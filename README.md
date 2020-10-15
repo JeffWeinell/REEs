@@ -20,7 +20,14 @@ Functional loci included entire or partial gene regions that have previously bee
 
 ##### Detailed, step-by-step methods for how I chose the set of target REEs
 
-1. I downloaded the *Thamnophis sirtalis* genome and the associated annotation table ("ref_Thamnophis_sirtalis-6.0_top_level_MHC.gff3" [n = 559,129 annotations]). I renamed the sequences in the *T. sirtalis* genome (e.g.: "Thamnophis_sirtalis_GCF_001077635.1_read1") and wrote the genome as a new file in sequential fasta format. I then made a two-column text file named: "Scaffold-Name-Key.txt", which has the new genome read names in the first column (column name = "ScaffoldName"), and the RefSeq accession number (i.e., the ID from column 1 of annotation table) the in the second column (column name = "RefSeq.ScaffoldAccession"). I may have used a code from Carl Hutter to generate the sequential fasta genome with renamed sequences.
+1. I downloaded the *Thamnophis sirtalis* genome, and its associated annotation table: **ref_Thamnophis_sirtalis-6.0_top_level_MHC.gff3** (n = 559,129 annotations). I renamed the sequences in the genome file to have the following format: **Thamnophis_sirtalis_GCF_001077635.1_read1**, etc., and wrote the renamed genome as a new file in sequential fasta format. I then made a two-column text file named **Scaffold-Name-Key.txt**, which has the following table (columns tab-delimited):
+
+ScaffoldName | RefSeq.ScaffoldAccession
+------------ | -------------
+Thamnophis_sirtalis_GCF_001077635.1_read1 | RefSeq accession number (the ID from column 1 of the annotation table)
+Thamnophis_sirtalis_GCF_001077635.1_read2 | ...
+...|...
+Thamnophis_sirtalis_GCF_001077635.1_readN|...
 
 2. *Thamnophis sirtalis* exome extracted from genome. I used the function **filter.annotationTable** to: (1) filter the original annotation table to only include annotations for regions that are both CDS regions and ≥ 120bp in length (result: n = 115,907 annotations for 77,329 unique regions), and (2) write the filtered annotation table to a file: **CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_withGenBankAcc_longer120bp.gff3**. Then, I used the function **get.exome.from.annotationTable** to extract from the genome the DNA sequences included in the filtered annotation table, and to write the extracted DNA sequences (the exome) to a file in fasta format: **Thamnophis_sirtalis_exome_longer120bp.fas**.
 
@@ -28,9 +35,9 @@ Functional loci included entire or partial gene regions that have previously bee
 
 4. Extract exomes (minimum exon length 120nt) for each squamate species. For each species and exon, I extracted the DNA sequence of the best match in the filtered hit table from step 2, and I saved these sequences to a fasta file; this step was performed using the function **get.exome.from.blastTable**.
 
-5. Align shared exons and calculate stats. I used the R function makeExomeStatsTable to do all of the following: (1) obtain the set of T. sirtalis exons present in all exomes (from step 3), i.e., the shared exons; (2) perform multiple sequence alignment (MAFFT algorithm) for each of the shared exons; (3) calculate a set of stats for each shared exon alignment, and save results to the file "stats_exome_data_TBLASTX.txt" (results: includes stats for 66,489 alignments). Specifically, the following descriptors and stats were calculated for each exon alignment: (1) NCBI Reference Sequence ID and location (stop_start) of CDS region on contig (2) number of species in alignment (always 11, because 11 species included, and only shared loci were aligned), (3) number of sites in which at least four species represented, (4) number of parsimony informative sites, (5) percent of sites parsimony informative, (6) mean pairwise percent genetic similarity to T. sirtalis, (7–17) percent genetic similarity to T. sirtalis for each species, (18) alignment width, (19) width of T. sirtalis exon, (20) gene name associated with exon, (21) mean number of variable sites compared to T. sirtalis, (22) minimum percent genetic similarity to T. sirtalis (among all species included), (23) minimum percent genetic similarity to T. sirtalis (among all snakes included). The gene name for each exon was extracted from the last column of the filtered annotation table. The stats table was saved to a file named "stats_exome_data_TBLASTX.txt".
+5. Align shared exons and calculate stats. I used the R function makeExomeStatsTable to do all of the following: (1) obtain the set of T. sirtalis exons present in all exomes (from step 3), i.e., the shared exons; (2) perform multiple sequence alignment (MAFFT algorithm) for each of the shared exons; (3) calculate a set of stats for each shared exon alignment, and save results to the file **stats_exome_data_TBLASTX.txt** (results: includes stats for 66,489 alignments). Specifically, the following descriptors and stats were calculated for each exon alignment: (1) NCBI Reference Sequence ID and location (stop_start) of CDS region on contig (2) number of species in alignment (always 11, because 11 species included, and only shared loci were aligned), (3) number of sites in which at least four species represented, (4) number of parsimony informative sites, (5) percent of sites parsimony informative, (6) mean pairwise percent genetic similarity to T. sirtalis, (7–17) percent genetic similarity to T. sirtalis for each species, (18) alignment width, (19) width of T. sirtalis exon, (20) gene name associated with exon, (21) mean number of variable sites compared to T. sirtalis, (22) minimum percent genetic similarity to T. sirtalis (among all species included), (23) minimum percent genetic similarity to T. sirtalis (among all snakes included). The gene name for each exon was extracted from the last column of the filtered annotation table. The stats table was saved to a file named "stats_exome_data_TBLASTX.txt".
 
-6. Filter loci to include the most rapidly evolving loci that also meet criteria. I used the R function pick.loci to do the following: (1) filtered out loci if minimum percent genetic similarity (among snakes) to Thamnophis sirtalis was < 65% or =100% (results = 64,546 loci retained; this stats table was not written to a file). For genes with multiple exons, I only kept the fastest evolving exon for each gene (i.e., only the exon with the lowest mean pairwise genetic distance to T. sirtalis; results = 16,650 loci retained; stats table: "stats_data_FastestExonPerGene.txt"). Next, I retained the set of exons with maximum number of variable sites in the target loci set, given a constraint on the total number of nucleotides that can be targeted (=1.2Mb for the SnakeCap probe set designed from the 20K Mybaits Kit; results = 2,068 loci retained [actually 2,071 because initially used max.capture.coverage = 1201000]; stats table was written to the file "stats_data_FastestExonPerGene_best.txt").
+6. Filter loci to include the most rapidly evolving loci that also meet criteria. I used the R function pick.loci to do the following: (1) filtered out loci if minimum percent genetic similarity (among snakes) to Thamnophis sirtalis was < 65% or =100% (results = 64,546 loci retained; this stats table was not written to a file). For genes with multiple exons, I only kept the fastest evolving exon for each gene (i.e., only the exon with the lowest mean pairwise genetic distance to T. sirtalis; results = 16,650 loci retained; stats table: "stats_data_FastestExonPerGene.txt"). Next, I retained the set of exons with maximum number of variable sites in the target loci set, given a constraint on the total number of nucleotides that can be targeted (=1.2Mb for the SnakeCap probe set designed from the 20K Mybaits Kit; results = 2,068 loci retained (actually 2,071 because initially used max.capture.coverage = 1201000); stats table was written to the file **stats_data_FastestExonPerGene_best.txt**).
 
 ```
 
@@ -38,10 +45,12 @@ result.pident <- pick.loci(statsTable.path = "~/AlignedExonStats/stats_exome_dat
 
 ```
 
-7. (optional). I used the R function align.and.concatenate.best.exons to perform multiple sequence alignment (MAFFT algorithm) for each exon in the "stats_data_FastestExonPerGene_best.txt" file (which was generated by the pick.loci function in step 5), and to concatenate exon alignments and generate an associated partition file. Single-locus alignments, the concatenated loci alignment, and the partition file were each saved to file. I estimated gene trees from these alignments (using IQTREE) to get a sense for how much phylogenetic information each locus contained.
+<!--- Next step was done but wasn't necessary. It might be good to run this as a sanity check when picking REEs for future probe sets
+7. I used the R function align.and.concatenate.best.exons to perform multiple sequence alignment (MAFFT algorithm) for each exon in the "stats_data_FastestExonPerGene_best.txt" file (which was generated by the pick.loci function in step 5), and to concatenate exon alignments and generate an associated partition file. Single-locus alignments, the concatenated loci alignment, and the partition file were each saved to file. I estimated gene trees from these alignments (using IQTREE) to get a sense for how much phylogenetic information each locus contained.
+--->
 
-8. For each locus, choose target region that will be used for probe design, considering the length of each target exon, probe length (120bp), and tiling regime (50% overlap between adjacent probes).
-
+<!--- Idk what I these commented out lines are for:
+8. For each locus, I chose the target region that will be used for probe design by considering the length of each target exon, probe length (120bp), and tiling regime (50% overlap between adjacent probes).
 Li = length of ith target exon
 nprobes,i = minimum # of probes needed to cover Li
 Lprobes,i = # of nucleotides covered by nprobes,i
@@ -50,7 +59,7 @@ nflank.5',i = # of nucleotides targeted upstream of exon
 = (nflank,i)/2 rounded down to nearest integer
 nflank.3',i = # of nucleotides targeted downstream of exon
 = nflank,i - nflank.5',i
-
+--->
 
 #### Selecting the set of target UCEs
 
