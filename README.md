@@ -1,5 +1,6 @@
-# SnakeCap
-Sequence Capture Pipeline for Phylogenomics of Snakes:
+# SnakeCap Sequence Capture Probe Set:
+
+## Description of SnakeCap Probe Set
 
 Multiple types of loci were targeted for sequence capture and phylogenomic analyses of snakes: (1) rapidly evolving exons (REEs), (2) ultra-conserved elements (UCEs), (3) ddRAD-like loci, (4) and a set of functionally interesting genes (e.g., scalation genes). The SnakeCap probe set includes probes for 3,129 loci (1,517,011 nt), including 1,653 REEs, 907 UCEs, 328 ddRAD-like loci, 27 major histocompatability complex (MHC) genes, 119 vision genes, and 95 scalation genes.
 
@@ -10,6 +11,9 @@ SnakeCap UCEs are a subset of the Micrurus fulvius UCEs from Streicher et al. (2
 ddRAD-like loci are shared, single-copy loci identified from in-silico ddRAD using recognition sites for SbfI and EcoRI restriction enzymes.
 
 Functional loci included entire or partial gene regions that have previously been predicted or known to function in either (1) vertebrate immune systems, (2) vision, (3) or scalation.
+
+## Methods for optimization of target loci in the SnakeCap Probe Set
+
 
 # References:
 
