@@ -1,1 +1,12 @@
-Had to make this file to make the folder its in.
+## Files provided by Arbor Biosciences:
+
+Version 1 probes (not used):
+- WEINELL-ultrastringent-baitcoverage-180919je.txt.gz
+- WEINELL-ultrastringent-baits-180919je.fas.gz 
+
+Version 2 probes (not used):
+- ALLWEINELL-ultrastringent-baits-180925je.fas.gz
+- ALLWEINELL-ultrastringent-baits-180925je.fas.list.targcovg.table.gz
+
+Version 3 probes (the probes we actually ordered):
+- ADD2WEINELL-ultrastringent-baits-181005je.fas.gz
