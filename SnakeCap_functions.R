@@ -1,5 +1,3 @@
-### source("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/SnakeCap_functions.R")
-
 #####
 ## Dependencies
 ###
@@ -761,8 +759,8 @@ writeDNAStringSet <- function(x,filepath,append=F,format="fasta",charsPerLine=10
 ### filter.annotationTable function
 #####################
 ## parameters # values last used are shown
-### input.gff   <- "/Users/Jeff/Google Drive/KU/SnakeCap/ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3"                                                      ### path to unfiltered genome annotation file
-### output.gff  <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TempFolder_3Nov2019/CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3" ### path and filename where to write filtered annotation table
+### input.gff   <- "ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3"                 ### path to unfiltered genome annotation file
+### output.gff  <- "CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3" ### path and filename where to write filtered annotation table
 ### region.type <- "CDS"
 ### min.length  <- 120
 filter.annotationTable <- function(input.gff,output.gff,region.type="CDS",min.length=120) {
@@ -778,10 +776,10 @@ filter.annotationTable <- function(input.gff,output.gff,region.type="CDS",min.le
 #####################
 ## parameters # values last used are shown
 ### species.name      <- "Thamnophis_sirtalis"
-### genome.filepath   <- "/Users/Jeff/Documents/SnakeGenomes/Thamnophis_sirtalis_GCF_001077635.1_genome_renamed_sequential.fas"                                                      ### directory to genome
-### input.gff         <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TempFolder_3Nov2019/CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3" ### path to filtered annotation table
-### output.dir.exome  <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TempFolder_3Nov2019/"                                                               ### directory to put exomes into
-### additional.ID     <- "/Users/Jeff/Google Drive/KU/SnakeCap/Scaffold-Name-Key.txt"                                                                               ### filename of a table that cross-references contig names to names in GFF file
+### genome.filepath   <- "Thamnophis_sirtalis_GCF_001077635.1_genome_renamed_sequential.fas"   ### directory to genome
+### input.gff         <- "CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3"      ### path to filtered annotation table
+### output.dir.exome  <- "Exomes_TempFolder_3Nov2019/"                                         ### directory to put exomes into
+### additional.ID     <- "Scaffold-Name-Key.txt"                                               ### filename of a table that cross-references contig names to names in GFF file
 get.exome.from.annotationTable <- function(species.name,genome.filepath,input.gff,output.dir.exome,additional.ID) {
 	filtered.gff1B    <- fread(input.gff)
 	refseq.names     <- unlist(filtered.gff1B[,1])
@@ -811,7 +809,7 @@ get.exome.from.annotationTable <- function(species.name,genome.filepath,input.gf
 ## reportBestMatches function
 ############
 ## parameters
-#### input.dir      <- "/panfs/pfs.local/home/j926w878/scratch/TBlastXResults/" ### must have that last slash mark
+#### input.dir      <- "TBlastXResults/" ### must have that last slash mark
 #### output.dir     <- input.dir
 #### species.names  <- c("Anolis_carolinensis","Crotalus_mitchellii","Pogona_vitticeps","Gekko_japonicus","Ophiophagus_hannah","Vipera_berus","Crotalus_horridus","Thamnophis_sirtalis","Python_bivittatus","Protobothrops_mucrosquamatus","Pantherophis_guttatus")
 #### blastMethod    <- "tblastx"   ### change to "blastn" if type = "UCEs"
@@ -842,9 +840,9 @@ reportBestMatches <- function(input.dir,species.names,output.dir=NA,blastMethod=
 #####################
 ## parameters   # values last used are shown
 #### species           <- "Vipera_berus"   ### species names
-#### genome.filepath   <- "/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Vipera_berus_GCA_000800605.1_Vber.be_1.0_genomic.fna"                ### genome filepath
-#### input.blastTable  <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TBLASTX_Results/Vipera_berus.tblastx.exons.best.txt"   ### BLAST hit table filepath
-#### output.dir.exome  <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TempFolder_3Nov2019/"                        ### directory to put exomes into
+#### genome.filepath   <- "Vipera_berus_GCA_000800605.1_Vber.be_1.0_genomic.fna"  ### genome filepath
+#### input.blastTable  <- "Vipera_berus.tblastx.exons.best.txt"                   ### BLAST hit table filepath
+#### output.dir.exome  <- "Exomes_TempFolder_3Nov2019/"                           ### directory to put exomes into
 get.exome.from.blastTable <- function(species,genome.filepath,input.blastTable,output.dir.exome) {
 
 	data.best           <- fread(file=input.blastTable,sep=",",header=T)
@@ -869,27 +867,23 @@ get.exome.from.blastTable <- function(species,genome.filepath,input.blastTable,o
 }
 
 ###########
-### get.UCEs.from.blastTable function ###
+### get.UCEs.from.blastTable function
 ###########
 ### (This function is identical to get.exome.from.blastTable function)
 ## parameters   # values last used are shown
-#### species           <- "Vipera_berus"   ### species names
-#### genome.filepath   <- "/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Vipera_berus_GCA_000800605.1_Vber.be_1.0_genomic.fna"                ### genome filepath
-#### input.blastTable  <- ""   ### BLAST hit table filepath
-#### output.dir        <- ""                        ### directory to save UCE-containing files
+#### species           <- "Vipera_berus"                                               ### species names
+#### genome.filepath   <- "Vipera_berus_GCA_000800605.1_Vber.be_1.0_genomic.fna"       ### genome filepath
+#### input.blastTable  <- ""                                                           ### BLAST hit table filepath
+#### output.dir        <- ""                                                           ### directory to save UCE-containing files
 get.UCEs.from.blastTable <- function(species,genome.filepath,input.blastTable,output.dir) {
-
 	data.best           <- fread(file=input.blastTable,sep=",",header=T)
-	
 	query.subject.id    <- paste(as.character(data.best$gseqid),"_Subject=",as.character(data.best$sseqid),"_",as.character(data.best$sstart),"_",as.character(data.best$send),sep="")
 	subject.id          <- gsub(".+_","",as.character(data.best$sseqid))
 	subject.start       <- data.best$sstart
 	subject.end         <- data.best$send
-
 	indexFa(genome.filepath)                                           ### create an index of file 'foo.fasta'; this avoids having to actually copy or move the file to a new directory
 	fa <- FaFile(genome.filepath)
 	gr <- as(seqinfo(fa), "GRanges")
-
 	scaff.matches.all   <- match(subject.id, names(gr))
 	start.all           <- apply(X=cbind(subject.start,subject.end),MARGIN=1,FUN=min)
 	end.all             <- apply(X=cbind(subject.start,subject.end),MARGIN=1,FUN=max)
@@ -904,13 +898,13 @@ get.UCEs.from.blastTable <- function(species,genome.filepath,input.blastTable,ou
 ## makeExomeStatsTable function
 ##############
 ## parameters
-#### exomes.filepaths     # paramA <- list.files(path="/Volumes/MyPassport/ExonCapture_LociSelection/Exomes/",full.names=T)
+#### exomes.filepaths     # paramA <- list.files(path="~/Exomes/",full.names=T)
 #### is.primary.exome     # paramB <- 1  ### indicates which of the species names correspond to the "subject" species during the tblastn step. This currently only works if set to 1.
-#### annotationTable.path # paramC <- "/Users/Jeff/Google Drive/KU/SnakeCap/CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_withGenBankAcc_longer120bp.gff3"
-#### output.dir           # paramD <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TempFolder_3Nov2019/" ### location to write Exome Stats Table, currently set as folder for testing
+#### annotationTable.path # paramC <- "CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_withGenBankAcc_longer120bp.gff3"
+#### output.dir           # paramD <- "Exomes_TempFolder_3Nov2019/"  ### location to write Exome Stats Table, currently set as folder for testing
 #### species              # paramE <- c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus","Protobothrops_mucrosquamatus","Pantherophis_guttatus","Anolis_carolinensis","Pogona_vitticeps","Gekko_japonicus")
 #### subgroup <-          # paramF <- c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus","Protobothrops_mucrosquamatus","Pantherophis_guttatus")  ### a subset of the full list of species to estimate stats for (here, subgroup includes only the snakes)
-## annotationTable.path   # paramC <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TempFolder_3Nov2019/CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3"
+## annotationTable.path   # paramC <- "CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3"
 makeExomeStatsTable <- function(exomes.filepaths,annotationTable.path,species,subgroup,output.dir,is.primary.exome=1,i.start=1,i.stop=NA){
 	species              <- c(species[is.primary.exome],species[-is.primary.exome])         ### reorders the list of species such that the primary.species is first in the list
 	is.subgroup          <- mgrep(query=subgroup,subject=species)                           ### a list of numbers indicating which of the species are also in the subgroup
@@ -1058,14 +1052,14 @@ makeExomeStatsTable <- function(exomes.filepaths,annotationTable.path,species,su
 ### max.capture.coverage    <- 1200000    ### the maximum number of nucleotides that you expect to be able to capture given constrains of your particular probe Kit
 ### write.stats.tables      <- FALSE      ### You will need to change this to TRUE; I have set to FALSE to avoid overwriting my earlier results
 ### plot.results            <- FALSE      ### Change to TRUE if you want to plot your result; haven't plotted this in a while so I'm not sure if this works
-### statsTable.path         <- "/Users/Jeff/Google Drive/KU/SnakeCap/AlignedExonStats/stats_exome_data_TBLASTX.txt"
+### statsTable.path         <- "stats_exome_data_TBLASTX.txt"
 ### output.dir              <- input.dir
 ### primary.species         <- "Thamnophis_sirtalis"
 ### species.subgroup        <- c(7:14) ### either a character vector of species names that are used in column names, or an integer vector specifying which columns are for species included in the subgroup
 ### use.min.pident.subgroup <- T
 ### fast.stat               <- "pident"   ### alternatively, "percentPIS". Whether to use mean percent identity or mean percent of sites parsimony informative when sorting loci before choosing those those with summed length < max.capture.coverage
 ####### Next like runs the function under the values that were used for SnakeCap
-### result.pident <- pick.loci(statsTable.path = "/Users/Jeff/Google Drive/KU/SnakeCap/AlignedExonStats/stats_exome_data_TBLASTX.txt", output.dir = NULL, primary.species = "Thamnophis_sirtalis", species.subgroup = c(7:14), use.min.pident.subgroup = T, min.pident.keep = c(65,100), max.capture.coverage = 1200000, write.stats.tables = T, plot.results = T, fast.stat = "pident")
+### result.pident <- pick.loci(statsTable.path = "stats_exome_data_TBLASTX.txt", output.dir = NULL, primary.species = "Thamnophis_sirtalis", species.subgroup = c(7:14), use.min.pident.subgroup = T, min.pident.keep = c(65,100), max.capture.coverage = 1200000, write.stats.tables = T, plot.results = T, fast.stat = "pident")
 pick.loci <- function(statsTable.path, output.dir, primary.species,species.subgroup=NULL, min.pident.keep=c(65,100), max.capture.coverage=1200000, write.stats.tables=F, plot.results=T,use.min.pident.subgroup=F,fast.stat="pident"){
 	stats.data.exome          <- fread(input=statsTable.path,sep=",",header=T)                                           ### reads in the full stats table generated in step 4
 	stats.data.exome.ordered  <- stats.data.exome[with(stats.data.exome, order(gene.name, mean.pident, decreasing=F)),]  ### Sorts loci by gene name, then by increasing percent identity to Thamnophis sirtalis
@@ -1182,21 +1176,19 @@ pick.loci <- function(statsTable.path, output.dir, primary.species,species.subgr
 ## align.and.concatenate.best.exons function
 ######################
 ## parameters
-### exomes.filepaths     # paramA <- list.files(path="/Volumes/MyPassport/ExonCapture_LociSelection/Exomes/",full.names=T)
+### exomes.filepaths     # paramA <- list.files(path="~/Exomes/",full.names=T)
 ### is.primary.exome     # paramB <- 1  ### indicates which of the species names correspond to the "subject" species during the tblastn step. This currently only works if set to 1.
-### statsTable.path      # paramC <- "/Users/Jeff/Google Drive/KU/SnakeCap/AlignedExonStats/stats_data_FastestExonPerGene_best.txt"
-### output.dir           # paramD <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TempFolder_3Nov2019/" ### location to write Exome Stats Table, currently set as folder for testing
+### statsTable.path      # paramC <- "stats_data_FastestExonPerGene_best.txt"
+### output.dir           # paramD <- "Exomes_TempFolder_3Nov2019/" ### location to write Exome Stats Table, currently set as folder for testing
 ### species              # paramE <- c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus","Protobothrops_mucrosquamatus","Pantherophis_guttatus","Anolis_carolinensis","Pogona_vitticeps","Gekko_japonicus")
 ### i.start <- 1
 ### i.stop  <- NA
 align.and.concatenate.best.exons <- function(exomes.filepaths,is.primary.exome,statsTable.path,output.dir,species,i.start = 1,i.stop = NA){
-
 	statsTable           <- fread(statsTable.path,sep=",",header=T)                         ### reads in the info on fastest exon per gene dataset with total length <1.2Mbp
 	species              <- c(species[is.primary.exome],species[-is.primary.exome])         ### reorders the list of species such that the primary.species is first in the list
 	exomes.filepaths     <- exomes.filepaths[mgrep(species,exomes.filepaths)]               ### puts the exomes.filepaths in the same order as species
 	exome.names          <- paste("exome",c(1:length(exomes.filepaths)),sep="")
 	#matches.names        <- paste("matches.exome",c(1:length(exomes.filepaths)),sep="")
-	
 	for(i in 1:length(exome.names)){                                                       #|reads in exomes
 		assign(x=exome.names[i],value=readDNAStringSet(filepath=exomes.filepaths[i]))      #|and assigns them
 	}                                                                                      #|to object names
@@ -1283,14 +1275,14 @@ makeBlastDB    <- function(makeblastdb.path,subject.path){
 ### This function uses a set of query sequences and blasts them against a set of subject sequences
 ### and produces a hit table with up to 50 hits per query
 ## parameters
-### blastn.path   <- "/Applications/ncbi-blast-2.5.0+/bin/blastn"
-### subject.path  <- "/Users/Jeff/Documents/SnakeGenomes/ContigFiles/GCA_000737285.1_CrotMitch1.0_genomic.fna"
-### query.path    <- "/Users/Jeff/Google Drive/KU/SnakeCap/StreicherWiens2017_UCEs_fasta/micrurus_UCEs.fa"
-### output.path   <- "/Users/Jeff/Google Drive/KU/SnakeCap/Crotalus-mitchellii.blastn.exons.50hits.txt"
+### blastn.path   <- "~/ncbi-blast-2.5.0+/bin/blastn"
+### subject.path  <- "GCA_000737285.1_CrotMitch1.0_genomic.fna"
+### query.path    <- "micrurus_UCEs.fa"
+### output.path   <- "Crotalus-mitchellii.blastn.exons.50hits.txt"
 # These next three lines are the full set of subject paths and the query path used for UCEs for SnakeCap
-### subject.path <- genome.subjects.paths  <- c("/Users/Jeff/Documents/SnakeGenomes/ContigFiles/GCA_000737285.1_CrotMitch1.0_genomic.fna","/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Protobothrops_mucrosquamatus_GCF_001527695.2_P.Mucros_1.0_genomic.fna","/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Pantherophus_guttatus_GCA_001185365.1_PanGut1.0_genomic.fna","/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Python_bivittatus_GCF_000186305.1_Python_molurus_bivittatus-5.0.2_genomic.fna","/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Thamnophis_sirtalis_GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna","/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Ophiophagus_hannah_GCA_000516915.1_OphHan1.0_genomic.fna","/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Vipera_berus_GCA_000800605.1_Vber.be_1.0_genomic.fna","/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Crotalus_horridus_GCA_001625485.1_ASM162548v1_genomic.fna")
-### query.path   <- micrurus.UCEs.path     <- "/Users/Jeff/Google Drive/KU/SnakeCap/StreicherWiens2017_UCEs_fasta/micrurus_UCEs.fa"
-### output.path  <- output.50hits.tables.paths <- c("/Users/Jeff/Google Drive/KU/SnakeCap/Crotalus-mitchellii.blastn.exons.50hits.txt","/Users/Jeff/Google Drive/KU/SnakeCap/Protobothrops.blastn.exons.50hits.txt","/Users/Jeff/Google Drive/KU/SnakeCap/Pantherophis.blastn.exons.50hits.txt","/Users/Jeff/Google Drive/KU/SnakeCap/Python.blastn.exons.50hits.txt","/Users/Jeff/Google Drive/KU/SnakeCap/Thamnophis.blastn.exons.50hits.txt","/Users/Jeff/Google Drive/KU/SnakeCap/Ophiophagus.blastn.exons.50hits.txt","/Users/Jeff/Google Drive/KU/SnakeCap/Vipera.blastn.exons.50hits.txt","/Users/Jeff/Google Drive/KU/SnakeCap/Crotalus-horridus.blastn.exons.50hits.txt")
+### subject.path <- genome.subjects.paths  <- c("~/GCA_000737285.1_CrotMitch1.0_genomic.fna","~/Protobothrops_mucrosquamatus_GCF_001527695.2_P.Mucros_1.0_genomic.fna","~/Pantherophus_guttatus_GCA_001185365.1_PanGut1.0_genomic.fna","~/Python_bivittatus_GCF_000186305.1_Python_molurus_bivittatus-5.0.2_genomic.fna","~/Thamnophis_sirtalis_GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna","~/ContigFiles/Ophiophagus_hannah_GCA_000516915.1_OphHan1.0_genomic.fna","~/Vipera_berus_GCA_000800605.1_Vber.be_1.0_genomic.fna","~/Crotalus_horridus_GCA_001625485.1_ASM162548v1_genomic.fna")
+### query.path   <- micrurus.UCEs.path     <- "~/StreicherWiens2017_UCEs_fasta/micrurus_UCEs.fa"
+### output.path  <- output.50hits.tables.paths <- c("~/Crotalus-mitchellii.blastn.exons.50hits.txt","~/Protobothrops.blastn.exons.50hits.txt","~/Pantherophis.blastn.exons.50hits.txt","~/Python.blastn.exons.50hits.txt","~/Thamnophis.blastn.exons.50hits.txt","~/Ophiophagus.blastn.exons.50hits.txt","~/Vipera.blastn.exons.50hits.txt","~/Crotalus-horridus.blastn.exons.50hits.txt")
 blastnR <- function(blastn.path,subject.path,query.path,output.path){
 	DB.extensions        <- c(".nog",".nsd",".nsi",".nsq",".nhr",".nin",".fai",".gz")  ### double-check that these are the files produced by makeBlastDB
 	makeblastdb.filepath <- gsub("/blastn","/makeblastdb",blastn.path)                 ### unless these files have been moved around
@@ -1315,9 +1307,9 @@ blastnR <- function(blastn.path,subject.path,query.path,output.path){
 ## align.bestHit.UCEs function
 ######################
 ## parameters
-### species.UCEs.filepaths   # paramA <- list.files(path="/Users/Jeff/Google Drive/KU/SnakeCap/UCEs.In.Snake.Genomes/",full.names=T)
+### species.UCEs.filepaths   # paramA <- list.files(path="~/UCEs.In.Snake.Genomes/",full.names=T)
 ### is.primary.species       # paramB <- 1                                                                                ### indicates which of the species names correspond to the "subject" species during the tblastn step. This currently only works if set to 1.
-### output.dir               # paramD <- "/Users/Jeff/Google Drive/KU/SnakeCap/UCEs_TempFolder_7Nov2019" ### location to write Exome Stats Table, currently set as folder for testing
+### output.dir               # paramD <- "~/UCEs_TempFolder_7Nov2019" ### location to write Exome Stats Table, currently set as folder for testing
 ### species                  # paramE <- c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus","Protobothrops_mucrosquamatus","Pantherophis_guttatus")
 ### i.start <- 1
 ### i.stop  <- NA
@@ -2931,7 +2923,7 @@ read.gb <- function(gb.filename,progress=T){
 ### for some loci the start_codon is poorly annotated in ncbi, but this function determines the start codon by comparing the translated CDS to the NCBI AA sequence
 ### makes lists of the target loci that with unusual or absent annotations
 ### library(biofiles)
-### targetTablePath    <- "/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/TargetTable1_28Sep2019.txt"  ### Four column table, with columns:
+### targetTablePath    <- "~/TargetTable1_28Sep2019.txt"  ### Four column table, with columns:
 ###                                                                                                           ### [,1]: locus names
 ###                                                                                                           ### [,2]: genbank ID of contig that contains target locus
 ###                                                                                                           ### [,3]: start position of target within contig
@@ -3283,7 +3275,7 @@ get.all.quad.trees <- function(ref.tree,alt.tips=NULL,support.scaler=1){
 ### Figuring out Functions used to pick UCEs after extracting best-matches... ##
 ##### Examining the starting set of UCEs. Since SnakeCap loci only selected from the Streicher Micrurus set, then no need to the read them into R
 # 
-# source.UCEs.dir          <- "/Users/Jeff/Google Drive/KU/SnakeCap/StreicherWiens2017_UCEs_fasta/"   ### Directory containing fasta file of set of UCEs to be queried in genomes
+# source.UCEs.dir          <- "~/StreicherWiens2017_UCEs_fasta/"   ### Directory containing fasta file of set of UCEs to be queried in genomes
 # source.species           <- c("micrurus")                                                                            ### Micrurus fulvius (even though Streicher also found additional UCEs in python, I only queried the Micrurus set)
 # source.species.filenames <- paste(source.UCEs.dir,source.species,"_UCEs.fa",sep="")                                  ### filenames for starting set of UCEs to be queried across species with genomes
 # 
@@ -3294,7 +3286,7 @@ get.all.quad.trees <- function(ref.tree,alt.tips=NULL,support.scaler=1){
 ### Comparing the best-match UCEs found in each species genome:
 #
 #species                 <- c("Thamnophis_sirtalis","Crotalus_horridus","Protobothrops_mucrosquamatus","Ophiophagus_hannah","Vipera_berus","Crotalus_mitchellii","Pantherophis_guttatus","Python_bivittatus")
-#UCEs.from.genomes.dir   <- "/Users/Jeff/Google Drive/KU/SnakeCap/UCEs.In.Snake.Genomes/"
+#UCEs.from.genomes.dir   <- "~/UCEs.In.Snake.Genomes/"
 #UCEs.from.genomes.paths <- paste(UCEs.from.genomes.dir,species,"_UCEs.fasta",sep="")
 #species.UCEs            <- paste(species,"_UCEs",sep="")
 #
@@ -3313,9 +3305,9 @@ get.all.quad.trees <- function(ref.tree,alt.tips=NULL,support.scaler=1){
 ####################################################################
 ### These are the alignments produced for the shared UCEs after using MAFFT 
 #
-# Crotalus.horridus_UCE-containing-contigs.filename <- "/Users/Jeff/Google Drive/KU/SnakeCap/Crotalus-horridus_UCE-containing-contigs.fasta"
-# Crotalus.horridus_UCEs                            <- "/Users/Jeff/Google Drive/KU/SnakeCap/Crotalus_horridus_UCEs.fasta"
-# UCE.alignments.dir                                <- "/Users/Jeff/Google Drive/KU/SnakeCap/MAFFT-aligned-UCEs"
+# Crotalus.horridus_UCE-containing-contigs.filename <- "~/Crotalus-horridus_UCE-containing-contigs.fasta"
+# Crotalus.horridus_UCEs                            <- "~/Crotalus_horridus_UCEs.fasta"
+# UCE.alignments.dir                                <- "~/MAFFT-aligned-UCEs"
 # UCE.alignment.filenames                           <- list.files(path=UCE.alignments.dir,full.names=T)
 # UCE.shortnames                                    <- gsub(".fasta","",list.files(path=UCE.alignments.dir,full.names=F))
 # UCE.shortnames                                    <- gsub("uce","UCE",UCE.shortnames)
@@ -3338,11 +3330,11 @@ get.all.quad.trees <- function(ref.tree,alt.tips=NULL,support.scaler=1){
 			
 ##########
 # library(ape)
-# geneTrees.dir      <- "/Users/Jeff/Documents/SnakeCap_Data/gene-trees_5May2019/targets_withFlanking_no-trimAL/treefiles_withFlanking_no-trimAL/"
+# geneTrees.dir      <- "~/targets_withFlanking_no-trimAL/treefiles_withFlanking_no-trimAL/"
 # trees              <- read.tree.multipleFiles(list.files(geneTrees.dir,full.names=T))
 # trees              <- trees[1:100] ### just looking at the first 100 for now because there are a lot of trees
 # taxa               <- unique.tiplabels(trees)  ### trees = the set of gene trees
-# ref.tree           <- read.tree("/Users/Jeff/Documents/SnakeCap_Data/gene-trees_5May2019/targets_withFlanking_no-trimAL/ASTRAL-tree_AllLoci_withFlanking_no-trimAL_Topology2.tre") ### unrooted
+# ref.tree           <- read.tree("~/gene-trees_5May2019/targets_withFlanking_no-trimAL/ASTRAL-tree_AllLoci_withFlanking_no-trimAL_Topology2.tre") ### unrooted
 # all.quads.trees    <- get.all.quad.trees(ref.tree=ref.tree,alt.tips=unique.tiplabels(c(trees,ref.tree)),support.scaler=100)
 
 #############
@@ -3364,8 +3356,8 @@ get.all.quad.trees <- function(ref.tree,alt.tips=NULL,support.scaler=1){
 # 	• Every clade-set in Tree 1 has an equal clade-set in Tree 2 (and vice versa)
 # 
 
-#tree1 <- read.tree(file="/Users/Jeff/Google Drive/KU/Tropidonophis/IQTREE_Tropidonophis/GeneTrees_PartitionedByCodon/rag1/rag1.tre")
-#tree2 <- read.tree(file="/Users/Jeff/Google Drive/KU/Tropidonophis/IQTREE_Tropidonophis/GeneTrees_PartitionedByCodon/nt3/nt3.tre")
+#tree1 <- read.tree(file="~/Tropidonophis/IQTREE_Tropidonophis/GeneTrees_PartitionedByCodon/rag1/rag1.tre")
+#tree2 <- read.tree(file="~/Tropidonophis/IQTREE_Tropidonophis/GeneTrees_PartitionedByCodon/nt3/nt3.tre")
 #
 #### may be better to just pick any tip shared between trees
 #tree1.rooted <- root(tree1,"Scaphiodontophis-annulatus_KU289943")
