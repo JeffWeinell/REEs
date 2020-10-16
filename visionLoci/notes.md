@@ -14,7 +14,7 @@ ARRB2 | 0% bait coverage
 CD36 | not yet clear why, because bait coverage was 100%
 GART | 0% bait coverage
 GAS6 | 0% bait coverage
-GPR98 | 
+GPR98 | No blastn match within *Ophiophagus hannah*
 GRK7 | 0% bait coverage
 HNF1A | 
 HNRPD | 
