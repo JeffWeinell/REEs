@@ -72,7 +72,12 @@ nflank.3',i = # of nucleotides targeted downstream of exon
 
 ##### Overview:
 
-Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus fulvius* (Streicher and Wiens, 2017; **Table X**). First, I filtered the full set of *Micrurus* UCEs to only include those present in all NCBI snake genomes (n = 2,968 UCEs). From this shared set of UCEs I (probably; check script to confirm) selected the 1,000 loci with the greatest number of informative sites, or, that were on different *T. sirtalis* contigs... Of these, 907 were included in the final probe set (following Arbor Biosciences' protocols for probe filtering).
+Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus fulvius* (Streicher and Wiens, 2017; **Table X**). First, I filtered the full set of *Micrurus* UCEs to only include those present in all NCBI snake genomes (n = 2,968 UCEs). I filtered the shared set of UCEs to only include loci:
+- with length ≥ 120nt
+- (probably; check script to confirm) selected the 1,000 loci with the greatest number of informative sites
+- and/or, that were on different *T. sirtalis* contigs
+
+... Of the 1,000 initiall chosen UCEs, only 907 were included in the final probe set (after following Arbor Biosciences' protocols for probe filtering).
 
 ##### Detailed, step-by-step methods for how I chose the set of target UCEs:
 
