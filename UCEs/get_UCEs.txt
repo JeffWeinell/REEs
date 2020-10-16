@@ -1,0 +1,452 @@
+library(ape)
+library(phangorn)
+library(phytools)
+library(dplyr)
+library(RecordLinkage)
+
+input.dir  <- "/Users/Jeff/Google Drive/KU/SnakeCap/StreicherWiens2017_UCEs_ASTRAL_37_taxa_4178_alignments/"
+#output.dir <- "/Users/Jeff/Google Drive/KU/SnakeCap/StreicherWiens2017_UCEs_fasta/"
+output.dir <- "/Users/Jeff/Documents/SnakeCap_Data/Streicher_UCE-subset"
+
+#### Micrurus_fulvius_UCEs  ####
+
+setwd(input.dir)
+files <- list.files()
+for(i in 1:length(files)){
+	temp.file <- list.files()[i]
+	temp.alignment <- read.dna(file=temp.file,format="sequential")
+	if(length(grep("micrurus",labels(temp.alignment)))==0){next}
+	temp.micrurus <- temp.alignment[grep("micrurus",labels(temp.alignment)),]
+	attributes(temp.micrurus)$dimnames[[1]] <- paste(labels(temp.micrurus)[1],gsub(".nexus.phy","",temp.file),sep="_")
+	write.dna(x=temp.micrurus,file=paste(output.dir,"micrurus_UCEs.fa",sep=""),append=T,format="fasta",nbcol=1,colw=length(temp.micrurus))
+}
+
+#### pareas_UCEs  ####
+
+setwd(input.dir)
+files <- list.files()
+for(i in 1:length(files)){
+	temp.file <- list.files()[i]
+	temp.alignment <- read.dna(file=temp.file,format="sequential")
+	if(length(grep("pareas",labels(temp.alignment)))==0){next}
+	temp.pareas <- temp.alignment[grep("pareas",labels(temp.alignment)),]
+	attributes(temp.pareas)$dimnames[[1]] <- paste(labels(temp.pareas)[1],gsub(".nexus.phy","",temp.file),sep="_")
+	write.dna(x=temp.pareas,file=paste(output.dir,"pareas_UCEs.fa",sep=""),append=T,format="fasta",nbcol=1,colw=length(temp.pareas))
+}
+
+
+#### acrochordus_UCEs  ####
+
+setwd(input.dir)
+files <- list.files()
+for(i in 1:length(files)){
+	temp.file <- list.files()[i]
+	temp.alignment <- read.dna(file=temp.file,format="sequential")
+	if(length(grep("acrochordus",labels(temp.alignment)))==0){next}
+	temp.acrochordus <- temp.alignment[grep("acrochordus",labels(temp.alignment)),]
+	attributes(temp.acrochordus)$dimnames[[1]] <- paste(labels(temp.acrochordus)[1],gsub(".nexus.phy","",temp.file),sep="_")
+	write.dna(x=temp.acrochordus,file=paste(output.dir,"acrochordus_UCEs.fa",sep=""),append=T,format="fasta",nbcol=1,colw=length(temp.acrochordus))
+}
+
+#### xenodermus_UCEs  ####
+
+setwd(input.dir)
+files <- list.files()
+for(i in 1:length(files)){
+	temp.file <- list.files()[i]
+	temp.alignment <- read.dna(file=temp.file,format="sequential")
+	if(length(grep("xenodermus",labels(temp.alignment)))==0){next}
+	temp.xenodermus <- temp.alignment[grep("xenodermus",labels(temp.alignment)),]
+	attributes(temp.xenodermus)$dimnames[[1]] <- paste(labels(temp.xenodermus)[1],gsub(".nexus.phy","",temp.file),sep="_")
+	write.dna(x=temp.xenodermus,file=paste(output.dir,"xenodermus_UCEs.fa",sep=""),append=T,format="fasta",nbcol=1,colw=length(temp.xenodermus))
+}
+
+#### Python_molurus_UCEs  ####
+
+setwd(input.dir)
+files <- list.files()
+for(i in 1:length(files)){
+	temp.file <- list.files()[i]
+	temp.alignment <- read.dna(file=temp.file,format="sequential")
+	if(length(grep("python",labels(temp.alignment)))==0){next}
+	temp.python <- temp.alignment[grep("python",labels(temp.alignment)),]
+	attributes(temp.python)$dimnames[[1]] <- paste(labels(temp.python)[1],gsub(".nexus.phy","",temp.file),sep="_")
+	write.dna(x=temp.python,file=paste(output.dir,"python_UCEs.fa",sep=""),append=T,format="fasta",nbcol=1,colw=length(temp.python))
+}
+
+### get names used for taxa ### 
+
+setwd(input.dir)
+files <- list.files()
+names.taxa <- c("micrurus_fulvius")
+for(i in 1:length(files)){
+	temp.file <- files[i]
+	temp.alignment <- read.dna(file=temp.file,format="sequential")
+	names.temp <- attributes(temp.alignment)$dimnames[[1]]
+	names.taxa <- union(names.taxa,names.temp)
+}
+
+
+#####
+
+#### Boaedon_fuliginosus_UCEs  ####
+
+#setwd(input.dir)
+#files <- list.files()
+#for(i in 1:length(files)){
+#	temp.file <- list.files()[i]
+#	temp.alignment <- read.dna(file=temp.file,format="sequential")
+#	if(length(grep("Boaedon",labels(temp.alignment)))==0){next}
+#	temp.python <- temp.alignment[grep("python",labels(temp.alignment)),]
+#	attributes(temp.python)$dimnames[[1]] <- paste(labels(temp.python)[1],gsub(".nexus.phy","",temp.file),sep="_")
+#	write.dna(x=temp.python,file=paste(output.dir,"python_UCEs.fa",sep=""),append=T,format="fasta",nbcol=1,colw=length(temp.python))
+}
+
+######
+### finds number of SNPs between Python and Micrurus UCEs
+######
+output.dir <- "/Users/Jeff/Google Drive/KU/SnakeCap/StreicherWiens2017_UCEs_fasta/"
+
+setwd(output.dir)
+micrurus.genes <- read.dna("micrurus-aligned_UCEs.fa",format="fasta")  #|For some reason these wont read into R
+python.genes   <- read.dna("python-aligned_UCEs.fa",format="fasta")    #|using readDNAStringSet function, but can be read using read.dna
+
+micrurus.loci.names <- gsub(".*uce-","uce-",labels(micrurus.genes))
+python.loci.names   <- gsub(".*uce-","uce-",labels(python.genes))
+
+overlap.genes <- intersect(micrurus.loci.names,python.loci.names)
+
+keep.micrurus <- which(micrurus.loci.names %in% overlap.genes == T)
+keep.python   <- which(python.loci.names %in% overlap.genes == T)
+
+micrurus.genes2 <- micrurus.genes[keep.micrurus]
+python.genes2   <- python.genes[keep.python]
+
+distances  <- list(); length(distances) <- length(overlap.genes)
+snp.counts <- list(); length(snp.counts) <- length(overlap.genes)
+for(i in 1:length(overlap.genes)){
+	distances.temp  <- dist.dna(x=c(micrurus.genes2[i],python.genes2[i]))
+	distances[i]    <- distances.temp
+	snp.counts.temp <- round(distances.temp*as.numeric(summary(micrurus.genes2[i])[1]))
+	snp.counts[i]   <- snp.counts.temp
+}
+distances.UCEs   <- unlist(distances)
+snp.counts.UCEs  <- unlist(snp.counts)
+max.snps.UCEs    <- max(snp.counts.UCEs)      ### 177
+median.snps.UCEs <- median(snp.counts.UCEs)   ### 10
+total.snps.UCEs  <- sum(snp.counts.UCEs)      ### 34583
+
+sorted.UCEs          <- micrurus.genes2[order(snp.counts.UCEs,decreasing=T)]  ###| Did this Nov 7 2019, trying to figure out why I picked the UCEs that I did
+sorted.UCEs.best1000 <- sorted.UCEs[1:1000]                                   ###| This is not the set I chose
+
+######
+## finds the number of SNPs between Ophiophagus and Python
+## using the best 120bp window of the best exon of each gene (16650 genes)
+######
+input.dir  <- "/Users/Jeff/Google Drive/KU/SnakeCap/AlignedExonStats/"
+setwd(input.dir)
+alignment <- read.dna("FastestExonPerGene_BestWindow120bp_aligned_concatenated_Loci1-16650.txt",format="fasta")
+Python.data <- alignment[grep("Python",labels(alignment)),]
+Ophiophagus.data <- alignment[grep("Ophiophagus",labels(alignment)),]
+partitions <- read.csv(file="FastestExonPerGene_BestWindow120bp_partitionFile_Table_Loci1-16650.txt",header=F,sep="-")
+
+distances <- list(); length(distances) <- nrow(partitions)
+snp.counts <- list(); length(snp.counts) <- nrow(partitions)
+for(i in 1:nrow(partitions)){
+	partitions.temp <- partitions[i,]
+	#Ophiophagus.temp <- substring(Ophiophagus.data,first=as.numeric(partitions.temp[1]),last=as.numeric(partitions.temp[2]))
+	#Python.temp <- substring(Python.data,first=partitions.temp[1],last=partitions.temp[2])
+	Ophiophagus.temp <- Ophiophagus.data[as.numeric(partitions.temp[1]):as.numeric(partitions.temp[2])]
+	Python.temp <- Python.data[as.numeric(partitions.temp[1]):as.numeric(partitions.temp[2])]
+	#distances.temp <- levenshteinSim(Ophiophagus.temp, Python.temp)
+	distances.temp <- dist.dna(x=c(as.list(Ophiophagus.temp),as.list(Python.temp)),model="raw")
+	distances[i] <- distances.temp
+	snp.counts.temp <- round(distances.temp*length(c(as.numeric(partitions.temp[1]):as.numeric(partitions.temp[2]))))
+	snp.counts[i] <- snp.counts.temp
+}
+distances.16650 <- unlist(distances)
+names(distances.16650) <- c(1:length(distances.16650))
+distances2.16650 <- distances.16650[-which(is.na(distances.16650))]
+snp.counts.16650 <- unlist(snp.counts)
+snp.counts2.16650 <- snp.counts.16650[-which(is.na(snp.counts.16650))]
+max.snps.16650 <- max(snp.counts2.16650)        # 120
+median.snps.16650 <- median(snp.counts2.16650)  # 11
+total.snps.16650 <- sum(snp.counts2.16650)      # 211633
+
+######
+## finds the number of SNPs between Ophiophagus and Python
+## using the best exons of the best genes (2071 genes)
+######
+
+input.dir  <- "/Users/Jeff/Google Drive/KU/SnakeCap/AlignedExonStats/"
+setwd(input.dir)
+alignment <- read.dna("FastestExonPerGene_BestExons_aligned_concatenated.txt",format="fasta")
+Python.data <- alignment[grep("Python",labels(alignment)),]
+Ophiophagus.data <- alignment[grep("Ophiophagus",labels(alignment)),]
+partitions <- read.csv(file="FastestExonPerGene_BestExons_partitionFile_Table_Loci1-2071.txt",header=F,sep="-")
+
+distances <- list(); length(distances) <- nrow(partitions)
+snp.counts <- list(); length(snp.counts) <- nrow(partitions)
+for(i in 1:nrow(partitions)){
+	partitions.temp <- partitions[i,]
+	#Ophiophagus.temp <- substring(Ophiophagus.data,first=as.numeric(partitions.temp[1]),last=as.numeric(partitions.temp[2]))
+	#Python.temp <- substring(Python.data,first=partitions.temp[1],last=partitions.temp[2])
+	Ophiophagus.temp <- Ophiophagus.data[as.numeric(partitions.temp[1]):as.numeric(partitions.temp[2])]
+	Python.temp <- Python.data[as.numeric(partitions.temp[1]):as.numeric(partitions.temp[2])]
+	#distances.temp <- levenshteinSim(Ophiophagus.temp, Python.temp)
+	distances.temp <- dist.dna(x=c(as.list(Ophiophagus.temp),as.list(Python.temp)),model="raw")
+	distances[i] <- distances.temp
+	snp.counts.temp <- round(distances.temp*length(c(as.numeric(partitions.temp[1]):as.numeric(partitions.temp[2]))))
+	snp.counts[i] <- snp.counts.temp
+}
+distances.2071 <- unlist(distances)
+names(distances.2071) <- c(1:length(distances.2071))
+distances2.2071 <- distances.2071[-which(is.na(distances.2071))]
+snp.counts.2071 <- unlist(snp.counts)
+snp.counts2.2071 <- snp.counts.2071[-which(is.na(snp.counts.2071))]
+max.snps.2071 <- max(snp.counts2.2071)        # 1800
+median.snps.2071 <- median(snp.counts2.2071)  # 67
+total.snps.2071 <- sum(snp.counts2.2071)      # 206842
+#########
+#
+
+par(mfrow=c(2,1))
+hist.snps.UCEs <- hist(snp.counts.UCEs,breaks=length(snp.counts.UCEs),main="Histogram of number of SNPs per locus between Elapidae (Ophiophagus or Micrurus) and Pythonidae (Python molurus)",xlab="",ylab="",col="black",xlim=c(0,2000),cex=0.5)
+#hist.snps.16650 <- hist(snp.counts2.16650,breaks=length(snp.counts2.16650),main="",xlab="",ylab="Number of Loci",col="black",xlim=c(0,2000))
+hist.snps.2071 <- hist(snp.counts2.2071,breaks=length(snp.counts2.2071),main="",xlab="Number of SNPs",ylab="",col="black",xlim=c(0,2000))
+
+########################################################################
+### Code between this line (i.e, "START.1") to the line with "END.1" ###
+### can be replicated by using the function "reportBestMatches"      ###
+### and then the function "get.UCEs.from.blastTable"                 ###
+
+library(Biostrings)
+library(dplyr)
+
+input.dir  <- "/Users/Jeff/Google Drive/KU/SnakeCap/"
+input.dir2 <- "/Users/Jeff/Google Drive/KU/SnakeCap/BLAST_Micrurus-UCEs_vs_SnakeGenomes"
+
+setwd(input.dir2)
+
+Pantherophis_HitTable        <- fread("Pantherophis.blastn.UCEs.50hits.txt",header=F,sep="\t")
+Python_HitTable              <- fread("Python.blastn.UCEs.50hits.txt",header=F,sep="\t")
+Crotalus.mitchellii_HitTable <- fread("Crotalus-mitchellii.blastn.UCEs.50hits.txt",header=F,sep="\t")
+Vipera_HitTable              <- fread("Vipera.blastn.UCEs.50hits.txt",header=F,sep="\t")
+Ophiophagus_HitTable         <- fread("Ophiophagus.blastn.UCEs.50hits.txt",header=F,sep="\t")
+Protobothrops_HitTable       <- fread("Protobothrops.blastn.UCEs.50hits.txt",header=F,sep="\t")
+Crotalus.horridus_HitTable   <- fread("Crotalus-horridus.blastn.UCEs.50hits.txt",header=F,sep="\t")
+Thamnophis_HitTable          <- fread("Thamnophis.blastn.UCEs.50hits.txt",header=F,sep="\t")
+
+setwd(input.dir)
+
+Pantherophis.UCE.contigs                 <- readDNAStringSet(paste(input.dir,"Pantherophis-guttatus_UCE-containing-contigs.fasta",sep=""),format="fasta")
+Python.bivittatus.UCE.contigs            <- readDNAStringSet(paste(input.dir,"Python-bivittatus_UCE-containing-contigs.fasta",sep=""),format="fasta")
+Crotalus.mitchellii.UCE.contigs          <- readDNAStringSet(paste(input.dir,"Crotalus-mitchellii_UCE-containing-contigs.fasta",sep=""),format="fasta")
+Vipera.berus.UCE.contigs                 <- readDNAStringSet(paste(input.dir,"Vipera-berus_UCE-containing-contigs.fasta",sep=""),format="fasta")
+Ophiophagus.hannah.UCE.contigs           <- readDNAStringSet(paste(input.dir,"Ophiophagus-hannah_UCE-containing-contigs.fasta",sep=""),format="fasta")
+Protobothrops.mucrosquamatus.UCE.contigs <- readDNAStringSet(paste(input.dir,"Protobothrops-mucrosquamatus_UCE-containing-contigs.fasta",sep=""),format="fasta")
+Crotalus.horridus.UCE.contigs            <- readDNAStringSet(paste(input.dir,"Crotalus-horridus_UCE-containing-contigs.fasta",sep=""),format="fasta")
+Thamnophis.sirtalis.UCE.contigs          <- readDNAStringSet(paste(input.dir,"Thamnophis-sirtalis_UCE-containing-contigs.fasta",sep=""),format="fasta")
+
+temp.HitTable <- Thamnophis_HitTable
+temp.contigs  <- Thamnophis.sirtalis.UCE.contigs
+temp.species <- "Thamnophis_sirtalis"
+
+temp.HitTable  <- temp.HitTable[order(temp.HitTable.fread$V1, temp.HitTable.fread$V11),]                           # <--- this version works for fread
+#temp.HitTable <- temp.HitTable[order(as.character(temp.HitTable[,1]), as.numeric(temp.HitTable[,11])),]          # <--- this version works for read.csv
+temp.HitTable  <- temp.HitTable[match(unique(temp.HitTable$V1), temp.HitTable$V1),]                                # <--- this version works for fread
+#temp.HitTable <- temp.HitTable[match(unique(as.character(temp.HitTable[,1])), as.character(temp.HitTable[,1])),] # <--- this version works for read.csv
+temp.names     <- gsub(pattern=".1 .*",replacement="",x=names(temp.contigs))
+
+#i=1
+names.list <- list(); length(names.list) <- nrow(temp.HitTable)
+start.list <- list(); length(start.list) <- nrow(temp.HitTable)
+end.list <- list(); length(end.list) <- nrow(temp.HitTable)
+contig.list <- list(); length(contig.list) <- nrow(temp.HitTable)
+UCE.names.list <- list(); length(UCE.names.list) <- nrow(temp.HitTable)
+for (i in 1:nrow(temp.HitTable)) {
+	temp.UCE.name    <- as.character(temp.HitTable[i,1]) # get UCE name of ith row of hit table
+	temp.contig.name <- as.character(temp.HitTable[i,2]) # get Genbank accession name of ith row of hit table
+	temp.start <- min(temp.HitTable[i,9:10])       # get start position of ith row of hit table
+	temp.end   <- max(temp.HitTable[i,9:10])      # get end position of ith row of hit table
+	#temp.contig <- Pantherophis.UCE.contigs[which(temp.names==temp.contig.name)] # find contig that contains ith uce
+	contig.list[i] <- which(temp.names==temp.contig.name)
+	# tempRanges <- GRanges(seqnames = names(temp.contig), ranges = IRanges(start = temp.start, end = temp.end))
+	
+	names.list[i]     <- names(temp.contig)
+	start.list[i]     <- temp.start
+	end.list[i]       <- temp.end
+	UCE.names.list[i] <- temp.UCE.name
+	
+	# temp.UCE <- temp.contig[tempRanges]
+	#names(temp.UCE) <- paste(temp.species,gsub("micrurus_fulvius_","",temp.UCE.name),sep="_")
+}
+names.list              <- unlist(names.list)
+UCE.names.list          <- unlist(UCE.names.list)
+start.list              <- unlist(start.list)
+end.list                <- unlist(end.list)
+contig.list             <- unlist(contig.list)
+temp.contigs.new        <- temp.contigs[contig.list]
+names(temp.contigs.new) <- UCE.names.list
+Ranges                  <- GRanges(seqnames = UCE.names.list, ranges = IRanges(start = start.list, end = end.list))
+temp.UCEs               <- temp.contigs.new[Ranges]         ### gets the UCE portion of the UCE-containing contig
+names(temp.UCEs)        <- paste(temp.species,gsub("micrurus_fulvius_","",names(temp.UCEs)),sep="_")
+writeXStringSet(x=temp.UCEs, filepath=paste(input.dir,temp.species,"_UCEs.fasta",sep=""))
+
+#############
+## "END.1" ##
+#############
+
+###############
+### Aligning the set of shared UCEs
+###############
+library(ape)
+library(phytools)
+input.dir <- "/Users/Jeff/Google Drive/KU/SnakeCap/"
+setwd(input.dir)
+
+#Thamnophis.sirtalis_UCEs          <- read.dna("Thamnophis_sirtalis_UCEs.fasta",format="fasta")
+#Crotalus.horridus_UCEs            <- read.dna("Crotalus_horridus_UCEs.fasta",format="fasta")
+#Protobothrops.mucrosquamatus_UCEs <- read.dna("Protobothrops_mucrosquamatus_UCEs.fasta",format="fasta")
+#Ophiophagus.hannah_UCEs           <- read.dna("Ophiophagus_hannah_UCEs.fasta",format="fasta")
+#Vipera.berus_UCEs                 <- read.dna("Vipera_berus_UCEs.fasta",format="fasta")
+#Crotalus.mitchellii_UCEs          <- read.dna("Crotalus_mitchellii_UCEs.fasta",format="fasta")
+#Pantherophis.guttatus_UCEs        <- read.dna("Pantherophis_guttatus_UCEs.fasta",format="fasta")
+#Python.bivittatus_UCEs            <- read.dna("Python_bivittatus_UCEs.fasta",format="fasta")
+
+Thamnophis.sirtalis_UCEs          <- readDNAStringSet("Thamnophis_sirtalis_UCEs.fasta",format="fasta")
+Crotalus.horridus_UCEs            <- readDNAStringSet("Crotalus_horridus_UCEs.fasta",format="fasta")
+Protobothrops.mucrosquamatus_UCEs <- readDNAStringSet("Protobothrops_mucrosquamatus_UCEs.fasta",format="fasta")
+Ophiophagus.hannah_UCEs           <- readDNAStringSet("Ophiophagus_hannah_UCEs.fasta",format="fasta")
+Vipera.berus_UCEs                 <- readDNAStringSet("Vipera_berus_UCEs.fasta",format="fasta")
+Crotalus.mitchellii_UCEs          <- readDNAStringSet("Crotalus_mitchellii_UCEs.fasta",format="fasta")
+Pantherophis.guttatus_UCEs        <- readDNAStringSet("Pantherophis_guttatus_UCEs.fasta",format="fasta")
+Python.bivittatus_UCEs            <- readDNAStringSet("Python_bivittatus_UCEs.fasta",format="fasta")
+
+UCE.species <- c("Thamnophis.sirtalis_UCEs","Crotalus.horridus_UCEs","Protobothrops.mucrosquamatus_UCEs","Ophiophagus.hannah_UCEs","Vipera.berus_UCEs","Crotalus.mitchellii_UCEs","Pantherophis.guttatus_UCEs","Python.bivittatus_UCEs")
+
+UCEs.temp <- gsub(".*_uce-","uce-",names(Thamnophis.sirtalis_UCEs))
+for(i in 1:length(UCE.species)){
+	temp.names <- gsub(".*_uce-","uce-",names(get(UCE.species[i])))
+	UCEs.temp <- intersect(UCEs.temp,temp.names)
+}
+
+UCEs.shared < -UCEs.temp
+
+for(i in 1:length(UCE.species)){
+	temp.names <- gsub(".*_uce-","uce-",names(get(UCE.species[i])))
+	keep.temp <- match(sort(UCEs.shared),temp.names)
+	assign(UCE.species[i],value=get(UCE.species[i])[keep.temp])
+}
+
+library(magrittr)
+library(Biostrings)
+library(muscle)
+library(rMSA)
+
+output.dir <- "/Users/Jeff/Google Drive/KU/SnakeCap/MAFFT-aligned-UCEs/"
+
+for(i in 1:length(UCEs.shared)){
+	#temp.seqs <- c(
+	#	get(UCE.species[1])[i],
+	#	get(UCE.species[2])[i],
+	#	get(UCE.species[3])[i],
+	#	get(UCE.species[4])[i],
+	#	get(UCE.species[5])[i],
+	#	get(UCE.species[6])[i],
+	#	get(UCE.species[7])[i],
+	#	get(UCE.species[8])[i]
+	#)
+	
+	temp.seqs <- lapply(UCE.species,get)
+	alignment <- DNAStringSet(mafft(temp.seqs,param="--adjustdirection --quiet"))
+	writeXStringSet(alignment, paste(output.dir,UCEs.shared[i],".fasta",sep=""), append = F)
+}
+
+########################
+########################
+###### NJ gene trees
+######
+library(magrittr)
+library(Biostrings)
+library(muscle)
+library(rMSA)
+library(ape)
+library(phangorn)
+
+input.dir  <- "/Users/Jeff/Google Drive/KU/SnakeCap/MAFFT-aligned-UCEs/"
+output.dir <- "/Users/Jeff/Google Drive/KU/SnakeCap/"
+setwd(input.dir)
+file.names <- list.files()
+loci.names <- gsub(".fasta","",file.names)
+tree.names <- paste("GeneTree",loci.names),sep="_")
+for(i in 1:length(loci.names)){
+	temp.alignment <- readDNAStringSet(paste(input.dir,file.names[i],sep=""),format="fasta")
+	names(temp.alignment) <- c("Thamnophis_sirtalis", "Crotalus_horridus","Protobothrops_mucrosquamatus","Ophiophagus_hannah","Vipera_berus","Crotalus_mitchellii","Pantherophis_guttatus","Python_bivittatus")
+	phy.alignment <- as.phyDat(as.matrix(temp.alignment))
+	dm <- dist.ml(phy.alignment)
+	NJtree1 <- NJ(dm)
+	NJtree2 <- root(NJtree1,outgroup="Python_bivittatus")
+	assign(paste("NJ",tree.names[i],sep=""),force.ultrametric(NJtree2))
+
+	# parsimonyTree <- pratchet(phy.alignment,trace=0)
+	# assign(paste("Parsimony",tree.names[i],sep=""), root(parsimonyTree,outgroup="Gekko_japonicus"))
+	
+	# mt = modelTest(phy.alignment,control=pml.control(trace=0))
+	# best.model <-mt[which(mt[,4]==min(mt[,4])),1]
+	# env <- attr(mt, "env")
+	# fit <- eval(get(best.model, env), env)
+	
+	# mrca.outgroup <- getMRCA(fit$tree,tip=c("Pogona_vitticeps","Anolis_carolinensis"))
+	# bs = bootstrap.pml(fit, bs=5, optNni=TRUE, control = pml.control(trace = 0),type="cladogram")
+	# mcc.ml <- maxCladeCred(bs,rooted=F)
+	# assign(paste("ML",tree.names[i],sep=""), force.ultrametric(root(mcc.ml,outgroup="Gekko_japonicus")))
+
+	if(i==1){app=F}
+	if(i!=1){app=T}
+	write.tree(get(paste("NJ",tree.names[i],sep="")), file=paste(output.dir,"NJ_UCE.trees",sep=""), tree.names=T,append=app)
+	#write.tree(get(paste("Parsimony",tree.names[i],sep="")), file=paste(input.dir,"Parsimony.trees",sep=""), tree.names=T,append=app)
+	#write.tree(get(paste("ML",tree.names[i],sep="")), file=paste(input.dir,"ML.trees",sep=""), tree.names=T,append=app)
+}
+
+NJ.geneTrees.UCEs <- read.tree(file=paste(output.dir,"NJ_UCE.trees",sep=""))
+NJ.geneTrees.UCEs.ladder <- lapply(NJ.geneTrees.UCEs,ladderize)
+class(NJ.geneTrees.UCEs.ladder) <- "multiPhylo"
+result <- densiTree(NJ.geneTrees.UCEs.ladder,alpha=0.002,scaleX=T)
+
+
+NJ.geneTrees.2071        <- read.tree(file=paste(output.dir,"AlignedExonStats/NJ_BestExonPerGene.trees",sep=""))
+NJ.geneTrees.2071.pruned <- lapply(NJ.geneTrees.2071,drop.tip,tip=c("Gekko_japonicus","Anolis_carolinensis","Pogona_vitticeps"))
+class(NJ.geneTrees.2071.pruned) <- "multiPhylo"
+NJ.geneTrees.2071.rooted <- lapply(NJ.geneTrees.2071.pruned,root,outgroup="Python_bivittatus")
+class(NJ.geneTrees.2071.rooted) <- "multiPhylo"
+NJ.geneTrees.2071.ladder <- lapply(NJ.geneTrees.2071.rooted,ladderize)
+class(NJ.geneTrees.2071.ladder) <- "multiPhylo"
+result.2071 <- densiTree(NJ.geneTrees.2071.ladder,alpha=0.002,scaleX=T)
+
+##################
+### Concatenating the shared UCE alignments
+##################
+input.dir <- "/Users/Jeff/Google Drive/KU/SnakeCap/MAFFT-aligned-UCEs/"
+output.dir <- "/Users/Jeff/Google Drive/KU/SnakeCap/MAFFT-aligned-UCEs_concatenated/"
+setwd(input.dir)
+alignment <- readDNAStringSet(list.files()[1],format="fasta")
+names(alignment) <- c("Thamnophis_sirtalis","Crotalus_horridus","Protobothrops_mucrosquamatus","Ophiophagus_hannah","Vipera_berus","Crotalus_mitchellii","Pantherophis_guttatus","Python_bivittatus")
+gene.name.temp <- gsub(".fasta","",list.files()[1])
+gene.start.temp <- 1
+gene.end.temp <- width(alignment)[1]
+write.temp <- paste("DNA, ",gene.name.temp," = ",gene.start.temp,"-",sep="",gene.end.temp)
+write(write.temp,file=paste(output.dir,"MAFFT-aligned-UCEs_concatenated_partitionFile.fasta",sep=""),append=F)
+for(i in 2:length(list.files())){
+	temp.alignment <- readDNAStringSet(list.files()[i],format="fasta")
+	names(temp.alignment) <- c("Thamnophis_sirtalis","Crotalus_horridus","Protobothrops_mucrosquamatus","Ophiophagus_hannah","Vipera_berus","Crotalus_mitchellii","Pantherophis_guttatus","Python_bivittatus")
+	alignment <- xscat(alignment,temp.alignment)
+	gene.name.temp <- gsub(".fasta","",list.files()[i])
+	gene.start.temp <- gene.end.temp+1
+	gene.end.temp <- width(alignment)[1]
+	write.temp <- paste("DNA, ",gene.name.temp," = ",gene.start.temp,"-",sep="",gene.end.temp)
+	write(write.temp,file=paste(output.dir,"MAFFT-aligned-UCEs_concatenated_partitionFile.fasta",sep=""),append=T)
+}
+writeXStringSet(alignment, paste(output.dir,"MAFFT-aligned-UCEs_concatenated.fasta",sep=""), append = F)
+
+########
