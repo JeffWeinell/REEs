@@ -11,7 +11,7 @@ Locus | Reason not included
 ACTB | 0% bait coverage
 Amelogenin | 
 ARRB2 | 0% bait coverage
-CD36 | not yet clear why, because bait coverage was 100%
+CD36 | proposed baits too non-specific
 GART | 0% bait coverage
 GAS6 | 0% bait coverage
 GPR98 | No blastn match within *Ophiophagus hannah*
@@ -19,19 +19,19 @@ GRK7 | 0% bait coverage
 HNF1A | 
 HNRPD | 
 HOXB5 | 0% bait coverage
-MAFB | 74.5% bait coverage, so probably a different reason for exclusion
+MAFB | proposed bait too non-specific
 NACA | 
 OPN5 | 
-NGF | not yet clear why, because bait coverage was 100%
+NGF | proposed baits too non-specific
 NONO | 
 OPN4 | 
 OTX2 | 0% bait coverage
 PAXIP1 | 
-PDCH15 | not yet clear why, because bait coverage was 100%
+PDCH15 | proposed baits too non-specific
 POLA1 | 
 RHOC | 
 RPL22 | 
 RPL38 | 
 TRB2 | 
-UBC | 74.5% bait coverage, so probably a different reason for exclusion
+UBC | proposed bait too non-specific
 
