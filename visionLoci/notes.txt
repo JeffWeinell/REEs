@@ -1,1 +1,0 @@
-148 vision loci targeted by Schott et al. (2017). I initially requested probes for 132 of these loci, and 13 of these failed (0 bait coverage). and so these were removed from the probe set.
