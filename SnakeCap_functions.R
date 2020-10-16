@@ -184,23 +184,23 @@ string.list <- function(y){
 
 ######## mgsub function
 ### find and replace value in a vector with corresponding values of a second vector, in an object
-#mgsub <- function(x,y,z){
-#	for(i in 1:length(x)){
-#		z <- gsub(pattern=x[i],replacement=y[i],z)
-#	}
-#	z
-#}
-
-mgsub <- function(patt,repl,subj,complete.matches.only=FALSE){
-	if(complete.matches.only){
-		patt <- paste0("^",patt,"$") # "^" indicates beginning of string and "$" indicates end of string
+mgsub <- function(x,y,z){
+	for(i in 1:length(x)){
+		z <- gsub(pattern=x[i],replacement=y[i],z)
 	}
-	for(i in 1:length(patt)){
-		subj <- gsub(pattern=patt[i],replacement=repl[i],subj)
-		
-	}
-	subj
+	z
 }
+
+#mgsub <- function(patt,repl,subj,complete.matches.only=FALSE){
+#	if(complete.matches.only){
+#		patt <- paste0("^",patt,"$") # "^" indicates beginning of string and "$" indicates end of string
+#	}
+#	for(i in 1:length(patt)){
+#		subj <- gsub(pattern=patt[i],replacement=repl[i],subj)
+#		
+#	}
+#	subj
+#}
 
 #################
 ######## mgrep function
@@ -301,18 +301,6 @@ arrowLine <- function(x0,y0,x1,y1=y0,nArrow=1,...){
 	}
 }
 
-
-######## dir.check.create function
-## checks if a directory exists, and if not, creates it
-#dir.check.create <- function(directory){
-#	if (!file.exists(directory)){
-#		if(!file.exists(dirname(directory))){
-#			dir.create(dirname(directory))
-#		}
-#		dir.create(directory)
-#	}
-#}
-
 ######## dir.check.create function
 ## checks if a directory exists, and if not, creates it
 ## parent directories are also created if they do not already exist
@@ -326,9 +314,6 @@ dir.check.create <- function(directory){
 	}
 }
 
-###################
-
-
 #####
 ## percent.missing.data function
 #####
@@ -336,7 +321,6 @@ dir.check.create <- function(directory){
 ### by default, missing characters include any of the following: "-","n","b","h","d","v","k","s","r","w","y","?"
 ### Therefore, ambiguous characters are treated as missing characters by default
 #####
-
 percent.missing.data <- function(alignment){
 	store.class <- class(alignment)
 	if(store.class %in% c("DNAMultipleAlignment","DNAStringSet")){
@@ -379,8 +363,8 @@ filter.alignment <- function (alignment,mdt=1,min.var=1,min.freq.common=1,min.fr
 	## Defining internal functions needed
 	## for the whole function to work
 
-	filter.md <- function(alignment.site) {                      ### alignment.site is one column of a DNA alignment
-		y    <- table(alignment.site)                            ### This is the number of each type of character in a given column
+	filter.md <- function(alignment.site) {                       ### alignment.site is one column of a DNA alignment
+		y    <- table(alignment.site)                         ### This is the number of each type of character in a given column
 		md.y <- (sum(y[which(names(y) %in% c("-"))])/sum(y))
 		if(md.y < mdt|md.y==0){
 			z = TRUE
@@ -521,7 +505,6 @@ filter.alignment <- function (alignment,mdt=1,min.var=1,min.freq.common=1,min.fr
 #               # baits must be names using the following format: targetName_startPosistionInTarget
 # distance = 0  # distance between target site and bait (probe) to be considered covered. Default is 0.
 # bait.length = 120 # length of baits (probes), 60 or 90 nt are also common
-
 bait.coverage <- function(targets,baits,distance=0,bait.length=120,fraction=T) {
 	bait.matrix           <- do.call(rbind,strsplit(names(baits),split="_"))
 	bait.matrix[,2]       <- as.numeric(bait.matrix[,2])+1
@@ -547,32 +530,11 @@ bait.coverage <- function(targets,baits,distance=0,bait.length=120,fraction=T) {
 	result
 }
 
-
-##### running bait.coverage code above to produce a coverage table like the one provided by Arbor Biosciences
-library(Biostrings)
-targets           <- readDNAStringSet(filepath="/Users/Jeff/Documents/SnakeCap_Data/Weinell_TargetLoci_Snakes_Final_18April2019.fa")
-baits             <- readDNAStringSet(filepath="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta")
-BaitCovg          <- round(bait.coverage(targets=targets,baits=baits,distance=0,fraction=T),digits=4)
-in100nt           <- round(bait.coverage(targets=targets,baits=baits,distance=100,fraction=T),digits=4)
-in300nt           <- round(bait.coverage(targets=targets,baits=baits,distance=300,fraction=T),digits=4)
-in500nt           <- round(bait.coverage(targets=targets,baits=baits,distance=500,fraction=T),digits=4)
-BaitCovg.count    <- round(bait.coverage(targets=targets,baits=baits,distance=0,fraction=F),digits=4)
-in100nt.count     <- round(bait.coverage(targets=targets,baits=baits,distance=100,fraction=F),digits=4)
-in300nt.count     <- round(bait.coverage(targets=targets,baits=baits,distance=300,fraction=F),digits=4)
-in500nt.count     <- round(bait.coverage(targets=targets,baits=baits,distance=500,fraction=F),digits=4)
-ALLTARGS.BaitCovg <- round(sum(BaitCovg.count)/sum(width(targets)),digits=4)
-ALLTARGS.in100nt  <- round(sum(in100nt.count)/sum(width(targets)),digits=4)
-ALLTARGS.in300nt  <- round(sum(in300nt.count)/sum(width(targets)),digits=4)
-ALLTARGS.in500nt  <- round(sum(in500nt.count)/sum(width(targets)),digits=4)
-table.temp        <- rbind(c("ALLTARGS",ALLTARGS.BaitCovg,ALLTARGS.in100nt,ALLTARGS.in300nt,ALLTARGS.in500nt),cbind(names(targets),BaitCovg,in100nt,in300nt,in500nt))
-write.table(table.temp)
-
 ##########
 ### na.replace function
 #######
 ### used to replace NA values of data.table with a desired value (usually "-")
 #######
-
 na.replace <- function(v,value=x){
 		v[is.na(v)] <- value
 		v
@@ -653,7 +615,6 @@ simple.concatenate.DNA <- function(...,make.partitions.table=F){
 ## istart=NA
 ## iend=NA
 ## only.variable.sites=F
-
 concatenate.alignments    <- function(alignment.folder,type="DNA",seqs.format="phylip",alignment.output=NA,partition.output=NA,show.progress=T,istart=NA,iend=NA,only.variable.sites=F){
 	alignment.filenames   <- list.files(alignment.folder,full.names=T)
 	alignment.shortnames  <- gsub("\\..+","",list.files(alignment.folder))
@@ -755,7 +716,6 @@ concatenate.alignments    <- function(alignment.folder,type="DNA",seqs.format="p
 ### parameters:
 ## ... = multiple DNAStringSet objects separated by commas
 #####
-
 concatenateDNAStringSets <- function(...){
 	x              <- list(...)
 	x.names        <- lapply(X=x,FUN=names)        ### list of character vectors, each containing the names of the sequences in the corresponding DNAStringSet
@@ -773,7 +733,6 @@ concatenateDNAStringSets <- function(...){
 	result
 }
 
-
 ##################################
 ### writeDNAStringSet function ###
 ##################################
@@ -786,21 +745,17 @@ concatenateDNAStringSets <- function(...){
 ## format = "fasta"       ### no options currently possible...
 ## charsPerLine = 100000  ### maximum number of characters to write on each line
 ######
-
 writeDNAStringSet <- function(x,filepath,append=F,format="fasta",charsPerLine=100000){
 	data         <- as.DNAbin(x)
 	param.append <- append
-	
 	if(format=="phylip"){
 		param.format = "sequential"
 	}
 	if(format=="fasta"){
 		param.format = "fasta"
 	}
-	
 	write.dna(x=data,file=filepath,format=param.format,append=param.append,nbcol=1,colsep="",colw=charsPerLine)
 }
-
 
 ##########################
 ### filter.annotationTable function
@@ -810,7 +765,6 @@ writeDNAStringSet <- function(x,filepath,append=F,format="fasta",charsPerLine=10
 ### output.gff  <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TempFolder_3Nov2019/CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3" ### path and filename where to write filtered annotation table
 ### region.type <- "CDS"
 ### min.length  <- 120
-
 filter.annotationTable <- function(input.gff,output.gff,region.type="CDS",min.length=120) {
 	unfiltered.gff   <- fread(input.gff)
 	filtered.gff1A   <- unfiltered.gff[which(unfiltered.gff$region==region.type),]
@@ -828,7 +782,6 @@ filter.annotationTable <- function(input.gff,output.gff,region.type="CDS",min.le
 ### input.gff         <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TempFolder_3Nov2019/CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3" ### path to filtered annotation table
 ### output.dir.exome  <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TempFolder_3Nov2019/"                                                               ### directory to put exomes into
 ### additional.ID     <- "/Users/Jeff/Google Drive/KU/SnakeCap/Scaffold-Name-Key.txt"                                                                               ### filename of a table that cross-references contig names to names in GFF file
-
 get.exome.from.annotationTable <- function(species.name,genome.filepath,input.gff,output.dir.exome,additional.ID) {
 	filtered.gff1B    <- fread(input.gff)
 	refseq.names     <- unlist(filtered.gff1B[,1])
@@ -863,7 +816,6 @@ get.exome.from.annotationTable <- function(species.name,genome.filepath,input.gf
 #### species.names  <- c("Anolis_carolinensis","Crotalus_mitchellii","Pogona_vitticeps","Gekko_japonicus","Ophiophagus_hannah","Vipera_berus","Crotalus_horridus","Thamnophis_sirtalis","Python_bivittatus","Protobothrops_mucrosquamatus","Pantherophis_guttatus")
 #### blastMethod    <- "tblastx"   ### change to "blastn" if type = "UCEs"
 #### locusType      <- "exons"     ### other options include "UCEs"...
-
 reportBestMatches <- function(input.dir,species.names,output.dir=NA,blastMethod="tblastx",locusType="exons") {
 	if(is.na(output.dir)){
 		output.dir <- input.dir
@@ -893,7 +845,6 @@ reportBestMatches <- function(input.dir,species.names,output.dir=NA,blastMethod=
 #### genome.filepath   <- "/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Vipera_berus_GCA_000800605.1_Vber.be_1.0_genomic.fna"                ### genome filepath
 #### input.blastTable  <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TBLASTX_Results/Vipera_berus.tblastx.exons.best.txt"   ### BLAST hit table filepath
 #### output.dir.exome  <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TempFolder_3Nov2019/"                        ### directory to put exomes into
-
 get.exome.from.blastTable <- function(species,genome.filepath,input.blastTable,output.dir.exome) {
 
 	data.best           <- fread(file=input.blastTable,sep=",",header=T)
@@ -926,7 +877,6 @@ get.exome.from.blastTable <- function(species,genome.filepath,input.blastTable,o
 #### genome.filepath   <- "/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Vipera_berus_GCA_000800605.1_Vber.be_1.0_genomic.fna"                ### genome filepath
 #### input.blastTable  <- ""   ### BLAST hit table filepath
 #### output.dir        <- ""                        ### directory to save UCE-containing files
-
 get.UCEs.from.blastTable <- function(species,genome.filepath,input.blastTable,output.dir) {
 
 	data.best           <- fread(file=input.blastTable,sep=",",header=T)
@@ -950,7 +900,6 @@ get.UCEs.from.blastTable <- function(species,genome.filepath,input.blastTable,ou
 	writeXStringSet(x = UCE.scaff, filepath=paste(output.dir,species,"_UCEs.fas",sep=""), append=F, format="fasta")
 }
 
-
 ##############
 ## makeExomeStatsTable function
 ##############
@@ -961,9 +910,7 @@ get.UCEs.from.blastTable <- function(species,genome.filepath,input.blastTable,ou
 #### output.dir           # paramD <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TempFolder_3Nov2019/" ### location to write Exome Stats Table, currently set as folder for testing
 #### species              # paramE <- c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus","Protobothrops_mucrosquamatus","Pantherophis_guttatus","Anolis_carolinensis","Pogona_vitticeps","Gekko_japonicus")
 #### subgroup <-          # paramF <- c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus","Protobothrops_mucrosquamatus","Pantherophis_guttatus")  ### a subset of the full list of species to estimate stats for (here, subgroup includes only the snakes)
-
-# annotationTable.path   # paramC <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TempFolder_3Nov2019/CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3"
-
+## annotationTable.path   # paramC <- "/Users/Jeff/Google Drive/KU/SnakeCap/Exomes_TempFolder_3Nov2019/CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3"
 makeExomeStatsTable <- function(exomes.filepaths,annotationTable.path,species,subgroup,output.dir,is.primary.exome=1,i.start=1,i.stop=NA){
 	species              <- c(species[is.primary.exome],species[-is.primary.exome])         ### reorders the list of species such that the primary.species is first in the list
 	is.subgroup          <- mgrep(query=subgroup,subject=species)                           ### a list of numbers indicating which of the species are also in the subgroup
@@ -972,7 +919,7 @@ makeExomeStatsTable <- function(exomes.filepaths,annotationTable.path,species,su
 	matches.names        <- paste("matches.exome",c(1:length(exomes.filepaths)),sep="")
 	
 	for(i in 1:length(exome.names)){                                                       #|reads in exomes
-		assign(x=exome.names[i],value=readDNAStringSet(filepath=exomes.filepaths[i]))      #|and assigns them
+		assign(x=exome.names[i],value=readDNAStringSet(filepath=exomes.filepaths[i]))  #|and assigns them
 	}                                                                                      #|to object names
 
 	annotationTable  <- fread(input=annotationTable.path)   ### reads in annotation table, which is associated with the primary exome
@@ -1117,11 +1064,8 @@ makeExomeStatsTable <- function(exomes.filepaths,annotationTable.path,species,su
 ### species.subgroup        <- c(7:14) ### either a character vector of species names that are used in column names, or an integer vector specifying which columns are for species included in the subgroup
 ### use.min.pident.subgroup <- T
 ### fast.stat               <- "pident"   ### alternatively, "percentPIS". Whether to use mean percent identity or mean percent of sites parsimony informative when sorting loci before choosing those those with summed length < max.capture.coverage
-
-
 ####### Next like runs the function under the values that were used for SnakeCap
 ### result.pident <- pick.loci(statsTable.path = "/Users/Jeff/Google Drive/KU/SnakeCap/AlignedExonStats/stats_exome_data_TBLASTX.txt", output.dir = NULL, primary.species = "Thamnophis_sirtalis", species.subgroup = c(7:14), use.min.pident.subgroup = T, min.pident.keep = c(65,100), max.capture.coverage = 1200000, write.stats.tables = T, plot.results = T, fast.stat = "pident")
-
 pick.loci <- function(statsTable.path, output.dir, primary.species,species.subgroup=NULL, min.pident.keep=c(65,100), max.capture.coverage=1200000, write.stats.tables=F, plot.results=T,use.min.pident.subgroup=F,fast.stat="pident"){
 	stats.data.exome          <- fread(input=statsTable.path,sep=",",header=T)                                           ### reads in the full stats table generated in step 4
 	stats.data.exome.ordered  <- stats.data.exome[with(stats.data.exome, order(gene.name, mean.pident, decreasing=F)),]  ### Sorts loci by gene name, then by increasing percent identity to Thamnophis sirtalis
@@ -1245,7 +1189,6 @@ pick.loci <- function(statsTable.path, output.dir, primary.species,species.subgr
 ### species              # paramE <- c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus","Protobothrops_mucrosquamatus","Pantherophis_guttatus","Anolis_carolinensis","Pogona_vitticeps","Gekko_japonicus")
 ### i.start <- 1
 ### i.stop  <- NA
-
 align.and.concatenate.best.exons <- function(exomes.filepaths,is.primary.exome,statsTable.path,output.dir,species,i.start = 1,i.stop = NA){
 
 	statsTable           <- fread(statsTable.path,sep=",",header=T)                         ### reads in the info on fastest exon per gene dataset with total length <1.2Mbp
@@ -1324,7 +1267,6 @@ align.and.concatenate.best.exons <- function(exomes.filepaths,is.primary.exome,s
 ###
 ## makeblastdb.path <- "/Applications/ncbi-blast-2.5.0+/bin/makeblastdb"                                          ### path to the script called "makeblastdb"
 ## subject.path     <- "/Users/Jeff/Documents/SnakeGenomes/ContigFiles/GCA_000737285.1_CrotMitch1.0_genomic.fna"  ### path to the subject sequences that will be made into a database
-
 makeBlastDB    <- function(makeblastdb.path,subject.path){
 	command.part1     <- makeblastdb.path              #|character strings that will be 
 	command.part2     <- "-in"                         #|pasted together into a "command" string
@@ -1349,7 +1291,6 @@ makeBlastDB    <- function(makeblastdb.path,subject.path){
 ### subject.path <- genome.subjects.paths  <- c("/Users/Jeff/Documents/SnakeGenomes/ContigFiles/GCA_000737285.1_CrotMitch1.0_genomic.fna","/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Protobothrops_mucrosquamatus_GCF_001527695.2_P.Mucros_1.0_genomic.fna","/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Pantherophus_guttatus_GCA_001185365.1_PanGut1.0_genomic.fna","/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Python_bivittatus_GCF_000186305.1_Python_molurus_bivittatus-5.0.2_genomic.fna","/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Thamnophis_sirtalis_GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna","/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Ophiophagus_hannah_GCA_000516915.1_OphHan1.0_genomic.fna","/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Vipera_berus_GCA_000800605.1_Vber.be_1.0_genomic.fna","/Users/Jeff/Documents/SnakeGenomes/ContigFiles/Crotalus_horridus_GCA_001625485.1_ASM162548v1_genomic.fna")
 ### query.path   <- micrurus.UCEs.path     <- "/Users/Jeff/Google Drive/KU/SnakeCap/StreicherWiens2017_UCEs_fasta/micrurus_UCEs.fa"
 ### output.path  <- output.50hits.tables.paths <- c("/Users/Jeff/Google Drive/KU/SnakeCap/Crotalus-mitchellii.blastn.exons.50hits.txt","/Users/Jeff/Google Drive/KU/SnakeCap/Protobothrops.blastn.exons.50hits.txt","/Users/Jeff/Google Drive/KU/SnakeCap/Pantherophis.blastn.exons.50hits.txt","/Users/Jeff/Google Drive/KU/SnakeCap/Python.blastn.exons.50hits.txt","/Users/Jeff/Google Drive/KU/SnakeCap/Thamnophis.blastn.exons.50hits.txt","/Users/Jeff/Google Drive/KU/SnakeCap/Ophiophagus.blastn.exons.50hits.txt","/Users/Jeff/Google Drive/KU/SnakeCap/Vipera.blastn.exons.50hits.txt","/Users/Jeff/Google Drive/KU/SnakeCap/Crotalus-horridus.blastn.exons.50hits.txt")
-
 blastnR <- function(blastn.path,subject.path,query.path,output.path){
 	DB.extensions        <- c(".nog",".nsd",".nsi",".nsq",".nhr",".nin",".fai",".gz")  ### double-check that these are the files produced by makeBlastDB
 	makeblastdb.filepath <- gsub("/blastn","/makeblastdb",blastn.path)                 ### unless these files have been moved around
@@ -1380,7 +1321,6 @@ blastnR <- function(blastn.path,subject.path,query.path,output.path){
 ### species                  # paramE <- c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus","Protobothrops_mucrosquamatus","Pantherophis_guttatus")
 ### i.start <- 1
 ### i.stop  <- NA
-
 align.bestHit.UCEs <- function(species.UCEs.filepaths,is.primary.species,output.dir,species,i.start = 1,i.stop = NA){
 	species                <- c(species[is.primary.species],species[-is.primary.species])         ### reorders the list of species such that the primary.species is first in the list
 	species.UCEs.filepaths <- species.UCEs.filepaths[mgrep(species,species.UCEs.filepaths)]       ### puts the species.UCEs.filepaths in the same order as species
@@ -1436,7 +1376,6 @@ align.bestHit.UCEs <- function(species.UCEs.filepaths,is.primary.species,output.
 ### value: a character vector of each possible combinations that can be created by drawing one sample from each input set,
 ###        each element has the form "set1sample set2sample". Can then use strsplit(value[i],split=" ") to get each seperately
 ###        
-
 xprod.combn <- function(list.of.vects) {
 	nloops  <- length(list.of.vects)-1
 	
@@ -1454,7 +1393,6 @@ xprod.combn <- function(list.of.vects) {
 ###### NOTE: the previous version of this function required that the input be a list of vectors, whereas this version takes any number of vectors as input and creates the list
 #### value: a two column matrix, with each row containing a unique combination from from set1 (column 1 element) and set2 (column 2 element)
 ###
-
 xprod.combn.mat <- function(...) {
 	list.of.vects <- list(...)
 	nloops        <- (length(list.of.vects)-1)
@@ -1628,7 +1566,6 @@ write.phy <- function (x, file = "", interleave = FALSE, strict = FALSE){
 ### checks that an individual has at least one of each these nucleotide types A,C,G,T in its sequence
 ### ls = a list containing one or more character vectors
 ### this function is mostly useful after first using the uniqueLetters function
-
 charTest.dna <- function(ls){
 		ls <- tolower(ls)
 		all(c("a","c","g","t") %in% ls)
@@ -1638,7 +1575,6 @@ charTest.dna <- function(ls){
 ### charTest.aa function
 ### checks that an individual has at least one of each these amino acid types A,C,G,T in its sequence
 ### ls = a list containing one or more character vectors
-
 charTest.aa <- function(ls){
 		#ls <- tolower(ls)
 		#all(c("a","c","g","t") %in% ls)
@@ -1651,7 +1587,6 @@ charTest.aa <- function(ls){
 ### alignment = DNA sequence alignment of class DNAbin, DNAMultipleAlignment, or DNAStringSet
 ######
 ### value = a trimmed alignment with the same class as the input (untrimmed) alignment, which may be DNAbin, DNAMultipleAlignment, or DNAStringSet
-
 trim.alignment <- function (alignment, threshold=1){
 	
 	store.class <- class(alignment)
@@ -1709,7 +1644,6 @@ trim.alignment <- function (alignment, threshold=1){
 ##                       ### The third frame is assumed to be the frame with the most snps. This method works best for longer loci, faster-evolving loci,
 ##                       ### and when the alignment has many individuals, and/or moderate to high genetic distances among individuals.
 ## frameAtFirstchar=NULL ### the frame (i.e., codon position) of the first character of the sequence (if known). If unknown, leave as NULL, in which case the first base treated as if it is the first codon position.
-
 codonsDNAStringSet <- function(x,which.codon.positions,predict.reading.frame=F,frameAtFirstchar=NULL){
 	x.mat               <- do.call(rbind,strsplit(as.character(x),split=""))
 	if(predict.reading.frame==T){
@@ -1750,14 +1684,10 @@ codonsDNAStringSet <- function(x,which.codon.positions,predict.reading.frame=F,f
 ### value = an alignment of snps with the same class as the input (untrimmed) alignment
 ### Remember that snps (herein) = sites with at least two alleles, each of which occurs at least twice
 ### Therefore, snps = parsimony informative sites...
-
 snp.alignment <- function (alignment){
-
 	######
 	## Defining internal functions needed
 	## for the whole function to work
-
-	
 	#### pars.inf.dna function ### tests if an alignment site is parsimony informative
 	pars.inf.dna <- function(alignment.site) {	   # alignment.site is one column of a DNA alignment
 		y <- table(alignment.site)                 # This is the number of each type of character in a given column
@@ -1769,8 +1699,7 @@ snp.alignment <- function (alignment){
 			y <- FALSE
 		}
 		y
-	}
-	
+	}	
 	#### pars.inf.aa function
 	pars.inf.aa <- function(alignment.site) {	   #|alignment.site is a column of an AA alignment
 		y   <- table(alignment.site)               #|this is the number of each type of character in a given column
@@ -1784,7 +1713,6 @@ snp.alignment <- function (alignment){
 		}
 		y
 	}
-	
 	#### string.list function
 	string.list <- function(y){
 		paste.collapse <- function(z){
@@ -1797,38 +1725,28 @@ snp.alignment <- function (alignment){
 		y <- apply(X=y,MARGIN=1,FUN=paste.collapse)
 		y
 	}
-
 	#### charTest.dna function ### tests if an individual has at least one of each nucleotide
 	charTest.dna <- function(ls){
 		ls <- tolower(ls)
 		any(c("a","c","g","t") %in% ls)  ### changed "all" to "any"
 	}
-
 	#### charTest.aa function
 	charTest.aa <- function(ls){
 		#ls <- tolower(ls)
 		#all(c("a","c","g","t") %in% ls)
 		any(GENETIC_CODE %in% ls)
 	}
-
-
 	#### Start of actual function  ####
-	
-	
 	store.class <- class(alignment)
-	
 	if(store.class %in% c("DNAMultipleAlignment","DNAStringSet")){
 		alignment <- as.DNAbin(DNAMultipleAlignment(alignment))
 		data.type <- "DNA"
 	}
-	
 	if(store.class %in% c("AAMultipleAlignment","AAStringSet")){
 		alignment <- as.AAbin(AAMultipleAlignment(alignment))
 		data.type <- "AA"
 	}
-	
 	x <- as.character(alignment)
-	
 	if(data.type == "DNA"){
 		keep.cols  <- unlist(apply(x, MARGIN=2, pars.inf.dna))
 		out        <- x[,keep.cols]
@@ -1840,34 +1758,25 @@ snp.alignment <- function (alignment){
 		out        <- x[,keep.cols]
 		keep.rows  <- apply(X=out,MARGIN=1,FUN=charTest.aa)     ### A list of logicals indicating whether each individual has at least one non-missing character
 	}
-	
 	out        <- out[keep.rows,]                               ### Only keeps individuals that have some data present
-	
-	
 	if(store.class=="DNAbin"){
 		out <- as.DNAbin(out)
 	}
-	
 	if(store.class=="DNAStringSet"){
 		out <- DNAStringSet(string.list(out))
 	}
-	
 	if(store.class=="DNAMultipleAlignment"){
 		out <- DNAMultipleAlignment(string.list(out))
 	}
-	
 	if(store.class=="AAbin"){
 		out <- as.AAbin(out)
 	}
-	
 	if(store.class=="AAStringSet"){
 		out <- AAStringSet(string.list(out))
 	}
-	
 	if(store.class=="AAMultipleAlignment"){
 		out <- AAMultipleAlignment(string.list(out))
 	}
-	
 	out
 }
 
@@ -1882,7 +1791,6 @@ snp.alignment <- function (alignment){
 ### value = an DNAStringSet alignment of snps
 ### Remember that snps = sites with at least two alleles, each of which occurs at least twice
 ### 
-
 snpsDNAStringSet <- function(alignment,remove.NoDataSeqs = T){
 	keep.cols <- rep(F,width(alignment[1]))
 	for(i in 1:width(alignment[1])){
@@ -1906,24 +1814,26 @@ snpsDNAStringSet <- function(alignment,remove.NoDataSeqs = T){
 }
 
 #########
-find.orf <-function(input.seq, codons = F, min.size = 80){
+### find.orf function
+#########
+find.orf <- function(input.seq, codons = F, min.size = 80){
   #Sets up data
   # input.seq<-trimmed[j]
-  codon.table<-data.frame(Start = rep(0,6), End = rep(0,6), Frame = c("F1", "F2", "F3", "R1", "R2", "R3"))
-  for.seq<-as.character(input.seq)
+  codon.table <- data.frame(Start = rep(0,6), End = rep(0,6), Frame = c("F1", "F2", "F3", "R1", "R2", "R3"))
+  for.seq     <- as.character(input.seq)
   
   #Gets codon stuff
-  TAA<-matchPattern("TAA", for.seq)
-  TGA<-matchPattern("TGA", for.seq)
-  TAG<-matchPattern("TAG", for.seq)
+  TAA <- matchPattern("TAA", for.seq)
+  TGA <- matchPattern("TGA", for.seq)
+  TAG <- matchPattern("TAG", for.seq)
   
   #Forward Frame 1
-  result1<-TAA[(TAA@ranges@start+2) %% 3 == 0]   
-  result2<-TGA[(TGA@ranges@start+2) %% 3 == 0]    
-  result3<-TAG[(TAG@ranges@start+2) %% 3 == 0]    
+  result1 <- TAA[(TAA@ranges@start+2) %% 3 == 0]   
+  result2 <- TGA[(TGA@ranges@start+2) %% 3 == 0]    
+  result3 <- TAG[(TAG@ranges@start+2) %% 3 == 0]    
   
-  starts<-c(result1@ranges@start, result2@ranges@start, result3@ranges@start)
-  ends<-c(result1@ranges@start+2, result2@ranges@start+2, result3@ranges@start+2)
+  starts <- c(result1@ranges@start, result2@ranges@start, result3@ranges@start)
+  ends   <- c(result1@ranges@start+2, result2@ranges@start+2, result3@ranges@start+2)
   if (length(starts) != 0){
     codon.table<-codon.table[codon.table$Frame != "F1",]
     temp.table<-data.frame(Start = starts, End = ends, Frame = "F1")
@@ -1931,9 +1841,9 @@ find.orf <-function(input.seq, codons = F, min.size = 80){
   } 
   
   #Forward Frame 2
-  result1<-TAA[(TAA@ranges@start+1) %% 3 == 0]   
-  result2<-TGA[(TGA@ranges@start+1) %% 3 == 0]    
-  result3<-TAG[(TAG@ranges@start+1) %% 3 == 0]    
+  result1 <- TAA[(TAA@ranges@start+1) %% 3 == 0]   
+  result2 <- TGA[(TGA@ranges@start+1) %% 3 == 0]    
+  result3 <- TAG[(TAG@ranges@start+1) %% 3 == 0]    
   
   starts<-c(result1@ranges@start-1, result2@ranges@start-1, result3@ranges@start-1)
   ends<-c(result1@ranges@start+1, result2@ranges@start+1, result3@ranges@start+1)
@@ -2041,13 +1951,11 @@ find.orf <-function(input.seq, codons = F, min.size = 80){
     orf.frame<-orf.frame[orf.frame$Size >= min.size,]
     return(orf.frame)
   } # end else
-  
 }# END FUNCTION
 
-####
+##########
 ## trim.ends function
-####
-
+######
 trim.ends <- function (x, min.n.seq = 4, codon.trim = T){
   #Converts DNAStringSet to something usable
   #x<-trimmed
@@ -2144,7 +2052,6 @@ trim.ends <- function (x, min.n.seq = 4, codon.trim = T){
 ## slice.size.bp = window width
 ## threshold = maximum fraction of sites that can be parsimony informative sites (mean of pairwise scores calculated for each individual) for the sequence to be considered aligned "good"
 ## individuals with fewer than 20bp in the slice.trim alignment are removed
-
 slice.trim <- function(input.align, slice.size.bp = 100, threshold = 0.45){  
   #makes consensus sequence for comparison
   #input.align<-trimal.align
@@ -2233,7 +2140,6 @@ slice.trim <- function(input.align, slice.size.bp = 100, threshold = 0.45){
 ## reads trimAL alignment into R
 ## deletes the trimAL alignment from the current directory
 ## value returned by this function is the trimAL alignment
-
 run.trimal <- function(input.align, method = "auto",locus.name=locus.names[i],trimal.exe.dir=getwd(),trimal.exe.name="trimal"){
   # input.align  <- rem.align
   # Finds probes that match to two or more contigs
@@ -2279,7 +2185,6 @@ run.trimal <- function(input.align, method = "auto",locus.name=locus.names[i],tr
 #####
 ## make.consensus function
 #####
-
 make.consensus <- function (input.alignment, method = c("majority","threshold","IUPAC","profile"), threshold = 0.6, warn.non.IUPAC = FALSE, type = c("DNA", "RNA")) {
   
   #input.alignment<-trimmed
@@ -2324,17 +2229,16 @@ make.consensus <- function (input.alignment, method = c("majority","threshold","
 ### charTest function checks that a sequence has at least one of each nucleotide types A,C,G,T
 ### ls = a list containing one or more character vectors
 ### this function is mostly useful after first using the uniqueLetters function
-
 charTest <- function(ls){
 		ls <- tolower(ls)
 		all(c("a","c","g","t") %in% ls)
 }
 
 ##################
-## percent.gaps
+## percent.gaps function
+##################	
 ## alignment must be an Xstringset
 ## returns the percentage of the alignment that is a gap "-"
-
 percent.gaps <- function(alignment){
 	area.alignment <- ((unique(width(alignment)))*length(alignment))
 	noGaps.seqs <- RemoveGaps(alignment)
@@ -2344,11 +2248,12 @@ percent.gaps <- function(alignment){
 
 ##################
 ### pis function
-### alternative parsimony informative sits calculation
+##################
+### alternative parsimony informative sites calculation
 ### this is the pis function in phyloch package
+#####
 ### x = DNAbin alignment
 ###
-
 pis.new <- function (x, abs = TRUE, use.ambiguities = FALSE,as.percent=F){
 	if(class(x)=="DNAStringSet"){
 		x <- as.DNAbin(DNAMultipleAlignment(x))
@@ -2358,9 +2263,9 @@ pis.new <- function (x, abs = TRUE, use.ambiguities = FALSE,as.percent=F){
 		x <- x[x > 1]                                                     # This is the number of each type of character in a given column
 		n <- c("-", "n", "b", "h", "d", "v", "k", "s", "r", "w","y","?")  # A list of possible characters to check against
 		if (length(x[!names(x) %in% n]) > 1){                             #| These lines are specifying whether the
-			x <- TRUE                                                     #| the ith column has at least two DIFFERENT but not ambiguous characters,
+			x <- TRUE                                                 #| the ith column has at least two DIFFERENT but not ambiguous characters,
 		} else {                                                          #|
-			x <- FALSE                                                    #|
+			x <- FALSE                                                #|
 		}                                                                 #|
 	}
 	nbchar <- dim(x)[2]
@@ -2384,7 +2289,6 @@ pis.new <- function (x, abs = TRUE, use.ambiguities = FALSE,as.percent=F){
 ## Dependencies
 ##  functions: percent.gaps, pis.new
 ##  packages: ape, Biostrings, data.table
-
 alignment.stats <- function(align.dir,outfile,seqs.format="phylip"){
 	ext         <- c("phy","fa"); names(ext) <- c("phylip","fasta")
 	ext.temp    <- as.character(ext[seqs.format])
@@ -2428,7 +2332,6 @@ alignment.stats <- function(align.dir,outfile,seqs.format="phylip"){
 	stats.table
 }
 
-
 #####
 ## align.alignment.columns function
 #####
@@ -2468,7 +2371,6 @@ align.alignment.columns <- function(phylip.alignment,npaces=6){
 #### scanFa.multiple function
 # used to pull in fasta formatted data stored in multiple files
 # directory = path to folder holding the fasta formatted files
-
 scanFa.multiple <- function(directory){
 	scan.fa <- function(filename){
 		res <- scanFa(FaFile(filename))
@@ -2507,9 +2409,6 @@ scanFa.multiple <- function(directory){
 ## ith.locus.end = "all"          # last locus to process. "all" means process until no more loci to process.
 ## locus.names.omit=NULL          # set to "WeinellEntry5179" for SnakeCap analyses, because the wrong target sequence was used when designing probes for this locus. I intended to target the Beta-keratin 2 gene, but instead targeted a non-coding region 80,000bp away.
 ## AA.pdist.drop.thresh=0.5       # maximum mean pairwise p-distance for AA sequence of an individual to keep the individual in AA alignments or alignments containing CDS regions
-
-#make.partitioned.alignment      <- function(output.dir,InputAlignmentFolder,TargetDNA_CDS.regions.filename,Ophiophagus.dna.filename,bait.species.filename,ref.type="DNA",old.names=NA,new.names=NA,functions=functions.filename,libs=libraries.filename,drop.reference=F){
-#make.partitioned.alignment      <- function(output.dir,InputAlignmentFolder,TargetDNA_CDS.regions.filename,Ophiophagus.dna.filename,bait.species.filename,ref.type="DNA",old.names=NA,new.names=NA,drop.reference=F){
 
 make.partitioned.alignment       <- function(output.dir,InputAlignmentFolder,TargetDNA_CDS.regions.filename,bait.species.filename,ref.type="DNA",old.names=NA,new.names=NA,drop.reference=F,ith.locus.start=1,ith.locus.end="all",locus.names.omit=NULL,AA.pdist.drop.thresh=0.5){
 	#source(libs)            ### loads required libraries from the libraries file
@@ -2553,12 +2452,6 @@ make.partitioned.alignment       <- function(output.dir,InputAlignmentFolder,Tar
 	input.alignment.filenames   <- list.files(InputAlignmentFolder,full.names=T)
 	input.alignment.shortnames  <- gsub(".phy","",list.files(InputAlignmentFolder))
 
-## 27/27 immune genes are in TargetDNA_CDS.regions
-## 1652/1652 WholeExon genes are in TargetDNA_CDS.regions  ### potentially re-add the ones that were missing to include the potentially one or two bases not included (for those with frame not 0)
-## 54/95 scalation genes missing from TargetDNA_CDS.regions
-## 29/119 vision genes missing from TargetDNA_CDS.regions
-## 85/??? exon-containing UCEs present in TargetDNA_CDS.regions
-## 0/??? exon-containing ddRAD-like loci present in TargetDNA_CDS.regions
 	shared.names                <- Reduce(intersect, list(input.alignment.shortnames,targetCDS.names)) ### updates shared.names so that they only processes loci that have been aligned and that have a known CDS region (which is included in TargetDNA_CDS.regions)
 	if(!is.null(locus.names.omit)){
 		shared.names  <- setdiff(shared.names,locus.names.omit)   ### doesnt process loci in locus.names.omit
@@ -2599,9 +2492,9 @@ make.partitioned.alignment       <- function(output.dir,InputAlignmentFolder,Tar
 # #			}
 		}
 		
-		if(length(final.locus)<5){        ##| Skips locus if fewer than 5 sequences in final.locus
-			next                          ##| (i.e. need at least 4 sequences other than the reference CDS)
-		}                                 ##|
+		if(length(final.locus) < 5){        ##| Skips locus if fewer than 5 sequences in final.locus
+			next                        ##| (i.e. need at least 4 sequences other than the reference CDS)
+		}                                   ##|
 	
 		alignment.names  <- names(final.locus)
 		if(!all(is.na(old.names))){
@@ -2974,9 +2867,7 @@ plotAlignment <- function(alignment){
 #####			rettype = "ft" | download feature table         # doesnt include as much feature information as rettype=gb
 ##### retmode = string indicating the mode to download sequences; default = "text"; don't change from default
 ###########
-
 get_ncbi_sequences <- function(outfile="",accessionList,startList=1,endList,strandList="1",db="nuccore",rettype="fasta",retmode="text"){
-	
 	URLs <- paste("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?",
 		"db=nuccore",
 		"&id=",accessionList,
@@ -2987,13 +2878,11 @@ get_ncbi_sequences <- function(outfile="",accessionList,startList=1,endList,stra
 		"&retmode=",retmode,
 		sep=""
 	)
-	
 	for(i in 1:length(URLs)){
 		temp.URL <- getURL(URLs[i])
 		write(temp.URL,file=outfile,append=T)
 	}
 }
-
 
 ####################
 #### include.accession.region.gb function
@@ -3002,7 +2891,6 @@ get_ncbi_sequences <- function(outfile="",accessionList,startList=1,endList,stra
 #### GenBank flatfile, in which the region information (ie, start and end info)
 #### is included as part of the accession name. This modification allows the
 #### the region info to be acccessed when using the AA.from.gb function
-
 include.accession.region.gb <- function(gb.filename){
 	original.string         <- readChar(gb.filename, file.info(gb.filename)$size)
 	new.string <- gsub(pattern=" REGION: ",replacement=":",original.string)
@@ -3015,7 +2903,6 @@ include.accession.region.gb <- function(gb.filename){
 ####################
 #### this function imports a GenBank flatflie into R
 ####
-
 read.gb <- function(gb.filename,progress=T){	
 	include.accession.region.gb <- function(gb.filename, outfile){
 		original.string  <- readChar(gb.filename, file.info(gb.filename)$size)
@@ -3054,7 +2941,6 @@ read.gb <- function(gb.filename,progress=T){
 ### gb.object          <- gbData
 ### targetTable.object <- targetTable
 ### i=1
-
 CDS.from.gb            <- function(gb.object,targetTable.object,output.filename=NA,report.noCDS=T,debug=F){
 
 	#is.wholenumber <- function(x, tol = .Machine$double.eps^0.5) {
@@ -3187,7 +3073,6 @@ CDS.from.gb            <- function(gb.object,targetTable.object,output.filename=
 	}
 	result
 }
-#########
 
 ############
 ### check.performance function
@@ -3214,7 +3099,6 @@ check.performance <- function(){
 ####
 ## rooted.tree = a tree of class phylo, with $node.label indicating the support values
 ## support.threshold = minimum value required to keep the node (and branch leading to the node)
-
 collapse.low.support.nodes <- function(rooted.tree,support.threshold=80){
 	tree1.rooted <- rooted.tree
 	tolerance                 <- min(tree1.rooted$edge.length)/2 ### this value is half the length of the shortest edge, and is used as the cuttoff for removing branches that will get set to zero-length
@@ -3226,62 +3110,6 @@ collapse.low.support.nodes <- function(rooted.tree,support.threshold=80){
 	tree1.rooted3             <- di2multi(tree1.rooted2,tol=tolerance)  ### deletes the zero-length edges deleted (this is the tree with low-support nodes collapsed!!!)
 	tree1.rooted3
 }
-
-##################################################
-### Figuring out Functions used to pick UCEs after extracting best-matches... ##
-##### Examining the starting set of UCEs. Since SnakeCap loci only selected from the Streicher Micrurus set, then no need to the read them into R
-# 
-# source.UCEs.dir          <- "/Users/Jeff/Google Drive/KU/SnakeCap/StreicherWiens2017_UCEs_fasta/"   ### Directory containing fasta file of set of UCEs to be queried in genomes
-# source.species           <- c("micrurus")                                                                            ### Micrurus fulvius (even though Streicher also found additional UCEs in python, I only queried the Micrurus set)
-# source.species.filenames <- paste(source.UCEs.dir,source.species,"_UCEs.fa",sep="")                                  ### filenames for starting set of UCEs to be queried across species with genomes
-# 
-# for(i in 1:length(source.species)){                                                           #|reads in UCE alignments   #| Reads in one or more sets of UCEs that will
-# 	assign(x=paste(source.species[i],"_UCEs",sep=""),value=readDNAStringSet(filepath=source.species.filenames[i]))          #| be queried within genomes.
-# }                                                                                                                         #|
-
-### Comparing the best-match UCEs found in each species genome:
-#
-#species                 <- c("Thamnophis_sirtalis","Crotalus_horridus","Protobothrops_mucrosquamatus","Ophiophagus_hannah","Vipera_berus","Crotalus_mitchellii","Pantherophis_guttatus","Python_bivittatus")
-#UCEs.from.genomes.dir   <- "/Users/Jeff/Google Drive/KU/SnakeCap/UCEs.In.Snake.Genomes/"
-#UCEs.from.genomes.paths <- paste(UCEs.from.genomes.dir,species,"_UCEs.fasta",sep="")
-#species.UCEs            <- paste(species,"_UCEs",sep="")
-#
-#for(i in 1:length(species.UCEs)){                                                              #|reads in UCE sets
-#	assign(x=species.UCEs[i],value=readDNAStringSet(filepath=UCEs.from.genomes.paths[i]))      #|for each species
-#}
-#
-#species.UCE.names       <- paste(paste(species,".UCE.names",sep=""))
-#for(i in 1:length(species.UCE.names)){                                                            #|assigns a character vector of UCE names to an object for each species
-#	assign(x=species.UCE.names[i],value=gsub(pattern=".*_uce","UCE",names(get(species.UCEs[i])))) #|the object names are held in the vector species.UCE.names
-#}
-#
-#shared.UCEs            <- intersect.all(lapply(species.UCE.names,get))                        ### list of UCEs that were found in all of the snake genomes (n=2,968)
-#sometimes.present.UCEs <- setdiff(unique(unlist(lapply(species.UCE.names,get))),shared.UCEs)  ### list of UCEs found in one or more but not all snake genomes (n=292)
-
-####################################################################
-### These are the alignments produced for the shared UCEs after using MAFFT 
-#
-# Crotalus.horridus_UCE-containing-contigs.filename <- "/Users/Jeff/Google Drive/KU/SnakeCap/Crotalus-horridus_UCE-containing-contigs.fasta"
-# Crotalus.horridus_UCEs                            <- "/Users/Jeff/Google Drive/KU/SnakeCap/Crotalus_horridus_UCEs.fasta"
-# UCE.alignments.dir                                <- "/Users/Jeff/Google Drive/KU/SnakeCap/MAFFT-aligned-UCEs"
-# UCE.alignment.filenames                           <- list.files(path=UCE.alignments.dir,full.names=T)
-# UCE.shortnames                                    <- gsub(".fasta","",list.files(path=UCE.alignments.dir,full.names=F))
-# UCE.shortnames                                    <- gsub("uce","UCE",UCE.shortnames)
-# 
-# for(i in 1:length(UCE.shortnames)){                                                           #|reads in UCE alignments
-# 	assign(x=UCE.shortnames[i],value=readDNAStringSet(filepath=UCE.alignment.filenames[i]))   #|and assigns them
-# }
-# 
-# test <- lapply(UCE.shortnames,get)
-# test2 <- NULL
-# for(i in 1:length(test)){
-# 	test2[i] <- length(test[[i]])
-# }
-# all(test2==8))
-#
-#
-
-
 
 ############
 ## congruency.test function
@@ -3345,7 +3173,6 @@ congruency.test <-function(tree1,tree2,min.support=80){
 	isCongruent
 }
 
-
 ###########
 ## multiple.congruency.test function
 #####
@@ -3354,7 +3181,6 @@ congruency.test <-function(tree1,tree2,min.support=80){
 ###		columns 1 and 2 contain the names of the two trees being compared, respectively
 ###		column 3 = a logical indicating whether the two trees (of columns 1 and 2) are congruent
 #####
-
 multiple.congruency.test <- function(...,min.support=80){
 	list.of.trees <- list(...)
 	if(length(list.of.trees)==1){
@@ -3393,7 +3219,6 @@ multiple.congruency.test <- function(...,min.support=80){
 #####
 ## input: the three column matrix produced by the function multiple.congruency.test
 #####
-
 congruency.network <- function(congruency.matrix,plot.network=T){
 	mat.congruent    <- congruency.matrix[which(congruency.matrix[,"tree1"] != congruency.matrix[,"tree2"] & congruency.matrix[,"congruent"]=="TRUE"),]
 	edge_list        <- tibble::tibble(from = mat.congruent[,1], to = mat.congruent[,2])
@@ -3410,7 +3235,6 @@ congruency.network <- function(congruency.matrix,plot.network=T){
 ##########
 ### returns the set of unique tip labels across a multiPhylo object
 ##########
-
 unique.tiplabels <- function(trees.multiPhylo){
 	label.search   <- str_locate(names(unlist(trees.multiPhylo)),pattern="tip.label")
 	tip.labels.all <- unlist(trees.multiPhylo)[which(!is.na(label.search[,1]))]
@@ -3424,7 +3248,6 @@ unique.tiplabels <- function(trees.multiPhylo){
 #### returns a multiPhylo object containing the set of all quad-trees (4-taxon subclades of a tree) for a set of tip.labels (by default, the tips labels of the input tree).
 #### It is often useful to set alt.tips = unique.tiplabels(<set of gene trees>), where the set of gene trees are held in a multiPhylo object
 ##########
-
 get.all.quad.trees <- function(ref.tree,alt.tips=NULL,support.scaler=1){
 	best.tree   <- ref.tree
 	if(is.null(alt.tips)){
@@ -3455,6 +3278,64 @@ get.all.quad.trees <- function(ref.tree,alt.tips=NULL,support.scaler=1){
 	all.quads.trees
 }
 
+			
+##################################################
+### Figuring out Functions used to pick UCEs after extracting best-matches... ##
+##### Examining the starting set of UCEs. Since SnakeCap loci only selected from the Streicher Micrurus set, then no need to the read them into R
+# 
+# source.UCEs.dir          <- "/Users/Jeff/Google Drive/KU/SnakeCap/StreicherWiens2017_UCEs_fasta/"   ### Directory containing fasta file of set of UCEs to be queried in genomes
+# source.species           <- c("micrurus")                                                                            ### Micrurus fulvius (even though Streicher also found additional UCEs in python, I only queried the Micrurus set)
+# source.species.filenames <- paste(source.UCEs.dir,source.species,"_UCEs.fa",sep="")                                  ### filenames for starting set of UCEs to be queried across species with genomes
+# 
+# for(i in 1:length(source.species)){                                                           #|reads in UCE alignments   #| Reads in one or more sets of UCEs that will
+# 	assign(x=paste(source.species[i],"_UCEs",sep=""),value=readDNAStringSet(filepath=source.species.filenames[i]))          #| be queried within genomes.
+# }                                                                                                                         #|
+
+### Comparing the best-match UCEs found in each species genome:
+#
+#species                 <- c("Thamnophis_sirtalis","Crotalus_horridus","Protobothrops_mucrosquamatus","Ophiophagus_hannah","Vipera_berus","Crotalus_mitchellii","Pantherophis_guttatus","Python_bivittatus")
+#UCEs.from.genomes.dir   <- "/Users/Jeff/Google Drive/KU/SnakeCap/UCEs.In.Snake.Genomes/"
+#UCEs.from.genomes.paths <- paste(UCEs.from.genomes.dir,species,"_UCEs.fasta",sep="")
+#species.UCEs            <- paste(species,"_UCEs",sep="")
+#
+#for(i in 1:length(species.UCEs)){                                                              #|reads in UCE sets
+#	assign(x=species.UCEs[i],value=readDNAStringSet(filepath=UCEs.from.genomes.paths[i]))      #|for each species
+#}
+#
+#species.UCE.names       <- paste(paste(species,".UCE.names",sep=""))
+#for(i in 1:length(species.UCE.names)){                                                            #|assigns a character vector of UCE names to an object for each species
+#	assign(x=species.UCE.names[i],value=gsub(pattern=".*_uce","UCE",names(get(species.UCEs[i])))) #|the object names are held in the vector species.UCE.names
+#}
+#
+#shared.UCEs            <- intersect.all(lapply(species.UCE.names,get))                        ### list of UCEs that were found in all of the snake genomes (n=2,968)
+#sometimes.present.UCEs <- setdiff(unique(unlist(lapply(species.UCE.names,get))),shared.UCEs)  ### list of UCEs found in one or more but not all snake genomes (n=292)
+
+####################################################################
+### These are the alignments produced for the shared UCEs after using MAFFT 
+#
+# Crotalus.horridus_UCE-containing-contigs.filename <- "/Users/Jeff/Google Drive/KU/SnakeCap/Crotalus-horridus_UCE-containing-contigs.fasta"
+# Crotalus.horridus_UCEs                            <- "/Users/Jeff/Google Drive/KU/SnakeCap/Crotalus_horridus_UCEs.fasta"
+# UCE.alignments.dir                                <- "/Users/Jeff/Google Drive/KU/SnakeCap/MAFFT-aligned-UCEs"
+# UCE.alignment.filenames                           <- list.files(path=UCE.alignments.dir,full.names=T)
+# UCE.shortnames                                    <- gsub(".fasta","",list.files(path=UCE.alignments.dir,full.names=F))
+# UCE.shortnames                                    <- gsub("uce","UCE",UCE.shortnames)
+# 
+# for(i in 1:length(UCE.shortnames)){                                                           #|reads in UCE alignments
+# 	assign(x=UCE.shortnames[i],value=readDNAStringSet(filepath=UCE.alignment.filenames[i]))   #|and assigns them
+# }
+# 
+# test <- lapply(UCE.shortnames,get)
+# test2 <- NULL
+# for(i in 1:length(test)){
+# 	test2[i] <- length(test[[i]])
+# }
+# all(test2==8))
+#
+#
+
+###############			
+			
+			
 ##########
 # library(ape)
 # geneTrees.dir      <- "/Users/Jeff/Documents/SnakeCap_Data/gene-trees_5May2019/targets_withFlanking_no-trimAL/treefiles_withFlanking_no-trimAL/"
