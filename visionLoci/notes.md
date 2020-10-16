@@ -8,30 +8,30 @@ Probes were designed for the remaining 119 vision loci.
 Schott et al. (2017) loci not targeted (n=30):
 Locus | Reason not included
 ----- | -----
-ACTB | 
+ACTB | 0% bait coverage
 Amelogenin | 
-ARRB2 | 
-CD36 | 
-GART | 
-GAS6 | 
+ARRB2 | 0% bait coverage
+CD36 | not yet clear why, because bait coverage was 100%
+GART | 0% bait coverage
+GAS6 | 0% bait coverage
 GPR98 | 
-GRK7 | 
+GRK7 | 0% bait coverage
 HNF1A | 
 HNRPD | 
-HOXB5 | 
-MAFB | 
+HOXB5 | 0% bait coverage
+MAFB | 74.5% bait coverage, so probably a different reason for exclusion
 NACA | 
 OPN5 | 
-NGF | 
+NGF | not yet clear why, because bait coverage was 100%
 NONO | 
 OPN4 | 
-OTX2 | 
+OTX2 | 0% bait coverage
 PAXIP1 | 
-PDCH15 | 
+PDCH15 | not yet clear why, because bait coverage was 100%
 POLA1 | 
 RHOC | 
 RPL22 | 
 RPL38 | 
 TRB2 | 
-UBC | 
+UBC | 74.5% bait coverage, so probably a different reason for exclusion
 
