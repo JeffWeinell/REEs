@@ -1,1 +1,1 @@
-Still determining exactly the scripts used to pick which UCEs to include
+The UCEs in micrurus_UCEs.fa and python_UCEs.fa are from Streicher et al. 2017
