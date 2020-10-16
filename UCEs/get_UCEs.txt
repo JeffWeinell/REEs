@@ -4,18 +4,23 @@ library(phytools)
 library(dplyr)
 library(RecordLinkage)
 
-input.dir  <- "/Users/Jeff/Google Drive/KU/SnakeCap/StreicherWiens2017_UCEs_ASTRAL_37_taxa_4178_alignments/"
-#output.dir <- "/Users/Jeff/Google Drive/KU/SnakeCap/StreicherWiens2017_UCEs_fasta/"
-output.dir <- "/Users/Jeff/Documents/SnakeCap_Data/Streicher_UCE-subset"
+input.dir  <- "~/StreicherWiens2017_UCEs_ASTRAL_37_taxa_4178_alignments/"
+#output.dir <- "~/StreicherWiens2017_UCEs_fasta/"
+output.dir <- "~/Streicher_UCE-subset"
+
+#####
+## Extracting UCEs for each species from each of the UCE alignments of Streicher et al. 2017
+## Among snakes, they included Micrurus, Pareas, Acrochordus, Xenodermus, Boaedon, and Python
 
 #### Micrurus_fulvius_UCEs  ####
-
 setwd(input.dir)
 files <- list.files()
 for(i in 1:length(files)){
-	temp.file <- list.files()[i]
+	temp.file      <- list.files()[i]
 	temp.alignment <- read.dna(file=temp.file,format="sequential")
-	if(length(grep("micrurus",labels(temp.alignment)))==0){next}
+	if(length(grep("micrurus",labels(temp.alignment)))==0){
+		next
+	}
 	temp.micrurus <- temp.alignment[grep("micrurus",labels(temp.alignment)),]
 	attributes(temp.micrurus)$dimnames[[1]] <- paste(labels(temp.micrurus)[1],gsub(".nexus.phy","",temp.file),sep="_")
 	write.dna(x=temp.micrurus,file=paste(output.dir,"micrurus_UCEs.fa",sep=""),append=T,format="fasta",nbcol=1,colw=length(temp.micrurus))
@@ -28,7 +33,9 @@ files <- list.files()
 for(i in 1:length(files)){
 	temp.file <- list.files()[i]
 	temp.alignment <- read.dna(file=temp.file,format="sequential")
-	if(length(grep("pareas",labels(temp.alignment)))==0){next}
+	if(length(grep("pareas",labels(temp.alignment)))==0){
+		next
+	}
 	temp.pareas <- temp.alignment[grep("pareas",labels(temp.alignment)),]
 	attributes(temp.pareas)$dimnames[[1]] <- paste(labels(temp.pareas)[1],gsub(".nexus.phy","",temp.file),sep="_")
 	write.dna(x=temp.pareas,file=paste(output.dir,"pareas_UCEs.fa",sep=""),append=T,format="fasta",nbcol=1,colw=length(temp.pareas))
@@ -42,7 +49,9 @@ files <- list.files()
 for(i in 1:length(files)){
 	temp.file <- list.files()[i]
 	temp.alignment <- read.dna(file=temp.file,format="sequential")
-	if(length(grep("acrochordus",labels(temp.alignment)))==0){next}
+	if(length(grep("acrochordus",labels(temp.alignment)))==0){
+		next
+	}
 	temp.acrochordus <- temp.alignment[grep("acrochordus",labels(temp.alignment)),]
 	attributes(temp.acrochordus)$dimnames[[1]] <- paste(labels(temp.acrochordus)[1],gsub(".nexus.phy","",temp.file),sep="_")
 	write.dna(x=temp.acrochordus,file=paste(output.dir,"acrochordus_UCEs.fa",sep=""),append=T,format="fasta",nbcol=1,colw=length(temp.acrochordus))
@@ -55,7 +64,9 @@ files <- list.files()
 for(i in 1:length(files)){
 	temp.file <- list.files()[i]
 	temp.alignment <- read.dna(file=temp.file,format="sequential")
-	if(length(grep("xenodermus",labels(temp.alignment)))==0){next}
+	if(length(grep("xenodermus",labels(temp.alignment)))==0){
+		next
+	}
 	temp.xenodermus <- temp.alignment[grep("xenodermus",labels(temp.alignment)),]
 	attributes(temp.xenodermus)$dimnames[[1]] <- paste(labels(temp.xenodermus)[1],gsub(".nexus.phy","",temp.file),sep="_")
 	write.dna(x=temp.xenodermus,file=paste(output.dir,"xenodermus_UCEs.fa",sep=""),append=T,format="fasta",nbcol=1,colw=length(temp.xenodermus))
@@ -68,12 +79,15 @@ files <- list.files()
 for(i in 1:length(files)){
 	temp.file <- list.files()[i]
 	temp.alignment <- read.dna(file=temp.file,format="sequential")
-	if(length(grep("python",labels(temp.alignment)))==0){next}
+	if(length(grep("python",labels(temp.alignment)))==0){
+		next
+	}
 	temp.python <- temp.alignment[grep("python",labels(temp.alignment)),]
 	attributes(temp.python)$dimnames[[1]] <- paste(labels(temp.python)[1],gsub(".nexus.phy","",temp.file),sep="_")
 	write.dna(x=temp.python,file=paste(output.dir,"python_UCEs.fa",sep=""),append=T,format="fasta",nbcol=1,colw=length(temp.python))
 }
 
+###############################
 ### get names used for taxa ### 
 
 setwd(input.dir)
