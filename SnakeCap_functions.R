@@ -1257,8 +1257,8 @@ align.and.concatenate.best.exons <- function(exomes.filepaths,is.primary.exome,s
 ### This function makes an ncbi blast database (which is needed to run blast against)
 ## parameters
 ###
-## makeblastdb.path <- "/Applications/ncbi-blast-2.5.0+/bin/makeblastdb"                                          ### path to the script called "makeblastdb"
-## subject.path     <- "/Users/Jeff/Documents/SnakeGenomes/ContigFiles/GCA_000737285.1_CrotMitch1.0_genomic.fna"  ### path to the subject sequences that will be made into a database
+## makeblastdb.path <- "~/ncbi-blast-2.5.0+/bin/makeblastdb"                     ### path to the script called "makeblastdb"
+## subject.path     <- "~/GCA_000737285.1_CrotMitch1.0_genomic.fna"              ### path to the subject sequences that will be made into a database
 makeBlastDB    <- function(makeblastdb.path,subject.path){
 	command.part1     <- makeblastdb.path              #|character strings that will be 
 	command.part2     <- "-in"                         #|pasted together into a "command" string
