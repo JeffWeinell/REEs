@@ -6,7 +6,7 @@ The probe set includes 3,129 single-copy loci (1,517,011 nt) shared across snake
 
 REEs include one or more entire exons and one or both exon-flanking regions, and range in length from 121 to 7,501 nt. I used a modified version of the FrogCap pipeline (Hutter et al., 2019) to select the optimal set of REEs from an alignment of snake exomes.
 
-SnakeCap UCEs are a subset of the Micrurus fulvius UCEs from Streicher et al. (2017).
+SnakeCap UCEs are a subset of the Micrurus fulvius UCEs from Streicher and Wiens (2017).
 
 ddRAD-like loci are shared, single-copy loci identified from in-silico ddRAD using recognition sites for SbfI and EcoRI restriction enzymes.
 
@@ -72,19 +72,19 @@ nflank.3',i = # of nucleotides targeted downstream of exon
 
 ##### Overview:
 
-Target UCEs include 907 of the 3,260 UCEs previously identified in Micrurus fulvius (Streicher et al., 2017; Table X). First, I filtered the full set of Micrus UCEs to only include those present in all NCBI snake genomes (n = 2,968 UCEs). From this shared set of UCEs I (probably; check script to confirm) selected the 1,000 loci with the greatest number of informative sites, or, that were on different T. sirtalis contigs... Of these, 907 were included in the final probe set (following Arbor Biosciences' protocols for probe filtering).
+Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus fulvius* (Streicher and Wiens, 2017; **Table X**). First, I filtered the full set of *Micrurus* UCEs to only include those present in all NCBI snake genomes (n = 2,968 UCEs). From this shared set of UCEs I (probably; check script to confirm) selected the 1,000 loci with the greatest number of informative sites, or, that were on different *T. sirtalis* contigs... Of these, 907 were included in the final probe set (following Arbor Biosciences' protocols for probe filtering).
 
 ##### Detailed, step-by-step methods for how I chose the set of target UCEs:
 
-1. I downloaded the set of Micurus fulvius UCEs (n = 3,260) identified by Streicher et al. (2017). These were available as a fasta file, with the name "micrurus_UCEs.fas".
+1. I downloaded the set of *Micurus fulvius* UCEs (n = 3,260) identified by Streicher and Wiens (2017). These were available as a fasta file called **micrurus_UCEs.fas**.
 
-2. I searched for Micrurus UCEs in the other snake genomes. I queried each Micrurus UCE against each squamate genome using the NCBI blastn algorithm (saving ≤ 50 matches per query), which was implemented using the R wrapper function blastnR. Then, I filtered each of the 50-match hit tables to include only the best match/query (max bitscore) using the R function reportBestMatches.
+2. I searched for *Micrurus* UCEs in the other snake genomes. I queried each *Micrurus* UCE against each squamate genome using the NCBI blastn algorithm (saving ≤ 50 matches per query), which was implemented using the R wrapper function **blastnR**. Then, I filtered each of the 50-match hit tables to include only the best match/query (max bitscore) using the R function **reportBestMatches**.
 
-3. From each genome, extract the best-match UCEs. From each snake genome, I extracted the DNA sequences corresponding to each best match in the filtered UCE hit table, and I saved these sequences to a fasta file. This step was performed using the function get.UCEs.from.blastTable.
+3. From each genome, I extracted the best-match UCEs, and I saved these sequences to a fasta file. This step was performed using the function **get.UCEs.from.blastTable**.
 
-4. Align the set of UCEs found in all snake genomes. This was done using the R function align.bestHit.UCEs.
+4. Align the set of UCEs found in all snake genomes. This was done using the R function **align.bestHit.UCEs**.
 
-5. I selected 1,000 UCEs subset of UCEs that... were on different T. sirtalis contigs, or, that had the most phylogenetic information or the largest mean pairwise genetic distance. I need to check on this...
+5. I selected 1,000 UCEs subset of UCEs that... were on different *T. sirtalis* contigs, or, that had the most phylogenetic information or the largest mean pairwise genetic distance. I need to check on this...
 
 #### Selecting the set of target ddRAD-like loci
 
@@ -92,46 +92,45 @@ Target UCEs include 907 of the 3,260 UCEs previously identified in Micrurus fulv
 
 ##### Detailed, step-by-step methods for how I chose the set of target ddRAD-like loci:
 
-1. Search (blast?) for Sbfi recognition site in T. baileyi genome (sense strand contigs); output = a NCBI-format hit table
-2. Search (blast?) for EcoRI recognition site in T. baileyi genome (sense strand contigs); output = a NCBI-format hit table
-3. Search (blast?) for Sbfi recognition site in T. baileyi genome (antisense strand contigs); output = a NCBI-format hit table
-4. Search (blast?) for EcoRI recognition site in T. baileyi genome (antisense strand contigs); output = a NCBI-format hit table
-5. Filtered T. baileyi contigs (sense strand) to only include those with both restriction enzyme recognition sites.
-6. Filtered T. baileyi contigs (antisense strand) to only include those with both restriction enzyme recognition sites.
+1. Search (blast?) for Sbfi recognition site in *T. baileyi* genome (sense strand contigs); output = a NCBI-format hit table
+2. Search (blast?) for EcoRI recognition site in *T. baileyi* genome (sense strand contigs); output = a NCBI-format hit table
+3. Search (blast?) for Sbfi recognition site in *T. baileyi* genome (antisense strand contigs); output = a NCBI-format hit table
+4. Search (blast?) for EcoRI recognition site in *T. baileyi* genome (antisense strand contigs); output = a NCBI-format hit table
+5. Filtered *T. baileyi* contigs (sense strand) to only include those with both restriction enzyme recognition sites.
+6. Filtered *T. baileyi* contigs (antisense strand) to only include those with both restriction enzyme recognition sites.
 7. For the set of contigs containing both recognition sites, extract the region between each pairwise combination of RE sites.
 8. Filter extracted regions to keep only those with length between 900–1000bp.
 9. BLAST (tblastx, tblastn, blastx, blastn?) each sequence in the set of 900-1000bp extracted regions to search within each snake genome
 10. Keep the set of single-copy sequences present in all snakes genomes, and design probes for these target loci.
 
-Calculated the pairwise genomic distance distance between 
-Set of 900–1000bp regions of the Sense Strand containing Sbfi and EcoRI recognition sites: "ddRAD-like-loci_SenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt"
+Set of 900–1000bp regions of the Sense Strand containing Sbfi and EcoRI recognition sites: **ddRAD-like-loci_SenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt**
 
 #### Selecting the set of Functional loci
 
 ##### Overview:
 
-Scalation loci: I targeted a subset of the genes included in the study by Holthaus et al. (2017). In that study, the authors identified homologous genes of the Epidermal Differentiation Complex (which are putatively involved in scalation) of Python bivittatus and Ophiophagus hannah. I downloaded the Ophiophagus scalation gene sequences using the table of genomic coordinates provided by Holthaus et al. (2017), and then used tblastn to search for and obtain homologous loci in Thamnophis sirtalis, Protobothrops mucrosquamatus, and Crotalus horridus.
+Scalation loci: I targeted a subset of the genes included in the study by Holthaus et al. (2017). In that study, the authors identified homologous genes of the Epidermal Differentiation Complex (which are putatively involved in scalation) of *Python bivittatus* and *Ophiophagus hannah*. I downloaded the *Ophiophagus* scalation gene sequences using the table of genomic coordinates provided by Holthaus et al. (2017), and then used tblastn to search for and obtain homologous loci in *T. sirtalis*, *Protobothrops mucrosquamatus*, and *Crotalus horridus*.
 
-Immune loci: I searched the annotation table of Thamnophis sirtalis for MHC (I or II) genes. Of these, only those for which Arbor Biosciences could create probes were included in the probe set.
+Immune loci: I searched the annotation table of *T. sirtalis* for MHC (I or II) genes. Of these, only those for which Arbor Biosciences could create probes were included in the probe set.
 
 Vision loci: 
 
 ##### Detailed, step-by-step methods for how I chose the set of functional loci:
 
-1.
+1. 
 
-2.
+2. 
 
-3.
+3. 
 
 
 
 ## References:
 
-Hutter C.R., Cobb K.A., Portik D., Travers S., Wood Jr. P.L., and Brown R.M. (2019). FrogCap: A modular sequence capture probe set for phylogenomics and population genetics for Anurans, assessed across multiple phylogenetic scales. bioRxiv 825307. doi: https://doi.org/10.1101/825307.
+Hutter C.R., Cobb K.A., Portik D., Travers S., Wood Jr. P.L., and R.M. Brown (2019). FrogCap: A modular sequence capture probe set for phylogenomics and population genetics for Anurans, assessed across multiple phylogenetic scales. *bioRxiv* 825307. doi: https://doi.org/10.1101/825307.
 
-Streicher et al. (2017).
+Streicher J.W., and J.J Wiens J.J. 2017. Phylogenomic analyses of more than 4000 nuclear loci resolve the origin of snakes among lizard families. *Biology Letters* 13, 20170393. doi: http://doi.org/10.1098/rsbl.2017.0393.
 
-Holthaus et al. (2017).
+Holthaus K.B., Mlitz V., Strasser B., Tschachler E., Alibardi L., and L. Eckhart. 2017. Identification and comparative analysis of the epidermal differentiation complex in snakes. *Scientific Reports* 7, 45338. doi: http://doi.org/10.1038/srep45338.
 
 
