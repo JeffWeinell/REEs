@@ -12,6 +12,22 @@ ddRAD-like loci are shared, single-copy loci identified from in-silico ddRAD usi
 
 Functional loci included entire or partial gene regions that have previously been predicted or known to function in either (1) vertebrate immune systems, (2) vision, (3) or scalation.
 
+##### Table 2.1 For each type of locus: genomic region targeted, number of loci (nloci), total number of nucleotides targeted (nnt), and nucleotide lengths (nt/locus) of the shortest and longest loci.
+
+Locus type | Region targeted | nloci | nnt | nt/locus (min–max)
+---- | ---- | ---- | ---- | ----
+Rapidly evolving exons (REEs) | Usually the entire exon + 0–60nt each of 5' & 3' flanking regions. | 1,653 | 996,369 | 121–7,501
+
+Ultra-conserved elements (UCEs) | Entire UCE region previously identified | 907 | 143,075 | 120–161
+
+ddRAD-like | in silico ddRAD selected loci | 328 | 271,505 | 120–996
+
+Functional | Immune (Exons of major histocompatibility complex (MHC) genes.) | 27 | 5,354 | 121–364
+   | Vision | 160nt, including ≤ 70nt upstream of start codon if targeted exon is first exon. Usually, first 160nt of exon targeted. | 119 | 18,857 | 120–170
+   | Scalation | 1100nt, including 1000nt of promoter region + first 100nt of first exon. | 95 | 81,851 | 125–1,101
+   All loci |  | 3,129 | 1,517,011 | 120–7,501 (mean = 531.62)  
+
+
 ### Methods
 
 #### Selecting the set of target REEs
