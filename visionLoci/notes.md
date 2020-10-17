@@ -24,6 +24,7 @@ OPN5 |
 NGF | proposed baits too non-specific
 NONO | 
 OPN4 | 
+OPN4x |
 OTX2 | 0% bait coverage
 PAXIP1 | 
 PDCH15 | proposed baits too non-specific
