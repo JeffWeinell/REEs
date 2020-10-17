@@ -1,11 +1,11 @@
 # notes
-I used blastn to search for 149 vision loci (Schott et al., 2017) in *Ophiophagus hannah* and found a match for 148 of these.
+I used blastn to search for 149 vision loci (149 exons of 142 genes; Schott et al., 2017) in *Ophiophagus hannah*, and found a match for 148 of these. The only locus not found in *Ophiophagus* was UNC119, but this was found in *Python*, and therefore probes were designed from *Python* for this gene.
 
-Of the 148 matches, I initially requested probes for 132 of these loci, and 13 of these failed (0% bait coverage), and so these were removed from the probe set.
+I initially requested probes for 132 of the 149 loci (132 of 142 genes), and probes could not be designed for 13 of these (0% bait coverage).
 
 Probes were designed for the remaining 119 vision loci.
 
-### Schott et al. (2017) loci not targeted (n=30):
+### Schott et al. (2017) Vision genes not targeted (n=23):
 Locus | Reason not included
 ----- | -----
 ACTB | 0% bait coverage
@@ -14,10 +14,9 @@ ARRB2 | 0% bait coverage
 CD36 | proposed baits too non-specific
 GART | 0% bait coverage
 GAS6 | 0% bait coverage
-GPR98 | No blastn match within *Ophiophagus hannah*
+GPR98 | 
 GRK7 | 0% bait coverage
 HNF1A | 
-HNRPD | 
 HOXB5 | 0% bait coverage
 MAFB | proposed bait too non-specific
 NACA | 
