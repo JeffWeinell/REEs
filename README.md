@@ -149,10 +149,6 @@ align.bestHit.UCEs(species.UCEs.filepaths=list.files(path="~/UCEs.In.Snake.Genom
 UCE.alignment.filenames    <- list.files(path="~/MAFFT-aligned-UCEs",full.names=T)
 UCE.shortnames             <- mgsub(patt=c(".fasta","uce-"),repl=c("","UCE."),subj=list.files(path="~/MAFFT-aligned-UCEs",full.names=F))
 
-#UCE.alignment.filenames   <- list.files(path="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/MAFFT-aligned-UCEs",full.names=T)
-#UCE.shortnames            <- mgsub(patt=c(".fasta","uce-"),repl=c("","UCE."),subj=list.files(path="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/MAFFT-aligned-UCEs",full.names=F))
-# UCE.number               <- as.numeric(gsub("UCE.","",UCE.shortnames))
-
 # Reads in UCE alignments.
 for(i in 1:length(UCE.shortnames)){                                                           
 	assign(x=UCE.shortnames[i],value=readDNAStringSet(filepath=UCE.alignment.filenames[i]))
@@ -191,7 +187,7 @@ for(i in 1:length(alignments.sorted.filtered.1000)){
 }
 target.UCEs        <- RemoveGaps(DNAStringSet(target.UCEs))
 names(target.UCEs) <- names(alignments.sorted.filtered.1000)
-writeXStringSet(x=target.UCEs,filepath= ,format="fasta")
+writeXStringSet(x=target.UCEs,filepath=<outputFilepath>,format="fasta")
 ```
 
 To filter UCEs by (by UCE alignment length), sort alignments by UCE name, and select (1,000 UCEs) the shared set of UCEs to only include those with an alignment width > 200nt, I used the following R code:
