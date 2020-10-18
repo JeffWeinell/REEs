@@ -85,24 +85,37 @@ nflank.3',i = # of nucleotides targeted downstream of exon
 
 ##### Overview:
 
-Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus fulvius* (Streicher and Wiens, 2017; **Table X**). First, I filtered the full set of *Micrurus* UCEs to only include those present in all NCBI snake genomes (n = 2,968 UCEs). I filtered the shared set of UCEs to only include loci:
-- with length ≥ 120nt
-- (probably; check script to confirm) selected the 1,000 loci with the greatest number of informative sites
-- and/or, that were on different *T. sirtalis* contigs
-
-... Of the 1,000 initiall chosen UCEs, only 907 were included in the final probe set (after following Arbor Biosciences' protocols for probe filtering).
+Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus fulvius* (Streicher and Wiens, 2017; **Table X**). First, I filtered the full set of *Micrurus* UCEs to only include those present in all NCBI snake genomes (n = 2,968 UCEs). Then, I filtered the shared set of UCEs to only include those with an alignment width > 200nt (2,551 UCEs retained; each UCE alignment included the eight snakes with published genomes). Next, I removed the following UCEs: uce-1843, uce-2179, uce-2433, uce-2465, uce-2498, uce-2890, uce-2960, and uce-3354 (not sure why I did this yet). I sorted the remaining 2,543 UCEs by UCE name and retained the first 1,000 loci in this set. Arbor Biosciences was able to synthesize probes for 907 of the 1,000 proposed target UCEs.
 
 ##### Detailed, step-by-step methods for how I chose the set of target UCEs:
 
 1. I downloaded the set of *Micurus fulvius* UCEs (n = 3,260) identified by Streicher and Wiens (2017). These were available as a fasta file called **micrurus_UCEs.fas**.
 
-2. I searched for *Micrurus* UCEs in the other snake genomes. I queried each *Micrurus* UCE against each squamate genome using the NCBI blastn algorithm (saving ≤ 50 matches per query), which was implemented using the R wrapper function **blastnR**. Then, I filtered each of the 50-match hit tables to include only the best match/query (max bitscore) using the R function **reportBestMatches**.
+2. To find *Micrurus* UCEs in each of the other snake genomes, I queried each *Micrurus* UCE against each snake genome using blastn algorithm (saving ≤ 50 matches per query), which was implemented using the R wrapper function **blastnR**. Results were saved to the files: **Crotalus_horridus.blastn.UCEs.50hits.txt**, **Crotalus_mitchellii.blastn.UCEs.50hits.txt**, **Ophiophagus_hannah.blastn.UCEs.50hits.txt**, **Pantherophis_guttatus.blastn.UCEs.50hits.txt*, **Protobothrops_mucrosquamatus.blastn.UCEs.50hits.txt**, **Python_bivittatus.blastn.UCEs.50hits.txt**, **Thamnophis_sirtalis.blastn.UCEs.50hits.txt**, and **Vipera_berus.blastn.UCEs.50hits.txt**.
 
-3. From each genome, I extracted the best-match UCEs, and I saved these sequences to a fasta file. This step was performed using the function **get.UCEs.from.blastTable**.
+```
+blastnR(blastn.path,subject.path,query.path,output.path)
+```
 
-4. Align the set of UCEs found in all snake genomes. This was done using the R function **align.bestHit.UCEs**.
+3. Then, I filtered the hit tables to include only the best match/query (max bitscore) using the R function **reportBestMatches**. Results were saved to the files: **Crotalus_horridus.blastn.UCEs.best.txt**, **Crotalus_mitchellii.blastn.UCEs.best.txt**, **Ophiophagus_hannah.blastn.UCEs.best.txt**, **Pantherophis_guttatus.blastn.UCEs.best.txt**, **Protobothrops_mucrosquamatus.blastn.UCEs.best.txt**, **Python_bivittatus.blastn.UCEs.best.txt**, **Thamnophis_sirtalis.blastn.UCEs.best.txt**, **Vipera_berus.blastn.UCEs.best.txt**.
 
-5. I selected 1,000 UCEs subset of UCEs that... were on different *T. sirtalis* contigs, or, that had the most phylogenetic information or the largest mean pairwise genetic distance. I need to check on this...
+```
+reportBestMatches(input.dir="~/BLAST_Micrurus-UCEs_vs_SnakeGenomes/",species.names=c("Crotalus_mitchellii","Crotalus_horridus","Ophiophagus_hannah","Pantherophis_guttatus","Protobothrops_mucrosquamatus","Python_bivittatus","Thamnophis_sirtalis","Vipera_berus"),output.dir=input.dir,blastMethod="blastn",locusType="UCEs")
+```
+
+4. To extract and save the set of best-match UCEs from each genome I used the function **get.UCEs.from.blastTable**.
+
+```
+get.UCEs.from.blastTable(species,genome.filepath,input.blastTable,output.dir)
+```
+
+5. Align the set of UCEs found in all snake genomes. This was done using the R function **align.bestHit.UCEs**.
+
+```
+align.bestHit.UCEs <- function(species.UCEs.filepaths,is.primary.species,output.dir,species,i.start = 1,i.stop = NA)
+```
+
+6. I selected 1,000 UCEs subset of UCEs that... were on different *T. sirtalis* contigs, or, that had the most phylogenetic information or the largest mean pairwise genetic distance. I need to check on this...
 
 #### Selecting the set of target ddRAD-like loci
 
