@@ -94,7 +94,21 @@ Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus ful
 2. To find *Micrurus* UCEs in each of the other snake genomes, I queried each *Micrurus* UCE against each snake genome using blastn algorithm (saving ≤ 50 matches per query), which was implemented using the R wrapper function **blastnR**. Results were saved to the files: **Crotalus_horridus.blastn.UCEs.50hits.txt**, **Crotalus_mitchellii.blastn.UCEs.50hits.txt**, **Ophiophagus_hannah.blastn.UCEs.50hits.txt**, **Pantherophis_guttatus.blastn.UCEs.50hits.txt*, **Protobothrops_mucrosquamatus.blastn.UCEs.50hits.txt**, **Python_bivittatus.blastn.UCEs.50hits.txt**, **Thamnophis_sirtalis.blastn.UCEs.50hits.txt**, and **Vipera_berus.blastn.UCEs.50hits.txt**.
 
 ```
-blastnR(blastn.path,subject.path,query.path,output.path)
+blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/GCA_000737285.1_CrotMitch1.0_genomic.fna",query.path="~/micrurus_UCEs.fa",output.path="~/Crotalus_mitchellii.blastn.UCEs.50hits.txt")
+
+blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Protobothrops_mucrosquamatus_GCF_001527695.2_P.Mucros_1.0_genomic.fna", query.path="~/micrurus_UCEs.fa",output.path="~/Protobothrops_mucrosquamatus.blastn.UCEs.50hits.txt")
+
+blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Pantherophus_guttatus_GCA_001185365.1_PanGut1.0_genomic.fna", query.path="~/micrurus_UCEs.fa",output.path="~/Pantherophis_guttatus.blastn.UCEs.50hits.txt")
+
+blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Python_bivittatus_GCF_000186305.1_Python_molurus_bivittatus-5.0.2_genomic.fna", query.path="~/micrurus_UCEs.fa",output.path="~/Python_bivittatus.blastn.UCEs.50hits.txt")
+
+blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Thamnophis_sirtalis_GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna" ,query.path="~/micrurus_UCEs.fa",output.path="~/Thamnophis_sirtalis.blastn.UCEs.50hits.txt")
+
+blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Ophiophagus_hannah_GCA_000516915.1_OphHan1.0_genomic.fna", query.path="~/micrurus_UCEs.fa",output.path="~/Ophiophagus_hannah.blastn.UCEs.50hits.txt")
+
+blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Vipera_berus_GCA_000800605.1_Vber.be_1.0_genomic.fna", query.path="~/micrurus_UCEs.fa",output.path="~/Vipera_berus.blastn.UCEs.50hits.txt")
+
+blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Crotalus_horridus_GCA_001625485.1_ASM162548v1_genomic.fna", query.path="~/micrurus_UCEs.fa",output.path="~/Crotalus_horridus.blastn.UCEs.50hits.txt")
 ```
 
 3. Then, I filtered the hit tables to include only the best match/query (max bitscore) using the R function **reportBestMatches**. Results were saved to the files: **Crotalus_horridus.blastn.UCEs.best.txt**, **Crotalus_mitchellii.blastn.UCEs.best.txt**, **Ophiophagus_hannah.blastn.UCEs.best.txt**, **Pantherophis_guttatus.blastn.UCEs.best.txt**, **Protobothrops_mucrosquamatus.blastn.UCEs.best.txt**, **Python_bivittatus.blastn.UCEs.best.txt**, **Thamnophis_sirtalis.blastn.UCEs.best.txt**, **Vipera_berus.blastn.UCEs.best.txt**.
@@ -120,7 +134,7 @@ get.UCEs.from.blastTable(species="Vipera_berus",genome.filepath=,input.blastTabl
 
 ```
 input.dir <- list.files(path="~/UCEs.In.Snake.Genomes/",full.names=T)
-align.bestHit.UCEs <- function(species.UCEs.filepaths=, output.dir=, species=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus","Protobothrops_mucrosquamatus","Pantherophis_guttatus"))
+align.bestHit.UCEs <- function(species.UCEs.filepaths=list.files(path="~/UCEs.In.Snake.Genomes/",full.names=T), output.dir=, species=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus", "Protobothrops_mucrosquamatus","Pantherophis_guttatus"))
 ```
 
 6. I selected 1,000 UCEs subset of UCEs that... were on different *T. sirtalis* contigs, or, that had the most phylogenetic information or the largest mean pairwise genetic distance. I need to check on this...
