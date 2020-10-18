@@ -121,22 +121,72 @@ reportBestMatches(input.dir="~/BLAST_Micrurus-UCEs_vs_SnakeGenomes/",species.nam
 
 ```
 get.UCEs.from.blastTable(species="Crotalus_horridus",genome.filepath=,input.blastTable="Crotalus_horridus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
+
 get.UCEs.from.blastTable(species="Crotalus_mitchellii",genome.filepath=,input.blastTable="Crotalus_mitchellii.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
+
 get.UCEs.from.blastTable(species="Ophiophagus_hannah",genome.filepath=,input.blastTable="Ophiophagus_hannah.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
+
 get.UCEs.from.blastTable(species="Pantherophis_guttatus",genome.filepath=,input.blastTable="Pantherophis_guttatus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
+
 get.UCEs.from.blastTable(species="Protobothrops_mucrosquamatus",genome.filepath=,input.blastTable="Protobothrops_mucrosquamatus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
+
 get.UCEs.from.blastTable(species="Python_bivittatus",genome.filepath=,input.blastTable="Python_bivittatus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
+
 get.UCEs.from.blastTable(species="Thamnophis_sirtalis",genome.filepath=,input.blastTable="Thamnophis_sirtalis.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
+
 get.UCEs.from.blastTable(species="Vipera_berus",genome.filepath=,input.blastTable="Vipera_berus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
 ```
 
 5. To identify and align the set of UCEs found in all snake genomes, I used the function **align.bestHit.UCEs**. This function invokes MAFFT to perform multisequence alignment.
 
 ```
-align.bestHit.UCEs <- function(species.UCEs.filepaths=list.files(path="~/UCEs.In.Snake.Genomes/",full.names=T), output.dir="~/MAFFT-aligned-UCEs", species=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus", "Protobothrops_mucrosquamatus","Pantherophis_guttatus"))
+align.bestHit.UCEs(species.UCEs.filepaths=list.files(path="~/UCEs.In.Snake.Genomes/",full.names=T), output.dir="~/MAFFT-aligned-UCEs", species=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus", "Protobothrops_mucrosquamatus","Pantherophis_guttatus"))
 ```
 
-6. I selected 1,000 UCEs subset of UCEs that... were on different *T. sirtalis* contigs, or, that had the most phylogenetic information or the largest mean pairwise genetic distance. I need to check on this...
+6. Final size filtering, sorting, and UCE selection steps were performed in R. *Thamnophis sirtalis* sequences for the selected UCEs (n = 1,000) were submitted to Arbor Biosciences for probe design. Requires Biostrings and ape packages.
+
+```
+UCE.alignment.filenames    <- list.files(path="~/MAFFT-aligned-UCEs",full.names=T)
+UCE.shortnames             <- mgsub(patt=c(".fasta","uce-"),repl=c("","UCE."),subj=list.files(path="~/MAFFT-aligned-UCEs",full.names=F))
+
+#UCE.alignment.filenames   <- list.files(path="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/MAFFT-aligned-UCEs",full.names=T)
+#UCE.shortnames            <- mgsub(patt=c(".fasta","uce-"),repl=c("","UCE."),subj=list.files(path="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/MAFFT-aligned-UCEs",full.names=F))
+
+# UCE.number                 <- as.numeric(gsub("UCE.","",UCE.shortnames))
+
+# Reads in UCE alignments.
+for(i in 1:length(UCE.shortnames)){                                                           
+	assign(x=UCE.shortnames[i],value=readDNAStringSet(filepath=UCE.alignment.filenames[i]))
+}
+
+# Hold UCE alignments in a list, sorted by UCE name
+alignments.sorted <- mget(sort(UCE.shortnames))
+
+### Renaming the individuals in each alignment (so that they are not truncated).
+for(i in 1:length(alignments.sorted)){
+	names(alignments.sorted[[i]]) <- c("Thamnophis_sirtalis","Crotalus_horridus","Protobothrops_mucrosquamatus","Ophiophagus_hannah","Vipera_berus","Crotalus_mitchellii","Pantherophis_guttatus","Python_bivittatus")
+}
+### calculating pdist for each of the shared UCE alignments
+mean.pdist <- vector(mode="numeric",length=length(alignments))
+for(i in 1:length(alignments.sorted)){
+	mean.pdist[i] <- round(mean(dist.dna(as.DNAbin(alignments.sorted[[i]]),model="raw",pairwise.deletion=T)),digits=3)
+}
+names(mean.pdist) <- names(alignments.sorted)
+alignment.lengths <- unlist(lapply(alignments.sorted,FUN=function(X){unique(width(X))}))
+
+
+# manually filtered out uce-1843, uce-2179, uce-2433, uce-2465, uce-2498, uce-2890, uce-2960, and uce-3354.
+
+```
+
+To filter UCEs by (by UCE alignment length), sort alignments by UCE name, and select (1,000 UCEs) the shared set of UCEs to only include those with an alignment width > 200nt, I used the following R code:
+
+7. Probes were designed for 907 of the 1,000 UCEs submitted to Arbor Biosciences.
+
+Lastly, I sorted the retained set of 
+Next, I removed the following UCEs: uce-1843, uce-2179, uce-2433, uce-2465, uce-2498, uce-2890, uce-2960, and uce-3354 (not sure why I did this yet). I sorted the remaining 2,543 UCEs by UCE name and retained the first 1,000 loci in this set. Arbor Biosciences was able to synthesize probes for 907 of the 1,000 proposed target UCEs.
+
+
 
 #### Selecting the set of target ddRAD-like loci
 
