@@ -199,10 +199,10 @@ writeXStringSet(x=target.UCEs,filepath=<outputFilepath>,format="fasta")
 
 ##### Detailed, step-by-step methods for how I chose the set of target ddRAD-like loci:
 
-1. Search (blast?) for Sbfi recognition site in *T. baileyi* genome (sense strand contigs); output = a NCBI-format hit table
-2. Search (blast?) for EcoRI recognition site in *T. baileyi* genome (sense strand contigs); output = a NCBI-format hit table
-3. Search (blast?) for Sbfi recognition site in *T. baileyi* genome (antisense strand contigs); output = a NCBI-format hit table
-4. Search (blast?) for EcoRI recognition site in *T. baileyi* genome (antisense strand contigs); output = a NCBI-format hit table
+1. grep Sbfi recognition site in *T. baileyi* genome (sense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
+2. grep EcoRI recognition site in *T. baileyi* genome (sense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
+3. grep Sbfi recognition site in *T. baileyi* genome (antisense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
+4. grep EcoRI recognition site in *T. baileyi* genome (antisense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
 5. Filtered *T. baileyi* contigs (sense strand) to only include those with both restriction enzyme recognition sites.
 6. Filtered *T. baileyi* contigs (antisense strand) to only include those with both restriction enzyme recognition sites.
 7. For the set of contigs containing both recognition sites, extract the region between each pairwise combination of RE sites.
