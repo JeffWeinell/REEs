@@ -106,13 +106,21 @@ reportBestMatches(input.dir="~/BLAST_Micrurus-UCEs_vs_SnakeGenomes/",species.nam
 4. To extract and save the set of best-match UCEs from each genome I used the function **get.UCEs.from.blastTable**.
 
 ```
-get.UCEs.from.blastTable(species,genome.filepath,input.blastTable,output.dir)
+get.UCEs.from.blastTable(species="Crotalus_horridus",genome.filepath=,input.blastTable="Crotalus_horridus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
+get.UCEs.from.blastTable(species="Crotalus_mitchellii",genome.filepath=,input.blastTable="Crotalus_mitchellii.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
+get.UCEs.from.blastTable(species="Ophiophagus_hannah",genome.filepath=,input.blastTable="Ophiophagus_hannah.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
+get.UCEs.from.blastTable(species="Pantherophis_guttatus",genome.filepath=,input.blastTable="Pantherophis_guttatus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
+get.UCEs.from.blastTable(species="Protobothrops_mucrosquamatus",genome.filepath=,input.blastTable="Protobothrops_mucrosquamatus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
+get.UCEs.from.blastTable(species="Python_bivittatus",genome.filepath=,input.blastTable="Python_bivittatus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
+get.UCEs.from.blastTable(species="Thamnophis_sirtalis",genome.filepath=,input.blastTable="Thamnophis_sirtalis.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
+get.UCEs.from.blastTable(species="Vipera_berus",genome.filepath=,input.blastTable="Vipera_berus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
 ```
 
-5. Align the set of UCEs found in all snake genomes. This was done using the R function **align.bestHit.UCEs**.
+5. To identify and align the set of UCEs found in all snake genomes, I used the function **align.bestHit.UCEs**.
 
 ```
-align.bestHit.UCEs <- function(species.UCEs.filepaths,is.primary.species,output.dir,species,i.start = 1,i.stop = NA)
+input.dir <- list.files(path="~/UCEs.In.Snake.Genomes/",full.names=T)
+align.bestHit.UCEs <- function(species.UCEs.filepaths=, output.dir=, species=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus","Protobothrops_mucrosquamatus","Pantherophis_guttatus"))
 ```
 
 6. I selected 1,000 UCEs subset of UCEs that... were on different *T. sirtalis* contigs, or, that had the most phylogenetic information or the largest mean pairwise genetic distance. I need to check on this...
