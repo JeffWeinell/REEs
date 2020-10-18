@@ -183,9 +183,15 @@ alignments.sorted.filtered[c("UCE.1843","UCE.2179","UCE.2433","UCE.2465","UCE.24
 # Keep first 1,000 UCE alignments in alignments.sorted.filtered
 alignments.sorted.filtered.1000 <- alignments.sorted.filtered[1:1000]
 
-# Extract and write Thamnophis sirtalis sequence for each of the 1,000 UCEs in alignments.sorted.filtered2
-
-
+# Extract and save the Thamnophis sirtalis sequence (gaps removed) from each alignment in alignments.sorted.filtered.1000
+library(DECIPHER) # need this package for the RemoveGaps function
+target.UCEs <- list(); length(target.UCEs) <- length(alignments.sorted.filtered.1000)
+for(i in 1:length(alignments.sorted.filtered.1000)){
+	target.UCEs[[i]] <- alignments.sorted.filtered.1000[[i]]$Thamnophis_sirtalis
+}
+target.UCEs        <- RemoveGaps(DNAStringSet(target.UCEs))
+names(target.UCEs) <- names(alignments.sorted.filtered.1000)
+writeXStringSet(x=target.UCEs,filepath= ,format="fasta")
 ```
 
 To filter UCEs by (by UCE alignment length), sort alignments by UCE name, and select (1,000 UCEs) the shared set of UCEs to only include those with an alignment width > 200nt, I used the following R code:
