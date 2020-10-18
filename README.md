@@ -151,8 +151,7 @@ UCE.shortnames             <- mgsub(patt=c(".fasta","uce-"),repl=c("","UCE."),su
 
 #UCE.alignment.filenames   <- list.files(path="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/MAFFT-aligned-UCEs",full.names=T)
 #UCE.shortnames            <- mgsub(patt=c(".fasta","uce-"),repl=c("","UCE."),subj=list.files(path="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/MAFFT-aligned-UCEs",full.names=F))
-
-# UCE.number                 <- as.numeric(gsub("UCE.","",UCE.shortnames))
+# UCE.number               <- as.numeric(gsub("UCE.","",UCE.shortnames))
 
 # Reads in UCE alignments.
 for(i in 1:length(UCE.shortnames)){                                                           
@@ -162,11 +161,12 @@ for(i in 1:length(UCE.shortnames)){
 # Hold UCE alignments in a list, sorted by UCE name
 alignments.sorted <- mget(sort(UCE.shortnames))
 
-### Renaming the individuals in each alignment (so that they are not truncated).
+### Renaming the individuals in each alignment (because names were truncated when saving alignments in the previous step).
 for(i in 1:length(alignments.sorted)){
-	names(alignments.sorted[[i]]) <- c("Thamnophis_sirtalis","Crotalus_horridus","Protobothrops_mucrosquamatus","Ophiophagus_hannah","Vipera_berus","Crotalus_mitchellii","Pantherophis_guttatus","Python_bivittatus")
+	names(alignments.sorted[[i]]) <- c("Thamnophis_sirtalis", "Crotalus_horridus", "Protobothrops_mucrosquamatus", "Ophiophagus_hannah", "Vipera_berus", "Crotalus_mitchellii", "Pantherophis_guttatus", "Python_bivittatus")
 }
-### calculating pdist for each of the shared UCE alignments
+
+### Calculate mean pairwise genetic distance among individuals in each UCE alignment
 mean.pdist <- vector(mode="numeric",length=length(alignments))
 for(i in 1:length(alignments.sorted)){
 	mean.pdist[i] <- round(mean(dist.dna(as.DNAbin(alignments.sorted[[i]]),model="raw",pairwise.deletion=T)),digits=3)
@@ -174,8 +174,17 @@ for(i in 1:length(alignments.sorted)){
 names(mean.pdist) <- names(alignments.sorted)
 alignment.lengths <- unlist(lapply(alignments.sorted,FUN=function(X){unique(width(X))}))
 
+# Remove UCE alignments if alignment width ≤ 200nt. Result: 417 UCEs removed and 2,551 retained
+alignments.sorted.filtered <- alignments.sorted[which(alignment.lengths > 200)]
 
-# manually filtered out uce-1843, uce-2179, uce-2433, uce-2465, uce-2498, uce-2890, uce-2960, and uce-3354.
+# Manually filter out "UCE.1843" "UCE.2179" "UCE.2433" "UCE.2465" "UCE.2498" "UCE.2890" "UCE.2960" "UCE.3354" "UCE.3501".
+alignments.sorted.filtered[c("UCE.1843","UCE.2179","UCE.2433","UCE.2465","UCE.2498","UCE.2890","UCE.2960","UCE.3354","UCE.3501")] <- NULL
+
+# Keep first 1,000 UCE alignments in alignments.sorted.filtered
+alignments.sorted.filtered.1000 <- alignments.sorted.filtered[1:1000]
+
+# Extract and write Thamnophis sirtalis sequence for each of the 1,000 UCEs in alignments.sorted.filtered2
+
 
 ```
 
