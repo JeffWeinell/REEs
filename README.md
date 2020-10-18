@@ -190,13 +190,7 @@ names(target.UCEs) <- names(alignments.sorted.filtered.1000)
 writeXStringSet(x=target.UCEs,filepath=<outputFilepath>,format="fasta")
 ```
 
-To filter UCEs by (by UCE alignment length), sort alignments by UCE name, and select (1,000 UCEs) the shared set of UCEs to only include those with an alignment width > 200nt, I used the following R code:
-
 7. Probes were designed for 907 of the 1,000 UCEs submitted to Arbor Biosciences.
-
-Lastly, I sorted the retained set of 
-Next, I removed the following UCEs: uce-1843, uce-2179, uce-2433, uce-2465, uce-2498, uce-2890, uce-2960, and uce-3354 (not sure why I did this yet). I sorted the remaining 2,543 UCEs by UCE name and retained the first 1,000 loci in this set. Arbor Biosciences was able to synthesize probes for 907 of the 1,000 proposed target UCEs.
-
 
 
 #### Selecting the set of target ddRAD-like loci
