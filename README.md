@@ -15,6 +15,7 @@
   - [Sequence Capture Library Prep](#LibraryPrep)
   - [DNA Sequencing](#DNASequencing)
   - [Post-sequencing](#PostSequencing)
+    - [Demultiplexing](#Demultiplexing)
     - [Processing sequence reads](#ProcessingReads)
     - [Phylogenetic Analyses](#PhylogeneticAnalyses)
 
@@ -275,12 +276,14 @@ Vision loci: I used blastn to search for the vision loci probes from Schott et a
 <a name="PostSequencing"></a>
 #### Post-sequencing
 
+<a name="Demultiplexing"></a>
+##### Demultiplexing
+
 <a name="ProcessingReads"></a>
 ##### Processing sequence reads
 
 <a name="PhylogeneticAnalyses"></a>
 ##### Phylogenetic Analyses
-
 
 <a name="Results"></a>
 ## Results
