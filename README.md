@@ -264,14 +264,24 @@ Vision loci: I used blastn to search for the vision loci probes from Schott et a
 <a name="ProbeSynthesis"></a>
 #### Probe Synthesis
 
+After choosing the target loci, probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total.
+
+See **Target-loci_Coverage_graph_24-March2020.pdf** for a plot of the probes aligned to each locus; this graph was generated using the code in **graph_probes_and_target.R**
+
+Haven't done this yet: Used code in "graph_target_and_features.R" to plot each target locus with ncbi feature annotations; black = target locus; thick red = exons; thin red = introns; thick purple = non-protein RNA gene.
+
 <a name="Sampling"></a>
 #### Taxa Sampled
 
 <a name="LibraryPrep"></a>
 #### Sequence Capture Library Prep
 
+Conducted by Arbor Biosciences; eight samples/pool; ...
+
 <a name="DNASequencing"></a>
 #### DNA Sequencing
+
+Novogene Illumina HiSeqX; paired-end sequencing with 150bp insert size.
 
 <a name="PostSequencing"></a>
 #### Post-sequencing
