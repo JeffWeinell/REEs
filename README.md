@@ -1,7 +1,11 @@
 # SnakeCap Sequence Capture Probe Set:
 
-### Description of SnakeCap Probe Set
+### Contents
 
+[Description of SnakeCap Probe Set](#Description)
+
+### Description of SnakeCap Probe Set
+<a name="Description"></a>
 The probe set includes 3,129 single-copy loci (1,517,011 nt) shared across snakes. Loci are categorized into four types: (1) rapidly evolving exons (REEs; n = 1,653), (2) ultra-conserved elements (UCEs; n = 907), (3) ddRAD-like loci (n = 328), (4) and functionally interesting genes, which includes 27 major histocompatibility complex (MHC) genes, 119 vision genes, and 95 scalation genes.
 
 REEs include one or more entire exons and one or both exon-flanking regions, and range in length from 121 to 7,501 nt. I used a modified version of the FrogCap pipeline (Hutter et al., 2019) to select the optimal set of REEs from an alignment of snake exomes.
