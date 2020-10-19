@@ -3,16 +3,29 @@
 ### Contents
 
 [Description of SnakeCap Probe Set](#Description)
+
 [Methods](#Methods)
-  - [Selecting the set of target Rapidly-evolving Exons (REEs)](#Methods.SelectingREEs)
-  - [Selecting the set of target Ultraconserved-elements (UCEs)](#Methods.SelectingUCEs)
-  - [Selecting the set of target ddRAD-like loci](#Methods.SelectingddRAD)
-  - [Selecting the set of target functionally interesting (Functional ) loci](#Methods.SelectingFunctional)
+  - [Choosing loci to include in the probe set](#Methods.SelectingTargetLoci)
+  -- [Selecting the set of target Rapidly-evolving Exons (REEs)](#Methods.SelectingREEs)
+  -- [Selecting the set of target Ultraconserved-elements (UCEs)](#Methods.SelectingUCEs)
+  -- [Selecting the set of target ddRAD-like loci](#Methods.SelectingddRAD)
+  -- [Selecting the set of target functionally interesting (Functional) loci](#Methods.SelectingFunctional)
+  - [Probe Synthesis](#ProbeSynthesis)
+  - [Taxa Sampled](#Sampling)
+  - [Sequence Capture Library Prep](#LibraryPrep)
+  - [DNA Sequencing](#DNASequencing)
+  - [Post-sequencing](#PostSequencing)
+  -- [Processing sequence reads](#ProcessingReads)
+  -- [Phylogenetic Analyses](#PhylogeneticAnalyses)
+
+[Results](#Results)
+
+[References](#References)
 
 <a name="Description"></a>
 ### Description of SnakeCap Probe Set
 
-The probe set includes 3,129 single-copy loci (1,517,011 nt) shared across snakes. Loci are categorized into four types: (1) rapidly evolving exons (REEs; n = 1,653), (2) ultra-conserved elements (UCEs; n = 907), (3) ddRAD-like loci (n = 328), (4) and functionally interesting genes, which includes 27 major histocompatibility complex (MHC) genes, 119 vision genes, and 95 scalation genes.
+The probe set includes 20,020 probes for 3,129 single-copy loci (1,517,011 nt) shared across snakes. The target loci are categorized into four types: (1) rapidly evolving exons (REEs; n = 1,653), (2) ultra-conserved elements (UCEs; n = 907), (3) ddRAD-like loci (n = 328), (4) and functionally interesting genes, which includes 27 major histocompatibility complex (MHC) genes, 119 vision genes, and 95 scalation genes.
 
 REEs include one or more entire exons and one or both exon-flanking regions, and range in length from 121 to 7,501 nt. I used a modified version of the FrogCap pipeline (Hutter et al., 2019) to select the optimal set of REEs from an alignment of snake exomes.
 
@@ -247,8 +260,32 @@ Vision loci: I used blastn to search for the vision loci probes from Schott et a
 
 3. 
 
+<a name="ProbeSynthesis"></a>
+#### Probe Synthesis
+
+<a name="Sampling"></a>
+#### Taxa Sampled
+
+<a name="LibraryPrep"></a>
+#### Sequence Capture Library Prep
+
+<a name="DNASequencing"></a>
+#### DNA Sequencing
+
+<a name="PostSequencing"></a>
+#### Post-sequencing
+
+<a name="ProcessingReads"></a>
+##### Processing sequence reads
+
+<a name="PhylogeneticAnalyses"></a>
+##### Phylogenetic Analyses
 
 
+<a name="Results"></a>
+## Results
+
+<a name="References"></a>
 ## References:
 
 Holthaus K.B., Mlitz V., Strasser B., Tschachler E., Alibardi L., and L. Eckhart. 2017. Identification and comparative analysis of the epidermal differentiation complex in snakes. *Scientific Reports* 7, 45338. doi: http://doi.org/10.1038/srep45338.
