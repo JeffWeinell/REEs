@@ -241,6 +241,18 @@ writeXStringSet(x=target.UCEs,filepath=<outputFilepath>,format="fasta")
 9. BLAST (tblastx, tblastn, blastx, blastn?) each sequence in the set of 900-1000bp extracted regions to search within each snake genome
 10. Keep the set of single-copy sequences present in all snakes genomes, and design probes for these target loci.
 
+Most of the important files and scripts for selecting ddRAD-like loci are in the zip file **RandomLoci.zip**
+
+**GREPmethod_RandomLociSelection.txt**
+
+**GREPmethod_RandomLociSelection_Part1_MakeHitTable_cluster.R** (run using **GREPmethod_RandomLociSelection_Part1_MakeHitTable_cluster.sh**)
+
+**GREPmethod_RandomLociSelection_Part2_MakeProposedLociTables_cluster.R** (run using **GREPmethod_RandomLociSelection_Part2_MakeProposedLociTables_cluster.sh**)
+
+Proposed target loci using PstI and HpaII recognition sites (didn't use any of these): **proposedLoci_CTGCAG-CCGG_output.txt** (result: 660,088 possible targets).
+
+Proposed target loci using SbfI and EcoR1 recognition sites (USED 328 of these): **proposedLoci_CCTGCAGG-GAATTC_output.txt** (result: 1,178 possible targets); These were reduced to 1,170 possible targets: **compProposedLoci_CCTGCAGG-GAATTC_output.txt**.
+
 Set of 900–1000bp regions of the Sense Strand containing Sbfi and EcoRI recognition sites: **ddRAD-like-loci_SenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt**
 
 <a name="Methods.SelectingFunctional"></a>
