@@ -3,9 +3,15 @@
 ### Contents
 
 [Description of SnakeCap Probe Set](#Description)
+[Methods](#Methods)
+  - [Selecting the set of target Rapidly-evolving Exons (REEs)](#Methods.SelectingREEs)
+  - [Selecting the set of target Ultraconserved-elements (UCEs)](#Methods.SelectingUCEs)
+  - [Selecting the set of target ddRAD-like loci](#Methods.SelectingddRAD)
+  - [Selecting the set of target functionally interesting (Functional ) loci](#Methods.SelectingFunctional)
 
-### Description of SnakeCap Probe Set
 <a name="Description"></a>
+### Description of SnakeCap Probe Set
+
 The probe set includes 3,129 single-copy loci (1,517,011 nt) shared across snakes. Loci are categorized into four types: (1) rapidly evolving exons (REEs; n = 1,653), (2) ultra-conserved elements (UCEs; n = 907), (3) ddRAD-like loci (n = 328), (4) and functionally interesting genes, which includes 27 major histocompatibility complex (MHC) genes, 119 vision genes, and 95 scalation genes.
 
 REEs include one or more entire exons and one or both exon-flanking regions, and range in length from 121 to 7,501 nt. I used a modified version of the FrogCap pipeline (Hutter et al., 2019) to select the optimal set of REEs from an alignment of snake exomes.
@@ -28,13 +34,16 @@ Functional | Immune (Exons of major histocompatibility complex (MHC) genes.) | 2
    | Scalation | 1100nt, including 1000nt of promoter region + first 100nt of first exon. | 95 | 81,851 | 125–1,101
    All loci |  | 3,129 | 1,517,011 | 120–7,501 (mean = 531.62)  
 
-
+<a name="Methods"></a>
 ### Methods
 
+<a name="Methods.SelectingREEs"></a>
 #### Selecting the set of target REEs
 
+<!-- <a name="Methods.SelectingREEs.overview"></a> -->
 ##### Overview: 
 
+<!-- <a name="Methods.SelectingREEs.detailed"></a> -->
 ##### Detailed, step-by-step methods for how I chose the set of target REEs
 
 1. I downloaded the *Thamnophis sirtalis* genome, and its associated annotation table: **ref_Thamnophis_sirtalis-6.0_top_level_MHC.gff3** (n = 559,129 annotations). I renamed the sequences in the genome file to have the following format: **Thamnophis_sirtalis_GCF_001077635.1_read1**, etc., and wrote the renamed genome as a new file in sequential fasta format. I then made a two-column text file named **Scaffold-Name-Key.txt**, which has the following table (columns tab-delimited):
@@ -85,12 +94,15 @@ nflank.3',i = # of nucleotides targeted downstream of exon
 = nflank,i - nflank.5',i
 --->
 
+<a name="Methods.SelectingUCEs"></a>
 #### Selecting the set of target UCEs
 
+<!-- <a name="Methods.SelectingUCEs.overview"></a> -->
 ##### Overview:
 
 Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus fulvius* (Streicher and Wiens, 2017; **Table X**). First, I filtered the full set of *Micrurus* UCEs to only include those present in all NCBI snake genomes (n = 2,968 UCEs). Then, I filtered the shared set of UCEs to only include those with an alignment width > 200nt (2,551 UCEs retained; each UCE alignment included the eight snakes with published genomes). Next, I removed the following UCEs: uce-1843, uce-2179, uce-2433, uce-2465, uce-2498, uce-2890, uce-2960, and uce-3354 (not sure why I did this yet). I sorted the remaining 2,543 UCEs by UCE name and retained the first 1,000 loci in this set. Arbor Biosciences was able to synthesize probes for 907 of the 1,000 proposed target UCEs.
 
+<!-- <a name="Methods.SelectingUCEs.detailed"></a> -->
 ##### Detailed, step-by-step methods for how I chose the set of target UCEs:
 
 1. I downloaded the set of *Micurus fulvius* UCEs (n = 3,260) identified by Streicher and Wiens (2017). These were available as a fasta file called **micrurus_UCEs.fas**.
@@ -196,7 +208,7 @@ writeXStringSet(x=target.UCEs,filepath=<outputFilepath>,format="fasta")
 
 7. Probes were designed for 907 of the 1,000 UCEs submitted to Arbor Biosciences.
 
-
+<a name="Methods.SelectingddRAD"></a>
 #### Selecting the set of target ddRAD-like loci
 
 ##### Overview:
@@ -216,6 +228,7 @@ writeXStringSet(x=target.UCEs,filepath=<outputFilepath>,format="fasta")
 
 Set of 900–1000bp regions of the Sense Strand containing Sbfi and EcoRI recognition sites: **ddRAD-like-loci_SenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt**
 
+<a name="Methods.SelectingFunctional"></a>
 #### Selecting the set of Functional loci
 
 ##### Overview:
