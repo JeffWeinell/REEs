@@ -6,17 +6,17 @@
 
 [Methods](#Methods)
   - [Choosing loci to include in the probe set](#Methods.SelectingTargetLoci)
-  -- [Selecting the set of target Rapidly-evolving Exons (REEs)](#Methods.SelectingREEs)
-  -- [Selecting the set of target Ultraconserved-elements (UCEs)](#Methods.SelectingUCEs)
-  -- [Selecting the set of target ddRAD-like loci](#Methods.SelectingddRAD)
-  -- [Selecting the set of target functionally interesting (Functional) loci](#Methods.SelectingFunctional)
+    - [Selecting the set of target Rapidly-evolving Exons (REEs)](#Methods.SelectingREEs)
+    - [Selecting the set of target Ultraconserved-elements (UCEs)](#Methods.SelectingUCEs)
+    - [Selecting the set of target ddRAD-like loci](#Methods.SelectingddRAD)
+    - [Selecting the set of target functionally interesting (Functional) loci](#Methods.SelectingFunctional)
   - [Probe Synthesis](#ProbeSynthesis)
   - [Taxa Sampled](#Sampling)
   - [Sequence Capture Library Prep](#LibraryPrep)
   - [DNA Sequencing](#DNASequencing)
   - [Post-sequencing](#PostSequencing)
-  -- [Processing sequence reads](#ProcessingReads)
-  -- [Phylogenetic Analyses](#PhylogeneticAnalyses)
+    - [Processing sequence reads](#ProcessingReads)
+    - [Phylogenetic Analyses](#PhylogeneticAnalyses)
 
 [Results](#Results)
 
