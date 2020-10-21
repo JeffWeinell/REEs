@@ -2383,16 +2383,20 @@ scanFa.multiple <- function(directory){
 	all.data
 }
 
+
+			
 ###########################
 ## make.partitioned.alignment function
 ###########################
-## parameters (probably need to update this to make it more generalizable, such as without needing Ophiophagus)
-###
+## Dependencies:
+##    R packages: Biostrings, stringr, ape, data.table
+#############
+## parameters (probably need to update this to make it more generalizable)
+###########################
 ## output.dir                     # where to save alignments (alignments for each type of data will be in different subdirectory)
-## InputAlignmentFolder           # folder containing input alignments
-## TargetDNA_CDS.regions.filename # full path to the fasta file containing only the CDS sequence of target loci (from which probes were designed). Sequence names must have the following format: "GeneName_TargetCDS_of_TargetLocusName_AnyAdditionalIformation", where GeneName and TargetLocusName are replaced with the actual names, and AnyAdditionalIformation can be a string of any characters
-## Ophiophagus.dna.filename       # path to file containing target loci extracted from Ophiophagus genome
-## bait.species.filename          # full path to the two column table: first column contains name of locus, second column contains name of species that the probes for that locus were designed from
+## InputAlignmentFolder           # folder containing input alignments, which are not partitioned by coding region
+## TargetCDS.path                 # full path to the fasta file containing only the CDS sequence of target loci (from which probes were designed). Sequence names must have the following format: "<GeneName>_TargetCDS_of_<TargetLocusName>_<AnyAdditionalIformation>", where <GeneName> and <TargetLocusName> are replaced with the actual names, and <AnyAdditionalIformation> can be a string of any characters
+## bait.species.filename          # full path to the file containing a two column table in which the first column contains name of locus and the second column contains name of species that the probes for that locus were designed from
 ## ref.type = "DNA"               # indicates that the input alignments are DNA sequences
 ## old.names=NA                   # character vector of sample names that should be changed to those defined in new.names parameter
 ## new.names=NA                   # character vector of sample names to change from those defined in old.names parameter
@@ -2402,7 +2406,17 @@ scanFa.multiple <- function(directory){
 ## locus.names.omit=NULL          # set to "WeinellEntry5179" for SnakeCap analyses, because the wrong target sequence was used when designing probes for this locus. I intended to target the Beta-keratin 2 gene, but instead targeted a non-coding region 80,000bp away.
 ## AA.pdist.drop.thresh=0.5       # maximum mean pairwise p-distance for AA sequence of an individual to keep the individual in AA alignments or alignments containing CDS regions
 
-make.partitioned.alignment       <- function(output.dir,InputAlignmentFolder,TargetDNA_CDS.regions.filename,bait.species.filename,ref.type="DNA",old.names=NA,new.names=NA,drop.reference=F,ith.locus.start=1,ith.locus.end="all",locus.names.omit=NULL,AA.pdist.drop.thresh=0.5){
+#########
+# Example Usage:
+#     source("~/SnakeCap_Functions.R") # load in the functions in this file
+#     library(Biostrings)
+#     library(stringr)
+#     library(ape)
+#     library(data.table)
+#     make.partitioned.alignment(InputAlignmentFolder="~/Immune/unpartitioned/", output.dir="~/Immune/partitioned/", TargetCDS.path="~/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa", bait.species.filename="~/bait_species_table.txt")
+#########
+
+make.partitioned.alignment       <- function(InputAlignmentFolder,output.dir,TargetCDS.path,bait.species.filename,ref.type="DNA",old.names=NA,new.names=NA,drop.reference=F,ith.locus.start=1,ith.locus.end="all",locus.names.omit=NULL,AA.pdist.drop.thresh=0.5){
 	#source(libs)            ### loads required libraries from the libraries file
 	#source(functions)       ### loads required functions from the functions file
 	
@@ -2424,25 +2438,28 @@ make.partitioned.alignment       <- function(output.dir,InputAlignmentFolder,Tar
 	makeDirectories <- lapply(X=subdirectories,FUN=dir.check.create)  ### need to assign an object to avoid printing results of lapply 
 	
 	### Reads in files ###
-	TargetDNA_CDS.regions       <- readDNAStringSet(TargetDNA_CDS.regions.filename,format="fasta")
-# #	Ophiophagus.dna             <- readDNAStringSet(Ophiophagus.dna.filename,format="fasta")
+	TargetDNA_CDS.regions       <- readDNAStringSet(TargetCDS.path,format="fasta")
 	bait.species.table          <- fread(bait.species.filename) ### reads the table specifying which species the probes were designed from for each locus 
 
-	### Defines names ### 
-# #	Ophiophagus.names           <- gsub("-Ophiophagus_hannah","",names(Ophiophagus.dna))
-
-#targetCDS.names             <- gsub(pattern=".*_Weinell",replacement="Weinell",x=names(TargetDNA_CDS.regions))  ###| used this if working with beta-keratin CDS
-#targetCDS.names             <- gsub(pattern="_.+",replacement="",x=targetCDS.names)                             ###| 
-#test1 <- gsub(pattern=".*_TargetCDS_of_",replacement="",x=names(TargetDNA_CDS.regions))
-#test2 <- gsub(pattern="_.+",replacement="",x=test1)
-#test3 <- strsplit(names(TargetDNA_CDS.regions))
-#test4 <- stri_list2matrix(test3,byrow=T)
+	#targetCDS.names             <- gsub(pattern=".*_Weinell",replacement="Weinell",x=names(TargetDNA_CDS.regions))  ###| used this if working with beta-keratin CDS
+	#targetCDS.names             <- gsub(pattern="_.+",replacement="",x=targetCDS.names)                             ###| 
+	#test1 <- gsub(pattern=".*_TargetCDS_of_",replacement="",x=names(TargetDNA_CDS.regions))
+	#test2 <- gsub(pattern="_.+",replacement="",x=test1)
+	#test3 <- strsplit(names(TargetDNA_CDS.regions))
+	#test4 <- stri_list2matrix(test3,byrow=T)
 
 	name.string.start           <- (str_locate_X(strings=names(TargetDNA_CDS.regions),pattern="_",X=3)+1)
 	name.string.end             <- (str_locate_X(strings=names(TargetDNA_CDS.regions),pattern="_",X=4)-1)
 	targetCDS.names             <- substring(names(TargetDNA_CDS.regions),first=name.string.start,last=name.string.end) ### target loci names of each sequence in TargetDNA_CDS.regions
 	input.alignment.filenames   <- list.files(InputAlignmentFolder,full.names=T)
 	input.alignment.shortnames  <- gsub(".phy","",list.files(InputAlignmentFolder))
+
+	## 27/27 immune genes are in TargetDNA_CDS.regions
+	## 1652/1652 WholeExon genes are in TargetDNA_CDS.regions  ### potentially re-add the ones that were missing to include the potentially one or two bases not included (for those with frame not 0)
+	## 54/95 scalation genes missing from TargetDNA_CDS.regions
+	## 29/119 vision genes missing from TargetDNA_CDS.regions
+	## 85/??? exon-containing UCEs present in TargetDNA_CDS.regions
+	## 0/??? exon-containing ddRAD-like loci present in TargetDNA_CDS.regions
 
 	shared.names                <- Reduce(intersect, list(input.alignment.shortnames,targetCDS.names)) ### updates shared.names so that they only processes loci that have been aligned and that have a known CDS region (which is included in TargetDNA_CDS.regions)
 	if(!is.null(locus.names.omit)){
@@ -2475,18 +2492,12 @@ make.partitioned.alignment       <- function(output.dir,InputAlignmentFolder,Tar
 		if(ref.type=="DNA"){
 			reference.cds        <- TargetDNA_CDS.regions[which(targetCDS.names==locus.name.temp)]
 			names(reference.cds) <- paste(bait.species.temp,names(reference.cds),sep="_")
-# #			if(locus.name.temp %in% Ophiophagus.names){
-# #				Ophiophagus.temp        <- Ophiophagus.dna[match(locus.name.temp,Ophiophagus.names)]
-# #				names(Ophiophagus.temp) <- "Ophiophagus_hannah"
-# #				final.locus             <- c(reference.cds,novel2,Ophiophagus.temp)
-# #			} else {
-				final.locus             <- c(reference.cds,novel2)
-# #			}
+			final.locus             <- c(reference.cds,novel2)
 		}
 		
-		if(length(final.locus) < 5){        ##| Skips locus if fewer than 5 sequences in final.locus
-			next                        ##| (i.e. need at least 4 sequences other than the reference CDS)
-		}                                   ##|
+		if(length(final.locus)<5){        ##| Skips locus if fewer than 5 sequences in final.locus
+			next                          ##| (i.e. need at least 4 sequences other than the reference CDS)
+		}                                 ##|
 	
 		alignment.names  <- names(final.locus)
 		if(!all(is.na(old.names))){
@@ -2815,7 +2826,8 @@ make.partitioned.alignment       <- function(output.dir,InputAlignmentFolder,Tar
 		write.table(x=alignments.made,file=paste(output.dir,"partitioned_alignments_made.txt",sep=""))
 	} # End i for loop
 }
-
+			
+			
 ##############
 ## plotAlignment function
 ##############
