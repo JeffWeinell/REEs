@@ -31,7 +31,7 @@ The probe set includes 20,020 probes for 3,129 single-copy loci (1,517,011 nt) s
 
 REEs include one or more entire exons and one or both exon-flanking regions, and range in length from 121 to 7,501 nt. I used a modified version of the FrogCap pipeline (Hutter et al., 2019) to select the optimal set of REEs from an alignment of snake exomes.
 
-SnakeCap UCEs are a subset of the Micrurus fulvius UCEs from Streicher and Wiens (2017).
+SnakeCap UCEs are a subset of the *Micrurus fulvius* UCEs from Streicher and Wiens (2017).
 
 ddRAD-like loci are shared, single-copy loci identified from in-silico ddRAD using recognition sites for SbfI and EcoRI restriction enzymes.
 
@@ -278,7 +278,7 @@ Vision loci: I used blastn to search for the vision loci probes from Schott et a
 <a name="ProbeSynthesis"></a>
 ### Probe Synthesis
 
-After choosing the target loci, probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total. See **Target-loci_Coverage_graph_22October2020.pdf** for a visual summary of target loci, probes, probe coverage, and features of loci including genes, mRNA/transcribed regions, and protein-coding (CDS) regions. This graph was generated using the code in **graph_target_and_features.R**.
+After choosing the target loci, probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total. See **Target-loci_Coverage_graph_22October2020.pdf** for a visual summary of target loci, probes, probe coverage, and features of loci including genes, mRNA/transcribed regions, and protein-coding (CDS) regions. This graph was generated with **graph_target_and_features.R** and then filesize reduction in Adobe Acrobat.
 
 <a name="Sampling"></a>
 ### Taxa Sampled
