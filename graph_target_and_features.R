@@ -1,23 +1,23 @@
 #### load necessary functions and libraries
-source("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/SnakeCap_functions.R")
+source("~/SnakeCap_functions.R")
 packages.to.load <- c("R.methodsS3","R.oo","assertthat","Rcpp","tibble","magrittr","lazyeval","DBI","BH","dplyr","R.utils","data.table","utils","BiocGenerics","bitops","S4Vectors","IRanges","RCurl","XVector","zlibbioc","GenomeInfoDb","GenomeInfoDbData","GenomicRanges","Biostrings","lambda.r","futile.options","snow","futile.logger","BiocParallel","Rsamtools","ape","rentrez","rMSA","stringr","stringi","biofiles","tidyr")
 invisible(lapply(packages.to.load, FUN=library, character.only = TRUE))
 
 ####
 ## loads fasta-formatted DNA sequences of target.loci and probes used to capture target loci
 ####
-target.loci             <- readDNAStringSet(file="/Users/Jeff/Documents/SnakeCap_Data/Weinell_TargetLoci_Snakes_Final_18April2019.fa")
-probes                  <- readDNAStringSet(file="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta")
+target.loci             <- readDNAStringSet(file="~/Weinell_TargetLoci_Snakes_Final_18April2019.fa")
+probes                  <- readDNAStringSet(file="~/Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta")
 
 ####
 ## loads start/stop/sense coordinates (location qualifiers) of features (gene, mRNA, and CDS regions) for each target locus. A different table is used for each type of target locus.
 ####
 
-Exon.Immune.annotations <- read.table("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/Exon.and.Immune-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v3.txt",colClasses="character",header=T,sep="\t")                           ### table made from NCBI annotations using code in /Users/Jeff/Documents/SnakeCap_Data/Notes_12April2020.txt
-UCE.annotations         <- read.table("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/UCE-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v2.txt",colClasses="character",header=T,sep="\t")                                       ### table made from NCBI annotations using code in /Users/Jeff/Documents/SnakeCap_Data/Notes_12April2020.txt
-ddRAD.annotations       <- read.table("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/ddRAD-loci_Thamnophis_putative-homologs-of-Thermophis_NCBI-coordinates_table_MoreInfo_v3_30March2020.txt",colClasses="character",header=T,sep="\t")     ### table made from NCBI annotations using code in /Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/get_Thamnophis_homologs_all.R
-vision.annotations      <- read.table("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/Vision-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v2.txt",colClasses="character",header=T,sep="\t")                                    ### table made from NCBI annotations using code in /Users/Jeff/Documents/SnakeCap_Data/Notes_12April2020.txt
-scalation.annotations   <- read.table("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/Scalation-Loci_NCBI-coordinates_table_MoreInfo_12April2020_MaybeUseThisFile.txt",colClasses="character",header=T,sep="\t")                              ### table made from annotations in paper rather than from NCBI feature tables
+Exon.Immune.annotations <- read.table("~/Exon.and.Immune-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v3.txt",colClasses="character",header=T,sep="\t")                           ### table made from NCBI annotations using code in /Users/Jeff/Documents/SnakeCap_Data/Notes_12April2020.txt
+UCE.annotations         <- read.table("~/UCE-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v2.txt",colClasses="character",header=T,sep="\t")                                       ### table made from NCBI annotations using code in /Users/Jeff/Documents/SnakeCap_Data/Notes_12April2020.txt
+ddRAD.annotations       <- read.table("~/ddRAD-loci_Thamnophis_putative-homologs-of-Thermophis_NCBI-coordinates_table_MoreInfo_v3_30March2020.txt",colClasses="character",header=T,sep="\t")     ### table made from NCBI annotations using code in /Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/get_Thamnophis_homologs_all.R
+vision.annotations      <- read.table("~/Vision-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v2.txt",colClasses="character",header=T,sep="\t")                                    ### table made from NCBI annotations using code in /Users/Jeff/Documents/SnakeCap_Data/Notes_12April2020.txt
+scalation.annotations   <- read.table("~/Scalation-Loci_NCBI-coordinates_table_MoreInfo_12April2020_MaybeUseThisFile.txt",colClasses="character",header=T,sep="\t")                              ### table made from annotations in paper rather than from NCBI feature tables
 
 ####
 ## merge the annotation tables into a single annotation table
@@ -28,7 +28,7 @@ features.table          <- rbind(Exon.Immune.annotations,UCE.annotations,scalati
 # write.table(x=features.table,file="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/All-Loci_NCBI-coordinates_table_MoreInfo_13April2020.txt",quote=F,sep="\t",row.names=F)
 # features.table        <- read.table("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/All-Loci_NCBI-coordinates_table_MoreInfo_13April2020.txt",colClasses="character",header=T,sep="\t")
 
-### This next table is used to transform gene/mRNA/CDS feature ranges that are annotated for Thamnophis sirtalis onto the homologous region of target loci not designed from T. sirtalis.
+### This next table is used to transform gene/mRNA/CDS feature ranges that are annotated for Thamnophis sirtalis onto the homologous region for loci not designed from T. sirtalis.
 ### So far, this table only includes range transormation info for Thamnophis vs. Thermophis (ddRAD-like loci).
 transform.ranges.table <- read.table("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/Thermophis.vs.Thamnophis.transform.range.matrix.txt",colClasses="character",header=F,sep="\t")
 
