@@ -303,17 +303,44 @@ Novogene Illumina HiSeqX; paired-end sequencing with 150bp insert size.
 <a name="Demultiplexing"></a>
 #### Demultiplexing
 
+To demultiplex raw DNA sequence reads from Illumina, I either used used **bcl2fastq** (Illumina; not sure if I actually used this)... or (more likely) the **bbmap** script **demuxbyname.sh** (Bushnell, 2014).
+
+Running **demuxbyname.sh**:
+
+```
+demuxbyname.sh in="HF10_N2_USPD16097067_HY25JBBXX_L4_1.fq" in2="HF10_N2_USPD16097067_HY25JBBXX_L4_2.fq.gz" out=out_%_1.fq out2=out_%_2.fq prefixmode=f names=GGTTACTG+CGAACTTA,TGCGTACA+CATTCGCT,TAGCGTTG+GGTGTTCG,ACTTCCTG+GGTGTCCG,CCGAAGTA+ACCGGTTC,TCGAAGCT+TGAACAGG,GAATCTGG+TTCTGGTG,AATCGGCG+TGAAGCCA,GGCTACAG+ATCACTAC,AAACATCG+TATGCGGT,GGACTATT+ATTCAGAA,TCTACGAC+TGCCTATG,GTGTTGTA+CGTGGACA,TAATGCGC+CAGTGTGG,CGTCAACG+GAGATTCC,TTTCATAG+GCCAGAGG,CTTGCTAT+AAGTCTCC,TGGAGCTG+AAGGATAA,TGCCTATG+GCCAAGAC,CACCACGG+TTGTTCTC,TTGTAGAT+TAAGATTA,GTTCATCT+CAATGATG,AACAGTTG+ACTCCTCC,ATTCAGAA+GGAATTAA,GTGCTTAT+GATCTGCC,GAATCAAT+AGCATCAG,ACCGTAGT+TCGTAGAT,ATCCGCAG+ACCTCCAA,CGTACGTT+TCTCAATT,TTGCCATC+AGCATATT,AGGTGGTC+ACGCTTAT,ACCTTAGA+CTTTTTGA,CATGATGA+TACCACCA,ACAGCAGA+ACTACTTA,TGAAGAGA+TTCGTTCT,ACGGCCGC+TAATGCGC,GATGCCGG+TACAGGTC,AACACATA+CTACGCAT,GTTATATA+GGTTACTG,GCGCCGTG+ATACTACT,TTCGAACC+TCGCCGGC,ACCTCCAA+TACTGTTA,ACTCCTCC+AGTCTTCT,TAACATAG+TGAGTTAG,TATGCGGT+ACTAGCTC,AAGACTGT+GAATCTGT,AAGGTAGG+GGCGAGGA,CCGTGAGA+CAATCGAA,ACGCTTAT+CTACCTTG,ACCGCTAT+TAGCACTT,TGTCTAAC+TGAATGCG,GAATATCC+ATTCAGCG,GAATTCGT+TAAGTACC,GGATTAGG+CGGCGTAA,TTAGAGTC+TGTTAGAC,GAAGTCTT+CAGAAGAT,AAGACGAA+ACACACCT,GACTAGTA+AAGTACAG,GTTCTACT+TGACTACT,TTGCGTAC+TAGCCGAT,CTGTCGAG+GATAGACA,GATAGAGG+AGTTACAT,CTGGAAGC+GAGCTGAA,TAGGATGA+GCTGCATG,GGCGAGGA+TTGGCAGG,ATAGCGAC+CGTCCGTG,AAGTCTCC+CAACTGCT,AATGTTGC+AAGGCAAT,GGTGTCCG+GTGGCTAC,AGCAGGAA+CTCTTGAA,TTATCTAC+GGATAATA,AATCGTTA+TGTTCTCC,GGTTGACG+TGCGTGAA,TGTGGTTG+GTCTGTGC,TAGCCGAT+TTAGGTTG,GTGATTCC+GCATAATT,ATCACAGA+AAGTTATC,CCTAGCCA+AGGTGGTC,ACCATTAA+AACGTGTA,CTACGAGG+CGGATTGC,GAGCTGAA+TAACATAG,AATGCAAA+ATCCGCAG,CTGGCCTC+AAGTCGTG,TAGCACTT+GGCCATCA,GCCAGAGG+GATCTCTT,CGTATTGG+TGCTTGTC,CAGAAGAT+GGTTGACG,GCAGCCTC+CCGCTACA,TGGCTCAG+GCCTGTTC,TGGTCATT+GGACTCTG,GTCGCTGT+GCAGCATA,CAAGCCGC+ACCATTAA,CGCGCCAA+GTAAGGTG,GAAGAGGC+ACAGCCTT,ACCTGACT+ACCGCTAT,CTACTGAC+ACCATATC,CGGATAAC+GAGTTAGC,ACTCTACG+GTCCACTC,TCGGATGT+TGAAGAAT,TCTATCAG+CAGGTTCC,TTGTGTTC+AGGCTATA,AAGGATAA+GCATGGCT,CGCATACA+ACCTTAGA,TTCAAGAA+TTCGGCCG,ACAGGCAG+TAGCTTGT,TTGGTGGC+ATTACTCG,CGGTGGTA+TTATGTAT,GCACTTGG+ATCATTCC,ACGTAGTC+ATTGGCTC,AAGAGAGC+TGAGGCGC,CAGATATT+TATAAGTC,AATCCGTT+AACACATA,AGTGTGTC+AAACATCG
+```
 <a name="ProcessingReads"></a>
 #### Processing sequence reads
+
+To processes sequence reads (assemble contigs for each sample) I followed the FrogCap pipeline (Hutter et al., 2019).
 
 <a name="DNA.Alignment"></a>
 #### DNA alignment
 
-**Generating an unpartitioned, multiple-species alignment for each captured locus.**
+**Generating an unpartitioned, multiple-species alignment for each captured locus:**
 
-**Generating partitioned and/or subset alignments.**
+I used the MAFFT algorithm for multiple alignment, as implemented in the R package rMSA
 
-Load in SnakeCap functions and required R packages:
+```
+mafft(final.locus,param="--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6")
+```
+
+**Generating partitioned and subset alignments:**
+
+I sorted each of the unpartitioned target+flanking alignments into one of six directories by locus type (REEs, UCEs, ddRAD-like, Immune, Scalation, Vision), and then ran an R script to generate nine types of alignments per locus, which differ in how data are subset or partitioned; the nine alignments are:
+
+- CDS_only: only includes protein-coding regions
+- CDS_FirstCodonPosition: only
+- CDS_SecondCodonPosition
+- CDS_ThirdCodonPosition
+- AminoAcids (an alignment of amino acid sequences from translating the CDS_only alignment)
+- Upstream_noncoding   (only includes noncoding DNA upstream of the first captured exon)
+- Downstream_noncoding (only includes noncoding DNA downstream of the last captured exon)
+- All_noncoding (includes only the non-CDS regions)
+- All_parts (includes all data types, and a partition file is created)
+
+In R, load in SnakeCap functions and required packages:
 
 ```
 source("~/SnakeCap_Functions.R") # load in the functions in this file
@@ -325,19 +352,41 @@ library(data.table)
 Run make.partitioned.alignment separately for REEs, UCEs, ddRAD-like, MHC, scalation, and vision genes:
 
 ```
-### Example usage for MHC genes:
-make.partitioned.alignment(InputAlignmentFolder="~/Immune/unpartitioned/", output.dir="~/Immune/partitioned/", TargetCDS.path="~/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa", bait.species.filename="~/bait_species_table.txt")
-```
 
+### REEs
+
+### UCEs
+
+### ddRAD-like loci
+
+### Immune (MHC) genes:
+make.partitioned.alignment(InputAlignmentFolder="~/Immune/unpartitioned/", output.dir="~/Immune/partitioned/", TargetCDS.path="~/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa", bait.species.filename="~/bait_species_table.txt")
+
+### Scalation genes:
+make.partitioned.alignment(InputAlignmentFolder="~/Scalation/unpartitioned/", output.dir="~/Scalation/partitioned/", TargetCDS.path="~/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa", bait.species.filename="~/bait_species_table.txt")
+
+### Vision genes:
+make.partitioned.alignment(InputAlignmentFolder="~/Vision/unpartitioned/", output.dir="~/Vision/partitioned/", TargetCDS.path="~/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa", bait.species.filename="~/bait_species_table.txt")
+
+
+
+
+
+```
 
 <a name="PhylogeneticAnalyses"></a>
 #### Phylogenetic Analyses
+
+- IQTREE...
+- ASTRAL III...
 
 <a name="Results"></a>
 ## Results
 
 <a name="References"></a>
 ## References:
+
+Bushnell, B. 2014. BBMap: A Fast, Accurate, Splice-Aware Aligner...
 
 Holthaus K.B., Mlitz V., Strasser B., Tschachler E., Alibardi L., and L. Eckhart. 2017. Identification and comparative analysis of the epidermal differentiation complex in snakes. *Scientific Reports* 7, 45338. doi: http://doi.org/10.1038/srep45338.
 
