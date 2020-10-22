@@ -1,6 +1,6 @@
 # SnakeCap Sequence Capture Probe Set:
 
-### Contents
+## Contents
 
 [Description of SnakeCap Probe Set](#Description)
 
@@ -17,6 +17,7 @@
   - [Post-sequencing](#PostSequencing)
     - [Demultiplexing](#Demultiplexing)
     - [Processing sequence reads](#ProcessingReads)
+    - [DNA Alignment](#DNA.Alignment)
     - [Phylogenetic Analyses](#PhylogeneticAnalyses)
 
 [Results](#Results)
@@ -24,7 +25,7 @@
 [References](#References)
 
 <a name="Description"></a>
-### Description of SnakeCap Probe Set
+## Description of SnakeCap Probe Set
 
 The probe set includes 20,020 probes for 3,129 single-copy loci (1,517,011 nt) shared across snakes. The target loci are categorized into four types: (1) rapidly evolving exons (REEs; n = 1,653), (2) ultra-conserved elements (UCEs; n = 907), (3) ddRAD-like loci (n = 328), (4) and functionally interesting genes, which includes 27 major histocompatibility complex (MHC) genes, 119 vision genes, and 95 scalation genes.
 
@@ -36,7 +37,7 @@ ddRAD-like loci are shared, single-copy loci identified from in-silico ddRAD usi
 
 Functional loci included entire or partial gene regions that have previously been predicted or known to function in either (1) vertebrate immune systems, (2) vision, (3) or scalation.
 
-##### Table 2.1 For each type of locus: genomic region targeted, number of loci (nloci), total number of nucleotides targeted (nnt), and nucleotide lengths (nt/locus) of the shortest and longest loci.
+#### Table 2.1 For each type of locus: genomic region targeted, number of loci (nloci), total number of nucleotides targeted (nnt), and nucleotide lengths (nt/locus) of the shortest and longest loci.
 
 Locus type | Region targeted | nloci | nnt | nt/locus (min–max)
 ---- | ---- | ---- | ---- | ----
@@ -50,16 +51,16 @@ Scalation | 1100nt, including 1000nt of promoter region + first 100nt of first e
 All loci |  | 3,129 | 1,517,011 | 120–7,501 (mean = 531.62)  
 
 <a name="Methods"></a>
-### Methods
+## Methods
 
 <a name="Methods.SelectingREEs"></a>
-#### Selecting the set of target REEs
+### Selecting the set of target REEs
 
 <!-- <a name="Methods.SelectingREEs.overview"></a> -->
-##### Overview: 
+#### Overview: 
 
 <!-- <a name="Methods.SelectingREEs.detailed"></a> -->
-##### Detailed, step-by-step methods for how I chose the set of target REEs
+#### Detailed, step-by-step methods for how I chose the set of target REEs
 
 1. I downloaded the *Thamnophis sirtalis* genome, and its associated annotation table: **ref_Thamnophis_sirtalis-6.0_top_level_MHC.gff3** (n = 559,129 annotations). I renamed the sequences in the genome file to have the following format: **Thamnophis_sirtalis_GCF_001077635.1_read1**, etc., and wrote the renamed genome as a new file in sequential fasta format. I then made a two-column text file named **Scaffold-Name-Key.txt**, which has the following table (columns tab-delimited):
 
@@ -110,15 +111,15 @@ nflank.3',i = # of nucleotides targeted downstream of exon
 --->
 
 <a name="Methods.SelectingUCEs"></a>
-#### Selecting the set of target UCEs
+### Selecting the set of target UCEs
 
 <!-- <a name="Methods.SelectingUCEs.overview"></a> -->
-##### Overview:
+#### Overview:
 
 Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus fulvius* (Streicher and Wiens, 2017; **Table X**). First, I filtered the full set of *Micrurus* UCEs to only include those present in all NCBI snake genomes (n = 2,968 UCEs). Then, I filtered the shared set of UCEs to only include those with an alignment width > 200nt (2,551 UCEs retained; each UCE alignment included the eight snakes with published genomes). Next, I removed the following UCEs: uce-1843, uce-2179, uce-2433, uce-2465, uce-2498, uce-2890, uce-2960, and uce-3354 (not sure why I did this yet). I sorted the remaining 2,543 UCEs by UCE name and retained the first 1,000 loci in this set. Arbor Biosciences was able to synthesize probes for 907 of the 1,000 proposed target UCEs.
 
 <!-- <a name="Methods.SelectingUCEs.detailed"></a> -->
-##### Detailed, step-by-step methods for how I chose the set of target UCEs:
+#### Detailed, step-by-step methods for how I chose the set of target UCEs:
 
 1. I downloaded the set of *Micurus fulvius* UCEs (n = 3,260) identified by Streicher and Wiens (2017). These were available as a fasta file called **micrurus_UCEs.fas**.
 
@@ -224,11 +225,11 @@ writeXStringSet(x=target.UCEs,filepath=<outputFilepath>,format="fasta")
 7. Probes were designed for 907 of the 1,000 UCEs submitted to Arbor Biosciences.
 
 <a name="Methods.SelectingddRAD"></a>
-#### Selecting the set of target ddRAD-like loci
+### Selecting the set of target ddRAD-like loci
 
-##### Overview:
+#### Overview:
 
-##### Detailed, step-by-step methods for how I chose the set of target ddRAD-like loci:
+#### Detailed, step-by-step methods for how I chose the set of target ddRAD-like loci:
 
 1. grep Sbfi recognition site in *T. baileyi* genome (sense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
 2. grep EcoRI recognition site in *T. baileyi* genome (sense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
@@ -256,9 +257,9 @@ Proposed target loci using SbfI and EcoR1 recognition sites (USED 328 of these):
 Set of 900–1000bp regions of the Sense Strand containing Sbfi and EcoRI recognition sites: **ddRAD-like-loci_SenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt**
 
 <a name="Methods.SelectingFunctional"></a>
-#### Selecting the set of Functional loci
+### Selecting the set of Functional loci
 
-##### Overview:
+#### Overview:
 
 Scalation loci: I targeted a subset of the genes included in the study by Holthaus et al. (2017). In that study, the authors identified homologous genes of the Epidermal Differentiation Complex (which are putatively involved in scalation) of *Python bivittatus* and *Ophiophagus hannah*. I downloaded the *Ophiophagus* scalation gene sequences using the table of genomic coordinates provided by Holthaus et al. (2017), and then used tblastn to search for and obtain homologous loci in *T. sirtalis*, *Protobothrops mucrosquamatus*, and *Crotalus horridus*.
 
@@ -266,7 +267,7 @@ Immune loci: I searched the annotation table of *T. sirtalis* for MHC (I or II) 
 
 Vision loci: I used blastn to search for the vision loci probes from Schott et al. (2017) (which were from *Anolis*, *Columba*, *Gallus*, and *Pelodiscus*, *Sceloporus*, or *Python*) within the snake genomes. Most of the SnakeCap probes for these loci are designed from *Ophiophagus* (n = 88), but some probes were designed from *Thamnophis* (n = 21), *Protobothrops* (n = 5), *Pantherophis* (n = 3), or *Python* (n = 2), when blastn of Schott et al 2017 probes did not yield a strong match in *Ophiophagus*.
 
-##### Detailed, step-by-step methods for how I chose the set of functional loci:
+#### Detailed, step-by-step methods for how I chose the set of functional loci:
 
 1. 
 
@@ -275,7 +276,7 @@ Vision loci: I used blastn to search for the vision loci probes from Schott et a
 3. 
 
 <a name="ProbeSynthesis"></a>
-#### Probe Synthesis
+### Probe Synthesis
 
 After choosing the target loci, probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total.
 
@@ -284,28 +285,29 @@ See **Target-loci_Coverage_graph_24-March2020.pdf** for a plot of the probes ali
 Haven't done this yet: Used code in "graph_target_and_features.R" to plot each target locus with ncbi feature annotations; black = target locus; thick red = exons; thin red = introns; thick purple = non-protein RNA gene.
 
 <a name="Sampling"></a>
-#### Taxa Sampled
+### Taxa Sampled
 
 <a name="LibraryPrep"></a>
-#### Sequence Capture Library Prep
+### Sequence Capture Library Prep
 
 Conducted by Arbor Biosciences; eight samples/pool; ...
 
 <a name="DNASequencing"></a>
-#### DNA Sequencing
+### DNA Sequencing
 
 Novogene Illumina HiSeqX; paired-end sequencing with 150bp insert size.
 
 <a name="PostSequencing"></a>
-#### Post-sequencing
+### Post-sequencing
 
 <a name="Demultiplexing"></a>
-##### Demultiplexing
+#### Demultiplexing
 
 <a name="ProcessingReads"></a>
-##### Processing sequence reads
+#### Processing sequence reads
 
-##### DNA alignment
+<a name="DNA.Alignment"></a>
+#### DNA alignment
 
 **Generating an unpartitioned, multiple-species alignment for each captured locus.**
 
@@ -329,7 +331,7 @@ make.partitioned.alignment(InputAlignmentFolder="~/Immune/unpartitioned/", outpu
 
 
 <a name="PhylogeneticAnalyses"></a>
-##### Phylogenetic Analyses
+#### Phylogenetic Analyses
 
 <a name="Results"></a>
 ## Results
