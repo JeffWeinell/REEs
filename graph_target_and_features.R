@@ -341,7 +341,7 @@ for(k in 130:135){ ### plots scalation loci
 ### On OsX: the quartz function is used to save the plot
 ### On Windows: the cairo_pdf functon is used to save the plot
 
-pdf.pathname <- "/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/Target-loci_Coverage_graph_14April2020_scalation.pdf"
+pdf.pathname <- "~/Target-loci_Coverage_graph_14April2020_scalation.pdf"
 if(Sys.info()["sysname"]=="Darwin"){
 	quartz(type = "pdf", file = pdf.pathname)
 } else {
