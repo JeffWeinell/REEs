@@ -330,8 +330,6 @@ mafft(final.locus,param="--localpair --maxiterate 1000 --adjustdirection --quiet
 
 I sorted each of the unpartitioned target+flanking alignments into one of six directories by locus type (REEs, UCEs, ddRAD-like, Immune, Scalation, Vision), and then ran an R script to generate nine types of alignments per locus, which differ in how data are subset or partitioned; the nine alignments are:
 
-*Note*: Most of the UCEs and ddRAD-like loci are non-coding, and therefore subsetted and partitioned alignments were not created for these loci.
-
 - CDS_only: only includes protein-coding regions
 - CDS_FirstCodonPosition: only
 - CDS_SecondCodonPosition
@@ -341,6 +339,8 @@ I sorted each of the unpartitioned target+flanking alignments into one of six di
 - Downstream_noncoding (only includes noncoding DNA downstream of the last captured exon)
 - All_noncoding (includes only the non-CDS regions)
 - All_parts (includes all data types, and a partition file is created)
+
+*Note*: Most of the UCEs and ddRAD-like loci are non-coding, and therefore subsetted and partitioned alignments were not created for these loci. 
 
 In R, load in SnakeCap functions and required packages:
 
