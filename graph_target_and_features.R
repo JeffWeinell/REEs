@@ -29,7 +29,7 @@ features.table          <- rbind(Exon.Immune.annotations,UCE.annotations,scalati
 # features.table        <- read.table("~/All-Loci_NCBI-coordinates_table_MoreInfo_13April2020.txt",colClasses="character",header=T,sep="\t")
 
 ### This next table is used to transform gene/mRNA/CDS feature ranges that are annotated for Thamnophis sirtalis onto the homologous region for loci not designed from T. sirtalis.
-### So far, this table only includes range transormation info for Thamnophis vs. Thermophis (ddRAD-like loci).
+### So far, this table only includes range transormation info for Thamnophis vs. Thermophis (ddRAD-like loci). The table was created with the script get_Thamnophis_homologs_all.R
 transform.ranges.table <- read.table("~/Thermophis.vs.Thamnophis.transform.range.matrix.txt",colClasses="character",header=F,sep="\t")
 
 loci.names  <- names(target.loci)                  ### Names of target loci. These have the form "WeinellEntryXXX", where XXX is a unique number identifier (one to 4 digits)
