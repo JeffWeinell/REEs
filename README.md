@@ -305,6 +305,29 @@ Novogene Illumina HiSeqX; paired-end sequencing with 150bp insert size.
 <a name="ProcessingReads"></a>
 ##### Processing sequence reads
 
+##### DNA alignment
+
+**Generating an unpartitioned, multiple-species alignment for each captured locus.**
+
+**Generating partitioned and/or subset alignments.**
+
+Load in SnakeCap functions and required R packages:
+
+```
+source("~/SnakeCap_Functions.R") # load in the functions in this file
+library(Biostrings)
+library(stringr)
+library(ape)
+library(data.table)
+```
+Run make.partitioned.alignment separately for REEs, UCEs, ddRAD-like, MHC, scalation, and vision genes:
+
+```
+### Example usage for MHC genes:
+make.partitioned.alignment(InputAlignmentFolder="~/Immune/unpartitioned/", output.dir="~/Immune/partitioned/", TargetCDS.path="~/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa", bait.species.filename="~/bait_species_table.txt")
+```
+
+
 <a name="PhylogeneticAnalyses"></a>
 ##### Phylogenetic Analyses
 
