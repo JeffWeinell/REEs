@@ -336,7 +336,7 @@ I sorted each of the unpartitioned target+flanking alignments into one of six di
 - All_noncoding (includes only the non-CDS regions)
 - All_parts (includes all data types, and a partition file is created)
 
-*Note*: Most of the UCEs and ddRAD-like loci are non-coding, and therefore subsetted and partitioned alignments were not created for these loci. 
+*Note*: Most of the UCEs and ddRAD-like loci are non-protein-coding, and, therefore, subsetted and partitioned alignments were not created for these loci; 87 UCEs with CDS; XXX ddRAD-like loci with CDS.
 
 In R, load in SnakeCap functions and required packages:
 
