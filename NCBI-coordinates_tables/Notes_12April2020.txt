@@ -1,0 +1,932 @@
+
+packages.to.load <- c("R.methodsS3","R.oo","assertthat","Rcpp","tibble","magrittr","lazyeval","DBI","BH","dplyr","R.utils","data.table","utils","BiocGenerics","bitops","S4Vectors","IRanges","RCurl","XVector","zlibbioc","GenomeInfoDb","GenomeInfoDbData","GenomicRanges","Biostrings","lambda.r","futile.options","snow","futile.logger","BiocParallel","Rsamtools","ape","rentrez","rMSA","stringr","stringi","biofiles")
+invisible(lapply(packages.to.load, FUN=library, character.only = TRUE))
+
+###### load functions
+source("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/SnakeCap_functions.R") ### loads in some necessary functions
+
+##### Rows shifted beginning at WeinellEntry1223 and ending at WeinellEntry1944
+#####
+## Does the same thing as "get_Thamnophis_homologs_all.R" except for WholeExon and Immune loci
+####
+
+gbData            <- biofiles::gbRecord("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/WholeExons.gb",progress=T)
+targetTable       <- read.table(file="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/TargetTable1_25March2020.txt",header=T,colClasses="character")
+target.loci       <- readDNAStringSet(filepath="/Users/Jeff/Documents/SnakeCap_Data/Weinell_TargetLoci_Snakes_Final_18April2019.fa")
+gbData            <- gbData[c(1:1607,1609:1680)] ### Removes 1608 (WeinellEntry1944)
+exon.names        <- targetTable[c(1:1607,1609:1680),"TargetName_ArborSci"] ### Removes 1608 (WeinellEntry1944)
+matched.loci      <- target.loci[exon.names]
+query.lengths     <- width(matched.loci)
+exonTable         <- targetTable[targetTable[,"TargetName_ArborSci"] %in% exon.names,]
+
+### identifying sequences with gene, mRNA, and/or CDS regions
+features.test.table           <- cbind(names(matched.loci),rep("-",length(matched.loci)),rep("-",length(matched.loci)),rep("-",length(matched.loci)))
+colnames(features.test.table) <- c("target.locus","gene","mRNA","CDS")
+for(i in 1:nrow(features.test.table)){
+	gene.temp <- gbData[[i]]["gene"]
+	mRNA.temp <- gbData[[i]]["mRNA"]
+	cds.temp  <- gbData[[i]]["CDS"]
+	if(length(gene.temp)==0){
+		features.test.table[i,"gene"] = "no"
+	} else {
+		features.test.table[i,"gene"] = "yes"
+	}
+	if(length(mRNA.temp)==0){
+		features.test.table[i,"mRNA"] = "no"
+	} else {
+		features.test.table[i,"mRNA"] = "yes"
+	}
+	if(length(cds.temp)==0){
+		features.test.table[i,"CDS"] = "no"
+	} else {
+		features.test.table[i,"CDS"] = "yes"
+	}
+}
+
+accession.homolog     <- exonTable[,2]
+subject.start.homolog <- as.numeric(exonTable[,"TargetStart"])
+subject.end.homolog   <- as.numeric(exonTable[,"TargetEnd"])
+subject.name.temp     <- paste0(accession.homolog,":",subject.start.homolog,"-",subject.end.homolog)
+subject.contig.sense  <- exonTable[,"Sense_Target_ReferenceContig"]
+
+subject.coordinates.table.temp    <- cbind(accession.homolog,subject.start.homolog,subject.end.homolog,subject.contig.sense)
+subject.coordinates.table.new     <- subject.coordinates.table.temp
+subject.coordinates.table.new[,2] <- apply(X=subject.coordinates.table.temp[,2:3],MARGIN=1,FUN=min)
+subject.coordinates.table.new[,3] <- apply(X=subject.coordinates.table.temp[,2:3],MARGIN=1,FUN=max)
+subject.NCBI.coordinates          <- paste0(subject.coordinates.table.new[,1],":",subject.coordinates.table.new[,2],"-",subject.coordinates.table.new[,3])
+subject.table                     <- cbind(features.test.table,subject.NCBI.coordinates,subject.coordinates.table.new)
+
+ddrad.target.names                <- targetTable$TargetName_ArborSci[which(targetTable$Locus.Type=="ddRAD-like")]
+exon.target.names                 <- targetTable$TargetName_ArborSci[which(targetTable$Locus.Type %in% c("WholeExon","Immune"))]
+#loci.missing                     <- setdiff(ddrad.target.names,subject.table[,"target.locus"])                    ### target loci not found with blastn
+loci.missing                      <- setdiff(exon.target.names,subject.table[,"target.locus"])                    ### target loci not found with blastn
+missing.loci.subject.table        <- cbind(loci.missing,matrix(data="—",ncol=8,nrow=length(loci.missing)))
+subject.table.semifinal           <- rbind(subject.table,missing.loci.subject.table)
+subject.table.final               <- subject.table.semifinal[match(exon.target.names,subject.table.semifinal[,1]),]
+
+subject.table       <- subject.table.final[match(names(matched.loci),subject.table.final[,"target.locus"]),]
+subject.table.temp  <- subject.table
+
+matched.loci.names                     <- subject.table.temp[,"target.locus"]
+features.test.table.noBuffer           <- cbind(matched.loci.names,rep("-",length(matched.loci.names)),rep("-",length(matched.loci.names)),rep("-",length(matched.loci.names)))
+colnames(features.test.table.noBuffer) <- c("target.locus","gene","mRNA","CDS")
+
+for(i in 1:nrow(features.test.table.noBuffer)){
+	gene.temp <- gbData[[i]]["gene"]
+	mRNA.temp <- gbData[[i]]["mRNA"]
+	cds.temp  <- gbData[[i]]["CDS"]
+	if(length(gene.temp)==0){
+		features.test.table.noBuffer[i,"gene"] = "no"
+	} else {
+		features.test.table.noBuffer[i,"gene"] = "yes"
+	}	
+	if(length(mRNA.temp)==0){
+		features.test.table.noBuffer[i,"mRNA"] = "no"
+	} else {
+		features.test.table.noBuffer[i,"mRNA"] = "yes"
+	}	
+	if(length(cds.temp)==0){
+		features.test.table.noBuffer[i,"CDS"] = "no"
+	} else {
+		features.test.table.noBuffer[i,"CDS"] = "yes"
+	}	
+}
+
+subject.table.temp[,1:4]   <- features.test.table.noBuffer
+gbData.noBuffer.with.genes <- gbData[which(subject.table.temp[,"gene"]=="yes")]  ### gbData with only the loci with a gene feature
+subject.table.with.genes   <- subject.table.temp[which(subject.table.temp[,"gene"]=="yes"),] ### subject table with only the loci with a gene feature
+
+feature.location.table.with.genes           <- matrix(data="–",ncol=10,nrow=nrow(subject.table.with.genes))
+colnames(feature.location.table.with.genes) <- c("Gene.ID","Gene.Name","Gene.Range","Gene.target.Sense","mRNA.Range","mRNA.target.Sense","CDS.Range","CDS.target.Sense","CDS_codon_start","target_codon_start")
+
+translate <- Biostrings::translate ### needed to because multiple libraries have a translate function
+
+for(i in 1:nrow(feature.location.table.with.genes)){
+	source.features.temp   <- gbData.noBuffer.with.genes[[i]]["source"]
+	gene.features.temp     <- gbData.noBuffer.with.genes[[i]]["gene"]
+	mRNA.features.temp     <- gbData.noBuffer.with.genes[[i]]["mRNA"]
+	CDS.features.temp      <- gbData.noBuffer.with.genes[[i]]["CDS"]
+	
+	#if(nrow(dbxref(gene.features.temp))>1){
+	#	feature.location.table.with.genes[i,"Gene.ID"]           <- "multiple gene IDs; locus skipped; come back to this later"
+	#	next
+	#}
+
+	#gene.ID.temp              <- as.character(dbxref(gene.features.temp))
+	#gene.name.temp            <- as.character(geneID(gene.features.temp))
+	gene.ID.temp              <- paste(as.matrix(dbxref(gene.features.temp)),collapse=";")
+	gene.name.temp            <- paste(as.matrix(geneID(gene.features.temp)),collapse=";")
+	gene.location.temp        <- cbind(as.character(fuzzy(gene.features.temp)[,1]),as.character(start(gene.features.temp)),as.character(fuzzy(gene.features.temp)[,2]),as.character(end(gene.features.temp)))
+	gene.location.temp[,1]    <- mgsub(x=c("TRUE","FALSE"),y=c("<",""),z=gene.location.temp[,1])
+	gene.location.temp[,3]    <- mgsub(x=c("TRUE","FALSE"),y=c(">",""),z=gene.location.temp[,3])
+	gene.location.temp.string <- paste(paste0(gene.location.temp[,1],gene.location.temp[,2],"..",gene.location.temp[,3],gene.location.temp[,4]),collapse=";")
+	gene.sense                <- paste(strand(gene.features.temp),collapse=";")
+
+	feature.location.table.with.genes[i,"Gene.ID"]           <- gene.ID.temp
+	feature.location.table.with.genes[i,"Gene.Name"]         <- gene.name.temp
+	feature.location.table.with.genes[i,"Gene.Range"]        <- paste(gene.location.temp.string,collapse=";")
+	feature.location.table.with.genes[i,"Gene.target.Sense"] <- gene.sense
+
+	if(length(mRNA.features.temp)!=0){
+		mRNA.location.temp        <- cbind(as.character(fuzzy(mRNA.features.temp)[,1]),as.character(unlist(start(mRNA.features.temp))),as.character(fuzzy(mRNA.features.temp)[,2]),as.character(unlist(end(mRNA.features.temp))))
+		mRNA.location.temp[,1]    <- mgsub(x=c("TRUE","FALSE"),y=c("<",""),z=mRNA.location.temp[,1])
+		mRNA.location.temp[,3]    <- mgsub(x=c("TRUE","FALSE"),y=c(">",""),z=mRNA.location.temp[,3])
+		mRNA.location.temp.string <- paste(paste0(mRNA.location.temp[,1],mRNA.location.temp[,2],"..",mRNA.location.temp[,3],mRNA.location.temp[,4]),collapse=";")
+
+		mRNA.sense         <- strand(mRNA.features.temp)
+		feature.location.table.with.genes[i,"mRNA.Range"]        <- mRNA.location.temp.string
+		mRNA.sense.string  <- paste(as.character(unlist(mRNA.sense)),collapse=";")
+		feature.location.table.with.genes[i,"mRNA.target.Sense"] <- mRNA.sense.string
+	}
+	if(length(CDS.features.temp)!=0){
+		
+		# when i %in% 47  71  87  96 128 347 498 618 672 683, "CDS" = T but "mRNA" = F, which doesn't make any sense so the next line skips these
+		#if(length(mRNA.features.temp)==0){
+		#	next
+		#}
+		if("translation" %in% names(qualif(CDS.features.temp))){
+			full.translation.temp    <- translation(CDS.features.temp)
+		}
+		CDS.location.temp        <- cbind(as.character(fuzzy(CDS.features.temp)[,1]),as.character(unlist(start(CDS.features.temp))),as.character(fuzzy(CDS.features.temp)[,2]),as.character(unlist(end(CDS.features.temp))))
+		CDS.location.temp[,1]    <- mgsub(x=c("TRUE","FALSE"),y=c("<",""),z=CDS.location.temp[,1])
+		CDS.location.temp[,3]    <- mgsub(x=c("TRUE","FALSE"),y=c(">",""),z=CDS.location.temp[,3])
+		CDS.location.temp.string <- paste(paste0(CDS.location.temp[,1],CDS.location.temp[,2],"..",CDS.location.temp[,3],CDS.location.temp[,4]),collapse=";")
+		CDS.sense                <- unlist(strand(CDS.features.temp))
+		CDS.codon.start          <- vector(length=length(CDS.sense),mode="character")
+		target.codon.start       <- vector(length=length(CDS.sense),mode="character")
+		for(j in 1:length(CDS.sense)){
+			if(CDS.sense[j]==1){
+				full.target_CDS.plus.sense  <- getSequence(source.features.temp)  ### full target region and same strand as the CDS strand
+				#CDS.plus.sense             <- getSequence(CDS.features.temp)    ### only the CDS region
+				CDS.plus.sense <- subseq(full.target_CDS.plus.sense,start=as.numeric(CDS.location.temp[j,2]),end=as.numeric(CDS.location.temp[j,4]))
+			} else{
+				full.target_CDS.plus.sense  <- reverseComplement(getSequence(source.features.temp))
+				#CDS.plus.sense             <- reverseComplement(getSequence(CDS.features.temp))
+				CDS.plus.sense              <- reverseComplement(subseq(getSequence(source.features.temp),start=as.numeric(CDS.location.temp[j,2]),end=as.numeric(CDS.location.temp[j,4])))
+			}
+			if(width(CDS.plus.sense)<15){
+				CDS.codon.start[j]    <- "skipped because CDS < 15bp"
+				target.codon.start[j] <- "skipped because CDS < 15bp"
+				next
+			}
+			cds1 <- CDS.plus.sense
+			cds2 <- subseq(CDS.plus.sense,start=2)
+			cds3 <- subseq(CDS.plus.sense,start=3)
+			cds.frames.list <- DNAStringSet(c(cds1,cds2,cds3))
+	
+			cds.translated      <- translate(subseq(cds.frames.list,start=rep(1,3),end=c(mround(width(cds1),base=3,direction="down"),mround(width(cds2),base=3,direction="down"),mround(width(cds3),base=3,direction="down"))),if.fuzzy="solve")
+			AA.seq.frames.list  <- gsub(pattern="^\\*+|\\*+$",replacement="",cds.translated)     ### removes beginning or terminal string of stop codons
+
+			internal.stop.check <- unlist(lapply(X=str_locate_all(string=AA.seq.frames.list,pattern="\\*"),FUN=nrow)) ### number of internal stop codons if translating for each possible frame
+
+			if(any(internal.stop.check==0) & "translation" %in% names(qualif(CDS.features.temp))){
+				possible.reading.frames <- which(internal.stop.check==0)
+				targetAA.in.fullAA      <- matrix(nrow=3,ncol=length(full.translation.temp)) ## empty matrix to be filled
+				## now checking which translated reading frames are in the NCBI translations
+				for(k in 1:3){
+					if(internal.stop.check[k]>0){
+						targetAA.in.fullAA[k,] <- 0
+					} else {
+						search.pattern.temp         <- as.character(AA.seq.frames.list[k])
+						targetAA.in.fullAA[k,]      <- unlist(lapply(X=str_locate_all(string=full.translation.temp,pattern=search.pattern.temp),FUN=nrow))
+					}
+				}
+					if(any(targetAA.in.fullAA!=0)){
+					possible.reading.frames2        <- rbind(internal.stop.check==0,apply(X=targetAA.in.fullAA,MARGIN=1,FUN=function(y){any(y>0)}))
+					CDS.codon.start.temp            <- which(apply(X=possible.reading.frames2,MARGIN=2,FUN=all))
+					CDS.codon.start[j]              <- paste(CDS.codon.start.temp,collapse=",")
+					target.cds1                     <- full.target_CDS.plus.sense
+					target.cds2                     <- subseq(full.target_CDS.plus.sense,start=2)
+					target.cds3                     <- subseq(full.target_CDS.plus.sense,start=3)
+					target.frames.list.cds.plus     <- DNAStringSet(c(target.cds1,target.cds2,target.cds3))
+					full.target.translated          <- translate(subseq(target.frames.list.cds.plus,start=rep(1,3),end=c(mround(width(target.cds1),base=3,direction="down"),mround(width(target.cds2),base=3,direction="down"),mround(width(target.cds3),base=3,direction="down"))),if.fuzzy="solve")
+					target.codon.start.temp         <- vector(length=length(CDS.codon.start.temp),mode="character")
+					for(z in 1:length(CDS.codon.start.temp)){
+						target.codon.start.temp[z]  <- which(unlist(lapply(X=str_locate_all(string=full.target.translated,pattern=as.character(AA.seq.frames.list[CDS.codon.start.temp[z]])),FUN=nrow)) !=0)
+					}
+					target.codon.start[j]           <- paste(target.codon.start.temp,collapse=",")				
+				} else {
+					CDS.codon.start[j]    <- "—"
+					target.codon.start[j] <- "–"
+				}
+			} else {
+				CDS.codon.start[j]    <- "—"
+				target.codon.start[j] <- "–"
+				next
+			}
+		}
+		feature.location.table.with.genes[i,"CDS.Range"]          <- CDS.location.temp.string
+		feature.location.table.with.genes[i,"CDS.target.Sense"]   <- paste(CDS.sense,collapse=";")
+		feature.location.table.with.genes[i,"CDS_codon_start"]    <- paste(CDS.codon.start,collapse=";")
+		feature.location.table.with.genes[i,"target_codon_start"] <- paste(target.codon.start,collapse=";")
+	}
+}
+
+subject.table.new                    <- cbind(subject.table.with.genes,feature.location.table.with.genes)
+exon.target.names                    <- targetTable$TargetName_ArborSci[which(targetTable$Locus.Type %in% c("WholeExon","Immune"))]
+loci.missing                         <- setdiff(exon.target.names,subject.table.new[,"target.locus"])                    ### target loci not found with blastn
+missing.loci.subject.table           <- cbind(loci.missing,matrix(data="—",ncol=(ncol(subject.table.new)-1),nrow=length(loci.missing)))
+colnames(missing.loci.subject.table) <- colnames(subject.table.new)
+subject.table.semifinal.new          <- rbind(subject.table.new,missing.loci.subject.table)
+subject.table.final                  <- subject.table.semifinal.new[match(exon.target.names,subject.table.semifinal.new[,1]),]
+## COMMENTED TO AVOID OVERWRITING ## write.table(x=subject.table.final,file="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/Exon.and.Immune-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020.txt",quote=F,sep="\t",row.names=F)
+## COMMENTED TO AVOID OVERWRITING ## write.table(x=subject.table.final,file="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/Exon.and.Immune-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v3.txt",quote=F,sep="\t",row.names=F)
+
+#########################
+
+#####
+## Does the same thing as "get_Thamnophis_homologs_all.R" except for UCE loci
+####
+
+# UNCOMMENT WHEN NEEDED # UCE.gbData         <- biofiles::gbRecord("/Users/Jeff/Documents/SnakeCap_Data/UCEs.gb",progress=T)
+gbData         <- UCE.gbData
+targetTable    <- read.table(file="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/TargetTable1_25March2020.txt",header=T,colClasses="character")
+target.loci    <- readDNAStringSet(filepath="/Users/Jeff/Documents/SnakeCap_Data/Weinell_TargetLoci_Snakes_Final_18April2019.fa")
+namesTable     <- read.table(file="/Users/Jeff/Documents/SnakeCap_Data/NamesTable_All-Loci_3March2020.txt",header=T,colClasses="character")
+UCE.names      <- namesTable[which(namesTable[,"TargetType"]=="UCE"),"TargetName"]
+matched.loci   <- target.loci[UCE.names]
+query.lengths  <- width(matched.loci)
+
+uceTable <- targetTable[targetTable[,"TargetName_ArborSci"] %in% UCE.names,]
+
+### identifying sequences with gene, mRNA, and/or CDS regions
+#features.test.table           <- cbind(names(matched.loci),rep("-",length(matched.loci)),rep("-",length(matched.loci)),rep("-",length(matched.loci)))
+#colnames(features.test.table) <- c("target.locus","gene","mRNA","CDS")
+#for(i in 1:nrow(features.test.table)){
+#	gene.temp <- gbData[[i]]["gene"]
+#	mRNA.temp <- gbData[[i]]["mRNA"]
+#	cds.temp  <- gbData[[i]]["CDS"]
+#	if(length(gene.temp)==0){
+#		features.test.table[i,"gene"] = "no"
+#	} else {
+#		features.test.table[i,"gene"] = "yes"
+#	}
+#	if(length(mRNA.temp)==0){
+#		features.test.table[i,"mRNA"] = "no"
+#	} else {
+#		features.test.table[i,"mRNA"] = "yes"
+#	}
+#	if(length(cds.temp)==0){
+#		features.test.table[i,"CDS"] = "no"
+#	} else {
+#		features.test.table[i,"CDS"] = "yes"
+#	}
+#}
+
+accession.homolog     <- uceTable[,2]
+subject.start.homolog <- as.numeric(uceTable[,"TargetStart"])
+subject.end.homolog   <- as.numeric(uceTable[,"TargetEnd"])
+subject.name.temp     <- paste0(accession.homolog,":",subject.start.homolog,"-",subject.end.homolog)
+subject.contig.sense  <- uceTable[,"Sense_Target_ReferenceContig"]
+
+subject.coordinates.table.temp    <- cbind(accession.homolog,subject.start.homolog,subject.end.homolog,subject.contig.sense)
+subject.coordinates.table.new     <- subject.coordinates.table.temp
+subject.coordinates.table.new[,2] <- apply(X=subject.coordinates.table.temp[,2:3],MARGIN=1,FUN=min)
+subject.coordinates.table.new[,3] <- apply(X=subject.coordinates.table.temp[,2:3],MARGIN=1,FUN=max)
+subject.NCBI.coordinates          <- paste0(subject.coordinates.table.new[,1],":",subject.coordinates.table.new[,2],"-",subject.coordinates.table.new[,3])
+#subject.table                    <- cbind(features.test.table,subject.NCBI.coordinates,subject.coordinates.table.new)
+subject.table                     <- cbind("target.locus"=names(matched.loci),"gene"=rep("-",length(names(matched.loci))),"mRNA"=rep("-",length(names(matched.loci))),"CDS"=rep("-",length(names(matched.loci))),subject.NCBI.coordinates,subject.coordinates.table.new)
+
+uce.target.names                  <- targetTable$TargetName_ArborSci[which(targetTable$Locus.Type %in% c("UCE"))]
+#loci.missing                     <- setdiff(ddrad.target.names,subject.table[,"target.locus"])                    ### target loci not found with blastn
+loci.missing                      <- setdiff(uce.target.names,subject.table[,"target.locus"])                    ### target loci not found with blastn
+missing.loci.subject.table        <- cbind(loci.missing,matrix(data="—",ncol=8,nrow=length(loci.missing)))
+subject.table.semifinal           <- rbind(subject.table,missing.loci.subject.table)
+subject.table.final               <- subject.table.semifinal[match(uce.target.names,subject.table.semifinal[,1]),]
+
+subject.table       <- subject.table.final[match(names(matched.loci),subject.table.final[,"target.locus"]),]
+subject.table.temp  <- subject.table
+
+matched.loci.names                     <- subject.table.temp[,"target.locus"]
+features.test.table.noBuffer           <- cbind(matched.loci.names,rep("-",length(matched.loci.names)),rep("-",length(matched.loci.names)),rep("-",length(matched.loci.names)))
+colnames(features.test.table.noBuffer) <- c("target.locus","gene","mRNA","CDS")
+
+for(i in 1:nrow(features.test.table.noBuffer)){
+	gene.temp <- gbData[[i]]["gene"]
+	mRNA.temp <- gbData[[i]]["mRNA"]
+	cds.temp  <- gbData[[i]]["CDS"]
+	if(length(gene.temp)==0){
+		features.test.table.noBuffer[i,"gene"] = "no"
+	} else {
+		features.test.table.noBuffer[i,"gene"] = "yes"
+	}	
+	if(length(mRNA.temp)==0){
+		features.test.table.noBuffer[i,"mRNA"] = "no"
+	} else {
+		features.test.table.noBuffer[i,"mRNA"] = "yes"
+	}	
+	if(length(cds.temp)==0){
+		features.test.table.noBuffer[i,"CDS"] = "no"
+	} else {
+		features.test.table.noBuffer[i,"CDS"] = "yes"
+	}	
+}
+
+subject.table.temp[,1:4]   <- features.test.table.noBuffer
+gbData.noBuffer.with.genes <- gbData[which(subject.table.temp[,"gene"]=="yes")]  ### gbData with only the loci with a gene feature
+subject.table.with.genes   <- subject.table.temp[which(subject.table.temp[,"gene"]=="yes"),] ### subject table with only the loci with a gene feature
+
+feature.location.table.with.genes           <- matrix(data="–",ncol=10,nrow=nrow(subject.table.with.genes))
+colnames(feature.location.table.with.genes) <- c("Gene.ID","Gene.Name","Gene.Range","Gene.target.Sense","mRNA.Range","mRNA.target.Sense","CDS.Range","CDS.target.Sense","CDS_codon_start","target_codon_start")
+
+translate <- Biostrings::translate ### needed to because multiple libraries have a translate function
+
+for(i in 1:nrow(feature.location.table.with.genes)){
+	source.features.temp   <- gbData.noBuffer.with.genes[[i]]["source"]
+	gene.features.temp     <- gbData.noBuffer.with.genes[[i]]["gene"]
+	mRNA.features.temp     <- gbData.noBuffer.with.genes[[i]]["mRNA"]
+	CDS.features.temp      <- gbData.noBuffer.with.genes[[i]]["CDS"]
+	
+	#if(nrow(dbxref(gene.features.temp))>1){
+	#	feature.location.table.with.genes[i,"Gene.ID"]           <- "multiple gene IDs; locus skipped; come back to this later"
+	#	next
+	#}
+	
+	#gene.ID.temp              <- as.character(dbxref(gene.features.temp))
+	#gene.name.temp            <- as.character(geneID(gene.features.temp))	
+	gene.ID.temp              <- paste(as.matrix(dbxref(gene.features.temp)),collapse=";")
+	gene.name.temp            <- paste(as.matrix(geneID(gene.features.temp)),collapse=";")
+	gene.location.temp        <- cbind(as.character(fuzzy(gene.features.temp)[,1]),as.character(start(gene.features.temp)),as.character(fuzzy(gene.features.temp)[,2]),as.character(end(gene.features.temp)))
+	gene.location.temp[,1]    <- mgsub(x=c("TRUE","FALSE"),y=c("<",""),z=gene.location.temp[,1])
+	gene.location.temp[,3]    <- mgsub(x=c("TRUE","FALSE"),y=c(">",""),z=gene.location.temp[,3])
+	gene.location.temp.string <- paste(paste0(gene.location.temp[,1],gene.location.temp[,2],"..",gene.location.temp[,3],gene.location.temp[,4]),collapse=";")
+	gene.sense                <- paste(strand(gene.features.temp),collapse=";")
+
+	feature.location.table.with.genes[i,"Gene.ID"]           <- gene.ID.temp
+	feature.location.table.with.genes[i,"Gene.Name"]         <- gene.name.temp
+	feature.location.table.with.genes[i,"Gene.Range"]        <- paste(gene.location.temp.string,collapse=";")
+	feature.location.table.with.genes[i,"Gene.target.Sense"] <- gene.sense
+
+	if(length(mRNA.features.temp)!=0){
+		mRNA.location.temp        <- cbind(as.character(fuzzy(mRNA.features.temp)[,1]),as.character(unlist(start(mRNA.features.temp))),as.character(fuzzy(mRNA.features.temp)[,2]),as.character(unlist(end(mRNA.features.temp))))
+		mRNA.location.temp[,1]    <- mgsub(x=c("TRUE","FALSE"),y=c("<",""),z=mRNA.location.temp[,1])
+		mRNA.location.temp[,3]    <- mgsub(x=c("TRUE","FALSE"),y=c(">",""),z=mRNA.location.temp[,3])
+		mRNA.location.temp.string <- paste(paste0(mRNA.location.temp[,1],mRNA.location.temp[,2],"..",mRNA.location.temp[,3],mRNA.location.temp[,4]),collapse=";")
+
+		mRNA.sense         <- strand(mRNA.features.temp)
+		feature.location.table.with.genes[i,"mRNA.Range"]        <- mRNA.location.temp.string
+		mRNA.sense.string  <- paste(as.character(unlist(mRNA.sense)),collapse=";")
+		feature.location.table.with.genes[i,"mRNA.target.Sense"] <- mRNA.sense.string
+	}
+	if(length(CDS.features.temp)!=0){
+		
+		# when i %in% XXXX, "CDS" = T but "mRNA" = F, which doesn't make any sense so the next line skips these
+		#if(length(mRNA.features.temp)==0){
+		#	next
+		#}
+		if("translation" %in% names(qualif(CDS.features.temp))){
+			full.translation.temp    <- translation(CDS.features.temp)
+		}
+		CDS.location.temp        <- cbind(as.character(fuzzy(CDS.features.temp)[,1]),as.character(unlist(start(CDS.features.temp))),as.character(fuzzy(CDS.features.temp)[,2]),as.character(unlist(end(CDS.features.temp))))
+		CDS.location.temp[,1]    <- mgsub(x=c("TRUE","FALSE"),y=c("<",""),z=CDS.location.temp[,1])
+		CDS.location.temp[,3]    <- mgsub(x=c("TRUE","FALSE"),y=c(">",""),z=CDS.location.temp[,3])
+		CDS.location.temp.string <- paste(paste0(CDS.location.temp[,1],CDS.location.temp[,2],"..",CDS.location.temp[,3],CDS.location.temp[,4]),collapse=";")
+		CDS.sense                <- unlist(strand(CDS.features.temp))
+		CDS.codon.start          <- vector(length=length(CDS.sense),mode="character")
+		target.codon.start       <- vector(length=length(CDS.sense),mode="character")
+		for(j in 1:length(CDS.sense)){
+			if(CDS.sense[j]==1){
+				full.target_CDS.plus.sense  <- getSequence(source.features.temp)  ### full target region and same strand as the CDS strand
+				#CDS.plus.sense             <- getSequence(CDS.features.temp)    ### only the CDS region
+				CDS.plus.sense <- subseq(full.target_CDS.plus.sense,start=as.numeric(CDS.location.temp[j,2]),end=as.numeric(CDS.location.temp[j,4]))
+			} else{
+				full.target_CDS.plus.sense  <- reverseComplement(getSequence(source.features.temp))
+				#CDS.plus.sense             <- reverseComplement(getSequence(CDS.features.temp))
+				CDS.plus.sense              <- reverseComplement(subseq(getSequence(source.features.temp),start=as.numeric(CDS.location.temp[j,2]),end=as.numeric(CDS.location.temp[j,4])))
+			}
+			if(width(CDS.plus.sense)<15){
+				CDS.codon.start[j]    <- "skipped because CDS < 15bp"
+				target.codon.start[j] <- "skipped because CDS < 15bp"
+				next
+			}
+			cds1 <- CDS.plus.sense
+			cds2 <- subseq(CDS.plus.sense,start=2)
+			cds3 <- subseq(CDS.plus.sense,start=3)
+			cds.frames.list <- DNAStringSet(c(cds1,cds2,cds3))
+	
+			cds.translated      <- translate(subseq(cds.frames.list,start=rep(1,3),end=c(mround(width(cds1),base=3,direction="down"),mround(width(cds2),base=3,direction="down"),mround(width(cds3),base=3,direction="down"))),if.fuzzy="solve")
+			AA.seq.frames.list  <- gsub(pattern="^\\*+|\\*+$",replacement="",cds.translated)     ### removes beginning or terminal string of stop codons
+
+			internal.stop.check <- unlist(lapply(X=str_locate_all(string=AA.seq.frames.list,pattern="\\*"),FUN=nrow)) ### number of internal stop codons if translating for each possible frame
+
+			if(any(internal.stop.check==0) & "translation" %in% names(qualif(CDS.features.temp))){
+				possible.reading.frames <- which(internal.stop.check==0)
+				targetAA.in.fullAA      <- matrix(nrow=3,ncol=length(full.translation.temp)) ## empty matrix to be filled
+				## now checking which translated reading frames are in the NCBI translations
+				for(k in 1:3){
+					if(internal.stop.check[k]>0){
+						targetAA.in.fullAA[k,] <- 0
+					} else {
+						search.pattern.temp         <- as.character(AA.seq.frames.list[k])
+						targetAA.in.fullAA[k,]      <- unlist(lapply(X=str_locate_all(string=full.translation.temp,pattern=search.pattern.temp),FUN=nrow))
+					}
+				}
+					if(any(targetAA.in.fullAA!=0)){
+					possible.reading.frames2        <- rbind(internal.stop.check==0,apply(X=targetAA.in.fullAA,MARGIN=1,FUN=function(y){any(y>0)}))
+					CDS.codon.start.temp            <- which(apply(X=possible.reading.frames2,MARGIN=2,FUN=all))
+					CDS.codon.start[j]              <- paste(CDS.codon.start.temp,collapse=",")
+					target.cds1                     <- full.target_CDS.plus.sense
+					target.cds2                     <- subseq(full.target_CDS.plus.sense,start=2)
+					target.cds3                     <- subseq(full.target_CDS.plus.sense,start=3)
+					target.frames.list.cds.plus     <- DNAStringSet(c(target.cds1,target.cds2,target.cds3))
+					full.target.translated          <- translate(subseq(target.frames.list.cds.plus,start=rep(1,3),end=c(mround(width(target.cds1),base=3,direction="down"),mround(width(target.cds2),base=3,direction="down"),mround(width(target.cds3),base=3,direction="down"))),if.fuzzy="solve")
+					target.codon.start.temp         <- vector(length=length(CDS.codon.start.temp),mode="character")
+					for(z in 1:length(CDS.codon.start.temp)){
+						target.codon.start.temp[z]  <- which(unlist(lapply(X=str_locate_all(string=full.target.translated,pattern=as.character(AA.seq.frames.list[CDS.codon.start.temp[z]])),FUN=nrow)) !=0)
+					}
+					target.codon.start[j]           <- paste(target.codon.start.temp,collapse=",")				
+				} else {
+					CDS.codon.start[j]    <- "—"
+					target.codon.start[j] <- "–"
+				}
+			} else {
+				CDS.codon.start[j]    <- "—"
+				target.codon.start[j] <- "–"
+				next
+			}
+		}
+		feature.location.table.with.genes[i,"CDS.Range"]          <- CDS.location.temp.string
+		feature.location.table.with.genes[i,"CDS.target.Sense"]   <- paste(CDS.sense,collapse=";")
+		feature.location.table.with.genes[i,"CDS_codon_start"]    <- paste(CDS.codon.start,collapse=";")
+		feature.location.table.with.genes[i,"target_codon_start"] <- paste(target.codon.start,collapse=";")
+	}
+}
+
+subject.table.new                    <- cbind(subject.table.with.genes,feature.location.table.with.genes)
+uce.target.names                     <- targetTable$TargetName_ArborSci[which(targetTable$Locus.Type %in% c("UCE"))]
+loci.missing                         <- setdiff(uce.target.names,subject.table.new[,"target.locus"])                    ### target loci not found with blastn
+missing.loci.subject.table           <- cbind(loci.missing,matrix(data="—",ncol=(ncol(subject.table.new)-1),nrow=length(loci.missing)))
+colnames(missing.loci.subject.table) <- colnames(subject.table.new)
+subject.table.semifinal.new          <- rbind(subject.table.new,missing.loci.subject.table)
+subject.table.final                  <- subject.table.semifinal.new[match(uce.target.names,subject.table.semifinal.new[,1]),]
+## COMMENTED TO AVOID OVERWRITING ## write.table(x=subject.table.final,file="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/UCE-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020.txt",quote=F,sep="\t",row.names=F)
+## COMMENTED TO AVOID OVERWRITING ## write.table(x=subject.table.final,file="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/UCE-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v2.txt",quote=F,sep="\t",row.names=F)
+
+#################################
+#####
+## Does the same thing as "get_Thamnophis_homologs_all.R" except for Vision loci
+####
+
+vision.gbData  <- biofiles::gbRecord("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/vision-loci_flatfile.gb",progress=T)
+gbData         <- vision.gbData
+targetTable    <- read.table(file="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/TargetTable1_25March2020.txt",header=T,colClasses="character")
+target.loci    <- readDNAStringSet(filepath="/Users/Jeff/Documents/SnakeCap_Data/Weinell_TargetLoci_Snakes_Final_18April2019.fa")
+namesTable     <- read.table(file="/Users/Jeff/Documents/SnakeCap_Data/NamesTable_All-Loci_3March2020.txt",header=T,colClasses="character")
+vision.names   <- namesTable[which(namesTable[,"TargetType"]=="Vision"),"TargetName"]
+matched.loci   <- target.loci[vision.names]
+query.lengths  <- width(matched.loci)
+
+visionTable    <- targetTable[targetTable[,"TargetName_ArborSci"] %in% vision.names,]
+
+### identifying sequences with gene, mRNA, and/or CDS regions
+#features.test.table           <- cbind(names(matched.loci),rep("-",length(matched.loci)),rep("-",length(matched.loci)),rep("-",length(matched.loci)))
+#colnames(features.test.table) <- c("target.locus","gene","mRNA","CDS")
+#for(i in 1:nrow(features.test.table)){
+#	gene.temp <- gbData[[i]]["gene"]
+#	mRNA.temp <- gbData[[i]]["mRNA"]
+#	cds.temp  <- gbData[[i]]["CDS"]
+#	if(length(gene.temp)==0){
+#		features.test.table[i,"gene"] = "no"
+#	} else {
+#		features.test.table[i,"gene"] = "yes"
+#	}
+#	if(length(mRNA.temp)==0){
+#		features.test.table[i,"mRNA"] = "no"
+#	} else {
+#		features.test.table[i,"mRNA"] = "yes"
+#	}
+#	if(length(cds.temp)==0){
+#		features.test.table[i,"CDS"] = "no"
+#	} else {
+#		features.test.table[i,"CDS"] = "yes"
+#	}
+#}
+
+accession.homolog     <- visionTable[,2]
+subject.start.homolog <- as.numeric(visionTable[,"TargetStart"])
+subject.end.homolog   <- as.numeric(visionTable[,"TargetEnd"])
+subject.name.temp     <- paste0(accession.homolog,":",subject.start.homolog,"-",subject.end.homolog)
+subject.contig.sense  <- visionTable[,"Sense_Target_ReferenceContig"]
+
+subject.coordinates.table.temp    <- cbind(accession.homolog,subject.start.homolog,subject.end.homolog,subject.contig.sense)
+subject.coordinates.table.new     <- subject.coordinates.table.temp
+subject.coordinates.table.new[,2] <- apply(X=subject.coordinates.table.temp[,2:3],MARGIN=1,FUN=min)
+subject.coordinates.table.new[,3] <- apply(X=subject.coordinates.table.temp[,2:3],MARGIN=1,FUN=max)
+subject.NCBI.coordinates          <- paste0(subject.coordinates.table.new[,1],":",subject.coordinates.table.new[,2],"-",subject.coordinates.table.new[,3])
+#subject.table                    <- cbind(features.test.table,subject.NCBI.coordinates,subject.coordinates.table.new)
+subject.table                     <- cbind("target.locus"=names(matched.loci),"gene"=rep("-",length(names(matched.loci))),"mRNA"=rep("-",length(names(matched.loci))),"CDS"=rep("-",length(names(matched.loci))),subject.NCBI.coordinates,subject.coordinates.table.new)
+
+vision.target.names               <- targetTable$TargetName_ArborSci[which(targetTable$Locus.Type %in% c("Vision"))]
+loci.missing                      <- setdiff(vision.target.names,subject.table[,"target.locus"])                    ### target loci not found with blastn
+missing.loci.subject.table        <- cbind(loci.missing,matrix(data="—",ncol=8,nrow=length(loci.missing)))
+subject.table.semifinal           <- rbind(subject.table,missing.loci.subject.table)
+subject.table.final               <- subject.table.semifinal[match(vision.target.names,subject.table.semifinal[,1]),]
+
+subject.table       <- subject.table.final[match(names(matched.loci),subject.table.final[,"target.locus"]),]
+subject.table.temp  <- subject.table
+
+matched.loci.names                     <- subject.table.temp[,"target.locus"]
+features.test.table.noBuffer           <- cbind(matched.loci.names,rep("-",length(matched.loci.names)),rep("-",length(matched.loci.names)),rep("-",length(matched.loci.names)))
+colnames(features.test.table.noBuffer) <- c("target.locus","gene","mRNA","CDS")
+
+for(i in 1:nrow(features.test.table.noBuffer)){
+	gene.temp <- gbData[[i]]["gene"]
+	mRNA.temp <- gbData[[i]]["mRNA"]
+	cds.temp  <- gbData[[i]]["CDS"]
+	if(length(gene.temp)==0){
+		features.test.table.noBuffer[i,"gene"] = "no"
+	} else {
+		features.test.table.noBuffer[i,"gene"] = "yes"
+	}	
+	if(length(mRNA.temp)==0){
+		features.test.table.noBuffer[i,"mRNA"] = "no"
+	} else {
+		features.test.table.noBuffer[i,"mRNA"] = "yes"
+	}	
+	if(length(cds.temp)==0){
+		features.test.table.noBuffer[i,"CDS"] = "no"
+	} else {
+		features.test.table.noBuffer[i,"CDS"] = "yes"
+	}	
+}
+
+subject.table.temp[,1:4]   <- features.test.table.noBuffer
+gbData.noBuffer.with.genes <- gbData[which(subject.table.temp[,"gene"]=="yes")]  ### gbData with only the loci with a gene feature
+subject.table.with.genes   <- subject.table.temp[which(subject.table.temp[,"gene"]=="yes"),] ### subject table with only the loci with a gene feature
+
+feature.location.table.with.genes           <- matrix(data="–",ncol=10,nrow=nrow(subject.table.with.genes))
+colnames(feature.location.table.with.genes) <- c("Gene.ID","Gene.Name","Gene.Range","Gene.target.Sense","mRNA.Range","mRNA.target.Sense","CDS.Range","CDS.target.Sense","CDS_codon_start","target_codon_start")
+
+translate <- Biostrings::translate ### needed to because multiple libraries have a translate function
+
+for(i in 1:nrow(feature.location.table.with.genes)){
+	source.features.temp   <- gbData.noBuffer.with.genes[[i]]["source"]
+	gene.features.temp     <- gbData.noBuffer.with.genes[[i]]["gene"]
+	mRNA.features.temp     <- gbData.noBuffer.with.genes[[i]]["mRNA"]
+	CDS.features.temp      <- gbData.noBuffer.with.genes[[i]]["CDS"]
+	
+	#if(nrow(dbxref(gene.features.temp))>1){
+	#	feature.location.table.with.genes[i,"Gene.ID"]           <- "multiple gene IDs; locus skipped; come back to this later"
+	#	next
+	#}
+	
+	#gene.ID.temp              <- as.character(dbxref(gene.features.temp))
+	#gene.name.temp            <- as.character(geneID(gene.features.temp))
+	gene.ID.temp              <- paste(as.matrix(dbxref(gene.features.temp)),collapse=";")
+	gene.name.temp            <- paste(as.matrix(geneID(gene.features.temp)),collapse=";")
+	gene.location.temp        <- cbind(as.character(fuzzy(gene.features.temp)[,1]),as.character(start(gene.features.temp)),as.character(fuzzy(gene.features.temp)[,2]),as.character(end(gene.features.temp)))
+	gene.location.temp[,1]    <- mgsub(x=c("TRUE","FALSE"),y=c("<",""),z=gene.location.temp[,1])
+	gene.location.temp[,3]    <- mgsub(x=c("TRUE","FALSE"),y=c(">",""),z=gene.location.temp[,3])
+	gene.location.temp.string <- paste(paste0(gene.location.temp[,1],gene.location.temp[,2],"..",gene.location.temp[,3],gene.location.temp[,4]),collapse=";")
+	gene.sense                <- paste(strand(gene.features.temp),collapse=";")
+
+	feature.location.table.with.genes[i,"Gene.ID"]           <- gene.ID.temp
+	feature.location.table.with.genes[i,"Gene.Name"]         <- gene.name.temp
+	feature.location.table.with.genes[i,"Gene.Range"]        <- paste(gene.location.temp.string,collapse=";")
+	feature.location.table.with.genes[i,"Gene.target.Sense"] <- gene.sense
+
+	if(length(mRNA.features.temp)!=0){
+		mRNA.location.temp        <- cbind(as.character(fuzzy(mRNA.features.temp)[,1]),as.character(unlist(start(mRNA.features.temp))),as.character(fuzzy(mRNA.features.temp)[,2]),as.character(unlist(end(mRNA.features.temp))))
+		mRNA.location.temp[,1]    <- mgsub(x=c("TRUE","FALSE"),y=c("<",""),z=mRNA.location.temp[,1])
+		mRNA.location.temp[,3]    <- mgsub(x=c("TRUE","FALSE"),y=c(">",""),z=mRNA.location.temp[,3])
+		mRNA.location.temp.string <- paste(paste0(mRNA.location.temp[,1],mRNA.location.temp[,2],"..",mRNA.location.temp[,3],mRNA.location.temp[,4]),collapse=";")
+
+		mRNA.sense         <- strand(mRNA.features.temp)
+		feature.location.table.with.genes[i,"mRNA.Range"]        <- mRNA.location.temp.string
+		mRNA.sense.string  <- paste(as.character(unlist(mRNA.sense)),collapse=";")
+		feature.location.table.with.genes[i,"mRNA.target.Sense"] <- mRNA.sense.string
+	}
+	if(length(CDS.features.temp)!=0){
+		
+		# when i %in% XXXX, "CDS" = T but "mRNA" = F, which doesn't make any sense so the next line skips these
+		#if(length(mRNA.features.temp)==0){
+		#	next
+		#}
+		
+		if("translation" %in% names(qualif(CDS.features.temp))){
+			full.translation.temp    <- translation(CDS.features.temp)
+		}
+		
+		CDS.location.temp        <- cbind(as.character(fuzzy(CDS.features.temp)[,1]),as.character(unlist(start(CDS.features.temp))),as.character(fuzzy(CDS.features.temp)[,2]),as.character(unlist(end(CDS.features.temp))))
+		CDS.location.temp[,1]    <- mgsub(x=c("TRUE","FALSE"),y=c("<",""),z=CDS.location.temp[,1])
+		CDS.location.temp[,3]    <- mgsub(x=c("TRUE","FALSE"),y=c(">",""),z=CDS.location.temp[,3])
+		CDS.location.temp.string <- paste(paste0(CDS.location.temp[,1],CDS.location.temp[,2],"..",CDS.location.temp[,3],CDS.location.temp[,4]),collapse=";")
+		CDS.sense                <- unlist(strand(CDS.features.temp))
+		CDS.codon.start          <- vector(length=length(CDS.sense),mode="character")
+		target.codon.start       <- vector(length=length(CDS.sense),mode="character")
+		for(j in 1:length(CDS.sense)){
+			if(CDS.sense[j]==1){
+				full.target_CDS.plus.sense  <- getSequence(source.features.temp)  ### full target region and same strand as the CDS strand
+				#CDS.plus.sense             <- getSequence(CDS.features.temp)    ### only the CDS region
+				CDS.plus.sense <- subseq(full.target_CDS.plus.sense,start=as.numeric(CDS.location.temp[j,2]),end=as.numeric(CDS.location.temp[j,4]))
+			} else{
+				full.target_CDS.plus.sense  <- reverseComplement(getSequence(source.features.temp))
+				#CDS.plus.sense             <- reverseComplement(getSequence(CDS.features.temp))
+				CDS.plus.sense              <- reverseComplement(subseq(getSequence(source.features.temp),start=as.numeric(CDS.location.temp[j,2]),end=as.numeric(CDS.location.temp[j,4])))
+			}
+			if(width(CDS.plus.sense)<15){
+				CDS.codon.start[j]    <- "skipped because CDS < 15bp"
+				target.codon.start[j] <- "skipped because CDS < 15bp"
+				next
+			}
+			cds1 <- CDS.plus.sense
+			cds2 <- subseq(CDS.plus.sense,start=2)
+			cds3 <- subseq(CDS.plus.sense,start=3)
+			cds.frames.list <- DNAStringSet(c(cds1,cds2,cds3))
+	
+			cds.translated      <- translate(subseq(cds.frames.list,start=rep(1,3),end=c(mround(width(cds1),base=3,direction="down"),mround(width(cds2),base=3,direction="down"),mround(width(cds3),base=3,direction="down"))),if.fuzzy="solve")
+			AA.seq.frames.list  <- gsub(pattern="^\\*+|\\*+$",replacement="",cds.translated)     ### removes beginning or terminal string of stop codons
+
+			internal.stop.check <- unlist(lapply(X=str_locate_all(string=AA.seq.frames.list,pattern="\\*"),FUN=nrow)) ### number of internal stop codons if translating for each possible frame
+
+			if(any(internal.stop.check==0) & "translation" %in% names(qualif(CDS.features.temp))){
+				possible.reading.frames <- which(internal.stop.check==0)
+				targetAA.in.fullAA      <- matrix(nrow=3,ncol=length(full.translation.temp)) ## empty matrix to be filled
+				## now checking which translated reading frames are in the NCBI translations
+				for(k in 1:3){
+					if(internal.stop.check[k]>0){
+						targetAA.in.fullAA[k,] <- 0
+					} else {
+						search.pattern.temp         <- as.character(AA.seq.frames.list[k])
+						targetAA.in.fullAA[k,]      <- unlist(lapply(X=str_locate_all(string=full.translation.temp,pattern=search.pattern.temp),FUN=nrow))
+					}
+				}
+					if(any(targetAA.in.fullAA!=0)){
+					possible.reading.frames2        <- rbind(internal.stop.check==0,apply(X=targetAA.in.fullAA,MARGIN=1,FUN=function(y){any(y>0)}))
+					CDS.codon.start.temp            <- which(apply(X=possible.reading.frames2,MARGIN=2,FUN=all))
+					CDS.codon.start[j]              <- paste(CDS.codon.start.temp,collapse=",")
+					target.cds1                     <- full.target_CDS.plus.sense
+					target.cds2                     <- subseq(full.target_CDS.plus.sense,start=2)
+					target.cds3                     <- subseq(full.target_CDS.plus.sense,start=3)
+					target.frames.list.cds.plus     <- DNAStringSet(c(target.cds1,target.cds2,target.cds3))
+					full.target.translated          <- translate(subseq(target.frames.list.cds.plus,start=rep(1,3),end=c(mround(width(target.cds1),base=3,direction="down"),mround(width(target.cds2),base=3,direction="down"),mround(width(target.cds3),base=3,direction="down"))),if.fuzzy="solve")
+					target.codon.start.temp         <- vector(length=length(CDS.codon.start.temp),mode="character")
+					for(z in 1:length(CDS.codon.start.temp)){
+						target.codon.start.temp[z]  <- which(unlist(lapply(X=str_locate_all(string=full.target.translated,pattern=as.character(AA.seq.frames.list[CDS.codon.start.temp[z]])),FUN=nrow)) !=0)
+					}
+					target.codon.start[j]           <- paste(target.codon.start.temp,collapse=",")				
+				} else {
+					CDS.codon.start[j]    <- "—"
+					target.codon.start[j] <- "–"
+				}
+			} else {
+				CDS.codon.start[j]    <- "—"
+				target.codon.start[j] <- "–"
+				next
+			}
+		}
+		feature.location.table.with.genes[i,"CDS.Range"]          <- CDS.location.temp.string
+		feature.location.table.with.genes[i,"CDS.target.Sense"]   <- paste(CDS.sense,collapse=";")
+		feature.location.table.with.genes[i,"CDS_codon_start"]    <- paste(CDS.codon.start,collapse=";")
+		feature.location.table.with.genes[i,"target_codon_start"] <- paste(target.codon.start,collapse=";")
+	}
+}
+
+subject.table.new                    <- cbind(subject.table.with.genes,feature.location.table.with.genes)
+vision.target.names                  <- targetTable$TargetName_ArborSci[which(targetTable$Locus.Type %in% c("Vision"))]
+loci.missing                         <- setdiff(vision.target.names,subject.table.new[,"target.locus"])                    ### target loci not found with blastn
+missing.loci.subject.table           <- cbind(loci.missing,matrix(data="—",ncol=(ncol(subject.table.new)-1),nrow=length(loci.missing)))
+colnames(missing.loci.subject.table) <- colnames(subject.table.new)
+subject.table.semifinal.new          <- rbind(subject.table.new,missing.loci.subject.table)
+subject.table.final                  <- subject.table.semifinal.new[match(vision.target.names,subject.table.semifinal.new[,1]),]
+## COMMENTED TO AVOID OVERWRITING ## write.table(x=subject.table.final,file="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/Vision-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020.txt",quote=F,sep="\t",row.names=F)
+## COMMENTED TO AVOID OVERWRITING ## write.table(x=subject.table.final,file="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/Vision-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v2.txt",quote=F,sep="\t",row.names=F)
+
+##############################################################################################################################################################
+## Does the same thing as "get_Thamnophis_homologs_all.R" except for WholeExon and Immune loci (only for loci with feature tables having multiple gene IDs) ##
+##############################################################################################################################################################
+
+gbData                  <- biofiles::gbRecord("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/WholeExons.gb",progress=T)
+## Read in the output of part 1 (above)
+Exon.Immune.annotations <- read.table("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/Exon.and.Immune-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020.txt",colClasses="character",header=T,sep="\t")                              ### table made from NCBI annotations using code in /Users/Jeff/Documents/SnakeCap_Data/Notes_12April2020.txt
+## Subset gbData to only include the loci with multiple Gene IDs
+gbData2           <- gbData[grep(pattern=";",Exon.Immune.annotations$Gene.ID)]
+gbData            <- gbData2
+targetTable       <- read.table(file="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/TargetTable1_25March2020.txt",header=T,colClasses="character")
+target.loci       <- readDNAStringSet(filepath="/Users/Jeff/Documents/SnakeCap_Data/Weinell_TargetLoci_Snakes_Final_18April2019.fa")
+#exon.names       <- targetTable[c(1:1607,1609:1680),"TargetName_ArborSci"]
+exon.names        <- Exon.Immune.annotations[grep(pattern=";",Exon.Immune.annotations$Gene.ID),"target.locus"]
+matched.loci      <- target.loci[exon.names]
+query.lengths     <- width(matched.loci)
+exonTable         <- targetTable[targetTable[,"TargetName_ArborSci"] %in% exon.names,]
+
+accession.homolog     <- exonTable[,2]
+subject.start.homolog <- as.numeric(exonTable[,"TargetStart"])
+subject.end.homolog   <- as.numeric(exonTable[,"TargetEnd"])
+subject.name.temp     <- paste0(accession.homolog,":",subject.start.homolog,"-",subject.end.homolog)
+subject.contig.sense  <- exonTable[,"Sense_Target_ReferenceContig"]
+
+subject.coordinates.table.temp    <- cbind(accession.homolog,subject.start.homolog,subject.end.homolog,subject.contig.sense)
+subject.coordinates.table.new     <- subject.coordinates.table.temp
+subject.coordinates.table.new[,2] <- apply(X=subject.coordinates.table.temp[,2:3],MARGIN=1,FUN=min)
+subject.coordinates.table.new[,3] <- apply(X=subject.coordinates.table.temp[,2:3],MARGIN=1,FUN=max)
+subject.NCBI.coordinates          <- paste0(subject.coordinates.table.new[,1],":",subject.coordinates.table.new[,2],"-",subject.coordinates.table.new[,3])
+#subject.table                    <- cbind(features.test.table,subject.NCBI.coordinates,subject.coordinates.table.new)
+subject.table                     <- cbind("target.locus"=names(matched.loci),matrix(data="-",ncol=3,nrow=length(names(matched.loci))),subject.NCBI.coordinates,subject.coordinates.table.new)
+exon.target.names                 <- targetTable$TargetName_ArborSci[which(targetTable$Locus.Type %in% c("WholeExon","Immune"))]
+#loci.missing                     <- setdiff(ddrad.target.names,subject.table[,"target.locus"])                    ### target loci not found with blastn
+loci.missing                      <- setdiff(exon.target.names,subject.table[,"target.locus"])                     ### target loci not found with blastn
+missing.loci.subject.table        <- cbind(loci.missing,matrix(data="—",ncol=8,nrow=length(loci.missing)))
+subject.table.semifinal           <- rbind(subject.table,missing.loci.subject.table)
+subject.table.final               <- subject.table.semifinal[match(exon.target.names,subject.table.semifinal[,1]),]
+
+subject.table                     <- subject.table.final[match(names(matched.loci),subject.table.final[,"target.locus"]),]
+subject.table.temp                <- subject.table
+
+matched.loci.names                     <- subject.table.temp[,"target.locus"]
+features.test.table.noBuffer           <- cbind(matched.loci.names,rep("-",length(matched.loci.names)),rep("-",length(matched.loci.names)),rep("-",length(matched.loci.names)))
+colnames(features.test.table.noBuffer) <- c("target.locus","gene","mRNA","CDS")
+
+for(i in 1:nrow(features.test.table.noBuffer)){
+	gene.temp <- gbData[[i]]["gene"]
+	mRNA.temp <- gbData[[i]]["mRNA"]
+	cds.temp  <- gbData[[i]]["CDS"]
+	if(length(gene.temp)==0){
+		features.test.table.noBuffer[i,"gene"] = "no"
+	} else {
+		features.test.table.noBuffer[i,"gene"] = "yes"
+	}	
+	if(length(mRNA.temp)==0){
+		features.test.table.noBuffer[i,"mRNA"] = "no"
+	} else {
+		features.test.table.noBuffer[i,"mRNA"] = "yes"
+	}	
+	if(length(cds.temp)==0){
+		features.test.table.noBuffer[i,"CDS"] = "no"
+	} else {
+		features.test.table.noBuffer[i,"CDS"] = "yes"
+	}	
+}
+
+#subject.table.temp[,1:4]  <- features.test.table.noBuffer
+subject.table.temp         <- cbind(features.test.table.noBuffer,subject.table.temp[,5:9])
+
+gbData.noBuffer.with.genes <- gbData[which(subject.table.temp[,"gene"]=="yes")]              ### gbData with only the loci with a gene feature
+subject.table.with.genes   <- subject.table.temp[which(subject.table.temp[,"gene"]=="yes"),] ### subject table with only the loci with a gene feature
+
+feature.location.table.with.genes           <- matrix(data="–",ncol=10,nrow=nrow(subject.table.with.genes))
+colnames(feature.location.table.with.genes) <- c("Gene.ID","Gene.Name","Gene.Range","Gene.target.Sense","mRNA.Range","mRNA.target.Sense","CDS.Range","CDS.target.Sense","CDS_codon_start","target_codon_start")
+
+translate <- Biostrings::translate ### needed to because multiple libraries have a translate function
+
+for(i in 1:nrow(feature.location.table.with.genes)){
+	source.features.temp   <- gbData.noBuffer.with.genes[[i]]["source"]
+	gene.features.temp     <- gbData.noBuffer.with.genes[[i]]["gene"]
+	mRNA.features.temp     <- gbData.noBuffer.with.genes[[i]]["mRNA"]
+	CDS.features.temp      <- gbData.noBuffer.with.genes[[i]]["CDS"]
+	
+	#if(nrow(dbxref(gene.features.temp))>1){
+		#feature.location.table.with.genes[i,"Gene.ID"]           <- "multiple gene IDs; locus skipped; come back to this later"
+		#next
+		#gene.ID.temp   <- paste(as.matrix(dbxref(gene.features.temp)),collapse=";")
+		#gene.name.temp <- paste(as.matrix(geneID(gene.features.temp)),collapse=";")
+	#}
+	
+	#gene.ID.temp             <- as.character(dbxref(gene.features.temp))
+	#gene.name.temp           <- as.character(geneID(gene.features.temp))	
+	gene.ID.temp              <- paste(as.matrix(dbxref(gene.features.temp)),collapse=";")
+	gene.name.temp            <- paste(as.matrix(geneID(gene.features.temp)),collapse=";")
+	gene.location.temp        <- cbind(as.character(fuzzy(gene.features.temp)[,1]),as.character(start(gene.features.temp)),as.character(fuzzy(gene.features.temp)[,2]),as.character(end(gene.features.temp)))
+	gene.location.temp[,1]    <- mgsub(x=c("TRUE","FALSE"),y=c("<",""),z=gene.location.temp[,1])
+	gene.location.temp[,3]    <- mgsub(x=c("TRUE","FALSE"),y=c(">",""),z=gene.location.temp[,3])
+	gene.location.temp.string <- paste(paste0(gene.location.temp[,1],gene.location.temp[,2],"..",gene.location.temp[,3],gene.location.temp[,4]),collapse=";")
+	gene.sense                <- paste(strand(gene.features.temp),collapse=";")
+
+	feature.location.table.with.genes[i,"Gene.ID"]           <- gene.ID.temp
+	feature.location.table.with.genes[i,"Gene.Name"]         <- gene.name.temp
+	feature.location.table.with.genes[i,"Gene.Range"]        <- paste(gene.location.temp.string,collapse=";")
+	feature.location.table.with.genes[i,"Gene.target.Sense"] <- gene.sense
+
+	if(length(mRNA.features.temp)!=0){
+		mRNA.location.temp        <- cbind(as.character(fuzzy(mRNA.features.temp)[,1]),as.character(unlist(start(mRNA.features.temp))),as.character(fuzzy(mRNA.features.temp)[,2]),as.character(unlist(end(mRNA.features.temp))))
+		mRNA.location.temp[,1]    <- mgsub(x=c("TRUE","FALSE"),y=c("<",""),z=mRNA.location.temp[,1])
+		mRNA.location.temp[,3]    <- mgsub(x=c("TRUE","FALSE"),y=c(">",""),z=mRNA.location.temp[,3])
+		mRNA.location.temp.string <- paste(paste0(mRNA.location.temp[,1],mRNA.location.temp[,2],"..",mRNA.location.temp[,3],mRNA.location.temp[,4]),collapse=";")
+
+		mRNA.sense         <- strand(mRNA.features.temp)
+		feature.location.table.with.genes[i,"mRNA.Range"]        <- mRNA.location.temp.string
+		mRNA.sense.string  <- paste(as.character(unlist(mRNA.sense)),collapse=";")
+		feature.location.table.with.genes[i,"mRNA.target.Sense"] <- mRNA.sense.string
+	}
+	if(length(CDS.features.temp)!=0){
+		
+		# when i %in% 47  71  87  96 128 347 498 618 672 683, "CDS" = T but "mRNA" = F, which doesn't make any sense so the next line skips these
+		#if(length(mRNA.features.temp)==0){
+		#	next
+		#}
+		
+		if("translation" %in% names(qualif(CDS.features.temp))){
+			full.translation.temp    <- translation(CDS.features.temp)
+		}
+		CDS.location.temp        <- cbind(as.character(fuzzy(CDS.features.temp)[,1]),as.character(unlist(start(CDS.features.temp))),as.character(fuzzy(CDS.features.temp)[,2]),as.character(unlist(end(CDS.features.temp))))
+		CDS.location.temp[,1]    <- mgsub(x=c("TRUE","FALSE"),y=c("<",""),z=CDS.location.temp[,1])
+		CDS.location.temp[,3]    <- mgsub(x=c("TRUE","FALSE"),y=c(">",""),z=CDS.location.temp[,3])
+		CDS.location.temp.string <- paste(paste0(CDS.location.temp[,1],CDS.location.temp[,2],"..",CDS.location.temp[,3],CDS.location.temp[,4]),collapse=";")
+		CDS.sense                <- unlist(strand(CDS.features.temp))
+		CDS.codon.start          <- vector(length=length(CDS.sense),mode="character")
+		target.codon.start       <- vector(length=length(CDS.sense),mode="character")
+		
+		for(j in 1:length(CDS.sense)){
+			if(CDS.sense[j]==1){
+				full.target_CDS.plus.sense  <- getSequence(source.features.temp)  ### full target region and same strand as the CDS strand
+				#CDS.plus.sense             <- getSequence(CDS.features.temp)    ### only the CDS region
+				CDS.plus.sense <- subseq(full.target_CDS.plus.sense,start=as.numeric(CDS.location.temp[j,2]),end=as.numeric(CDS.location.temp[j,4]))
+			} else{
+				full.target_CDS.plus.sense  <- reverseComplement(getSequence(source.features.temp))
+				#CDS.plus.sense             <- reverseComplement(getSequence(CDS.features.temp))
+				CDS.plus.sense              <- reverseComplement(subseq(getSequence(source.features.temp),start=as.numeric(CDS.location.temp[j,2]),end=as.numeric(CDS.location.temp[j,4])))
+			}
+			if(width(CDS.plus.sense)<15){
+				CDS.codon.start[j]    <- "skipped because CDS < 15bp"
+				target.codon.start[j] <- "skipped because CDS < 15bp"
+				next
+			}
+			cds1 <- CDS.plus.sense
+			cds2 <- subseq(CDS.plus.sense,start=2)
+			cds3 <- subseq(CDS.plus.sense,start=3)
+			cds.frames.list <- DNAStringSet(c(cds1,cds2,cds3))
+	
+			cds.translated      <- translate(subseq(cds.frames.list,start=rep(1,3),end=c(mround(width(cds1),base=3,direction="down"),mround(width(cds2),base=3,direction="down"),mround(width(cds3),base=3,direction="down"))),if.fuzzy="solve")
+			AA.seq.frames.list  <- gsub(pattern="^\\*+|\\*+$",replacement="",cds.translated)     ### removes beginning or terminal string of stop codons
+
+			internal.stop.check <- unlist(lapply(X=str_locate_all(string=AA.seq.frames.list,pattern="\\*"),FUN=nrow)) ### number of internal stop codons if translating for each possible frame
+
+			if(any(internal.stop.check==0) & "translation" %in% names(qualif(CDS.features.temp))){
+				possible.reading.frames <- which(internal.stop.check==0)
+				targetAA.in.fullAA      <- matrix(nrow=3,ncol=length(full.translation.temp)) ## empty matrix to be filled
+				## now checking which translated reading frames are in the NCBI translations
+				for(k in 1:3){
+					if(internal.stop.check[k]>0){
+						targetAA.in.fullAA[k,] <- 0
+					} else {
+						search.pattern.temp         <- as.character(AA.seq.frames.list[k])
+						targetAA.in.fullAA[k,]      <- unlist(lapply(X=str_locate_all(string=full.translation.temp,pattern=search.pattern.temp),FUN=nrow))
+					}
+				}
+					if(any(targetAA.in.fullAA!=0)){
+					possible.reading.frames2        <- rbind(internal.stop.check==0,apply(X=targetAA.in.fullAA,MARGIN=1,FUN=function(y){any(y>0)}))
+					CDS.codon.start.temp            <- which(apply(X=possible.reading.frames2,MARGIN=2,FUN=all))
+					CDS.codon.start[j]              <- paste(CDS.codon.start.temp,collapse=",")
+					target.cds1                     <- full.target_CDS.plus.sense
+					target.cds2                     <- subseq(full.target_CDS.plus.sense,start=2)
+					target.cds3                     <- subseq(full.target_CDS.plus.sense,start=3)
+					target.frames.list.cds.plus     <- DNAStringSet(c(target.cds1,target.cds2,target.cds3))
+					full.target.translated          <- translate(subseq(target.frames.list.cds.plus,start=rep(1,3),end=c(mround(width(target.cds1),base=3,direction="down"),mround(width(target.cds2),base=3,direction="down"),mround(width(target.cds3),base=3,direction="down"))),if.fuzzy="solve")
+					target.codon.start.temp         <- vector(length=length(CDS.codon.start.temp),mode="character")
+					for(z in 1:length(CDS.codon.start.temp)){
+						target.codon.start.temp[z]  <- which(unlist(lapply(X=str_locate_all(string=full.target.translated,pattern=as.character(AA.seq.frames.list[CDS.codon.start.temp[z]])),FUN=nrow)) !=0)
+					}
+					target.codon.start[j]           <- paste(target.codon.start.temp,collapse=",")				
+				} else {
+					CDS.codon.start[j]    <- "—"
+					target.codon.start[j] <- "–"
+				}
+			} else {
+				CDS.codon.start[j]    <- "—"
+				target.codon.start[j] <- "–"
+				next
+			}
+		}
+		feature.location.table.with.genes[i,"CDS.Range"]          <- CDS.location.temp.string
+		feature.location.table.with.genes[i,"CDS.target.Sense"]   <- paste(CDS.sense,collapse=";")
+		feature.location.table.with.genes[i,"CDS_codon_start"]    <- paste(CDS.codon.start,collapse=";")
+		feature.location.table.with.genes[i,"target_codon_start"] <- paste(target.codon.start,collapse=";")
+	}
+}
+
+subject.table.new                     <- cbind(subject.table.with.genes,feature.location.table.with.genes)
+#exon.target.names                    <- targetTable$TargetName_ArborSci[which(targetTable$Locus.Type %in% c("WholeExon","Immune"))]
+#loci.missing                         <- setdiff(exon.target.names,subject.table.new[,"target.locus"])                    ### target loci not found with blastn
+#missing.loci.subject.table           <- cbind(loci.missing,matrix(data="—",ncol=(ncol(subject.table.new)-1),nrow=length(loci.missing)))
+#colnames(missing.loci.subject.table) <- colnames(subject.table.new)
+#subject.table.semifinal.new          <- rbind(subject.table.new,missing.loci.subject.table)
+#subject.table.final                  <- subject.table.semifinal.new[match(exon.target.names,subject.table.semifinal.new[,1]),]
+## COMMENTED TO AVOID OVERWRITING ## write.table(x=subject.table.new,file="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/Exon.and.Immune-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_13April2020_MultipleGeneIDs.txt",quote=F,sep="\t",row.names=F)
+
+###################################################
+## possibly a faster way to extract feature info ##
+###################################################
+### The downside of this method is that CDS is not translated to verify reading frame
+
+### Read in data
+vision.gbData                               <- biofiles::gbRecord("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/vision-loci_flatfile.gb",progress=T)
+targetTable                                 <- read.table(file="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/TargetTable1_25March2020.txt",header=T,colClasses="character")
+visionTable                                 <- targetTable[which(targetTable["Locus.Type"]=="Vision"),]
+gbData.temp                                 <- vision.gbData
+
+### Rename list element names to "WeinellEntryXXXX" names
+names(gbData.temp)                           <- visionTable[,"TargetName_ArborSci"]
+
+### makes a single data frame containing ranges data for features of all gbRecords
+ranges.all                                  <- do.call(rbind,lapply(X=gbData.temp,FUN=function(y){z=as.data.frame(ranges(y,include=c("gene","product","codon_start")),row.names=c(1:length(y))); z}))
+
+### Adds additional columns to the data frame (data from targetTable)
+ranges.all[,"target.locus"]                 <- gsub("\\..*","",rownames(ranges.all))
+ranges.all[,"TargetName_NCBI"]              <- visionTable[match(ranges.all[,"target.locus"],visionTable[,"TargetName_ArborSci"]),"TargetName_NCBI"]
+ranges.all[,"TargetStart"]                  <- visionTable[match(ranges.all[,"target.locus"],visionTable[,"TargetName_ArborSci"]),"TargetStart"]
+ranges.all[,"TargetEnd"]                    <- visionTable[match(ranges.all[,"target.locus"],visionTable[,"TargetName_ArborSci"]),"TargetEnd"]
+ranges.all[,"Sense_Target_ReferenceContig"] <- visionTable[match(ranges.all[,"target.locus"],visionTable[,"TargetName_ArborSci"]),"Sense_Target_ReferenceContig"]
+ranges.all[,"Locus.Type"]                   <- visionTable[match(ranges.all[,"target.locus"],visionTable[,"TargetName_ArborSci"]),"Locus.Type"]
+
+
+
