@@ -330,6 +330,8 @@ mafft(final.locus,param="--localpair --maxiterate 1000 --adjustdirection --quiet
 
 I sorted each of the unpartitioned target+flanking alignments into one of six directories by locus type (REEs, UCEs, ddRAD-like, Immune, Scalation, Vision), and then ran an R script to generate nine types of alignments per locus, which differ in how data are subset or partitioned; the nine alignments are:
 
+*Note*: Most of the UCEs and ddRAD-like loci are non-coding, and therefore subsetted and partitioned alignments were not created for these loci.
+
 - CDS_only: only includes protein-coding regions
 - CDS_FirstCodonPosition: only
 - CDS_SecondCodonPosition
@@ -352,12 +354,14 @@ library(data.table)
 Run make.partitioned.alignment separately for REEs, UCEs, ddRAD-like, MHC, scalation, and vision genes:
 
 ```
-
 ### REEs
+make.partitioned.alignment(InputAlignmentFolder="~/WholeExon/unpartitioned/", output.dir="~/WholeExon/partitioned/", TargetCDS.path="~/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa", bait.species.filename="~/bait_species_table.txt")
 
 ### UCEs
+make.partitioned.alignment(InputAlignmentFolder="~/UCE/unpartitioned/", output.dir="~/UCE/partitioned/", TargetCDS.path="~/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa", bait.species.filename="~/bait_species_table.txt")
 
 ### ddRAD-like loci
+make.partitioned.alignment(InputAlignmentFolder="~/ddRAD-like/unpartitioned/", output.dir="~/ddRAD-like/partitioned/", TargetCDS.path="~/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa", bait.species.filename="~/bait_species_table.txt")
 
 ### Immune (MHC) genes:
 make.partitioned.alignment(InputAlignmentFolder="~/Immune/unpartitioned/", output.dir="~/Immune/partitioned/", TargetCDS.path="~/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa", bait.species.filename="~/bait_species_table.txt")
@@ -367,11 +371,6 @@ make.partitioned.alignment(InputAlignmentFolder="~/Scalation/unpartitioned/", ou
 
 ### Vision genes:
 make.partitioned.alignment(InputAlignmentFolder="~/Vision/unpartitioned/", output.dir="~/Vision/partitioned/", TargetCDS.path="~/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa", bait.species.filename="~/bait_species_table.txt")
-
-
-
-
-
 ```
 
 <a name="PhylogeneticAnalyses"></a>
