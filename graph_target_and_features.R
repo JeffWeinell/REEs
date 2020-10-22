@@ -17,7 +17,7 @@ Exon.Immune.annotations <- read.table("~/Exon.and.Immune-Loci_Thamnophis_NCBI-co
 UCE.annotations         <- read.table("~/UCE-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v2.txt",colClasses="character",header=T,sep="\t")                                       ### table made from NCBI annotations using code in /Users/Jeff/Documents/SnakeCap_Data/Notes_12April2020.txt
 ddRAD.annotations       <- read.table("~/ddRAD-loci_Thamnophis_putative-homologs-of-Thermophis_NCBI-coordinates_table_MoreInfo_v3_30March2020.txt",colClasses="character",header=T,sep="\t")     ### table made from NCBI annotations using code in /Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/get_Thamnophis_homologs_all.R
 vision.annotations      <- read.table("~/Vision-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v2.txt",colClasses="character",header=T,sep="\t")                                    ### table made from NCBI annotations using code in /Users/Jeff/Documents/SnakeCap_Data/Notes_12April2020.txt
-scalation.annotations   <- read.table("~/Scalation-Loci_NCBI-coordinates_table_MoreInfo_12April2020_MaybeUseThisFile.txt",colClasses="character",header=T,sep="\t")                              ### table made from annotations in paper rather than from NCBI feature tables
+scalation.annotations   <- read.table("~/Scalation-Loci_NCBI-coordinates_table_MoreInfo_12April2020.txt",colClasses="character",header=T,sep="\t")                              ### table made from annotations in paper rather than from NCBI feature tables
 
 ####
 ## merge the annotation tables into a single annotation table
@@ -25,12 +25,12 @@ scalation.annotations   <- read.table("~/Scalation-Loci_NCBI-coordinates_table_M
 features.table          <- rbind(Exon.Immune.annotations,UCE.annotations,scalation.annotations,vision.annotations,ddRAD.annotations)  ### will eventually use rbind to include the annotations of other types of loci
 
 # The next two lines (commented out) write or read the combined feature table generated in the previous line. Reading in the separate annotation tables each time and re-generating the combined feature table is good for keeping track of how the tables were generated.
-# write.table(x=features.table,file="/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/All-Loci_NCBI-coordinates_table_MoreInfo_13April2020.txt",quote=F,sep="\t",row.names=F)
-# features.table        <- read.table("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/All-Loci_NCBI-coordinates_table_MoreInfo_13April2020.txt",colClasses="character",header=T,sep="\t")
+# write.table(x=features.table,file="~/All-Loci_NCBI-coordinates_table_MoreInfo_13April2020.txt",quote=F,sep="\t",row.names=F)
+# features.table        <- read.table("~/All-Loci_NCBI-coordinates_table_MoreInfo_13April2020.txt",colClasses="character",header=T,sep="\t")
 
 ### This next table is used to transform gene/mRNA/CDS feature ranges that are annotated for Thamnophis sirtalis onto the homologous region for loci not designed from T. sirtalis.
 ### So far, this table only includes range transormation info for Thamnophis vs. Thermophis (ddRAD-like loci).
-transform.ranges.table <- read.table("/Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/Thermophis.vs.Thamnophis.transform.range.matrix.txt",colClasses="character",header=F,sep="\t")
+transform.ranges.table <- read.table("~/Thermophis.vs.Thamnophis.transform.range.matrix.txt",colClasses="character",header=F,sep="\t")
 
 loci.names  <- names(target.loci)                  ### Names of target loci. These have the form "WeinellEntryXXX", where XXX is a unique number identifier (one to 4 digits)
 probe.names <- names(probes)                       ### Names of probes. These have the form "WeinellEntryXXX_StartPosition_EndPosition" (first base of target locus = position "0")
