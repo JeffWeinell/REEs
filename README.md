@@ -311,6 +311,17 @@ demuxbyname.sh in="HF10_N2_USPD16097067_HY25JBBXX_L4_1.fq" in2="HF10_N2_USPD1609
 
 To processes sequence reads (assemble contigs for each sample) I followed the FrogCap pipeline (Hutter et al., 2019).
 
+**01_Pre_Process_Reads_Apr10.R**
+**02_Assemble_Spades_Apr18.R**
+**03_Target-loci_matching_20Feb2020.R** (= **03_Probe-Matching.R** of Hutter et al., 2019)
+**03-2_Data-subsetting_JLW.R** (This is an extra step not in Hutter et al., 2019)
+**04_Loci_alignment_1May2019.R**
+**05_mtgenome_assembly_May8.R**
+**06_Trim_Align_Aug14.R**
+**07_Concat_CompleteMatrix_Aug29.R**
+**07-2_IQTREE_1May2019.R**
+**Sort_Alignments_by_LocusType.R**
+
 <a name="DNA.Alignment"></a>
 #### DNA alignment
 
@@ -385,6 +396,8 @@ make.partitioned.alignment(InputAlignmentFolder="~/Vision/unpartitioned/", outpu
 <a name="References"></a>
 ## References:
 
+SPADES...
+
 Bushnell, B. 2014. BBMap: A Fast, Accurate, Splice-Aware Aligner...
 
 Holthaus K.B., Mlitz V., Strasser B., Tschachler E., Alibardi L., and L. Eckhart. 2017. Identification and comparative analysis of the epidermal differentiation complex in snakes. *Scientific Reports* 7, 45338. doi: http://doi.org/10.1038/srep45338.
@@ -394,7 +407,6 @@ Hutter C.R., Cobb K.A., Portik D., Travers S., Wood Jr. P.L., and R.M. Brown. 20
 Schott R.K., Panesar B., Card D.C., Preston M., Castoe T.A., and B.S.W. Chang. 2017. Targeted Capture of Complete Coding Regions across Divergent Species. *Genome Biology and Evolution* 9(2), 398–414. doi: http://doi.org/10.1093/gbe/evx005
 
 Streicher J.W., and J.J Wiens J.J. 2017. Phylogenomic analyses of more than 4000 nuclear loci resolve the origin of snakes among lizard families. *Biology Letters* 13, 20170393. doi: http://doi.org/10.1098/rsbl.2017.0393.
-
 
 
 
