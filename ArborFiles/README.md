@@ -6,7 +6,8 @@
 - WEINELL-ultrastringent-baitcoverage-180919je.txt.gz: bait coverage statistics
 
 **Version 2** targets and baits (not the final set; 120nt baits):
-- 
+- Targets and baits in version 1 that were filtered/not included in version 2: All of the loci with 0% bait coverage (from ultrastringent filtering of version 1 set), plus the following loci: WeinellEntry44, WeinellEntry45, WeinellEntry496, WeinellEntry497, WeinellEntry589, WeinellEntry590, WeinellEntry1670, WeinellEntry1671, WeinellEntry1815, WeinellEntry1818, WeinellEntry1822, WeinellEntry1824, WeinellEntry1828, WeinellEntry1829, WeinellEntry1833, WeinellEntry1838, WeinellEntry1840, WeinellEntry1841, WeinellEntry1847, WeinellEntry1850, WeinellEntry1854, WeinellEntry1856, WeinellEntry1858, WeinellEntry1862, WeinellEntry1863, WeinellEntry1864, WeinellEntry1865, WeinellEntry1866, WeinellEntry1869, WeinellEntry1872, WeinellEntry1873, WeinellEntry1874, WeinellEntry1875, WeinellEntry1876.
+- Targets and baits added to version 2 that were not in version 1: 
 - ALLWEINELL-ultrastringent-baits-180925je.fas.gz: 
 - ALLWEINELL-ultrastringent-baits-180925je.fas.list.targcovg.table.gz: 
 
