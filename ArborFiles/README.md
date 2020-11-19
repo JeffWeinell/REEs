@@ -1,4 +1,4 @@
-## Files provided by Arbor Biosciences:
+## Files provided to or by Arbor Biosciences:
 
 **Version 1** targets and baits (not the final set; 120nt baits):
 - Target-Loci_Jeff-Weinell_10Sep2018.fasta: First set of proposed target loci submitted to Arbor (corresponding to WeinellEntry1–WeinellEntry1898)
