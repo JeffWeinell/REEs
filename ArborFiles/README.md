@@ -9,9 +9,9 @@
 - Targets and baits in version 1 that were filtered from version 2 because they had 0% bait coverage after application of Arbor's ultrastringent filtering method.
 - Targets and baits removed because each is identical to another locus targeted (same sequence but different genomic location):
 
-| loci having identical sequences  | genomic location | type of loci gene names (NCBI features) |   |
+| loci having identical sequences  | genomic location | type of loci gene names (NCBI features) | type of loci |
 |---|---|---|---|
-| WeinellEntry44; WeinellEntry45 | NW_013659646.1:15015-15975; NW_013659646.1:24066-25026 | vomeronasal type-2 receptor 26-like; vomeronasal type-2 receptor 116-like |  ; |
+| WeinellEntry44; WeinellEntry45 | NW_013659646.1:15015-15975; NW_013659646.1:24066-25026 | vomeronasal type-2 receptor 26-like; vomeronasal type-2 receptor 116-like | REE ; REE |
 | WeinellEntry496; WeinellEntry497  | NW_013657804.1:817033-817753; NW_013657804.1:820482-821202 | olfactory receptor 10A2-like; olfactory receptor 10A2-like |   |
 |   |   |   |   |
 |   |   |   |   |
