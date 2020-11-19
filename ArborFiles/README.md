@@ -6,7 +6,7 @@
 - WEINELL-ultrastringent-baitcoverage-180919je.txt.gz: bait coverage statistics for version 1 loci
 
 **Version 2** targets and baits (not the final set; 120nt baits):
-- Targets and baits in version 1 that were filtered from version 2 because they had 0% bait coverage after application of Arbor's ultrastringent filtering method.
+- ZeroCoverageLoci.txt: The list of version 1 targets that were filtered (not included in version 2 or later) because they had 0% bait coverage after application of Arbor's ultrastringent filtering method.
 - Loci filtered because multiple multiple copies in genome, or duplicate target: REEs: WeinellEntry44, WeinellEntry45, WeinellEntry496, WeinellEntry497, WeinellEntry589, WeinellEntry590, WeinellEntry1670, WeinellEntry1671; Immune loci: WeinellEntry1815, WeinellEntry1818, WeinellEntry1822, WeinellEntry1824, WeinellEntry1828, WeinellEntry1829, WeinellEntry1833, WeinellEntry1838, WeinellEntry1840, WeinellEntry1841, WeinellEntry1847, WeinellEntry1850, WeinellEntry1854, WeinellEntry1856, WeinellEntry1858, WeinellEntry1862, WeinellEntry1863, WeinellEntry1864, WeinellEntry1865, WeinellEntry1866, WeinellEntry1869, WeinellEntry1872, WeinellEntry1873, WeinellEntry1874, WeinellEntry1875, WeinellEntry1876. More details on these loci are shown in the following two tables:
 
 Targets and baits removed because each is identical to another locus targeted (same sequence but different genomic location):
