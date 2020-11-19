@@ -7,39 +7,35 @@
 
 **Version 2** targets and baits (not the final set; 120nt baits):
 - Targets and baits in version 1 that were filtered from version 2 because they had 0% bait coverage after application of Arbor's ultrastringent filtering method.
-- Targets and baits removed because each is identical to another locus targeted (same sequence but different genomic location): 
+- Targets and baits removed because each is identical to another locus targeted (same sequence but different genomic location):
 
-| loci having identical sequences  | genomic location | type of loi and gene name (NCBI feature) |   |
+| loci having identical sequences  | genomic location | type of loci gene names (NCBI features) |   |
 |---|---|---|---|
-| WeinellEntry44 and WeinellEntry45 | NW_013659646.1:15015-15975 and NW_013659646.1:24066-25026 | vision: vomeronasal type-2 receptor 26-like and omeronasal type-2 receptor 26-like |  |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-|   |   | immune (MHC)  |   |
-
-
-
-
-NW_013659646.1:15015-15975 (WeinellEntry44) [gene = vomeronasal type-2 receptor 26-like]	NW_013659646.1:24066-25026 (WeinellEntry45) [vomeronasal type-2 receptor 116-like]
+| WeinellEntry44; WeinellEntry45 | NW_013659646.1:15015-15975; NW_013659646.1:24066-25026 | vomeronasal type-2 receptor 26-like; vomeronasal type-2 receptor 116-like |  ; |
+| WeinellEntry496; WeinellEntry497  | NW_013657804.1:817033-817753; NW_013657804.1:820482-821202 | olfactory receptor 10A2-like; olfactory receptor 10A2-like |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
 
 NW_013657804.1:817033-817753 (WeinellEntry496) [gene = LOC106537664; olfactory receptor 10A2-like]	NW_013657804.1:820482-821202 (WeinellEntry497) [gene = LOC106537665;  olfactory receptor 10A2-like]
+
 NW_013658610.1:34635-34875 (WeinellEntry589) [gene = LOC106546921; metalloproteinase inhibitor 4-like]	NW_013658610.1:59791-60031 (WeinellEntry590) [gene = LOC106546925; metalloproteinase inhibitor 4-like]
 NW_013658165.1:745869-746109 (WeinellEntry1670) [gene = LOC106542938; helicase with zinc finger domain 2-like]	NW_013658165.1:748461-748701 (WeinellEntry1671) [gene = LOC106542941; helicase with zinc finger domain 2-like]
 NW_013657739.1:622801-622921 (WeinellEntry1858) [gene = CIITA; class 2 MHC transactivator (exon1?)]	NW_013657804.1:7924-8044 (WeinellEntry1869) [gene =LOC106537644; MHC class II transactivator-like]
