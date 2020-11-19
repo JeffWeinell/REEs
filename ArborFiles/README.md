@@ -24,18 +24,18 @@ Targets and baits removed because each is identical to another locus targeted (s
 | WeinellEntry1866; WeinellEntry1876  | NW_013657739.1:629975-630095; NW_013657804.1:17253-17373 | class 2 MHC transactivator] (exon6?);  | immune  |
 | WeinellEntry1815; WeinellEntry1840? or 1820?  | NW_013657739.1:619933-620293; NW_013657804.1:5056-5416 | class 2 MHC transactivator] (exon7?);  | immune |
 
-Targets and baits removed because identical to another locus targeted (same genomic location):
-| Duplicate target loci  | *Thamnophis* scaffold and location | Loci filtered | type of loci |
+Target loci that are identical to one another (same genomic location):
+| Duplicate pair target loci  | *Thamnophis* scaffold and location | locus filtered from version 2 targets | type of loci (based on method/reason for including)|
 |---|---|---|---|
-| WeinellEntry397; WeinellEntry1818 | NW_013657739.1:625317-626997  | both...? | REE; immune |
-| WeinellEntry422; WeinellEntry1822 | NW_013657804.1:12345-14265   | both...?  | REE; immune |
+| WeinellEntry397; WeinellEntry1818 | NW_013657739.1:625317-626997  | WeinellEntry1818 | REE; immune |
+| WeinellEntry422; WeinellEntry1822 | NW_013657804.1:12345-14265   | WeinellEntry1822  | REE; immune |
 | WeinellEntry559; WeinellEntry1824 | NW_013657921.1:388522-388882 | WeinellEntry1824  | REE; immune |
-| WeinellEntry1539; WeinellEntry1828 | NW_013658177.1:704767-705247 | both...? | REE; immune |
+| WeinellEntry1539; WeinellEntry1828 | NW_013658177.1:704767-705247 | WeinellEntry1828 | REE; immune |
 | WeinellEntry248; WeinellEntry1829 | NW_013658448.1:275425-275785 | WeinellEntry1829 | REE; immune |
-| WeinellEntry612; WeinellEntry1833 | NW_013658549.1:435664-436024 | both...?  | REE; immune |
-| WeinellEntry1232; WeinellEntry1838 | NW_013658556.1:485920-486280 | both...?  | REE; immune |
-| WeinellEntry191; WeinellEntry1841 | NW_013659059.1:5414-5774 | both...?  | REE; immune |
-| WeinellEntry836; WeinellEntry1847 | NW_013659625.1:112053-112413 | both...? | REE; immune |
+| WeinellEntry612; WeinellEntry1833 | NW_013658549.1:435664-436024 | WeinellEntry1833  | REE; immune |
+| WeinellEntry1232; WeinellEntry1838 | NW_013658556.1:485920-486280 | WeinellEntry1838  | REE; immune |
+| WeinellEntry191; WeinellEntry1841 | NW_013659059.1:5414-5774 | WeinellEntry1841 | REE; immune |
+| WeinellEntry836; WeinellEntry1847 | NW_013659625.1:112053-112413 | WeinellEntry1847 | REE; immune |
 | WeinellEntry787; WeinellEntry1850 | NW_013659779.1:147829-148189 | WeinellEntry1850 | REE; immune |
 | WeinellEntry728; WeinellEntry1854 | NW_013660884.1:27009-27369 | WeinellEntry1854 | REE; immune |
 | WeinellEntry891; WeinellEntry1856 | NW_013661154.1:9614-9974 | WeinellEntry1856 | REE; immune |
