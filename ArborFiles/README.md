@@ -11,17 +11,17 @@
 
 | loci having identical sequences  | genomic location | type of loci gene names (NCBI features) | type of loci |
 |---|---|---|---|
-| WeinellEntry44; WeinellEntry45 | NW_013659646.1:15015-15975; NW_013659646.1:24066-25026 | vomeronasal type-2 receptor 26-like; vomeronasal type-2 receptor 116-like | REE ; REE |
-| WeinellEntry496; WeinellEntry497  | NW_013657804.1:817033-817753; NW_013657804.1:820482-821202 | olfactory receptor 10A2-like; olfactory receptor 10A2-like |   |
-|   |   |   |   |
-|   |   |   |   |
-|   |   |   |   |
-|   |   |   |   |
-|   |   |   |   |
-|   |   |   |   |
-|   |   |   |   |
-|   |   |   |   |
-|   |   |   |   |
+| WeinellEntry44; WeinellEntry45 | NW_013659646.1:15015-15975; NW_013659646.1:24066-25026 | vomeronasal type-2 receptor 26-like; vomeronasal type-2 receptor 116-like | REEs |
+| WeinellEntry496; WeinellEntry497  | NW_013657804.1:817033-817753; NW_013657804.1:820482-821202 | olfactory receptor 10A2-like; olfactory receptor 10A2-like | REEs |
+| WeinellEntry589; WeinellEntry590  | NW_013658610.1:34635-34875; NW_013658610.1:59791-60031 |  metalloproteinase inhibitor 4-like; metalloproteinase inhibitor 4-like | REEs |
+| WeinellEntry1670; WeinellEntry1671  | NW_013658165.1:745869-746109; NW_013658165.1:748461-748701  | helicase with zinc finger domain 2-like; helicase with zinc finger domain 2-like  | REEs |
+| WeinellEntry1858; WeinellEntry1869  | NW_013657739.1:622801-622921; NW_013657804.1:7924-8044 | class 2 MHC transactivator (exon1?); MHC class II transactivator-like | immune |
+| WeinellEntry1862; WeinellEntry1872  |  |   |   |
+| WeinellEntry1863; WeinellEntry1873  |   |   |   |
+| WeinellEntry1864; WeinellEntry1874  |   |   |   |
+| WeinellEntry1865; WeinellEntry1875  |   |   |   |
+| WeinellEntry1866; WeinellEntry1876  |   |   |   |
+| WeinellEntry1815; WeinellEntry1840? or 1820?  |   |   |   |
 |   |   |   |   |
 |   |   |   |   |
 |   |   |   |   |
@@ -34,17 +34,13 @@
 |   |   |   |   |
 |   |   |   |   |
 
-NW_013657804.1:817033-817753 (WeinellEntry496) [gene = LOC106537664; olfactory receptor 10A2-like]	NW_013657804.1:820482-821202 (WeinellEntry497) [gene = LOC106537665;  olfactory receptor 10A2-like]
-
-NW_013658610.1:34635-34875 (WeinellEntry589) [gene = LOC106546921; metalloproteinase inhibitor 4-like]	NW_013658610.1:59791-60031 (WeinellEntry590) [gene = LOC106546925; metalloproteinase inhibitor 4-like]
-NW_013658165.1:745869-746109 (WeinellEntry1670) [gene = LOC106542938; helicase with zinc finger domain 2-like]	NW_013658165.1:748461-748701 (WeinellEntry1671) [gene = LOC106542941; helicase with zinc finger domain 2-like]
-NW_013657739.1:622801-622921 (WeinellEntry1858) [gene = CIITA; class 2 MHC transactivator (exon1?)]	NW_013657804.1:7924-8044 (WeinellEntry1869) [gene =LOC106537644; MHC class II transactivator-like]
 NW_013657739.1:627964-628084 (WeinellEntry1862) [gene = CIITA; class 2 MHC transactivator] (exon2?)]	NW_013657804.1:15230-15350 (WeinellEntry1872)
 NW_013657739.1:628290-628410 (WeinellEntry1863) [gene = CIITA; class 2 MHC transactivator] (exon3?)]	NW_013657804.1:15556-15676 (WeinellEntry1873)
 NW_013657739.1:628863-628983 (WeinellEntry1864) [gene = CIITA; class 2 MHC transactivator] (exon4?)]	NW_013657804.1:16129-16249 (WeinellEntry1874)
 NW_013657739.1:629656-629776 (WeinellEntry1865) [gene = CIITA; class 2 MHC transactivator] (exon5?)]	NW_013657804.1:16934-17054 (WeinellEntry1875)
 NW_013657739.1:629975-630095 (WeinellEntry1866) [gene = CIITA; class 2 MHC transactivator] (exon6?)]	NW_013657804.1:17253-17373 (WeinellEntry1876)
-NW_013657739.1:619933-620293 (WeinellEntry1815) [gene = CIITA; class 2 MHC transactivator] (exon7?)]	NW_013657804.1:5056-5416 (WeinellEntry1840… actually same as 1820???)
+NW_013657739.1:619933-620293 (WeinellEntry1815) [gene = CIITA; class 2 MHC transactivator] (exon7?)]	NW_013657804.1:5056-5416 (WeinellEntry1840… 1820???)
+
 NW_013657739.1:625317-626997 (WeinellEntry397)	same exact target (WeinellEntry1818)
 NW_013657804.1:12345-14265 (WeinellEntry422)	same exact target (WeinellEntry1822)
 NW_013657921.1:388522-388882 (WeinellEntry559) [INCLUDED IN FINAL SET]	same exact target (WeinellEntry1824)
