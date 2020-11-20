@@ -1,11 +1,11 @@
 ## Files provided to or by Arbor Biosciences:
 
-**Version 1** targets and baits (not the final set; 120nt baits):
+**Version 1** targets and baits (not used; 120nt baits):
 - Target-Loci_Jeff-Weinell_10Sep2018.fasta: First set of proposed target loci submitted to Arbor (corresponding to WeinellEntry1–WeinellEntry1898)
 - WEINELL-ultrastringent-baits-180919je.fas.gz: Baits designed from version 1 targets
 - WEINELL-ultrastringent-baitcoverage-180919je.txt.gz: bait coverage statistics for version 1 loci
 
-**Version 2** targets and baits (not the final set; 120nt baits):
+**Version 2** targets and baits (not used; 120nt baits):
 - Version1_ZeroBaitCoverageLoci.tsv: The list of targets (version 1 set) filtered after application of Arbor's ultrastringent filtering method; these loci had 0% bait coverage.
 - Other version 1 targets were filtered because they were identical to other positions in the genome, or because they were targeted twice (i.e., the positions were already targeted by another "WeinellEntry" target); this happened for some loci that were selected for inclusion for different reasons. Some of the immune and vision loci were already included because they were identified as single-copy rapidly-evolving exons (REEs). The following loci were filtered for one of these two afforementioned reasons: REEs: WeinellEntry44, WeinellEntry45, WeinellEntry496, WeinellEntry497, WeinellEntry589, WeinellEntry590, WeinellEntry1670, WeinellEntry1671; Immune loci: WeinellEntry1815, WeinellEntry1818, WeinellEntry1822, WeinellEntry1824, WeinellEntry1828, WeinellEntry1829, WeinellEntry1833, WeinellEntry1838, WeinellEntry1840, WeinellEntry1841, WeinellEntry1847, WeinellEntry1850, WeinellEntry1854, WeinellEntry1856, WeinellEntry1858, WeinellEntry1862, WeinellEntry1863, WeinellEntry1864, WeinellEntry1865, WeinellEntry1866, WeinellEntry1869, WeinellEntry1872, WeinellEntry1873, WeinellEntry1874, WeinellEntry1875, WeinellEntry1876. More details on these loci are shown in the following two tables.
 
