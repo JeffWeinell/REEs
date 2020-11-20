@@ -34,7 +34,8 @@ Target entries removed because already targeted by another entry:
 | WeinellEntry728; WeinellEntry1854 | NW_013660884.1:27009-27369 | WeinellEntry1854 | REE; immune |
 | WeinellEntry891; WeinellEntry1856 | NW_013661154.1:9614-9974 | WeinellEntry1856 | REE; immune |
 
-- Targets and baits added to version 2 that were not in version 1: WeinellEntry1899–WeinellEntry2152 and WeinellEntry2153–WeinellEntry3152
+- Targets added to version 2 that were not in version 1: WeinellEntry1899–WeinellEntry2152 (REEs), and WeinellEntry2153–WeinellEntry3152 (UCEs).
+- Version 2 targets include 41 immune loci (plus 12 REEs that are also MHC loci), 1990 REEs, and 1000 UCEs.
 - ALLWEINELL-ultrastringent-baits-180925je.fas.gz: Baits designed from version 2 set of target loci
 - ALLWEINELL-ultrastringent-baits-180925je.fas.list.targcovg.table.gz: bait coverage statistics for version 2 loci
 
