@@ -12,10 +12,10 @@
 Targets removed because sequence is non-specific in *Thamnophis* genome.
 | loci having identical sequences  | *Thamnophis* scaffold and location | gene names used in genome annotation| type of loci |
 |---|---|---|---|
-| WeinellEntry44; WeinellEntry45 | NW_013659646.1:15015-15975; NW_013659646.1:24066-25026 | vomeronasal type-2 receptor 26-like; vomeronasal type-2 receptor 116-like | REEs? |
+| WeinellEntry44; WeinellEntry45 | NW_013659646.1:15015-15975; NW_013659646.1:24066-25026 | vomeronasal type-2 receptor 26-like; vomeronasal type-2 receptor 116-like | REEs |
 | WeinellEntry496; WeinellEntry497  | NW_013657804.1:817033-817753; NW_013657804.1:820482-821202 | olfactory receptor 10A2-like; olfactory receptor 10A2-like | REEs |
-| WeinellEntry589; WeinellEntry590  | NW_013658610.1:34635-34875; NW_013658610.1:59791-60031 |  metalloproteinase inhibitor 4-like; metalloproteinase inhibitor 4-like | REEs? |
-| WeinellEntry1670; WeinellEntry1671  | NW_013658165.1:745869-746109; NW_013658165.1:748461-748701  | helicase with zinc finger domain 2-like; helicase with zinc finger domain 2-like  | REEs? |
+| WeinellEntry589; WeinellEntry590  | NW_013658610.1:34635-34875; NW_013658610.1:59791-60031 |  metalloproteinase inhibitor 4-like; metalloproteinase inhibitor 4-like | REEs |
+| WeinellEntry1670; WeinellEntry1671  | NW_013658165.1:745869-746109; NW_013658165.1:748461-748701  | helicase with zinc finger domain 2-like; helicase with zinc finger domain 2-like  | REEs |
 | WeinellEntry1858; WeinellEntry1869  | NW_013657739.1:622801-622921; NW_013657804.1:7924-8044 | class 2 MHC transactivator (exon1?); MHC class II transactivator-like | immune |
 | WeinellEntry1862; WeinellEntry1872  | NW_013657739.1:627964-628084; NW_013657804.1:15230-15350 | class 2 MHC transactivator (exon2?); MHC class II transactivator-like | immune  |
 | WeinellEntry1863; WeinellEntry1873  | NW_013657739.1:628290-628410; NW_013657804.1:15556-15676 | class 2 MHC transactivator (exon3?); MHC class II transactivator-like | immune  |
