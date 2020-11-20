@@ -40,8 +40,13 @@ Target entries removed because already targeted by another entry:
 - ALLWEINELL-ultrastringent-baits-180925je.fas.list.targcovg.table.gz: bait coverage statistics for version 2 loci
 
 **Version 3** targets and baits (these are the baits we actually ordered and used for sequence capture; 120nt):
-- 
-- ADD2WEINELL-ultrastringent-baits-181005je.fas.gz: This is the set of baits purchased for sequence capture.
+- Weinell_Additional-Loci_Entry3153to5735_4Oct2018.fasta: Targets added to version 3 that were not in version 2: WeinellEntry3153 – WeinellEntry5735.
+- Weinell_MultiHitProbes_Remove.txt: Probes from version 2 that were not included in version 3, because these hit multiple sites in the other genomes. Need to figure out which genomes were blasted against in this step.
+- Targets removed as a result of removing the multi-hit probes included: 
+- ADD2WEINELL-ultrastringent-baits-181005je.fas.gz: Baits designed from version 3 set of target loci
+
+**Version 4** targets and baits (these are the baits we actually ordered and used for sequence capture; 120nt):
+- Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta: This is the set of baits purchased for sequence capture.
 - Arbor didn't provide a target coverage table for the final set of probes, but I calculated this myself and the results are in the file SnakeCap_probes_target-coverage.txt
 
 "...  About our ultra-stringent filtration: a probe is eliminated from consideration if it is 25% RepeatMasked, or if its closest *Thamnophis* genomic hit is 25% or more soft-masked, or if the probe has multiple strong hybrid sites detected in the *Thamnophis* genome. To loosen the stringency we could increase the RM threshold and/or the number of tolerable hot hits in the genome. But I would strongly recommend you go with ultra-stringent if it hits sufficient target space for your application." - Arbor
