@@ -43,7 +43,7 @@ Target entries removed because already targeted by another entry:
 
 - Weinell_MultiHitProbes_Remove.txt: Probes from version 2 that were not included in version 3, because these hit multiple sites in the other genomes. **Need to figure out which genomes were blasted against in this step.**
 - Version2-Loci-removed_allProbes-multiHit.tsv: List of targets removed as a result of removing the multi-hit probes. The removed targets included 115 REEs, 14 immune loci, and 12 UCEs.
-- Weinell_Additional-Loci_Entry3153to5735_4Oct2018.fasta: Targets added to version 3 that were not in version 2; these included **~2,025 XXX** loci (WeinellEntry3153– ~5177), **~98** scalation loci (~WeinellEntry5178-WeinellEntry5275), 132 vision loci (WeinellEntry5276–5407), and 328 ddRAD-like loci (WeinellEntry5408-5735).
+- Weinell_Additional-Loci_Entry3153to5735_4Oct2018.fasta: Targets added to version 3 that were not in version 2; these included 2,025 **REEs?** (WeinellEntry3153–5177), 98 scalation loci (~WeinellEntry5178-WeinellEntry5275), 132 vision loci (WeinellEntry5276–5407), and 328 ddRAD-like loci (WeinellEntry5408-5735).
 - ADD2WEINELL-ultrastringent-baits-181005je.fas.gz: Baits designed from version 3 set of target loci
 
 **Version 4** targets and baits (these are the baits we actually ordered and used for sequence capture; 120nt):
