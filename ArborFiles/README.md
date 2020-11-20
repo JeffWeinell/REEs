@@ -34,21 +34,41 @@ Target entries removed because already targeted by another entry:
 | WeinellEntry728; WeinellEntry1854 | NW_013660884.1:27009-27369 | WeinellEntry1854 | REE; immune |
 | WeinellEntry891; WeinellEntry1856 | NW_013661154.1:9614-9974 | WeinellEntry1856 | REE; immune |
 
-- Weinell_Additional_Targets_20Sep2018.txt: Targets added to version 2 that were not in version 1, including more REEs (WeinellEntry1899–WeinellEntry2152) and 1,000 UCEs (WeinellEntry2153–WeinellEntry3152).
+- Weinell_Additional_Targets_20Sep2018.txt: Targets added to version 2 that were not in version 1, including more REEs (WeinellEntry1899–WeinellEntry2152) and 1,000 UCEs (WeinellEntry2153–WeinellEntry3152). All of these passed ultrastringent filtering.
 - Version 2 targets include 41 immune loci (plus 12 REEs that are also MHC loci), 1,990 REEs, and 1,000 UCEs.
 - ALLWEINELL-ultrastringent-baits-180925je.fas.gz: Baits designed from version 2 set of target loci
 - ALLWEINELL-ultrastringent-baits-180925je.fas.list.targcovg.table.gz: bait coverage statistics for version 2 loci
 
-**Version 3** targets and baits (these are the baits we actually ordered and used for sequence capture; 120nt):
-
+**Version 3** targets and baits (not used; 120nt baits): 
 - Weinell_MultiHitProbes_Remove.txt: Probes from version 2 that were not included in version 3, because these hit multiple sites in the other genomes. **Need to figure out which genomes were blasted against in this step.**
 - Version2-Loci-removed_allProbes-multiHit.tsv: List of targets removed as a result of removing the multi-hit probes. The removed targets included 115 REEs, 14 immune loci, and 12 UCEs.
 - Weinell_Additional-Loci_Entry3153to5735_4Oct2018.fasta: Targets added to version 3 that were not in version 2; these included 2,025 **REEs?** (WeinellEntry3153–5177), 98 scalation loci (WeinellEntry5178-WeinellEntry5275), 132 vision loci (WeinellEntry5276–5407), and 328 ddRAD-like loci (WeinellEntry5408-5735).
 - ADD2WEINELL-ultrastringent-baits-181005je.fas.gz: Baits designed from version 3 set of target loci
 
+<!--
+R Code used to get the list of loci in Version3-ZeroBaitCoverageLoci.tsv
+library(ape)
+loci.v3.added         <- read.dna(file="/Users/alyssaleinweber/Downloads/Weinell_Additional-Loci_Entry3153to5735_4Oct2018.fasta",format="fasta")
+loci.v3.added.names   <- attributes(loci.v3.added)$names
+probes.v3             <- read.dna(file="/Users/alyssaleinweber/Downloads/ADD2WEINELL-ultrastringent-baits-181005je.fas",format="fasta")
+probes.v3.names       <- attributes(probes.v3)$dimnames[[1]]
+probes.final          <- read.dna(file="/Users/alyssaleinweber/Downloads/Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta",format="fasta")
+probes.final.names    <- attributes(probes.final)$dimnames[[1]]
+loci.v3.withProbes    <- unique(gsub("_.*","",probes.v3.names))
+loci.final.withProbes <- unique(gsub("_.*","",probes.final.names))
+loci.v3.zeroCoverage  <- setdiff(loci.v3.added.names,loci.v3.withProbes) ### these 74 loci were added to version 3, but had zero bait coverage, and therefore these were removed from version 4
+-->
+
 **Version 4** targets and baits (these are the baits we actually ordered and used for sequence capture; 120nt):
-- Version3-probes-removed.tsv: List of version 3 baits not included in version 4. (Use setdiff, gsub, and unique function in R to get this list by comparing the probe names in ADD2WEINELL-ultrastringent-baits-181005je.fas to the probe names in Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta).
+
+- Version3-ZeroBaitCoverageLoci.tsv: Version 3 targets removed by Arbor's ultrastringent filtering method; 74 targets were filtered, include 67 REEs and seven vision loci.
+- Version3-probes-removed.tsv: List of version 3 baits not included in version 4, because the maximum number of baits = 20,020 for the set particular bait kit.
+
+(Use setdiff, gsub, and unique function in R to get this list by comparing the probe names in ADD2WEINELL-ultrastringent-baits-181005je.fas to the probe names in Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta).
+
 - Version3-Loci-removed.tsv: List of targets removed as a result of removing the baits in Version3-probes-removed.tsv.
+
+
 - Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta: This is the set of baits purchased for sequence capture.
 - Arbor didn't provide a target coverage table for the final set of probes, but I calculated this myself and the results are in the file SnakeCap_probes_target-coverage.txt
 
