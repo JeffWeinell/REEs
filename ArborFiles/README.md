@@ -7,9 +7,9 @@
 
 **Version 2** targets and baits (not the final set; 120nt baits):
 - ZeroCoverageLoci.txt: The list of version 1 targets that were filtered (not included in version 2 or later) because they had 0% bait coverage after application of Arbor's ultrastringent filtering method.
-- Loci filtered because multiple multiple copies in genome, or duplicate target: REEs: WeinellEntry44, WeinellEntry45, WeinellEntry496, WeinellEntry497, WeinellEntry589, WeinellEntry590, WeinellEntry1670, WeinellEntry1671; Immune loci: WeinellEntry1815, WeinellEntry1818, WeinellEntry1822, WeinellEntry1824, WeinellEntry1828, WeinellEntry1829, WeinellEntry1833, WeinellEntry1838, WeinellEntry1840, WeinellEntry1841, WeinellEntry1847, WeinellEntry1850, WeinellEntry1854, WeinellEntry1856, WeinellEntry1858, WeinellEntry1862, WeinellEntry1863, WeinellEntry1864, WeinellEntry1865, WeinellEntry1866, WeinellEntry1869, WeinellEntry1872, WeinellEntry1873, WeinellEntry1874, WeinellEntry1875, WeinellEntry1876. More details on these loci are shown in the following two tables:
+- Other version 1 targets were filtered because they were identical to other positions in the genome, or because they were targeted twice (i.e., the positions were already targeted by another "WeinellEntry" target); this happened for some loci that were selected for inclusion for different reasons. Some of the immune and vision loci were already included because they were identified as single-copy rapidly-evolving exons (REEs). The following loci were filtered for one of these two afforementioned reasons: REEs: WeinellEntry44, WeinellEntry45, WeinellEntry496, WeinellEntry497, WeinellEntry589, WeinellEntry590, WeinellEntry1670, WeinellEntry1671; Immune loci: WeinellEntry1815, WeinellEntry1818, WeinellEntry1822, WeinellEntry1824, WeinellEntry1828, WeinellEntry1829, WeinellEntry1833, WeinellEntry1838, WeinellEntry1840, WeinellEntry1841, WeinellEntry1847, WeinellEntry1850, WeinellEntry1854, WeinellEntry1856, WeinellEntry1858, WeinellEntry1862, WeinellEntry1863, WeinellEntry1864, WeinellEntry1865, WeinellEntry1866, WeinellEntry1869, WeinellEntry1872, WeinellEntry1873, WeinellEntry1874, WeinellEntry1875, WeinellEntry1876. More details on these loci are shown in the following two tables.
 
-Targets and baits removed because each is identical to another locus targeted (same sequence but different genomic location):
+Targets removed because sequence is non-specific in *Thamnophis* genome.
 | loci having identical sequences  | *Thamnophis* scaffold and location | type of loci gene names (NCBI features) | type of loci |
 |---|---|---|---|
 | WeinellEntry44; WeinellEntry45 | NW_013659646.1:15015-15975; NW_013659646.1:24066-25026 | vomeronasal type-2 receptor 26-like; vomeronasal type-2 receptor 116-like | REEs? |
@@ -24,7 +24,7 @@ Targets and baits removed because each is identical to another locus targeted (s
 | WeinellEntry1866; WeinellEntry1876  | NW_013657739.1:629975-630095; NW_013657804.1:17253-17373 | class 2 MHC transactivator] (exon6?);  | immune  |
 | WeinellEntry1815; WeinellEntry1840? or 1820?  | NW_013657739.1:619933-620293; NW_013657804.1:5056-5416 | class 2 MHC transactivator] (exon7?);  | immune |
 
-Target loci that are identical to one another (same genomic location):
+Target entries removed because already targeted by another entry:
 | Duplicate pair target loci  | *Thamnophis* scaffold and location | locus filtered from version 2 targets | type of loci (based on method/reason for including)|
 |---|---|---|---|
 | WeinellEntry397; WeinellEntry1818 | NW_013657739.1:625317-626997  | WeinellEntry1818 | REE; immune |
