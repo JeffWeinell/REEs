@@ -47,6 +47,8 @@ Target entries removed because already targeted by another entry:
 - ADD2WEINELL-ultrastringent-baits-181005je.fas.gz: Baits designed from version 3 set of target loci
 
 **Version 4** targets and baits (these are the baits we actually ordered and used for sequence capture; 120nt):
+- Version3-probes-removed.tsv: List of version 3 baits not included in version 4. (Use setdiff, gsub, and unique function in R to get this list by comparing the probe names in ADD2WEINELL-ultrastringent-baits-181005je.fas to the probe names in Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta).
+- Version3-Loci-removed.tsv: List of targets removed as a result of removing the baits in Version3-probes-removed.tsv.
 - Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta: This is the set of baits purchased for sequence capture.
 - Arbor didn't provide a target coverage table for the final set of probes, but I calculated this myself and the results are in the file SnakeCap_probes_target-coverage.txt
 
