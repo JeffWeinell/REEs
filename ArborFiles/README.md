@@ -70,3 +70,10 @@ loci.v3.zeroCoverage  <- setdiff(loci.v3.added.names,loci.v3.withProbes) ### the
 
 Description of Arbor's ultrastringent filtration:
 "...  About our ultra-stringent filtration: a probe is eliminated from consideration if it is 25% RepeatMasked, or if its closest *Thamnophis* genomic hit is 25% or more soft-masked, or if the probe has multiple strong hybrid sites detected in the *Thamnophis* genome. To loosen the stringency we could increase the RM threshold and/or the number of tolerable hot hits in the genome. But I would strongly recommend you go with ultra-stringent if it hits sufficient target space for your application." - Arbor
+
+**Future versions of target loci and baits** considering sequencing performance.
+
+- Should use consensus sequences (across snakes) of target loci to design baits; this will reduce taxonomic dropout, which was not terrible but noticeable for version 4.
+- Remove these loci, which were not captured for any species: 
+
+
