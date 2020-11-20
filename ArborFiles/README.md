@@ -9,23 +9,17 @@
 - Version1_ZeroBaitCoverageLoci.tsv: The list of targets (version 1 set) filtered after application of Arbor's ultrastringent filtering method; these loci had 0% bait coverage.
 - Other version 1 targets were filtered because they were identical to other positions in the genome, or because they were targeted twice (i.e., the positions were already targeted by another "WeinellEntry" target); this happened for some loci that were selected for inclusion for different reasons. Some of the immune and vision loci were already included because they were identified as single-copy rapidly-evolving exons (REEs). The following loci were filtered for one of these two afforementioned reasons: REEs: WeinellEntry44, WeinellEntry45, WeinellEntry496, WeinellEntry497, WeinellEntry589, WeinellEntry590, WeinellEntry1670, WeinellEntry1671; Immune loci: WeinellEntry1815, WeinellEntry1818, WeinellEntry1822, WeinellEntry1824, WeinellEntry1828, WeinellEntry1829, WeinellEntry1833, WeinellEntry1838, WeinellEntry1840, WeinellEntry1841, WeinellEntry1847, WeinellEntry1850, WeinellEntry1854, WeinellEntry1856, WeinellEntry1858, WeinellEntry1862, WeinellEntry1863, WeinellEntry1864, WeinellEntry1865, WeinellEntry1866, WeinellEntry1869, WeinellEntry1872, WeinellEntry1873, WeinellEntry1874, WeinellEntry1875, WeinellEntry1876. More details on these loci are shown in the following two tables.
 
-Targets removed because sequence is non-specific in *Thamnophis* genome.
-| loci having identical sequences  | *Thamnophis* scaffold and location | gene names used in genome annotation| type of loci |
+Targets removed because sequence is non-specific in *Thamnophis* genome; only targets with non-zero bait coverage after ultrastringent filtering are shown here.
+| loci having identical sequences  | *Thamnophis* scaffold and location | gene names used in genome annotation| type |
 |---|---|---|---|
 | WeinellEntry44; WeinellEntry45 | NW_013659646.1:15015-15975; NW_013659646.1:24066-25026 | vomeronasal type-2 receptor 26-like; vomeronasal type-2 receptor 116-like | REEs |
 | WeinellEntry496; WeinellEntry497  | NW_013657804.1:817033-817753; NW_013657804.1:820482-821202 | olfactory receptor 10A2-like; olfactory receptor 10A2-like | REEs |
 | WeinellEntry589; WeinellEntry590  | NW_013658610.1:34635-34875; NW_013658610.1:59791-60031 |  metalloproteinase inhibitor 4-like; metalloproteinase inhibitor 4-like | REEs |
 | WeinellEntry1670; WeinellEntry1671  | NW_013658165.1:745869-746109; NW_013658165.1:748461-748701  | helicase with zinc finger domain 2-like; helicase with zinc finger domain 2-like  | REEs |
-| WeinellEntry1858; WeinellEntry1869  | NW_013657739.1:622801-622921; NW_013657804.1:7924-8044 | class 2 MHC transactivator (exon1?); MHC class II transactivator-like | immune |
-| WeinellEntry1862; WeinellEntry1872  | NW_013657739.1:627964-628084; NW_013657804.1:15230-15350 | class 2 MHC transactivator (exon2?); MHC class II transactivator-like | immune  |
-| WeinellEntry1863; WeinellEntry1873  | NW_013657739.1:628290-628410; NW_013657804.1:15556-15676 | class 2 MHC transactivator (exon3?); MHC class II transactivator-like | immune  |
-| WeinellEntry1864; WeinellEntry1874  | NW_013657739.1:628863-628983; NW_013657804.1:16129-16249 | class 2 MHC transactivator (exon4?); MHC class II transactivator-like | immune  |
-| WeinellEntry1865; WeinellEntry1875  | NW_013657739.1:629656-629776; NW_013657804.1:16934-17054 | class 2 MHC transactivator (exon5?); MHC class II transactivator-like | immune  |
-| WeinellEntry1866; WeinellEntry1876  | NW_013657739.1:629975-630095; NW_013657804.1:17253-17373 | class 2 MHC transactivator (exon6?); MHC class II transactivator-like | immune  |
 | WeinellEntry1815; WeinellEntry1840? or 1820?  | NW_013657739.1:619933-620293; NW_013657804.1:5056-5416 | class 2 MHC transactivator (exon7?); MHC class II transactivator-like | immune |
 
 Target entries removed because already targeted by another entry:
-| Duplicate pair target loci  | *Thamnophis* scaffold and location | locus filtered from version 2 targets | type of loci (based on method/reason for including)|
+| Duplicate pair target loci  | *Thamnophis* scaffold and location | locus filtered from version 2 targets | type (based on method/reason for including)|
 |---|---|---|---|
 | WeinellEntry397; WeinellEntry1818 | NW_013657739.1:625317-626997  | WeinellEntry1818 | REE; immune |
 | WeinellEntry422; WeinellEntry1822 | NW_013657804.1:12345-14265   | WeinellEntry1822  | REE; immune |
