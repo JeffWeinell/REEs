@@ -40,9 +40,10 @@ Target entries removed because already targeted by another entry:
 - ALLWEINELL-ultrastringent-baits-180925je.fas.list.targcovg.table.gz: bait coverage statistics for version 2 loci
 
 **Version 3** targets and baits (these are the baits we actually ordered and used for sequence capture; 120nt):
-- Weinell_Additional-Loci_Entry3153to5735_4Oct2018.fasta: Targets added to version 3 that were not in version 2: WeinellEntry3153 – WeinellEntry5735.
+
 - Weinell_MultiHitProbes_Remove.txt: Probes from version 2 that were not included in version 3, because these hit multiple sites in the other genomes. Need to figure out which genomes were blasted against in this step.
-- Targets removed as a result of removing the multi-hit probes included: 
+- Version2-Loci-removed_allProbes-multiHit.tsv: List of targets removed as a result of removing the multi-hit probes. The removed targets included 115 REEs, 14 immune loci, and 12 UCEs.
+- Weinell_Additional-Loci_Entry3153to5735_4Oct2018.fasta: Targets added to version 3 that were not in version 2; these included WeinellEntry3153 – WeinellEntry5735.
 - ADD2WEINELL-ultrastringent-baits-181005je.fas.gz: Baits designed from version 3 set of target loci
 
 **Version 4** targets and baits (these are the baits we actually ordered and used for sequence capture; 120nt):
