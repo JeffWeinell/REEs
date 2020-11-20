@@ -62,14 +62,11 @@ loci.v3.zeroCoverage  <- setdiff(loci.v3.added.names,loci.v3.withProbes) ### the
 **Version 4** targets and baits (these are the baits we actually ordered and used for sequence capture; 120nt):
 
 - Version3-ZeroBaitCoverageLoci.tsv: Version 3 targets removed by Arbor's ultrastringent filtering method; 74 targets were filtered, include 67 REEs and seven vision loci.
-- Version3-probes-removed.tsv: List of version 3 baits not included in version 4, because the maximum number of baits = 20,020 for the set particular bait kit.
-
-(Use setdiff, gsub, and unique function in R to get this list by comparing the probe names in ADD2WEINELL-ultrastringent-baits-181005je.fas to the probe names in Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta).
-
-- Version3-Loci-removed.tsv: List of targets removed as a result of removing the baits in Version3-probes-removed.tsv.
-
-
+- Version3-probes-removed.tsv: List of version 3 baits not included in version 4 (n = 5,144), because the maximum number of baits is 20,020 for this kit.
+- Version3-Loci-removed.tsv: List of target loci removed (n = 2,189) as a result of removing the baits in Version3-probes-removed.tsv; loci removed included...
+- Weinell_  : This is the final set of target loci, for which baits were designed.
 - Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta: This is the set of baits purchased for sequence capture.
-- Arbor didn't provide a target coverage table for the final set of probes, but I calculated this myself and the results are in the file SnakeCap_probes_target-coverage.txt
+- SnakeCap_probes_target-coverage.txt: bait coverage table for the final set of target loci.
 
+Description of Arbor's ultrastringent filtration:
 "...  About our ultra-stringent filtration: a probe is eliminated from consideration if it is 25% RepeatMasked, or if its closest *Thamnophis* genomic hit is 25% or more soft-masked, or if the probe has multiple strong hybrid sites detected in the *Thamnophis* genome. To loosen the stringency we could increase the RM threshold and/or the number of tolerable hot hits in the genome. But I would strongly recommend you go with ultra-stringent if it hits sufficient target space for your application." - Arbor
