@@ -86,6 +86,10 @@ Specifically, the following descriptors and stats were calculated for each exon 
 
 6. Filter loci to include the most rapidly evolving loci that also meet criteria. I used the R function **pick.loci** to do the following: (1) filtered out loci if minimum percent genetic similarity (among snakes) to *T. sirtalis* was < 65% or = 100% (results = 64,546 loci retained; this stats table was not written to a file). For genes with multiple exons, I only kept the fastest evolving exon for each gene (i.e., only the exon with the lowest mean pairwise genetic distance to *T. sirtalis*; results = 16,650 loci retained; stats table: **stats_data_FastestExonPerGene.txt**). Next, I retained the set of exons with maximum number of variable sites in the target loci set, given a constraint on the total number of nucleotides that can be targeted (=1.2Mb for the SnakeCap probe set designed from the 20K Mybaits Kit; results = 2,068 loci retained (actually 2,071 because initially used max.capture.coverage = 1201000); stats table was written to the file **stats_data_FastestExonPerGene_best.txt**).
 
+REEs: Weinell entries 1–1814 and 1899–2152 (n = 2,068). The first 1,814 REEs and 84 immune loci (entries 1815–1898) were submitted to Arbor Biosciences for bait design. See the README.md file in the ArborFiles folder for a description of which loci were submitted to Arbor and how the probe set changed as Arbor performed ultrastringent filtration.
+
+Additional REEs? were also selected and submitted to Arbor (Weinell entries 3153-5177), but these were subsequently removed for the target loci (baits not designed for these), because of the constraints on the number of loci.
+
 
 ```
 
