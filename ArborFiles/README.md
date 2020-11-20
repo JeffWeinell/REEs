@@ -16,7 +16,7 @@ Targets removed because sequence is non-specific in *Thamnophis* genome; only ta
 | WeinellEntry496; WeinellEntry497  | NW_013657804.1:817033-817753; NW_013657804.1:820482-821202 | olfactory receptor 10A2-like; olfactory receptor 10A2-like | REEs |
 | WeinellEntry589; WeinellEntry590  | NW_013658610.1:34635-34875; NW_013658610.1:59791-60031 |  metalloproteinase inhibitor 4-like; metalloproteinase inhibitor 4-like | REEs |
 | WeinellEntry1670; WeinellEntry1671  | NW_013658165.1:745869-746109; NW_013658165.1:748461-748701  | helicase with zinc finger domain 2-like; helicase with zinc finger domain 2-like  | REEs |
-| WeinellEntry1815; WeinellEntry1840? or 1820?  | NW_013657739.1:619933-620293; NW_013657804.1:5056-5416 | class 2 MHC transactivator (exon7?); MHC class II transactivator-like | immune |
+| WeinellEntry1815; WeinellEntry1820  | NW_013657739.1:619933-620293; NW_013657804.1:5056-5416 | class 2 MHC transactivator (exon7?); MHC class II transactivator-like | immune |
 
 Target entries removed because already targeted by another entry:
 | Duplicate pair target loci  | *Thamnophis* scaffold and location | locus filtered from version 2 targets | type (based on method/reason for including)|
