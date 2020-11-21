@@ -86,16 +86,25 @@ Specifically, the following descriptors and stats were calculated for each exon 
 
 6. Filter loci to include the most rapidly evolving loci that also meet criteria. I used the R function **pick.loci** to do the following: (1) filtered out loci if minimum percent genetic similarity (among snakes) to *T. sirtalis* was < 65% or = 100% (results = 64,546 loci retained; this stats table was not written to a file). For genes with multiple exons, I only kept the fastest evolving exon for each gene (i.e., only the exon with the lowest mean pairwise genetic distance to *T. sirtalis*; results = 16,650 loci retained; stats table: **stats_data_FastestExonPerGene.txt**). From these, I retained the best set of exons (maximizing total number of variable sites) while meeting the contraints of the 20K my-baits kit (max nucleotides = 1.2Mb; max baits = 20K). Result = 2,068 REEs retained; see the stats table **stats_data_FastestExonPerGene_best.txt** for info on these; **stats_data_FastestExonPerGene_best_20Nov2020.txt** includes an extra column with the WeinellEntry names used by Arbor.
 
-Only a subset of the 2,068 REEs were included in the bait kit ordered from Arbor. Using ultra-stringent filtering, Arbor designed baits for 1,996 of these REEs (i.e. 72 REEs filtered; **Version1_ZeroBaitCoverageLoci.tsv**); eight other REEs were removed because 
+The 2,068 best REEs were submitted to Arbor Biosciences for probe design, and 1,998 passed ultrastringent filtration (70 REEs filtered: **Version1_ZeroBaitCoverageLoci.tsv**). Of these, 123 REEs were removed because all of the baits designed to target these loci were non-specific within either or both of the genomes of *T. sirtalis* or other *Thermophis baileyi*. An additional 212 REEs were removed so that other loci could be targeted (i.e., UCEs, immune, scalation, vision, and ddRAD-like loci).
 
-2068-72
+<!--
+REEs that failed ultrastringent filtration: 70
+REEs removed because all baits were non-specific: 123
+REEs removed to make room for other loci: 212
+Total REEs removed: 70+123+212 = 405
+1,653 REEs were synthesized and included in the bait kit.
+10 REEs unaccounted for...
+-->
 
+<!--
 Version1_ZeroBaitCoverageLoci.tsv: 70 REEs, 29 immune loci
 Version1_removed-loci_baits-nonspecific.tsv: 8 REEs, 2 immune loci
-Version1_removed-loci_duplicate-targets.tsv: 0 REEs, 12 immune loci
-Version2-Loci-removed_allProbes-multiHit.tsv: 116 REEs
-
-1,653 REEs were synthesized and included in the bait kit.
+Version1_removed-loci_duplicate-targets.tsv: 12 immune loci
+Version2-Loci-removed_allProbes-multiHit.tsv: 115 REEs, 14 immune loci, and 12 UCEs
+Version3-loci-removed_ZeroBaitCoverageLoci.tsv: 67 short exon fragments, 7 vision loci
+Version3-loci-removed_others.tsv: 212 REEs, 1,958 short exon fragments, 10 UCEs, 3 scalation, and 6 vision loci.
+-->
 
 See the README file in ArborFiles folder for a description about how the bait kit changed after working with Arbor.
 
