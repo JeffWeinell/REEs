@@ -29,7 +29,7 @@
   - 132 vision loci: WeinellEntry5276–5407
   - 328 ddRAD-like loci: WeinellEntry5408-5735.
 
-- Version 3 targets included XXX immune loci (plus XXX REEs that are also immune loci), XXX REEs, and XXX UCEs.
+- Version 3 targets included 1,865 REEs, 917 UCEs, 27 immune loci (plus **12?** REEs that are also immune loci), 2,025 short exon fragments, 98 scalation loci, 132 vision loci, and 328 ddRAD-like loci
   - ADD2WEINELL-ultrastringent-baits-181005je.fas.gz: baits designed from version 3 set of target loci
 
 <!--
