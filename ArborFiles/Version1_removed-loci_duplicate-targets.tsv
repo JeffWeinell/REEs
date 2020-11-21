@@ -1,13 +1,13 @@
-target name Thamnophis sirtalis genome region target types  notes
-WeinellEntry1818 NW_013657739.1:625317-626997 REE, immune  identical to WeinellEntry397
-WeinellEntry1822 NW_013657804.1:12345-14265 REE, immune  identical to WeinellEntry422
-WeinellEntry1824 NW_013657921.1:388522-388882 REE, immune  identical to WeinellEntry559
-WeinellEntry1828 NW_013658177.1:704767-705247 REE, immune  identical to WeinellEntry1539
-WeinellEntry1829 NW_013658448.1:275425-275785 REE, immune  identical to WeinellEntry248
-WeinellEntry1833 NW_013658549.1:435664-436024 REE, immune  identical to WeinellEntry612
-WeinellEntry1838 NW_013658556.1:485920-486280 REE, immune  identical to WeinellEntry1232
-WeinellEntry1841 NW_013659059.1:5414-5774 REE, immune  identical to WeinellEntry191
-WeinellEntry1847 NW_013659625.1:112053-112413 REE, immune  identical to WeinellEntry836
-WeinellEntry1850 NW_013659779.1:147829-148189 REE, immune  identical to WeinellEntry787
-WeinellEntry1854 NW_013660884.1:27009-27369 REE, immune  identical to WeinellEntry728
-WeinellEntry1856 NW_013661154.1:9614-9974 REE, immune  identical to WeinellEntry891
+target name	Thamnophis sirtalis genome region	target types 	notes
+WeinellEntry1818	NW_013657739.1:625317-626997	REE, immune	identical to WeinellEntry397
+WeinellEntry1822	NW_013657804.1:12345-14265	REE, immune 	identical to WeinellEntry422
+WeinellEntry1824	NW_013657921.1:388522-388882	REE, immune	identical to WeinellEntry559
+WeinellEntry1828	NW_013658177.1:704767-705247	REE, immune	identical to WeinellEntry1539
+WeinellEntry1829	NW_013658448.1:275425-275785	REE, immune	identical to WeinellEntry248
+WeinellEntry1833	NW_013658549.1:435664-436024	REE, immune	identical to WeinellEntry612
+WeinellEntry1838	NW_013658556.1:485920-486280	REE, immune	identical to WeinellEntry1232
+WeinellEntry1841	NW_013659059.1:5414-5774	REE, immune	identical to WeinellEntry191
+WeinellEntry1847	NW_013659625.1:112053-112413	REE, immune	identical to WeinellEntry836
+WeinellEntry1850	NW_013659779.1:147829-148189	REE, immune	identical to WeinellEntry787
+WeinellEntry1854	NW_013660884.1:27009-27369	REE, immune	identical to WeinellEntry728
+WeinellEntry1856	NW_013661154.1:9614-9974	REE, immune	identical to WeinellEntry891
