@@ -73,16 +73,32 @@ Thamnophis_sirtalis_GCF_001077635.1_readN|...
 
 2. *Thamnophis sirtalis* exome extracted from genome. I used the function **filter.annotationTable** to: (1) filter the original annotation table to only include annotations for regions that are both CDS regions and ≥ 120bp in length (result: n = 115,907 annotations for 77,329 unique regions), and (2) write the filtered annotation table to a file: **CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_withGenBankAcc_longer120bp.gff3**. Then, I used the function **get.exome.from.annotationTable** to extract from the genome the DNA sequences included in the filtered annotation table, and to write the extracted DNA sequences (the exome) to a file in fasta format: **Thamnophis_sirtalis_exome_longer120bp.fas**.
 
+```
+filter.annotationTable()
+get.exome.from.annotationTabl()
+```
+
 3. Find *T. sirtalis* exons in other squamate genomes. I downloaded all squamate genomes available from NCBI (**Table 4**). I queried each *T. sirtalis* exon against each squamate genome using the program **tblastx** (allowing up to 50 matches to be saved per query). This step produces a Hit Table for each species, which includes stats on each query/target match, including the bitscore, which is a measurement how good the match is (how likely the match corresponds to homology). **Note to self**: I used the cluster submission file **TBLASTX.sh** to perform this step. Then, I filtered each of the full (i.e., 50 matches/query) hit tables to include only the best match/query (max bitscore) using the R function **reportBestMatches**.
 
+```
+reportBestMatches()
+```
+
 4. Extract exomes (minimum exon length 120nt) for each squamate species. For each species and exon, I extracted the DNA sequence of the best match in the filtered hit table from step 2, and I saved these sequences to a fasta file; this step was performed using the function **get.exome.from.blastTable**.
+
+```
+get.exome.from.blastTable()
+```
 
 5. Align shared exons and calculate stats. I used the R function **makeExomeStatsTable** to do all of the following:
   - obtain the set of *T. sirtalis* exons present in all exomes (from step 3), i.e., the shared exons
   - perform multiple sequence alignment (MAFFT algorithm) for each of the shared exons
   - calculate a set of stats for each shared exon alignment, and save results to the file **stats_exome_data_TBLASTX.txt** (results: includes stats for 66,489 alignments). 
   
-Specifically, the following descriptors and stats were calculated for each exon alignment and saved to the file **stats_exome_data_TBLASTX.txt**: (1) NCBI Reference Sequence ID and location (stop_start) of CDS region on contig (2) number of species in alignment (always 11, because 11 species included, and only shared loci were aligned), (3) number of sites in which at least four species represented, (4) number of parsimony informative sites, (5) percent of sites parsimony informative, (6) mean pairwise percent genetic similarity to *T. sirtalis*, (7–17) percent genetic similarity to *T. sirtalis* for each species, (18) alignment width, (19) width of *T. sirtalis* exon, (20) gene name associated with exon, (21) mean number of variable sites compared to *T. sirtalis*, (22) minimum percent genetic similarity to *T. sirtalis* (among all species included), (23) minimum percent genetic similarity to *T. sirtalis* (among all snakes included). The gene name for each exon was extracted from the last column of the filtered annotation table.
+```
+stats_exome <- makeExomeStatsTable()
+```
+The file **stats_exome_data_TBLASTX.txt** contains a table with NCBI annotation information for each exon. Rows correspond to exons, and columns include the following: (1) *Thamnophis sirtalis* NCBI Reference Sequence ID and location of exon (stop_start) **(start_stop?)** (2) number of species in alignment (always 11, because 11 species included, and only shared loci were aligned), (3) number of sites with at least four species represented, (4) number of parsimony informative sites, (5) percent of sites parsimony informative, (6) mean pairwise percent genetic similarity to *T. sirtalis*, (7–17) percent genetic similarity of each species to *T. sirtalis*, (18) exon alignment width, (19) width of *T. sirtalis* exon, (20) gene name associated with the exon (extracted from the last column of the filtered annotation table of *T. sirtalis*), (21) mean number of variable sites compared to *T. sirtalis*, (22) minimum percent genetic similarity to *T. sirtalis* (among the 11 species included), (23) minimum percent genetic similarity to *T. sirtalis* among the snakes included.
 
 6. Filter loci to include the most rapidly evolving loci that also meet criteria. I used the R function **pick.loci** to do the following: (1) filtered out loci if minimum percent genetic similarity (among snakes) to *T. sirtalis* was < 65% or = 100% (results = 64,546 loci retained; this temporary stats table was not written to a file). (2) For genes with multiple exons, I only kept the fastest evolving exon for each gene (the exon with the lowest mean pairwise genetic distance to *T. sirtalis*).
 
