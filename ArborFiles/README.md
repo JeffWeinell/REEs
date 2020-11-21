@@ -61,9 +61,9 @@ loci.v3.zeroCoverage  <- setdiff(loci.v3.added.names,loci.v3.withProbes) ### the
 
 **Version 4** targets and baits (these are the baits we actually ordered and used for sequence capture; 120nt):
 
-- Version3-ZeroBaitCoverageLoci.tsv: Version 3 targets removed by Arbor's ultrastringent filtering method; 74 targets were filtered, include 67 REEs and seven vision loci.
+- Version3-ZeroBaitCoverageLoci.tsv: Version 3 targets removed by Arbor's ultrastringent filtering method; 74 targets were filtered, include 67 short exon fragments and 7 vision loci.
 - Version3-probes-removed.tsv: List of version 3 baits not included in version 4 (n = 5,144), because the maximum number of baits is 20,020 for this kit.
-- Version3-Loci-removed.tsv: List of target loci removed (n = 2,189) as a result of removing the baits in Version3-probes-removed.tsv; removed targets included 212 REEs, 1,958 short exon fragments (single-bait), 10 UCEs, 3 scalation, and 6 vision loci.
+- Version3-Loci-removed.tsv: List of target loci removed (n = 2,189) as a result of removing the baits in Version3-probes-removed.tsv; removed targets included 212 REEs, 1,958 short exon fragments, 10 UCEs, 3 scalation, and 6 vision loci.
 - Weinell_TargetLoci_Snakes_Final_18April2019.fa: This is the final set of target loci, for which baits were designed.
 - Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta: This is the set of baits purchased for sequence capture.
 - SnakeCap_probes_target-coverage.txt: bait coverage table for the final set of target loci.
