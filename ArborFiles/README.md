@@ -14,8 +14,8 @@
 - Version2_additional-targets_Entry1899to3152_20Sep2018.txt: New targets added to version 2, including:
   - 254 REEs: WeinellEntry1899–2152
   - 1,000 UCEs: WeinellEntry2153–3152
-- Version 2 targets include 41 immune loci (plus 12 REEs that are also MHC loci), 1,990 REEs, and 1,000 UCEs.
-  - ALLWEINELL-ultrastringent-baits-180925je.fas.gz: Baits designed from version 2 set of target loci
+- Version 2 targets included 41 immune loci (plus 12 REEs that are also immune loci), 1,990 REEs, and 1,000 UCEs.
+  - ALLWEINELL-ultrastringent-baits-180925je.fas.gz: baits designed from version 2 set of target loci
   - ALLWEINELL-ultrastringent-baits-180925je.fas.list.targcovg.table.gz: bait coverage statistics for version 2 loci.
 
 **Version 3** targets and baits (not used; 120nt baits): 
@@ -29,7 +29,8 @@
   - 132 vision loci: WeinellEntry5276–5407
   - 328 ddRAD-like loci: WeinellEntry5408-5735.
 
-- ADD2WEINELL-ultrastringent-baits-181005je.fas.gz: Baits designed from version 3 set of target loci
+- Version 3 targets included 41 immune loci (plus 12 REEs that are also MHC loci), 1,990 REEs, and 1,000 UCEs.
+  - ADD2WEINELL-ultrastringent-baits-181005je.fas.gz: baits designed from version 3 set of target loci
 
 <!--
 R Code used to get the list of loci in Version3-ZeroBaitCoverageLoci.tsv
