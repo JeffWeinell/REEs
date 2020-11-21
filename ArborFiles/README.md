@@ -1,14 +1,14 @@
 ## Files provided to or by Arbor Biosciences:
 
 **Version 1** targets and baits (not used; 120nt baits):
-- Target-Loci_Jeff-Weinell_10Sep2018.fasta: First set of proposed target loci submitted to Arbor (corresponding to WeinellEntry1–WeinellEntry1898)
+- Version1_Target-Loci_Jeff-Weinell_10Sep2018.fasta: First set of proposed target loci submitted to Arbor (corresponding to WeinellEntry1–WeinellEntry1898)
 - WEINELL-ultrastringent-baits-180919je.fas.gz: Baits designed from version 1 targets
 - WEINELL-ultrastringent-baitcoverage-180919je.txt.gz: bait coverage statistics for version 1 loci
 
 **Version 2** targets and baits (not used; 120nt baits):
-- Version1_ZeroBaitCoverageLoci.tsv: The list of targets (version 1 set) filtered after application of Arbor's ultrastringent filtering method (70 REEs, 29 immune loci); these loci had 0% bait coverage.
-- Version1_removed-loci_baits-nonspecific.tsv: list of targets filtered because their baits matched multiple regions of *T. sirtalis* genome (8 REEs, 2 immune loci).
-- Version1_removed-loci_duplicate-targets.tsv: list of WeinellEntry targets filtered because they were already targeted under a different WeinellEntry name. Specifically, 12 immune loci were also identified as REEs and therefore these were initially included distinct targets.
+- Version1-loci-removed_ZeroBaitCoverageLoci.tsv: The list of targets (version 1 set) filtered after application of Arbor's ultrastringent filtering method (70 REEs, 29 immune loci); these loci had 0% bait coverage.
+- Version1-loci-removed_baits-nonspecific.tsv: list of targets filtered because their baits matched multiple regions of *T. sirtalis* genome (8 REEs, 2 immune loci).
+- Version1-loci-removed_duplicate-targets.tsv: list of WeinellEntry targets filtered because they were already targeted under a different WeinellEntry name. Specifically, 12 immune loci were also identified as REEs and therefore these were initially included distinct targets.
 
 - Weinell_Additional_Targets_20Sep2018.txt: Targets added to version 2 that were not in version 1, including more REEs (WeinellEntry1899–WeinellEntry2152) and 1,000 UCEs (WeinellEntry2153–WeinellEntry3152). All of these passed ultrastringent filtering.
 
