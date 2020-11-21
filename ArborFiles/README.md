@@ -42,7 +42,7 @@ Target entries removed because already targeted by another entry:
 **Version 3** targets and baits (not used; 120nt baits): 
 - Weinell_MultiHitProbes_Remove.txt: Probes from version 2 that were not included in version 3, because these hit multiple sites in the other genomes. **Need to figure out which genomes were blasted against in this step.**
 - Version2-Loci-removed_allProbes-multiHit.tsv: List of targets removed as a result of removing the multi-hit probes. The removed targets included 115 REEs, 14 immune loci, and 12 UCEs.
-- Weinell_Additional-Loci_Entry3153to5735_4Oct2018.fasta: Targets added to version 3 that were not in version 2; these included 2,025 **REEs?** (WeinellEntry3153–5177), 98 scalation loci (WeinellEntry5178-WeinellEntry5275), 132 vision loci (WeinellEntry5276–5407), and 328 ddRAD-like loci (WeinellEntry5408-5735).
+- Weinell_Additional-Loci_Entry3153to5735_4Oct2018.fasta: Targets added to version 3 that were not in version 2; these included 2,025 partial exons (WeinellEntry3153–5177; one bait per exon, and each exon from a different gene), 98 scalation loci (WeinellEntry5178-WeinellEntry5275), 132 vision loci (WeinellEntry5276–5407), and 328 ddRAD-like loci (WeinellEntry5408-5735).
 - ADD2WEINELL-ultrastringent-baits-181005je.fas.gz: Baits designed from version 3 set of target loci
 
 <!--
@@ -63,7 +63,7 @@ loci.v3.zeroCoverage  <- setdiff(loci.v3.added.names,loci.v3.withProbes) ### the
 
 - Version3-ZeroBaitCoverageLoci.tsv: Version 3 targets removed by Arbor's ultrastringent filtering method; 74 targets were filtered, include 67 REEs and seven vision loci.
 - Version3-probes-removed.tsv: List of version 3 baits not included in version 4 (n = 5,144), because the maximum number of baits is 20,020 for this kit.
-- Version3-Loci-removed.tsv: List of target loci removed (n = 2,189) as a result of removing the baits in Version3-probes-removed.tsv; removed targets included 2,170 REEs, 10 UCEs, 3 scalation, and 6 vision loci.
+- Version3-Loci-removed.tsv: List of target loci removed (n = 2,189) as a result of removing the baits in Version3-probes-removed.tsv; removed targets included 145 REEs, 2,025 partial exons (single-bait), 10 UCEs, 3 scalation, and 6 vision loci.
 - Weinell_TargetLoci_Snakes_Final_18April2019.fa: This is the final set of target loci, for which baits were designed.
 - Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta: This is the set of baits purchased for sequence capture.
 - SnakeCap_probes_target-coverage.txt: bait coverage table for the final set of target loci.
