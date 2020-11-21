@@ -84,9 +84,24 @@ Thamnophis_sirtalis_GCF_001077635.1_readN|...
   
 Specifically, the following descriptors and stats were calculated for each exon alignment and saved to the file **stats_exome_data_TBLASTX.txt**: (1) NCBI Reference Sequence ID and location (stop_start) of CDS region on contig (2) number of species in alignment (always 11, because 11 species included, and only shared loci were aligned), (3) number of sites in which at least four species represented, (4) number of parsimony informative sites, (5) percent of sites parsimony informative, (6) mean pairwise percent genetic similarity to *T. sirtalis*, (7–17) percent genetic similarity to *T. sirtalis* for each species, (18) alignment width, (19) width of *T. sirtalis* exon, (20) gene name associated with exon, (21) mean number of variable sites compared to *T. sirtalis*, (22) minimum percent genetic similarity to *T. sirtalis* (among all species included), (23) minimum percent genetic similarity to *T. sirtalis* (among all snakes included). The gene name for each exon was extracted from the last column of the filtered annotation table.
 
-6. Filter loci to include the most rapidly evolving loci that also meet criteria. I used the R function **pick.loci** to do the following: (1) filtered out loci if minimum percent genetic similarity (among snakes) to *T. sirtalis* was < 65% or = 100% (results = 64,546 loci retained; this stats table was not written to a file). For genes with multiple exons, I only kept the fastest evolving exon for each gene (i.e., only the exon with the lowest mean pairwise genetic distance to *T. sirtalis*; results = 16,650 loci retained; stats table: **stats_data_FastestExonPerGene.txt**). From these, I retained the best set of exons (maximizing total number of variable sites) while meeting the contraints of the 20K my-baits kit (max nucleotides = 1.2Mb; max baits = 20K). Result = 2,068 REEs retained; see the stats table **stats_data_FastestExonPerGene_best.txt** for info on these; **stats_data_FastestExonPerGene_best_20Nov2020.txt** includes an extra column with the WeinellEntry names used by Arbor.
+6. Filter loci to include the most rapidly evolving loci that also meet criteria. I used the R function **pick.loci** to do the following: (1) filtered out loci if minimum percent genetic similarity (among snakes) to *T. sirtalis* was < 65% or = 100% (results = 64,546 loci retained; this temporary stats table was not written to a file). (2) For genes with multiple exons, I only kept the fastest evolving exon for each gene (the exon with the lowest mean pairwise genetic distance to *T. sirtalis*).
 
-The 2,068 best REEs were submitted to Arbor Biosciences for probe design, and 1,998 passed ultrastringent filtration (70 REEs filtered: **Version1_ZeroBaitCoverageLoci.tsv**). Of these, 123 REEs were removed because all of the baits designed to target these loci were non-specific within either or both of the genomes of *T. sirtalis* or other *Thermophis baileyi*. An additional 212 REEs were removed so that other loci could be targeted (i.e., UCEs, immune, scalation, vision, and ddRAD-like loci).
+```
+result.pident <- pick.loci(statsTable.path = "~/AlignedExonStats/stats_exome_data_TBLASTX.txt", output.dir = "~/AlignedExonStats/", primary.species = "Thamnophis_sirtalis", use.min.pident.subgroup = T, species.subgroup = c(7:14), min.pident.keep = c(65,100), max.capture.coverage = 1200000, write.stats.tables = T, plot.results = T, fast.stat = "pident")
+```
+
+Running the pick.loci function produced the table "result.pident", which contains percent identity stats for the 16,650 loci retained; this stats table was saved to the file  **stats_data_FastestExonPerGene.txt**.
+
+From these 16,650 exons, I chose the set of exons that maximizes the number of variable sites while meeting the following constraints and conditions: total number of nucleotides targetted ≤ 1.2Mb and number of baits ≤ 20,000 (constraints of the 20K my-baits kit), bait size = 120nt, and bait tiling = 50% overlap.
+
+```
+Insert code showing the function used for selecting the optimal set of target exons given the constraints listed above. This script sorted the exons by % similarity to T. sirtalis (increasing simility), calculated the number of baits needed to capture each exon, and then performed a rolling summation across the vector of number of baits/exon, and a rolling summation of target exon length. The largest set of exons for which number of baits ≤ 20,000 and number of nucleotides ≤ 120,000,000 was chosen as the optimal set.
+```
+
+Result = 2,068 REEs retained; the stats table for these loci was written to the file **stats_data_FastestExonPerGene_best.txt**; an updated version of this stats table that includes the WeinellEntry locus names is **stats_data_FastestExonPerGene_best_20Nov2020.txt**.
+
+These 2,068 REEs were submitted to Arbor Biosciences for probe design. Arbor performed ultrastringent filtration these loci which resulted in the removal of 70 REEs (**Version1_ZeroBaitCoverageLoci.tsv**), whereas 1,998 passed this step. An additional 123 REEs were removed because the baits designed to target these loci were all non-specific within the genomes of *T. sirtalis* and/or *Thermophis baileyi*; 212 other REEs were removed to allow some baits to be used to target other types of loci (UCEs, immune, scalation, vision, and ddRAD-like loci). The remaining 1,653 REEs were synthesized and included in the mybaits 20K bait kit (product no. 3001160). 
+
 
 <!--
 REEs that failed ultrastringent filtration: 70
@@ -104,16 +119,9 @@ Version1_removed-loci_duplicate-targets.tsv: 12 immune loci
 Version2-Loci-removed_allProbes-multiHit.tsv: 115 REEs, 14 immune loci, and 12 UCEs
 Version3-loci-removed_ZeroBaitCoverageLoci.tsv: 67 short exon fragments, 7 vision loci
 Version3-loci-removed_others.tsv: 212 REEs, 1,958 short exon fragments, 10 UCEs, 3 scalation, and 6 vision loci.
+See the README file in ArborFiles folder for a description about how the bait kit changed after working with Arbor.
 -->
 
-See the README file in ArborFiles folder for a description about how the bait kit changed after working with Arbor.
-
-REEs: Weinell entries 1–1814 and 1899–2152 (n = 2,068). The first 1,814 REEs and 84 immune loci (entries 1815–1898) were submitted to Arbor Biosciences for bait design. See the README.md file in the ArborFiles folder for a description of which loci were submitted to Arbor and how the probe set changed as Arbor performed ultrastringent filtration. A set of short exon fragments (one bait per exon) were also initially selected and submitted to Arbor for bait design (Weinell entries 3153-5177), but these targets and baits were not included in the bait kit ordered from Arbor due to the 20K bait limitation of the my-baits 1 16 reaction kit (product no. 3001160).
-
-```
-result.pident <- pick.loci(statsTable.path = "~/AlignedExonStats/stats_exome_data_TBLASTX.txt", output.dir = "~/AlignedExonStats/", primary.species = "Thamnophis_sirtalis", use.min.pident.subgroup = T, species.subgroup = c(7:14), min.pident.keep = c(65,100), max.capture.coverage = 1200000, write.stats.tables = T, plot.results = T, fast.stat = "pident")
-
-```
 
 <!--- Next step was done but wasn't necessary. It might be good to run this as a sanity check when picking REEs for future probe sets
 7. I used the R function align.and.concatenate.best.exons to perform multiple sequence alignment (MAFFT algorithm) for each exon in the "stats_data_FastestExonPerGene_best.txt" file (which was generated by the pick.loci function in step 5), and to concatenate exon alignments and generate an associated partition file. Single-locus alignments, the concatenated loci alignment, and the partition file were each saved to file. I estimated gene trees from these alignments (using IQTREE) to get a sense for how much phylogenetic information each locus contained.
