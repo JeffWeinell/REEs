@@ -1,4 +1,4 @@
-target name	Thamnophis sirtalis genome region	target types 	notes
+target name	Thamnophis sirtalis genome region	target types 	reason for removal
 WeinellEntry1818	NW_013657739.1:625317-626997	REE, immune	identical to WeinellEntry397
 WeinellEntry1822	NW_013657804.1:12345-14265	REE, immune 	identical to WeinellEntry422
 WeinellEntry1824	NW_013657921.1:388522-388882	REE, immune	identical to WeinellEntry559
