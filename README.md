@@ -84,19 +84,27 @@ Thamnophis_sirtalis_GCF_001077635.1_readN|...
   
 Specifically, the following descriptors and stats were calculated for each exon alignment and saved to the file **stats_exome_data_TBLASTX.txt**: (1) NCBI Reference Sequence ID and location (stop_start) of CDS region on contig (2) number of species in alignment (always 11, because 11 species included, and only shared loci were aligned), (3) number of sites in which at least four species represented, (4) number of parsimony informative sites, (5) percent of sites parsimony informative, (6) mean pairwise percent genetic similarity to *T. sirtalis*, (7–17) percent genetic similarity to *T. sirtalis* for each species, (18) alignment width, (19) width of *T. sirtalis* exon, (20) gene name associated with exon, (21) mean number of variable sites compared to *T. sirtalis*, (22) minimum percent genetic similarity to *T. sirtalis* (among all species included), (23) minimum percent genetic similarity to *T. sirtalis* (among all snakes included). The gene name for each exon was extracted from the last column of the filtered annotation table.
 
-6. Filter loci to include the most rapidly evolving loci that also meet criteria. I used the R function **pick.loci** to do the following: (1) filtered out loci if minimum percent genetic similarity (among snakes) to *T. sirtalis* was < 65% or = 100% (results = 64,546 loci retained; this stats table was not written to a file). For genes with multiple exons, I only kept the fastest evolving exon for each gene (i.e., only the exon with the lowest mean pairwise genetic distance to *T. sirtalis*; results = 16,650 loci retained; stats table: **stats_data_FastestExonPerGene.txt**). Next, I retained the set of exons with maximum number of variable sites in the target loci set, given a constraint on the total number of nucleotides that can be targeted (=1.2Mb for the SnakeCap probe set designed from the 20K Mybaits Kit; results = 2,068 loci retained (actually 2,071 because initially used max.capture.coverage = 1201000); stats table was written to the file **stats_data_FastestExonPerGene_best.txt**).
+6. Filter loci to include the most rapidly evolving loci that also meet criteria. I used the R function **pick.loci** to do the following: (1) filtered out loci if minimum percent genetic similarity (among snakes) to *T. sirtalis* was < 65% or = 100% (results = 64,546 loci retained; this stats table was not written to a file). For genes with multiple exons, I only kept the fastest evolving exon for each gene (i.e., only the exon with the lowest mean pairwise genetic distance to *T. sirtalis*; results = 16,650 loci retained; stats table: **stats_data_FastestExonPerGene.txt**). From these, I retained the best set of exons (maximizing total number of variable sites) while meeting the contraints of the 20K my-baits kit (max nucleotides = 1.2Mb; max baits = 20K). Result = 2,068 REEs retained; see the stats table **stats_data_FastestExonPerGene_best.txt** for info on these; **stats_data_FastestExonPerGene_best_20Nov2020.txt** includes an extra column with the WeinellEntry names used by Arbor.
 
-REEs: Weinell entries 1–1814 and 1899–2152 (n = 2,068). The first 1,814 REEs and 84 immune loci (entries 1815–1898) were submitted to Arbor Biosciences for bait design. See the README.md file in the ArborFiles folder for a description of which loci were submitted to Arbor and how the probe set changed as Arbor performed ultrastringent filtration.
+Only a subset of the 2,068 REEs were included in the bait kit ordered from Arbor. Using ultra-stringent filtering, Arbor designed baits for 1,996 of these REEs (i.e. 72 REEs filtered; **Version1_ZeroBaitCoverageLoci.tsv**); eight other REEs were removed because 
 
-Additional REEs? were also selected and submitted to Arbor (Weinell entries 3153-5177), but these were subsequently removed for the target loci (baits not designed for these), because of the constraints on the number of loci.
+2068-72
 
+Version1_ZeroBaitCoverageLoci.tsv: 70 REEs, 29 immune loci
+Version1_removed-loci_baits-nonspecific.tsv: 8 REEs, 2 immune loci
+Version1_removed-loci_duplicate-targets.tsv: 0 REEs, 12 immune loci
+Version2-Loci-removed_allProbes-multiHit.tsv: 116 REEs
+
+1,653 REEs were synthesized and included in the bait kit.
+
+See the README file in ArborFiles folder for a description about how the bait kit changed after working with Arbor.
+
+REEs: Weinell entries 1–1814 and 1899–2152 (n = 2,068). The first 1,814 REEs and 84 immune loci (entries 1815–1898) were submitted to Arbor Biosciences for bait design. See the README.md file in the ArborFiles folder for a description of which loci were submitted to Arbor and how the probe set changed as Arbor performed ultrastringent filtration. A set of short exon fragments (one bait per exon) were also initially selected and submitted to Arbor for bait design (Weinell entries 3153-5177), but these targets and baits were not included in the bait kit ordered from Arbor due to the 20K bait limitation of the my-baits 1 16 reaction kit (product no. 3001160).
 
 ```
-
 result.pident <- pick.loci(statsTable.path = "~/AlignedExonStats/stats_exome_data_TBLASTX.txt", output.dir = "~/AlignedExonStats/", primary.species = "Thamnophis_sirtalis", use.min.pident.subgroup = T, species.subgroup = c(7:14), min.pident.keep = c(65,100), max.capture.coverage = 1200000, write.stats.tables = T, plot.results = T, fast.stat = "pident")
 
 ```
-
 
 <!--- Next step was done but wasn't necessary. It might be good to run this as a sanity check when picking REEs for future probe sets
 7. I used the R function align.and.concatenate.best.exons to perform multiple sequence alignment (MAFFT algorithm) for each exon in the "stats_data_FastestExonPerGene_best.txt" file (which was generated by the pick.loci function in step 5), and to concatenate exon alignments and generate an associated partition file. Single-locus alignments, the concatenated loci alignment, and the partition file were each saved to file. I estimated gene trees from these alignments (using IQTREE) to get a sense for how much phylogenetic information each locus contained.
