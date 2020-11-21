@@ -6,20 +6,28 @@
 - WEINELL-ultrastringent-baitcoverage-180919je.txt.gz: bait coverage statistics for version 1 loci
 
 **Version 2** targets and baits (not used; 120nt baits):
-- Version1-loci-removed_ZeroBaitCoverageLoci.tsv: The list of targets (version 1 set) filtered after application of Arbor's ultrastringent filtering method (70 REEs, 29 immune loci); these loci had 0% bait coverage.
-- Version1-loci-removed_baits-nonspecific.tsv: list of targets filtered because all of their baits matched multiple regions of *T. sirtalis* genome (8 REEs, 2 immune loci).
+- Version1-loci-removed_ZeroBaitCoverageLoci.tsv: The list of version 1 targets removed after application of Arbor's ultrastringent filtering method. Removed loci included:
+  - 70 REEs and 29 immune loci
+- Version1-loci-removed_baits-nonspecific.tsv: list of targets filtered because all of their baits matched multiple regions of *T. sirtalis* genome. The loci removed for this reason included:
+  - 8 REEs and 2 immune loci
 - Version1-loci-removed_duplicate-targets.tsv: list of WeinellEntry targets filtered because they were already targeted under a different WeinellEntry name. Specifically, 12 immune loci were also identified as REEs and therefore these were initially included distinct targets.
-- Version2_additional-targets_Entry1899to3152_20Sep2018.txt: Targets added to version 2 that were not in version 1, including more REEs (WeinellEntry1899–WeinellEntry2152) and 1,000 UCEs (WeinellEntry2153–WeinellEntry3152). All of these passed ultrastringent filtering.
-
+- Version2_additional-targets_Entry1899to3152_20Sep2018.txt: New targets added to version 2, including:
+  - 254 REEs: WeinellEntry1899–2152
+  - 1,000 UCEs WeinellEntry2153–3152
 - Version 2 targets include 41 immune loci (plus 12 REEs that are also MHC loci), 1,990 REEs, and 1,000 UCEs.
   - ALLWEINELL-ultrastringent-baits-180925je.fas.gz: Baits designed from version 2 set of target loci
-  - ALLWEINELL-ultrastringent-baits-180925je.fas.list.targcovg.table.gz: bait coverage statistics for version 2 loci
+  - ALLWEINELL-ultrastringent-baits-180925je.fas.list.targcovg.table.gz: bait coverage statistics for version 2 loci.
 
 **Version 3** targets and baits (not used; 120nt baits): 
 
-- Version2-baits-removed_baits-nonspecific.txt: Probes from version 2 that were not included in version 3, because these hit multiple sites in the other genomes. **Need to figure out which genomes were blasted against in this step.**
-- Version2-loci-removed_baits-nonspecific.tsv: List of targets removed as a result of removing the multi-hit probes. The removed targets included 115 REEs, 14 immune loci, and 12 UCEs.
-- Version3_additional-targets_Entry3153to5735_4Oct2018.fasta: Targets added to version 3 that were not in version 2; these included 2,025 short exon fragments (WeinellEntry3153–5177; single-bait per exon), 98 scalation loci (WeinellEntry5178-WeinellEntry5275), 132 vision loci (WeinellEntry5276–5407), and 328 ddRAD-like loci (WeinellEntry5408-5735).
+- Version2-baits-removed_baits-nonspecific.txt: Probes from version 2 that were not included in version 3, because these hit multiple sites in the other genomes. **Need to figure out which genomes were blasted against in this step.**.
+- Version2-loci-removed_baits-nonspecific.tsv: List of targets removed as a result of removing the multi-hit probes. The removed targets included:
+  - 115 REEs, 14 immune loci, and 12 UCEs
+- Version3_additional-targets_Entry3153to5735_4Oct2018.fasta: List of new targets added to version 3, including:
+  - 2,025 short exon fragments: WeinellEntry3153–5177
+  - 98 scalation loci: WeinellEntry5178-5275
+  - 132 vision loci: WeinellEntry5276–5407
+  - 328 ddRAD-like loci: WeinellEntry5408-5735.
 
 - ADD2WEINELL-ultrastringent-baits-181005je.fas.gz: Baits designed from version 3 set of target loci
 
