@@ -12,8 +12,8 @@
 - Version2_additional-targets_20Sep2018.txt: Targets added to version 2 that were not in version 1, including more REEs (WeinellEntry1899–WeinellEntry2152) and 1,000 UCEs (WeinellEntry2153–WeinellEntry3152). All of these passed ultrastringent filtering.
 
 - Version 2 targets include 41 immune loci (plus 12 REEs that are also MHC loci), 1,990 REEs, and 1,000 UCEs.
--- ALLWEINELL-ultrastringent-baits-180925je.fas.gz: Baits designed from version 2 set of target loci
--- ALLWEINELL-ultrastringent-baits-180925je.fas.list.targcovg.table.gz: bait coverage statistics for version 2 loci
+  - ALLWEINELL-ultrastringent-baits-180925je.fas.gz: Baits designed from version 2 set of target loci
+  - ALLWEINELL-ultrastringent-baits-180925je.fas.list.targcovg.table.gz: bait coverage statistics for version 2 loci
 
 **Version 3** targets and baits (not used; 120nt baits): 
 
