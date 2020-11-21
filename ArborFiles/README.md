@@ -66,7 +66,7 @@ loci.v3.zeroCoverage  <- setdiff(loci.v3.added.names,loci.v3.withProbes) ### the
 - Version3-Loci-removed.tsv: List of target loci removed (n = 2,189) as a result of removing the baits in Version3-probes-removed.tsv; removed targets included 212 REEs, 1,958 short exon fragments, 10 UCEs, 3 scalation, and 6 vision loci.
 - Weinell_TargetLoci_Snakes_Final_18April2019.fa: This is the final set of target loci, for which baits were designed.
 - Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta: This is the set of baits purchased for sequence capture.
-- SnakeCap_probes_target-coverage.txt: bait coverage table for the final set of target loci.
+- Final_SnakeCap_probes_target-coverage.txt: bait coverage table for the final set of target loci.
 
 Description of Arbor's ultrastringent filtration:
 "...  About our ultra-stringent filtration: a probe is eliminated from consideration if it is 25% RepeatMasked, or if its closest *Thamnophis* genomic hit is 25% or more soft-masked, or if the probe has multiple strong hybrid sites detected in the *Thamnophis* genome. To loosen the stringency we could increase the RM threshold and/or the number of tolerable hot hits in the genome. But I would strongly recommend you go with ultra-stringent if it hits sufficient target space for your application." - Arbor
