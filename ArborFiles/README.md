@@ -13,7 +13,7 @@
 - Version1-loci-removed_duplicate-targets.tsv: list of WeinellEntry targets filtered because they were already targeted under a different WeinellEntry name. Specifically, 12 immune loci were also identified as REEs and therefore these were initially included distinct targets.
 - Version2_additional-targets_Entry1899to3152_20Sep2018.txt: New targets added to version 2, including:
   - 254 REEs: WeinellEntry1899–2152
-  - 1,000 UCEs WeinellEntry2153–3152
+  - 1,000 UCEs: WeinellEntry2153–3152
 - Version 2 targets include 41 immune loci (plus 12 REEs that are also MHC loci), 1,990 REEs, and 1,000 UCEs.
   - ALLWEINELL-ultrastringent-baits-180925je.fas.gz: Baits designed from version 2 set of target loci
   - ALLWEINELL-ultrastringent-baits-180925je.fas.list.targcovg.table.gz: bait coverage statistics for version 2 loci.
