@@ -1,11 +1,11 @@
 ## Files provided to or by Arbor Biosciences:
 
-**Version 1** targets and baits (not used; 120nt baits):
+**Version 1** targets and baits (not the final set):
 - Version1_Target-Loci_Jeff-Weinell_10Sep2018.fasta: First set of proposed target loci submitted to Arbor (corresponding to WeinellEntry1–WeinellEntry1898)
 - WEINELL-ultrastringent-baits-180919je.fas.gz: Baits designed from version 1 targets
 - WEINELL-ultrastringent-baitcoverage-180919je.txt.gz: bait coverage statistics for version 1 loci
 
-**Version 2** targets and baits (not used; 120nt baits):
+**Version 2** targets and baits (not the final set):
 - Version1-loci-removed_ZeroBaitCoverageLoci.tsv: The list of version 1 targets removed after application of Arbor's ultrastringent filtering method. Removed loci included:
   - 70 REEs and 29 immune loci
 - Version1-loci-removed_baits-nonspecific.tsv: list of targets filtered because all of their baits matched multiple regions of *T. sirtalis* genome. The loci removed for this reason included:
@@ -18,7 +18,7 @@
   - ALLWEINELL-ultrastringent-baits-180925je.fas.gz: baits designed from version 2 set of target loci
   - ALLWEINELL-ultrastringent-baits-180925je.fas.list.targcovg.table.gz: bait coverage statistics for version 2 loci.
 
-**Version 3** targets and baits (not used; 120nt baits): 
+**Version 3** targets and baits (not the final set): 
 
 - Version2-baits-removed_baits-nonspecific.txt: Probes from version 2 that were not included in version 3, because these hit multiple sites in the other genomes. **Need to figure out which genomes were blasted against in this step.**.
 - Version2-loci-removed_baits-nonspecific.tsv: List of targets removed as a result of removing the multi-hit probes. The removed targets included:
@@ -29,7 +29,7 @@
   - 132 vision loci: WeinellEntry5276–5407
   - 328 ddRAD-like loci: WeinellEntry5408-5735.
 
-- Version 3 targets included 41 immune loci (plus 12 REEs that are also MHC loci), 1,990 REEs, and 1,000 UCEs.
+- Version 3 targets included XXX immune loci (plus XXX REEs that are also immune loci), XXX REEs, and XXX UCEs.
   - ADD2WEINELL-ultrastringent-baits-181005je.fas.gz: baits designed from version 3 set of target loci
 
 <!--
