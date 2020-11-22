@@ -293,13 +293,43 @@ Set of 900–1000bp regions of the Sense Strand containing Sbfi and EcoRI recogn
 
 #### Overview:
 
-**MHC loci**: I used grep to search within the annotation table of the *T. sirtalis* genome (**ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3**) for CDS features of major histocompatibility genes, using the following grep search terms: (1) "MHC", (2) "major histocompatibility". Results = 86 CDS regions corresponding to exons of 19 genes (**ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3**). I used the function **get.loci.from.annotationTable** to extract the 86 MHC loci from the *T. sirtalis* genome:
+**MHC loci**: I used grep to search within the annotation table of the *T. sirtalis* genome (**ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3**) for CDS features of major histocompatibility genes, using the following grep search terms: (1) "MHC", (2) "major histocompatibility". Results = 86 CDS regions corresponding to exons of 19 genes (**ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3**).
+
+Two of these CDS regions were very short (XXX and XXX) and therefore were not included as potential targets. For the remaining 84 MHCs, Target loci for the remaining 84 MHCs included the entire CDS region plus approximately equal amounts of upstream and downstream non-coding DNA (0-60nt). The amount of flanking non-coding DNA targetted was determined by the size of baits and the tiling scheme (120nt baits; 50% tiling). Specifically, the following script was used to define coordinates of target loci:
+
+``
+annotations.MHC  <- read.table(file="~/ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3",sep="\t")
+CDS.start        <- apply(X=annotations.MHC[,4:5],MARGIN=1,FUN=min) ### for each row, the start is position is defined as the smaller of the two values in column 4 and 5
+CDS.end          <- apply(X=annotations.MHC[,4:5],MARGIN=1,FUN=max) ### for each row, the end position is defined as the larger of the two values in column 4 and 5
+CDS.length       <- (CDS.end-(CDS.start-1))       ### lengths of CDS regions
+
+bait.length   <- 120 ### nucleotide length of baits
+tiling        <- 0.5 ### corresponds to 50% overlap between adjacent baits
+
+target.length <- ceiling((ceiling(CDS.length/(bait.length*tiling))*(bait.length*tiling)))+1
+target.start  <- ceiling(CDS.start-(target.length-CDS.length)/2)
+target.end    <- ceiling(CDS.end+(target.length-CDS.length)/2)
+
+``
+
+I used the function **get_ncbi_sequences** to extract the 84 MHC targets from the *T. sirtalis* genome:
 
 ```
-get.loci.from.annotationTable(species.name="Thamnophis_sirtalis",genome.filepath="~/Thamnophis_sirtalis_GCF_001077635.1_genome_renamed_sequential.fas",input.gff="ref_Thamnophis_sirtalis-6.0_top_level_MHC.gff3",output.file="MHC-loci.fas",additional.ID="Scaffold-Name-Key.txt")
+get_ncbi_sequences <- function(outfile="MHC-target-loci.fasta",
+                               accessionList=,
+			       startList=,
+			       endList=,
+			       strandList=,
+			       db="nuccore",
+			       rettype="fasta",
+			       retmode="text")
 ```
 
-The 86 MHC loci were saved to the file **MHC-loci.fas**; two of these CDS regions were very short (XXX and XXX) removed from the set of potential target loci. The remaining 84 MHC loci were submitted to Arbor Biosciences for ultrastringent filtration and bait design (WeinellEntry1815-1898); 29 MHC loci failed ultrastringent filtration (no baits designed for these loci). Additionally, 16 other MHC loci were filtered because the baits that were designed were non-specific within the genomes of *T. sirtalis* and/or *Thermophis baileyi* (**blast results files: XXXXXX)**; 12 MHC loci were already and included as targets because they were identified as REEs (**Version1_removed-loci_duplicate-targets.tsv**), and therefore I removed one target from each pair of identical target loci. The final set of target loci (for which baits were synthesised) included 27 MHC loci (plus five more that were included as REEs: WeinellEntry248, 559, 728, 787, and 891).
+<!--
+The 86 MHC loci were saved to the file **MHC-loci.fas**; two of these CDS regions were very short (XXX and XXX) removed from the set of potential target loci. 
+-->
+
+The 84 MHC target loci were submitted to Arbor Biosciences for ultrastringent filtration and bait design (WeinellEntry1815-1898); 29 MHC loci failed ultrastringent filtration (no baits designed for these loci). Additionally, 16 other MHC loci were filtered because the baits that were designed were non-specific within the genomes of *T. sirtalis* and/or *Thermophis baileyi* (**blast results files: XXXXXX)**; 12 MHC loci were already and included as targets because they were identified as REEs (**Version1_removed-loci_duplicate-targets.tsv**), and therefore I removed one target from each pair of identical target loci. The final set of target loci (for which baits were synthesised) included 27 MHC loci (plus five more that were included as REEs: WeinellEntry248, 559, 728, 787, and 891).
 
 <!--
 Version1_ZeroBaitCoverageLoci.tsv: 70 REEs, 29 MHC loci
