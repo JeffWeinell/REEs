@@ -75,7 +75,7 @@ Thamnophis_sirtalis_GCF_001077635.1_readN|...
 
 ```
 filter.annotationTable()
-get.exome.from.annotationTabl()
+get.exome.from.annotationTable()
 ```
 
 3. Find *T. sirtalis* exons in other squamate genomes. I downloaded all squamate genomes available from NCBI (**Table 4**). I queried each *T. sirtalis* exon against each squamate genome using the program **tblastx** (allowing up to 50 matches to be saved per query). This step produces a Hit Table for each species, which includes stats on each query/target match, including the bitscore, which is a measurement how good the match is (how likely the match corresponds to homology). **Note to self**: I used the cluster submission file **TBLASTX.sh** to perform this step. Then, I filtered each of the full (i.e., 50 matches/query) hit tables to include only the best match/query (max bitscore) using the R function **reportBestMatches**.
@@ -302,19 +302,12 @@ Set of 900–1000bp regions of the Sense Strand containing Sbfi and EcoRI recogn
 
 #### Overview:
 
-Scalation loci: I targeted a subset of the genes included in the study by Holthaus et al. (2017). In that study, the authors identified homologous genes of the Epidermal Differentiation Complex (which are putatively involved in scalation) of *Python bivittatus* and *Ophiophagus hannah*. I downloaded the *Ophiophagus* scalation gene sequences using the table of genomic coordinates provided by Holthaus et al. (2017), and then used tblastn to search for and obtain homologous loci in *T. sirtalis*, *Protobothrops mucrosquamatus*, and *Crotalus horridus*.
+**Immune loci**: I used grep to search within the annotation table of the *T. sirtalis* genome (**ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3**) for CDS features of major histocompatibility genes, using the following grep search terms: (1) "MHC", (2) "major histocompatibility". Results = 86 CDS regions corresponding to exons of 19 genes (**ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3**). These 86 exons were included as target loci and submitted to Arbor Biosciences to design baits...
 
-**Immune loci**: I used grep to search within the annotation table of the *T. sirtalis* genome (**ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3**) for MHC (class I or II) genes, using the following search terms: (1) "MHC", (2) "major histocompatibility", and filtered the results to include only CDS regions (n = 86 matches). These exons were submitted to Arbor Biosciences to design baits...
+**Scalation loci**: I targeted a subset of the genes included in the study by Holthaus et al. (2017). In that study, the authors identified homologous genes of the Epidermal Differentiation Complex (which are putatively involved in scalation) of *Python bivittatus* and *Ophiophagus hannah*. I downloaded the *Ophiophagus* scalation gene sequences using the table of genomic coordinates provided by Holthaus et al. (2017), and then used tblastn to search for and obtain homologous loci in *T. sirtalis*, *Protobothrops mucrosquamatus*, and *Crotalus horridus*.
 
-Vision loci: I used blastn to search for the vision loci probes from Schott et al. (2017) (which were from *Anolis*, *Columba*, *Gallus*, and *Pelodiscus*, *Sceloporus*, or *Python*) within the snake genomes. Most of the SnakeCap probes for these loci are designed from *Ophiophagus* (n = 88), but some probes were designed from *Thamnophis* (n = 21), *Protobothrops* (n = 5), *Pantherophis* (n = 3), or *Python* (n = 2), when blastn of Schott et al 2017 probes did not yield a strong match in *Ophiophagus*.
+**Vision loci**: I used blastn to search for the vision loci probes from Schott et al. (2017) (which were from *Anolis*, *Columba*, *Gallus*, and *Pelodiscus*, *Sceloporus*, or *Python*) within the snake genomes. Most of the SnakeCap probes for these loci are designed from *Ophiophagus* (n = 88), but some probes were designed from *Thamnophis* (n = 21), *Protobothrops* (n = 5), *Pantherophis* (n = 3), or *Python* (n = 2), when blastn of Schott et al 2017 probes did not yield a strong match in *Ophiophagus*.
 
-#### Detailed, step-by-step methods for how I chose the set of functional loci:
-
-1. 
-
-2. Immune loci
-
-3. 
 
 <a name="ProbeSynthesis"></a>
 ### Probe Synthesis
