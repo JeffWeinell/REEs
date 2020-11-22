@@ -293,21 +293,21 @@ Set of 900–1000bp regions of the Sense Strand containing Sbfi and EcoRI recogn
 
 #### Overview:
 
-**Immune loci**: I used grep to search within the annotation table of the *T. sirtalis* genome (**ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3**) for CDS features of major histocompatibility genes, using the following grep search terms: (1) "MHC", (2) "major histocompatibility". Results = 86 CDS regions corresponding to exons of 19 genes (**ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3**). I used the function **get.loci.from.annotationTable** to extract the 86 immune loci from the *T. sirtalis* genome:
+**MHC loci**: I used grep to search within the annotation table of the *T. sirtalis* genome (**ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3**) for CDS features of major histocompatibility genes, using the following grep search terms: (1) "MHC", (2) "major histocompatibility". Results = 86 CDS regions corresponding to exons of 19 genes (**ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3**). I used the function **get.loci.from.annotationTable** to extract the 86 MHC loci from the *T. sirtalis* genome:
 
 ```
 get.loci.from.annotationTable(species.name="Thamnophis_sirtalis",genome.filepath="~/Thamnophis_sirtalis_GCF_001077635.1_genome_renamed_sequential.fas",input.gff="ref_Thamnophis_sirtalis-6.0_top_level_MHC.gff3",output.file="MHC-loci.fas",additional.ID="Scaffold-Name-Key.txt")
 ```
 
-The 86 immune loci were saved to the file **MHC-loci.fas**; two of these loci were very short, but the remaining 84 were submitted to Arbor Biosciences for bait design (WeinellEntry1815-1898). Ultastringent filtration (conducted by Arbor) removed 29 immune loci (0% bait coverage). Additionally, 16 immune loci were filtered because the baits were non-specific within the genome of *T. sirtalis* and/or *Thermophis baileyi*; 12 immune loci were "removed" from the target set because they were already targeted as REEs (**Version1_removed-loci_duplicate-targets.tsv**). The final set of target loci (for which baits were synthesised) included 27 immune loci (plus 8 REEs that are also immune loci).
+The 86 MHC loci were saved to the file **MHC-loci.fas**; two of these CDS regions were very short (XXX and XXX) removed from the set of potential target loci. The remaining 84 MHC loci were submitted to Arbor Biosciences for ultrastringent filtration and bait design (WeinellEntry1815-1898); 29 MHC loci failed ultrastringent filtration (no baits designed for these loci). Additionally, 16 other MHC loci were filtered because the baits that were designed were non-specific within the genomes of *T. sirtalis* and/or *Thermophis baileyi* (**blast results files: XXXXXX)**; 12 MHC loci were already and included as targets because they were identified as REEs (**Version1_removed-loci_duplicate-targets.tsv**), and therefore I removed one target from each pair of identical target loci. The final set of target loci (for which baits were synthesised) included 27 MHC loci (plus five more that were included as REEs: WeinellEntry248, 559, 728, 787, and 891).
 
 <!--
-Version1_ZeroBaitCoverageLoci.tsv: 70 REEs, 29 immune loci
-Version1_removed-loci_baits-nonspecific.tsv: 8 REEs, 2 immune loci
-Version1_removed-loci_duplicate-targets.tsv: 12 immune loci
-Version2-Loci-removed_allProbes-multiHit.tsv: 115 REEs, 14 immune loci, and 12 UCEs
+Version1_ZeroBaitCoverageLoci.tsv: 70 REEs, 29 MHC loci
+Version1_removed-loci_baits-nonspecific.tsv: 8 REEs, 2 MHC loci
+Version1_removed-loci_duplicate-targets.tsv: 12 MHC loci
+Version2-loci-removed_baits-nonspecific.tsv: 115 REEs, 14 MHC loci, and 12 UCEs
 Version3-loci-removed_ZeroBaitCoverageLoci.tsv: 67 short exon fragments, 7 vision loci
-Version3-loci-removed_others.tsv: 212 REEs, 1,958 short exon fragments, 10 UCEs, 3 scalation, and 6 vision loci.
+Version3-loci-removed_others.tsv: 209 REEs (non-MHC), 3 MHC-REEs, 1,958 short exon fragments, 10 UCEs, 3 scalation, and 6 vision loci.
 See the README file in ArborFiles folder for a description about how the bait kit changed after working with Arbor.
 -->
 
