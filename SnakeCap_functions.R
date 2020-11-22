@@ -805,6 +805,44 @@ get.exome.from.annotationTable <- function(species.name,genome.filepath,input.gf
 	writeXStringSet(x = genome.scaff, filepath=paste(output.dir.exome,species.name,"_exome_longer120bp.fas",sep=""), append=F, format="fasta")
 }
 
+##########################
+### get.loci.from.annotationTable function ###
+#####################
+### identical to the function get.exome.from.annotationTable, but used more generally.
+### I used this function to extract the MHC loci from the Thamnophis sirtalis genome
+#######
+## parameters # values last used are shown
+### species.name      <- "Thamnophis_sirtalis"
+### genome.filepath   <- "Thamnophis_sirtalis_GCF_001077635.1_genome_renamed_sequential.fas"   ### directory to genome
+### input.gff         <- "ref_Thamnophis_sirtalis-6.0_top_level_MHC.gff3"                      ### path to filtered annotation table containing only the loci of interest
+### output.file       <- "MHC-loci.fas"                                                        ### directory to put exomes into
+### additional.ID     <- "Scaffold-Name-Key.txt"                                               ### filename of a table that cross-references contig names to names in GFF file
+
+get.loci.from.annotationTable <- function(species.name,genome.filepath,input.gff,output.file,additional.ID) {
+	filtered.gff1B   <- fread(input.gff)
+	refseq.names     <- unlist(filtered.gff1B[,1])
+	ScaffoldKey      <- fread(additional.ID)                                                                 ### this is needed because the names in the gff file are not exactly the same as the ones in the genome file; they both link to a common Genbank Accession # though
+	alt.scaff.names  <- ScaffoldKey$ScaffoldName[match(refseq.names,ScaffoldKey$RefSeq.ScaffoldAccession)]   ### links the names in the gff file to the names of the CDS matches
+
+	subject.id        <- alt.scaff.names
+	subject.start     <- as.numeric(filtered.gff1B$start)
+	subject.end       <- as.numeric(filtered.gff1B$end)
+	new.names         <- paste(subject.id,"_",refseq.names,":",subject.start,"-",subject.end,sep="")	
+
+	indexFa(genome.filepath)                                           ### create an index of file 'foo.fasta'; this avoids having to actually copy or move the file to a new directory
+	fa <- FaFile(genome.filepath)
+	gr <- as(seqinfo(fa), "GRanges")
+
+	scaff.matches.all   <- match(subject.id, names(gr))
+	start.all           <- apply(X=cbind(subject.start,subject.end),MARGIN=1,FUN=min)
+	end.all             <- apply(X=cbind(subject.start,subject.end),MARGIN=1,FUN=max)
+	subranges           <- IRanges(start=start.all ,end=end.all,names=subject.id)
+	gsubranges          <- GRanges(seqnames=subject.id,ranges=subranges)
+	genome.scaff        <- getSeq(fa, gsubranges)
+	names(genome.scaff) <- new.names
+	writeXStringSet(x = genome.scaff, filepath=output.file, append=F, format="fasta")
+}
+
 ############
 ## reportBestMatches function
 ############
