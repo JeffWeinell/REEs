@@ -295,11 +295,12 @@ Set of 900–1000bp regions of the Sense Strand containing Sbfi and EcoRI recogn
 
 **MHC loci**: I used grep to search within the annotation table of the *T. sirtalis* genome (**ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3**) for CDS features of major histocompatibility genes, using the following grep search terms: (1) "MHC", (2) "major histocompatibility". Results = 86 CDS regions corresponding to exons of 19 genes (**ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3**).
 
-Two of these CDS regions were very short (XXX and XXX) and therefore were not included as potential targets.
-
-For the remaining 84 MHCs, target loci included the entire CDS region plus approximately equal amounts of upstream and downstream non-coding DNA (0-60nt). The amount of flanking non-coding DNA targetted was determined by the size of baits (120nt baits). Specifically, the following script was used to define coordinates of target loci:
+Target loci included the entire CDS region plus approximately equal amounts of upstream and downstream non-coding DNA (0-60nt). The amount of flanking non-coding DNA targetted was determined by the size of baits (120nt baits). Specifically, the following R script was used to (1) define coordinates of target loci, and (2) to extract MHC targets from the *T. sirtalis* genome and save them to the file **MHC-target-loci.fasta**:
 
 ```
+library(RCurl)
+source("~/SnakeCap_functions.R")
+
 annotations.MHC  <- read.table(file="~/ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3",sep="\t")
 MHC.contigs      <- annotations.MHC[,1]
 CDS.start        <- apply(X=annotations.MHC[,4:5],MARGIN=1,FUN=min) ### for each row, the start is position is defined as the smaller of the two values in column 4 and 5
@@ -312,15 +313,7 @@ target.length    <- ceiling((ceiling(CDS.length/(bait.length))*(bait.length)))+1
 target.start     <- ceiling(CDS.start-(target.length-CDS.length)/2)
 target.end       <- ceiling(CDS.end+(target.length-CDS.length)/2)
 
-```
-/Users/alyssaleinweber/Documents/Jeff_SequenceCapture-GitHub/ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3
-I then used the function **get_ncbi_sequences** to extract the MHC targets from the *T. sirtalis* genome:
-
-```
-library(RCurl)
-source("~/SnakeCap_functions.R")
-
-MHC.targets <- get_ncbi_sequences(outfile="/Users/alyssaleinweber/Documents/Jeff_SequenceCapture-GitHub/MHC-target-loci_try4.fasta",
+MHC.targets <- get_ncbi_sequences(outfile="~/MHC-target-loci.fasta",
         accessionList = MHC.contigs,
 	startList = target.start,
 	endList = target.end,
@@ -328,11 +321,14 @@ MHC.targets <- get_ncbi_sequences(outfile="/Users/alyssaleinweber/Documents/Jeff
 )
 ```
 
-<!--
-The 86 MHC loci were saved to the file **MHC-loci.fas**; two of these CDS regions were very short (XXX and XXX) removed from the set of potential target loci. 
--->
+Next, I used blastn to search for the MHC target loci in the *T. sirtalis* genome (results in hit table **MHC_86-targets-vs-Thamnophis_HitTable.csv**).
 
+
+
+<!--
+The locus NW_013661433.1:30811-30931 matched seven genomic regions with 100% identity and contained a short CDS (4bp); therefore this target loci was dropped from further analyses. Additionally, the locus NW_013659533.1:83942-84062 was dropped because...
 The 84 MHC target loci were submitted to Arbor Biosciences for ultrastringent filtration and bait design (WeinellEntry1815-1898); 29 MHC loci failed ultrastringent filtration (no baits designed for these loci). Additionally, 16 other MHC loci were filtered because the baits that were designed were non-specific within the genomes of *T. sirtalis* and/or *Thermophis baileyi* (**blast results files: XXXXXX)**; 12 MHC loci were already and included as targets because they were identified as REEs (**Version1_removed-loci_duplicate-targets.tsv**), and therefore I removed one target from each pair of identical target loci. The final set of target loci (for which baits were synthesised) included 27 MHC loci (plus five more that were included as REEs: WeinellEntry248, 559, 728, 787, and 891).
+-->
 
 <!--
 Version1_ZeroBaitCoverageLoci.tsv: 70 REEs, 29 MHC loci
