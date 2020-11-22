@@ -304,7 +304,7 @@ Set of 900–1000bp regions of the Sense Strand containing Sbfi and EcoRI recogn
 
 Scalation loci: I targeted a subset of the genes included in the study by Holthaus et al. (2017). In that study, the authors identified homologous genes of the Epidermal Differentiation Complex (which are putatively involved in scalation) of *Python bivittatus* and *Ophiophagus hannah*. I downloaded the *Ophiophagus* scalation gene sequences using the table of genomic coordinates provided by Holthaus et al. (2017), and then used tblastn to search for and obtain homologous loci in *T. sirtalis*, *Protobothrops mucrosquamatus*, and *Crotalus horridus*.
 
-Immune loci: I searched the annotation table of *T. sirtalis* for MHC (I or II) genes. Of these, only those for which Arbor Biosciences could create probes were included in the probe set.
+**Immune loci**: I used grep to search within the annotation table of the *T. sirtalis* genome (**ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3**) for MHC (class I or II) genes, using the following search terms: (1) "MHC", (2) "major histocompatibility", and filtered the results to include only CDS regions (n = 86 matches). These exons were submitted to Arbor Biosciences to design baits...
 
 Vision loci: I used blastn to search for the vision loci probes from Schott et al. (2017) (which were from *Anolis*, *Columba*, *Gallus*, and *Pelodiscus*, *Sceloporus*, or *Python*) within the snake genomes. Most of the SnakeCap probes for these loci are designed from *Ophiophagus* (n = 88), but some probes were designed from *Thamnophis* (n = 21), *Protobothrops* (n = 5), *Pantherophis* (n = 3), or *Python* (n = 2), when blastn of Schott et al 2017 probes did not yield a strong match in *Ophiophagus*.
 
@@ -312,7 +312,7 @@ Vision loci: I used blastn to search for the vision loci probes from Schott et a
 
 1. 
 
-2. 
+2. Immune loci
 
 3. 
 
