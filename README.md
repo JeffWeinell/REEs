@@ -295,34 +295,37 @@ Set of 900–1000bp regions of the Sense Strand containing Sbfi and EcoRI recogn
 
 **MHC loci**: I used grep to search within the annotation table of the *T. sirtalis* genome (**ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3**) for CDS features of major histocompatibility genes, using the following grep search terms: (1) "MHC", (2) "major histocompatibility". Results = 86 CDS regions corresponding to exons of 19 genes (**ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3**).
 
-Two of these CDS regions were very short (XXX and XXX) and therefore were not included as potential targets. For the remaining 84 MHCs, Target loci for the remaining 84 MHCs included the entire CDS region plus approximately equal amounts of upstream and downstream non-coding DNA (0-60nt). The amount of flanking non-coding DNA targetted was determined by the size of baits and the tiling scheme (120nt baits; 50% tiling). Specifically, the following script was used to define coordinates of target loci:
+Two of these CDS regions were very short (XXX and XXX) and therefore were not included as potential targets.
 
-``
-annotations.MHC  <- read.table(file="~/ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3",sep="\t")
-CDS.start        <- apply(X=annotations.MHC[,4:5],MARGIN=1,FUN=min) ### for each row, the start is position is defined as the smaller of the two values in column 4 and 5
-CDS.end          <- apply(X=annotations.MHC[,4:5],MARGIN=1,FUN=max) ### for each row, the end position is defined as the larger of the two values in column 4 and 5
-CDS.length       <- (CDS.end-(CDS.start-1))       ### lengths of CDS regions
-
-bait.length   <- 120 ### nucleotide length of baits
-tiling        <- 0.5 ### corresponds to 50% overlap between adjacent baits
-
-target.length <- ceiling((ceiling(CDS.length/(bait.length*tiling))*(bait.length*tiling)))+1
-target.start  <- ceiling(CDS.start-(target.length-CDS.length)/2)
-target.end    <- ceiling(CDS.end+(target.length-CDS.length)/2)
-
-``
-
-I used the function **get_ncbi_sequences** to extract the 84 MHC targets from the *T. sirtalis* genome:
+For the remaining 84 MHCs, target loci included the entire CDS region plus approximately equal amounts of upstream and downstream non-coding DNA (0-60nt). The amount of flanking non-coding DNA targetted was determined by the size of baits (120nt baits). Specifically, the following script was used to define coordinates of target loci:
 
 ```
-get_ncbi_sequences <- function(outfile="MHC-target-loci.fasta",
-                               accessionList=,
-			       startList=,
-			       endList=,
-			       strandList=,
-			       db="nuccore",
-			       rettype="fasta",
-			       retmode="text")
+annotations.MHC  <- read.table(file="~/ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3",sep="\t")
+MHC.contigs      <- annotations.MHC[,1]
+CDS.start        <- apply(X=annotations.MHC[,4:5],MARGIN=1,FUN=min) ### for each row, the start is position is defined as the smaller of the two values in column 4 and 5
+CDS.end          <- apply(X=annotations.MHC[,4:5],MARGIN=1,FUN=max) ### for each row, the end position is defined as the larger of the two values in column 4 and 5
+CDS.length       <- (CDS.end-(CDS.start-1))                         ### lengths of CDS regions
+
+bait.length      <- 120 ### nucleotide length of baits
+
+target.length    <- ceiling((ceiling(CDS.length/(bait.length))*(bait.length)))+1
+target.start     <- ceiling(CDS.start-(target.length-CDS.length)/2)
+target.end       <- ceiling(CDS.end+(target.length-CDS.length)/2)
+
+```
+/Users/alyssaleinweber/Documents/Jeff_SequenceCapture-GitHub/ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3
+I then used the function **get_ncbi_sequences** to extract the MHC targets from the *T. sirtalis* genome:
+
+```
+library(RCurl)
+source("~/SnakeCap_functions.R")
+
+MHC.targets <- get_ncbi_sequences(outfile="/Users/alyssaleinweber/Documents/Jeff_SequenceCapture-GitHub/MHC-target-loci_try4.fasta",
+        accessionList = MHC.contigs,
+	startList = target.start,
+	endList = target.end,
+	rettype = "fasta",
+)
 ```
 
 <!--
