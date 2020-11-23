@@ -9,7 +9,9 @@
     - [Selecting the set of target Rapidly-evolving Exons (REEs)](#Methods.SelectingREEs)
     - [Selecting the set of target Ultraconserved-elements (UCEs)](#Methods.SelectingUCEs)
     - [Selecting the set of target ddRAD-like loci](#Methods.SelectingddRAD)
-    - [Selecting the set of target functionally interesting (Functional) loci](#Methods.SelectingFunctional)
+    - [Selecting the set of target major histocompatibility loci](#Methods.SelectingMHC)
+    - [Selecting the set of target scalation loci](#Methods.SelectingScalation)
+    - [Selecting the set of target vision loci](#Methods.SelectingVision)
   - [Probe Synthesis](#ProbeSynthesis)
   - [Taxa Sampled](#Sampling)
   - [Sequence Capture Library Prep](#LibraryPrep)
@@ -44,8 +46,7 @@ Locus type | Region targeted | nloci | nnt | nt/locus (min–max)
 Rapidly evolving exons (REEs) | Usually the entire exon + 0–60nt each of 5' & 3' flanking regions. | 1,653 | 996,369 | 121–7,501
 Ultra-conserved elements (UCEs) | Entire UCE region previously identified | 907 | 143,075 | 120–161
 ddRAD-like | in silico ddRAD selected loci | 328 | 271,505 | 120–996
-Functional: |  |  |  |  
-Immune | (Exons of major histocompatibility complex (MHC) genes.) | 27 | 5,354 | 121–364
+MHC | Exons + 0–60nt each of 5' & 3' flanking regions of major histocompatibility complex (MHC) genes. | 27 | 5,354 | 121–364
 Vision | 160nt, including ≤ 70nt upstream of start codon if targeted exon is first exon. Usually, first 160nt of exon targeted. | 119 | 18,857 | 120–170
 Scalation | 1100nt, including 1000nt of promoter region + first 100nt of first exon. | 95 | 81,851 | 125–1,101
 All loci |  | 3,129 | 1,517,011 | 120–7,501 (mean = 531.62)  
@@ -305,10 +306,8 @@ Proposed target loci using SbfI and EcoR1 recognition sites (USED 328 of these):
 
 Set of 900–1000bp regions of the Sense Strand containing Sbfi and EcoRI recognition sites: **ddRAD-like-loci_SenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt**
 
-<a name="Methods.SelectingFunctional"></a>
-### Selecting the set of Functional loci
-
-#### MHC loci:
+<a name="Methods.SelectingMHC"></a>
+### Selecting MHC loci:
 
 I used grep to search within the annotation table of the *T. sirtalis* genome (**ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3**) for CDS features of major histocompatibility genes, using the following grep search terms: (1) "MHC", (2) "major histocompatibility". Results = 86 CDS regions corresponding to exons of 19 genes (**ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3**).
 
@@ -408,11 +407,14 @@ Version3-loci-removed_others.tsv: 209 REEs (non-MHC), 3 MHC-REEs, 1,958 short ex
 See the README file in ArborFiles folder for a description about how the bait kit changed after working with Arbor.
 -->
 
-#### Scalation loci:
+<a name="Methods.SelectingScalation"></a>
+### Selecting scalation loci:
 
 I targeted a subset of the genes included in the study by Holthaus et al. (2017). In that study, the authors identified homologous genes of the Epidermal Differentiation Complex (which are putatively involved in scalation) of *Python bivittatus* and *Ophiophagus hannah*. I downloaded the *Ophiophagus* scalation gene sequences using the table of genomic coordinates provided by Holthaus et al. (2017), and then used tblastn to search for and obtain homologous loci in *T. sirtalis*, *Protobothrops mucrosquamatus*, and *Crotalus horridus*.
 
-#### Vision loci:
+
+<a name="Methods.SelectingVision"></a>
+### Selecting vision loci:
 
 I used blastn to search for the vision loci probes from Schott et al. (2017) (which were from *Anolis*, *Columba*, *Gallus*, and *Pelodiscus*, *Sceloporus*, or *Python*) within the snake genomes. Most of the SnakeCap probes for these loci are designed from *Ophiophagus* (n = 88), but some probes were designed from *Thamnophis* (n = 21), *Protobothrops* (n = 5), *Pantherophis* (n = 3), or *Python* (n = 2), when blastn of Schott et al 2017 probes did not yield a strong match in *Ophiophagus*.
 
@@ -435,15 +437,17 @@ species | genome assembly accession | contig prefixes | n target loci with baits
 *Thermophis baileyi* | GCA_003457575.1 | QLTV01 | 328  | 229
 
 <a name="Sampling"></a>
-### Taxa Sampled
+### Taxa sampled
+
+The following species were sequenced: *Achalinus spinalis*, *Aparallactus capensis*, *Aplopeltura boa*, *Elapsoidea sundevalli*, *Boiga irregularis*, *Buhoma depressiceps*, *Cerberus schneideri*, *Chamaelycus fasciatus*, *Cyclocorus lineatus*, *Oxyrhabdium* cf. *modestum*, *Oxyrhabdium leporinum*, *Oxyrhabdium modestum*, *Prosymna visseri*, *Psammodynastes pulverulentus*, *Pseudaspis cana*, *Pseudoxyrhopus tritaeniatus*, *Rhamphiophis oxyrhynchus*, *Scolecophis atrocinctus*, *Tantilla taeniata*.
 
 <a name="LibraryPrep"></a>
-### Sequence Capture Library Prep
+### Sequence capture library prep
 
 Conducted by Arbor Biosciences; eight samples/pool; ...
 
 <a name="DNASequencing"></a>
-### DNA Sequencing
+### DNA sequencing
 
 Novogene Illumina HiSeqX; paired-end sequencing with 150bp insert size.
 
