@@ -383,10 +383,13 @@ The remaining 84 MHC target loci were submitted to Arbor Biosciences for ultrast
 -->
 
 <!--
-Version1_ZeroBaitCoverageLoci.tsv: 70 REEs,, 29 MHC loci
-Version1_removed-loci_baits-nonspecific.tsv: 8 REEs, 2 MHC loci
+Version1_Target-loci_Jeff-Weinell_10Sep2018.fasta: 1802 REEs (non-MHC), 12 REE/MHCs, 84 MHCs
+Version1_ZeroBaitCoverageLoci.tsv: 70 REEs (non-MHC), 29 MHC loci
+Version1_removed-loci_baits-nonspecific.tsv: 8 REEs (non-MHC), 2 MHC loci
 Version1_removed-loci_duplicate-targets.tsv: 12 MHC loci
-Version2-loci-removed_baits-nonspecific.tsv: 115 REEs, 14 MHC loci, and 12 UCEs
+Version2_additional-targets_20Sep2018.txt: 337 REEs (non-MHC), 1 REE (MHC)
+Version2-loci-removed_baits-nonspecific.tsv: 111 REEs (non-MHC), 4 REE-MHCs, 14 MHC loci, and 12 UCEs
+Version3_additional-targets_Entry3153to5735_4Oct2018.fasta: 2,025 short exons, 98 scalation loci, 132 vision loci, 328 ddRAD-like loci
 Version3-loci-removed_ZeroBaitCoverageLoci.tsv: 67 short exon fragments, 7 vision loci
 Version3-loci-removed_others.tsv: 209 REEs (non-MHC), 3 MHC-REEs, 1,958 short exon fragments, 10 UCEs, 3 scalation, and 6 vision loci.
 See the README file in ArborFiles folder for a description about how the bait kit changed after working with Arbor.
