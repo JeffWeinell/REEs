@@ -9,7 +9,7 @@ V1 targets removed (baits non-specific)|8 |0|2|0|0|0|0|0|0|10
 V1 targets removed (duplicate entries)|0|0|0|12|0|0|0|0|0|12
 V2 targets removed (zero bait coverage)|6|0|0|0|75|0|0|0|0|81
 V2 targets removed (baits non-specific)|115|4|14|0|8|0|0|0|0|141
-V3 targets removed (zero bait coverage)| |   |   |   |   |   |    |    |    |74
-V3 targets removed (other reason)| |   |   |   |   |   |    |    |    |2,189
-Total targets removed| |   |   |   |   |   |    |    |    |2,606
-Final targets (with baits synthesized)| |   |   |   |   |   |    |    |    |3,129
+V3 targets removed (zero bait coverage)|0|0|0|0|0|67|0|7|0|74
+V3 targets removed (other reason)|209|3|0|0|10|1,958|3|6|0|2,189
+Total targets removed|408|7|45|12|93|2,025|3|13|0|2,606
+Final targets (with baits synthesized)|1,647|6|26|1|907|0|95|119|328|3,129
