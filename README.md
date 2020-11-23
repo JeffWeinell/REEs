@@ -80,6 +80,22 @@ get.exome.from.annotationTable()
 
 3. Find *T. sirtalis* exons in other squamate genomes. I downloaded all squamate genomes available from NCBI (**Table 4**). I queried each *T. sirtalis* exon against each squamate genome using the program **tblastx** (allowing up to 50 matches to be saved per query). This step produces a Hit Table for each species, which includes stats on each query/target match, including the bitscore, which is a measurement how good the match is (how likely the match corresponds to homology). **Note to self**: I used the cluster submission file **TBLASTX.sh** to perform this step. Then, I filtered each of the full (i.e., 50 matches/query) hit tables to include only the best match/query (max bitscore) using the R function **reportBestMatches**.
 
+#### Table 4. Genomes used to select sequence capture target loci.
+Species  | Family | NCBI Genome Assembly Accession
+----|----|---- 
+Anolis carolinensis | Dactyloidae | GCF_000090745.1
+Gekko japonicus | Gekkonidae | GCF_001447785.1
+Pogona vitticeps | Agamidae | 
+Crotalus horridus | Viperidae (Crotalinae) | GCA_001625485.1
+Crotalus mitchellii (= C. pyrrhus) | Viperidae (Crotalinae) | GCA_000737285.1
+Ophiophagus hannah | Elapidae | GCA_000516915.1
+Pantherophis guttatus | Colubridae (Colubrinae) | GCA_001185365.1
+Protobothrops mucrosquamatus | Viperidae (Crotalinae) | GCF_001527695.1
+Python bivitattus | Pythonidae | GCF_000186305.1
+Thamnophis sirtalis | Colubridae (Natricinae) | GCF_001077635.1
+Vipera berus berus | Viperidae (Viperinae) | GCA_000800605.1
+
+
 ```
 reportBestMatches()
 ```
