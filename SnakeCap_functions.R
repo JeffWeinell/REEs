@@ -93,6 +93,18 @@ countChars <- function(x,pattern) {
 	nchar(x)-nchar(counter)
 }
 
+########
+## is.overlap
+########
+## test if two integer ranges overlap
+########
+## r1 = vector containing the limits of the first range (intermediate values optional)
+## r2 = vector containing the limits of the second range (intermediate values optional)
+########
+
+is.overlap <- function(r1,r2){
+	 min(r1) <= max(r2) && min(r2) <= max(r1)
+}
 
 ########
 ## read.tree.multipleFiles function
