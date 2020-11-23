@@ -449,7 +449,7 @@ Conducted by Arbor Biosciences; eight samples/pool; ...
 <a name="DNASequencing"></a>
 ### DNA sequencing
 
-Novogene Illumina HiSeqX; paired-end sequencing with 150bp insert size.
+Novogene Illumina HiSeqX; paired-end sequencing, read length 150nt, insert size 400nt?.
 
 <a name="PostSequencing"></a>
 ### Post-sequencing
