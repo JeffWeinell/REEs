@@ -20,7 +20,7 @@
 
 **Version 3** targets and baits (not the final set): 
 
-- Version2-baits-removed_baits-nonspecific.txt: Probes from version 2 that were not included in version 3, because these hit multiple sites in the other genomes. **Need to figure out which genomes were blasted against in this step.**.
+- Version2-baits-removed_baits-nonspecific.fasta: Probes from version 2 that were not included in version 3, because these hit multiple sites in the other genomes. **Need to figure out which genomes were blasted against in this step.**.
 - Version2-loci-removed_baits-nonspecific.tsv: List of targets removed as a result of removing the multi-hit probes. The removed targets included:
   - 115 REEs, 14 immune loci, and 12 UCEs
 - Version3_additional-targets_Entry3153to5735_4Oct2018.fasta: List of new targets added to version 3, including:
