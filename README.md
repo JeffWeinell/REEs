@@ -80,7 +80,7 @@ get.exome.from.annotationTable()
 
 3. Find *T. sirtalis* exons in other squamate genomes. I downloaded all squamate genomes available from NCBI (**Table 4**). I queried each *T. sirtalis* exon against each squamate genome using the program **tblastx** (allowing up to 50 matches to be saved per query). This step produces a Hit Table for each species, which includes stats on each query/target match, including the bitscore, which is a measurement how good the match is (how likely the match corresponds to homology). **Note to self**: I used the cluster submission file **TBLASTX.sh** to perform this step. Then, I filtered each of the full (i.e., 50 matches/query) hit tables to include only the best match/query (max bitscore) using the R function **reportBestMatches**.
 
-#### Table 4. Genomes used to select sequence capture target loci.
+#### Table 4. Genomes used to select REEs.
 Species  | Family | NCBI Genome Assembly Accession
 ----|----|---- 
 Anolis carolinensis | Dactyloidae | GCF_000090745.1
