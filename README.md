@@ -343,23 +343,21 @@ for(i in 1:length(mhc.dna)){
 # calculate query coverage for each blastn match
 queryCoverage <- round((mhc.hits.Thamnophis[,"query.end"]-(mhc.hits.Thamnophis[,"query.start"]-1))/queryLength,digits=4)
 
-# filter hit table to only include matches with percent.identity > 85 and queryCoverage > 0.90 (=90%)
-mhc.hits.filtered <- mhc.hits.Thamnophis[which(mhc.hits.Thamnophis[,"percent.identity"] > 85 & queryCoverage > 0.9),]
+# filter hit table to only include matches with percent.identity and queryCoverage > 90%
+mhc.hits.filtered.90 <- mhc.hits.Thamnophis[which(mhc.hits.Thamnophis[,"percent.identity"] > 90 & queryCoverage > 0.9),]
 
 ```
 
 Summary of the MHC filtered hit table. The table below shows the number MHC loci (columns 2-5) with at least n matches (column 1) in the genome of *T. sirtalis* with at least *x* percent coverage and percent identical sites across the covered region.
 
-  n matches in *T. sirtalis* genome | MHC loci: x = 50% | x = 60% | x = 70% | x = 80% | x = 90% | x = 95% | x = 100%
+  n matches in *T. sirtalis* genome | MHC loci: x=0 | x=60 | x=70 | x=80 | x=90 | x=95 | x=100
  ------|------|------|------|------|------|------|------
-  1    |      |      |      |      |      |      |      
-  2    |      |      |      |      |      |      |      
-  3    |      |      |      |      |      |      |      
-  4    |      |      |      |      |      |      |      
-  5    |      |      |      |      |      |      |      
- &gt; 5|      |      |      |      |      |      |      
-
-contains matches with ≥90% query coverage (MHC target coverage) and ≥85% identical sites between MHC target and genome match:
+  1    | 28   | 30   | 31   | 35   | 50   | 58   | 70   
+  2    | 27   | 26   | 27   | 30   | 31   | 27   | 15   
+  3    |  4   |  4   |  6   |  6   |  2   |  0   |  0   
+  4    |  2   |  5   |  3   |  1   |  2   |  0   |  0   
+  5    |  6   |  6   |  6   |  2   |  0   |  0   |  0   
+ &gt; 5| 19   | 15   | 13   | 12   |  0   |  0   |  0   
 
 <!--
 The locus NW_013661433.1:30811-30931 matched seven genomic regions with 100% identity and contained a short CDS (4bp); therefore this target loci was dropped from further analyses. Additionally, the locus NW_013659533.1:83942-84062 was dropped because...
