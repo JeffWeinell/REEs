@@ -9,7 +9,7 @@
     - [Selecting the set of target Rapidly-evolving Exons (REEs)](#Methods.SelectingREEs)
     - [Selecting the set of target Ultraconserved-elements (UCEs)](#Methods.SelectingUCEs)
     - [Selecting the set of target ddRAD-like loci](#Methods.SelectingddRAD)
-    - [Selecting the set of target major histocompatibility loci](#Methods.SelectingMHC)
+    - [Selecting the set of target major histocompatibility loci (MHCs)](#Methods.SelectingMHC)
     - [Selecting the set of target scalation loci](#Methods.SelectingScalation)
     - [Selecting the set of target vision loci](#Methods.SelectingVision)
   - [Probe Synthesis](#ProbeSynthesis)
