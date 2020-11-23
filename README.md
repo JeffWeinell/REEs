@@ -423,8 +423,9 @@ I used blastn to search for the vision loci probes from Schott et al. (2017) (wh
 After choosing the target loci, probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total. See **Target-loci_Coverage_graph_22October2020.pdf** for a visual summary of target loci, probes, probe coverage, and features of loci including genes, mRNA/transcribed regions, and protein-coding (CDS) regions. This graph was generated with **graph_target_and_features.R** and then filesize reduction in Adobe Acrobat.
 
 **Table X.** Genomes from which synthesized baits were designed from.
+
 species | genome assembly accession | contig prefixes | n target loci with baits designed from species | n bait-containing contigs
-----|----|----|----
+----|----|----|----|----
 *Thamnophis sirtalis* | GCF_001077635.1 | NW_0136; LFLD01 | 2,619  | 1,412 
 *Ophiophagus hannah* | GCA_000516915.1  | AZIM01 | 151 | 86 
 *Crotalus horridus* | GCA_001625485.1 | LVCR01 | 2  | 2 
