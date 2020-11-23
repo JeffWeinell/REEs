@@ -76,13 +76,14 @@ Thamnophis_sirtalis_GCF_001077635.1_readN|...
 2. *Thamnophis sirtalis* exome extracted from genome. I used the function **filter.annotationTable** to: (1) filter the original annotation table to only include annotations for regions that are both CDS regions and ≥ 120bp in length (result: n = 115,907 annotations for 77,329 unique regions), and (2) write the filtered annotation table to a file: **CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_withGenBankAcc_longer120bp.gff3**. Then, I used the function **get.exome.from.annotationTable** to extract from the genome the DNA sequences included in the filtered annotation table, and to write the extracted DNA sequences (the exome) to a file in fasta format: **Thamnophis_sirtalis_exome_longer120bp.fas**.
 
 ```
-filter.annotationTable()
-get.exome.from.annotationTable()
+filter.annotationTable(input.gff="~/ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3",output.gff="CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3",region.type="CDS",min.length=120)
+
+get.exome.from.annotationTable(species.name="Thamnophis_sirtalis",genome.filepath="~/Thamnophis_sirtalis_GCF_001077635.1_genome_renamed_sequential.fas",input.gff="CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3",output.dir.exome = "~/exomes/",additional.ID="Scaffold-Name-Key.txt")
 ```
 
-3. Find *T. sirtalis* exons in other squamate genomes. I downloaded all squamate genomes available from NCBI (**Table 4**). I queried each *T. sirtalis* exon against each squamate genome using the program **tblastx** (allowing up to 50 matches to be saved per query). This step produces a Hit Table for each species, which includes stats on each query/target match, including the bitscore, which is a measurement how good the match is (how likely the match corresponds to homology). **Note to self**: I used the cluster submission file **TBLASTX.sh** to perform this step. Then, I filtered each of the full (i.e., 50 matches/query) hit tables to include only the best match/query (max bitscore) using the R function **reportBestMatches**.
+3. I downloaded all squamate genomes available from NCBI and then searched within each for exons homologous to those in the *T. sirtalis* exome (**Table 4**).
 
-#### Table 4. Genomes used to select REEs.
+**Table 4**. Genomes used to select REEs included all squamate genomes available from NCBI.
 Species  | Family | NCBI Genome Assembly Accession
 ----|----|---- 
 *Anolis carolinensis* | Dactyloidae | GCF_000090745.1
@@ -97,15 +98,19 @@ Species  | Family | NCBI Genome Assembly Accession
 *Thamnophis sirtalis* | Colubridae (Natricinae) | GCF_001077635.1
 *Vipera berus berus* | Viperidae (Viperinae) | GCA_000800605.1
 
+I queried each *T. sirtalis* exon against each squamate genome using **tblastx** (allowing up to 50 matches to be saved per query). This step produces a Hit Table for each species with stats on each query/target match, including the bitscore, which is a measurement how good the match is (how likely the match corresponds to homology). **Note to self**: I used the cluster submission file **TBLASTX.sh** to perform this step.
+
+Then, I filtered each of the full (i.e., 50 matches/query) hit tables to include only the best match/query (max bitscore) using the R function **reportBestMatches**.
 
 ```
-reportBestMatches()
+reportBestMatches(input.dir="TBlastXResults/",species.names=c("Anolis_carolinensis","Crotalus_mitchellii","Pogona_vitticeps","Gekko_japonicus","Ophiophagus_hannah","Vipera_berus","Crotalus_horridus","Thamnophis_sirtalis","Python_bivittatus","Protobothrops_mucrosquamatus","Pantherophis_guttatus"),output.dir=NA,blastMethod="tblastx",locusType="exons")
 ```
 
 4. Extract exomes (minimum exon length 120nt) for each squamate species. For each species and exon, I extracted the DNA sequence of the best match in the filtered hit table from step 2, and I saved these sequences to a fasta file; this step was performed using the function **get.exome.from.blastTable**.
 
 ```
-get.exome.from.blastTable()
+### Example for Vipera berus
+get.exome.from.blastTable(species="Vipera_berus",genome.filepath="~/Vipera_berus_GCA_000800605.1_Vber.be_1.0_genomic.fna",input.blastTable="Vipera_berus.tblastx.exons.best.txt",output.dir.exome="~/exomes/")
 ```
 
 5. Align shared exons and calculate stats. I used the R function **makeExomeStatsTable** to do all of the following:
@@ -114,8 +119,13 @@ get.exome.from.blastTable()
   - calculate a set of stats for each shared exon alignment, and save results to the file **stats_exome_data_TBLASTX.txt** (results: includes stats for 66,489 alignments). 
   
 ```
-stats_exome <- makeExomeStatsTable()
+### "species" parameter includes the set of the squamates
+### "subgroup" parameter includes the set of the snakes
+### "is.primary.exome" was set to 1 because Thamnophis sirtalis is the first species in the "species" parameter vector, and this is the species that baits were designed from
+
+stats_exome <- makeExomeStatsTable(exomes.filepaths=list.files(path="~/exomes/",full.names=T), annotationTable.path="CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_withGenBankAcc_longer120bp.gff3", species=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus","Protobothrops_mucrosquamatus","Pantherophis_guttatus","Anolis_carolinensis","Pogona_vitticeps","Gekko_japonicus"), subgroup=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus","Protobothrops_mucrosquamatus","Pantherophis_guttatus"), output.dir="~/exomes/", is.primary.exome=1)
 ```
+
 The file **stats_exome_data_TBLASTX.txt** contains a table with NCBI annotation information for each exon. Rows correspond to exons, and columns include the following: (1) *Thamnophis sirtalis* NCBI Reference Sequence ID and location of exon (stop_start) **(start_stop?)** (2) number of species in alignment (always 11, because 11 species included, and only shared loci were aligned), (3) number of sites with at least four species represented, (4) number of parsimony informative sites, (5) percent of sites parsimony informative, (6) mean pairwise percent genetic similarity to *T. sirtalis*, (7–17) percent genetic similarity of each species to *T. sirtalis*, (18) exon alignment width, (19) width of *T. sirtalis* exon, (20) gene name associated with the exon (extracted from the last column of the filtered annotation table of *T. sirtalis*), (21) mean number of variable sites compared to *T. sirtalis*, (22) minimum percent genetic similarity to *T. sirtalis* (among the 11 species included), (23) minimum percent genetic similarity to *T. sirtalis* among the snakes included.
 
 6. Filter loci to include the most rapidly evolving loci while considering constraints imposed by the bait kit. To do this, I used the R function **pick.loci**, which: (1) filtered out loci if minimum percent genetic similarity (among snakes) to *T. sirtalis* was < 65% or = 100% (result: 64,546 exons pass step 1). (2) For genes with multiple exons, I only kept the exon with the lowest mean pairwise genetic distance to *T. sirtalis* (16,650 exons pass step 2 and are saved to **stats_data_FastestExonPerGene.txt**). (3) Identify the set of exons that maximize the total number of variable sites (all exons in set) while meeting the following constraints and conditions: total number of nucleotides targetted ≤ 1.2Mb and number of baits ≤ 20,000 (these are constraints of the 20K my-baits kit), bait size = 120nt, and bait tiling = 50% overlap.
