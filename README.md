@@ -343,8 +343,23 @@ for(i in 1:length(mhc.dna)){
 # calculate query coverage for each blastn match
 queryCoverage <- round((mhc.hits.Thamnophis[,"query.end"]-(mhc.hits.Thamnophis[,"query.start"]-1))/queryLength,digits=4)
 
+## Summarize the blastn hit table
 # filter hit table to only include matches with percent.identity and queryCoverage > 90%
-mhc.hits.filtered.90 <- mhc.hits.Thamnophis[which(mhc.hits.Thamnophis[,"percent.identity"] > 90 & queryCoverage > 0.9),]
+# mhc.hits.filtered.90 <- mhc.hits.Thamnophis[which(mhc.hits.Thamnophis[,"percent.identity"] > 90 & queryCoverage > 0.9),]
+
+x.vals      <- c(0,60,70,80,90,95,100)     ### x = threshold for percent.identity and percent queryCoverage
+n.matches   <- c(0:100)                    ### range for number of hits in genome to check
+summary.mat <- matrix(data="",ncol=length(x.vals),nrow=length(n.matches))
+
+for(i in 1:length(x.vals)){
+	mhc.hits.temp <- mhc.hits.Thamnophis[which(mhc.hits.Thamnophis[,"percent.identity"] >= x.vals[i] & queryCoverage >= (x.vals[i]/100)),]
+	for(j in 1:length(n.matches)){
+		summary.mat[j,i] <- length(which(table(mhc.hits.temp[,1])==n.matches[j]))
+	}
+}
+
+length(which(table(mhc.hits.filtered.100[,1])==0))
+
 
 ```
 
@@ -352,22 +367,23 @@ Summary of the MHC filtered hit table. The table below shows the number MHC loci
 
   n matches | MHC loci: x=0 | x=60 | x=70 | x=80 | x=90 | x=95 | x=100
  ---|---|---|---|---|---|---|---
-  1    | 28   | 30   | 31   | 35   | 50   | 58   | 70   
-  2    | 27   | 26   | 27   | 30   | 31   | 27   | 15   
-  3    |  4   |  4   |  6   |  6   |  2   |  0   |  0   
-  4    |  2   |  5   |  3   |  1   |  2   |  0   |  0   
-  5    |  6   |  6   |  6   |  2   |  0   |  0   |  0   
- &gt; 5| 19   | 15   | 13   | 12   |  0   |  0   |  0   
-
+  1    | 28   | 30   | 31   | 35   | 50   | 58   | 70
+  2    | 27   | 26   | 27   | 30   | 31   | 27   | 15
+  3    |  4   |  4   |  6   |  5   |  2   |  0   |  0
+  4    |  2   |  5   |  3   |  2   |  2   |  0   |  0
+  5    |  6   |  6   |  6   |  2   |  0   |  0   |  0
+ &gt; 5| 19   | 15   | 13   | 12   |  0   |  0   |  0
 
 The MHC loci with genomic coordinates NW_013661433.1:30811-30931 and NW_013659533.1:83942-84062 were dropped from the set of potential target loci because contained very short coding regions (4bp and 19bp, respectively).
 
+The remaining 84 MHC target loci were submitted to Arbor Biosciences for ultrastringent filtration and bait design (WeinellEntry1815-1898)... 
+
 <!--
-The remaining 84 MHC target loci were submitted to Arbor Biosciences for ultrastringent filtration and bait design (WeinellEntry1815-1898); 29 MHC loci failed ultrastringent filtration, and therefore no baits designed for these loci (**Version1_ZeroBaitCoverageLoci.tsv**). Additionally, 16 other MHC loci were filtered because their baits were non-specific within the genomes of *T. sirtalis* and/or *Thermophis baileyi* (**blast results files: XXXXXX)**. Another 12 MHC loci were already included as targets because they were identified as REEs, and therefore I removed one of the duplicates from each pair of duplicated targets (**Version1_removed-loci_duplicate-targets.tsv**). The final set of target loci for which baits were synthesised included 27 MHC loci plus five others that had been included as REEs (WeinellEntry248, 559, 728, 787, and 891).
+29 MHC loci failed ultrastringent filtration, and therefore no baits designed for these loci (**Version1_ZeroBaitCoverageLoci.tsv**). Additionally, 16 other MHC loci were filtered because their baits were non-specific within the genomes of *T. sirtalis* and/or *Thermophis baileyi* (**blast results files: XXXXXX)**. Another 12 MHC loci were already included as targets because they were identified as REEs, and therefore I removed one of the duplicates from each pair of duplicated targets (**Version1_removed-loci_duplicate-targets.tsv**). The final set of target loci for which baits were synthesised included 27 MHC loci plus five others that had been included as REEs (WeinellEntry248, 559, 728, 787, and 891).
 -->
 
 <!--
-Version1_ZeroBaitCoverageLoci.tsv: 70 REEs, 29 MHC loci
+Version1_ZeroBaitCoverageLoci.tsv: 70 REEs,, 29 MHC loci
 Version1_removed-loci_baits-nonspecific.tsv: 8 REEs, 2 MHC loci
 Version1_removed-loci_duplicate-targets.tsv: 12 MHC loci
 Version2-loci-removed_baits-nonspecific.tsv: 115 REEs, 14 MHC loci, and 12 UCEs
