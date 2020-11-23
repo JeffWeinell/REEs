@@ -348,16 +348,18 @@ mhc.hits.filtered <- mhc.hits.Thamnophis[which(mhc.hits.Thamnophis[,"percent.ide
 
 ```
 
-Summary of the MHC filtered hit table, which contains matches with ≥90% query coverage (MHC target coverage) and ≥85% identical sites between MHC target and genome match:
+Summary of the MHC filtered hit table. The table below shows the number MHC loci (columns 2-5) with at least n matches (column 1) in the genome of *T. sirtalis* with at least *x* percent coverage and percent identical sites across the covered region.
 
-number of matches in genome | number of MHC loci
----|---
-1  | 41
-2  | 30
-3  | 5
-4  | 3
-5  | 1
->5 | 5
+ n matches in *T. sirtalis* genome | MHC loci: x = 50% | x = 60% | x = 70% | x = 80% | x = 90% | x = 95% | x = 100%
+------|------|------|------|------|------|------|------
+ 1    |    41|      |      |      |      |      |      
+ 2    |    30|      |      |      |      |      |      
+ 3    |     5|      |      |      |      |      |      
+ 4    |     3|      |      |      |      |      |      
+ 5    |     1|      |      |      |      |      |      
+ >5   |     5|      |      |      |      |      |      
+
+contains matches with ≥90% query coverage (MHC target coverage) and ≥85% identical sites between MHC target and genome match:
 
 <!--
 The locus NW_013661433.1:30811-30931 matched seven genomic regions with 100% identity and contained a short CDS (4bp); therefore this target loci was dropped from further analyses. Additionally, the locus NW_013659533.1:83942-84062 was dropped because...
