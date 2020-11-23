@@ -46,14 +46,14 @@ WeinellEntry583	REE
 WeinellEntry585	REE
 WeinellEntry591	REE
 WeinellEntry600	REE
-WeinellEntry612	REE
+WeinellEntry612	REE_MHC
 WeinellEntry620	REE
 WeinellEntry626	REE
 WeinellEntry641	REE
 WeinellEntry711	REE
 WeinellEntry751	REE
 WeinellEntry779	REE
-WeinellEntry836	REE
+WeinellEntry836	REE_MHC
 WeinellEntry886	REE
 WeinellEntry910	REE
 WeinellEntry939	REE
@@ -69,7 +69,7 @@ WeinellEntry1110	REE
 WeinellEntry1137	REE
 WeinellEntry1171	REE
 WeinellEntry1218	REE
-WeinellEntry1232	REE
+WeinellEntry1232	REE_MHC
 WeinellEntry1248	REE
 WeinellEntry1262	REE
 WeinellEntry1297	REE
