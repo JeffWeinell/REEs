@@ -350,14 +350,14 @@ mhc.hits.filtered <- mhc.hits.Thamnophis[which(mhc.hits.Thamnophis[,"percent.ide
 
 Summary of the MHC filtered hit table. The table below shows the number MHC loci (columns 2-5) with at least n matches (column 1) in the genome of *T. sirtalis* with at least *x* percent coverage and percent identical sites across the covered region.
 
- n matches in *T. sirtalis* genome | MHC loci: x = 50% | x = 60% | x = 70% | x = 80% | x = 90% | x = 95% | x = 100%
-------|------|------|------|------|------|------|------
- 1    |    41|      |      |      |      |      |      
- 2    |    30|      |      |      |      |      |      
- 3    |     5|      |      |      |      |      |      
- 4    |     3|      |      |      |      |      |      
- 5    |     1|      |      |      |      |      |      
- >5   |     5|      |      |      |      |      |      
+  n matches in *T. sirtalis* genome | MHC loci: x = 50% | x = 60% | x = 70% | x = 80% | x = 90% | x = 95% | x = 100%
+ ------|------|------|------|------|------|------|------
+  1    |      |      |      |      |      |      |      
+  2    |      |      |      |      |      |      |      
+  3    |      |      |      |      |      |      |      
+  4    |      |      |      |      |      |      |      
+  5    |      |      |      |      |      |      |      
+ &gt; 5|      |      |      |      |      |      |      
 
 contains matches with ≥90% query coverage (MHC target coverage) and ≥85% identical sites between MHC target and genome match:
 
