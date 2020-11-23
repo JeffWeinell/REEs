@@ -402,7 +402,12 @@ Summary of the MHC filtered hit table. The table below shows the number MHC loci
 
 The MHC loci with genomic coordinates NW_013661433.1:30811-30931 and NW_013659533.1:83942-84062 were dropped from the set of potential target loci because contained very short coding regions (4bp and 19bp, respectively).
 
-The remaining 84 MHC target loci were submitted to Arbor Biosciences for ultrastringent filtration and bait design (WeinellEntry1815-1898); 29 MHC loci failed ultrastringent filtration, and therefore no baits designed for these loci (**Version1_ZeroBaitCoverageLoci.tsv**); 16 other MHC loci filtered because their baits were all non-specific within the genomes of *T. sirtalis* and/or *Thermophis baileyi* (**blast results files: XXXXXX)**. Another 12 MHC loci were already included as targets (as REEs), and therefore I removed the duplicated targets (**Version1_removed-loci_duplicate-targets.tsv**). The final set of target loci for which baits were synthesised included 27 MHC loci plus five others that had been included as REEs (WeinellEntry248, 559, 728, 787, and 891).
+The remaining 84 MHC target loci were submitted to Arbor Biosciences for ultrastringent filtration and bait design (WeinellEntry1815-1898):
+ - 29 MHC loci failed ultrastringent filtration, and therefore no baits designed for these loci (**Version1_ZeroBaitCoverageLoci.tsv**)
+ - 16 other MHC loci were filtered because their baits were all non-specific within the genomes of *T. sirtalis* (**blast results files: XXXXXX)**
+ - 12 other MHC loci were already picked as targets (as REEs), and therefore I removed these duplicated targets (**Version1_removed-loci_duplicate-targets.tsv**). 
+ 
+The remaining 27 MHC loci (non-REEs) and six others that were targetted as REEs (entries 248, 559, 728, 787, 891, and 1944) were included in the final set of target loci for which baits were synthesized.
 
 <!--
 Version1_Target-loci_Jeff-Weinell_10Sep2018.fasta: 1802 REEs (non-MHC), 12 REE/MHCs, 84 MHCs
