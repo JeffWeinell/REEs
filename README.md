@@ -323,7 +323,41 @@ MHC.targets <- get_ncbi_sequences(outfile="~/MHC-target-loci_preliminary.fasta",
 
 Next, I used blastn to search for the MHC target loci in the *T. sirtalis* genome (results in hit table **MHC_86-targets-vs-Thamnophis_HitTable.csv**).
 
+Examining the hit tables in R:
 
+```
+# read in the blastn hit table
+mhc.hits.Thamnophis            <- read.csv(file="~/MHC_86-targets-vs-Thamnophis_HitTable.csv",header=F)
+colnames(mhc.hits.Thamnophis)  <- c("query.acc.ver", "subject.acc.ver", "percent.identity", "alignment.length", "mismatches", "gap.opens", "query.start", "query.end", "subject.start", "subject.end", "evalue", "bit score")
+
+# read target MHC sequences
+library(Biostrings)
+mhc.dna        <- readDNAStringSet(filepath="/Users/alyssaleinweber/Documents/Jeff_SequenceCapture-GitHub/MHC-target-loci_preliminary.fasta")
+names(mhc.dna) <- gsub(pattern=" .*",replacement="",names(mhc.dna))
+
+# create a vector for query length (mhc target length) corresponding to the rows of the hit table so that query coverage can be calculated
+queryLength <- vector(mode="numeric",length=nrow(mhc.hits.Thamnophis))
+for(i in 1:length(mhc.dna)){
+	queryLength[which(mhc.hits.Thamnophis[,1]==names(mhc.dna[i]))] <- width(mhc.dna[i])
+}
+# calculate query coverage for each blastn match
+queryCoverage <- round((mhc.hits.Thamnophis[,"query.end"]-(mhc.hits.Thamnophis[,"query.start"]-1))/queryLength,digits=4)
+
+# filter hit table to only include matches with percent.identity > 85 and queryCoverage > 0.90 (=90%)
+mhc.hits.filtered <- mhc.hits.Thamnophis[which(mhc.hits.Thamnophis[,"percent.identity"] > 85 & queryCoverage > 0.9),]
+
+```
+
+Summary of the MHC filtered hit table, which contains matches with ≥90% query coverage (MHC target coverage) and ≥85% identical sites between MHC target and genome match:
+
+number of matches in genome | number of MHC loci
+---|---
+1  | 41
+2  | 30
+3  | 5
+4  | 3
+5  | 1
+>5 | 5
 
 <!--
 The locus NW_013661433.1:30811-30931 matched seven genomic regions with 100% identity and contained a short CDS (4bp); therefore this target loci was dropped from further analyses. Additionally, the locus NW_013659533.1:83942-84062 was dropped because...
