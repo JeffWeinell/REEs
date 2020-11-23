@@ -50,6 +50,7 @@ Vision | 160nt, including ≤ 70nt upstream of start codon if targeted exon is f
 Scalation | 1100nt, including 1000nt of promoter region + first 100nt of first exon. | 95 | 81,851 | 125–1,101
 All loci |  | 3,129 | 1,517,011 | 120–7,501 (mean = 531.62)  
 
+
 <a name="Methods"></a>
 ## Methods
 
@@ -83,17 +84,17 @@ get.exome.from.annotationTable()
 #### Table 4. Genomes used to select REEs.
 Species  | Family | NCBI Genome Assembly Accession
 ----|----|---- 
-Anolis carolinensis | Dactyloidae | GCF_000090745.1
-Gekko japonicus | Gekkonidae | GCF_001447785.1
-Pogona vitticeps | Agamidae | 
-Crotalus horridus | Viperidae (Crotalinae) | GCA_001625485.1
-Crotalus mitchellii (= C. pyrrhus) | Viperidae (Crotalinae) | GCA_000737285.1
-Ophiophagus hannah | Elapidae | GCA_000516915.1
-Pantherophis guttatus | Colubridae (Colubrinae) | GCA_001185365.1
-Protobothrops mucrosquamatus | Viperidae (Crotalinae) | GCF_001527695.1
-Python bivitattus | Pythonidae | GCF_000186305.1
-Thamnophis sirtalis | Colubridae (Natricinae) | GCF_001077635.1
-Vipera berus berus | Viperidae (Viperinae) | GCA_000800605.1
+*Anolis carolinensis* | Dactyloidae | GCF_000090745.1
+*Gekko japonicus* | Gekkonidae | GCF_001447785.1
+*Pogona vitticeps* | Agamidae | GCF_900067755.1
+*Crotalus horridus* | Viperidae (Crotalinae) | GCA_001625485.1
+*Crotalus mitchellii* (= *C. pyrrhus*) | Viperidae (Crotalinae) | GCA_000737285.1
+*Ophiophagus hannah* | Elapidae | GCA_000516915.1
+*Pantherophis guttatus* | Colubridae (Colubrinae) | GCA_001185365.1
+*Protobothrops mucrosquamatus* | Viperidae (Crotalinae) | GCF_001527695.1
+*Python bivitattus* | Pythonidae | GCF_000186305.1
+*Thamnophis sirtalis* | Colubridae (Natricinae) | GCF_001077635.1
+*Vipera berus berus* | Viperidae (Viperinae) | GCA_000800605.1
 
 
 ```
@@ -420,6 +421,17 @@ I used blastn to search for the vision loci probes from Schott et al. (2017) (wh
 ### Probe Synthesis
 
 After choosing the target loci, probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total. See **Target-loci_Coverage_graph_22October2020.pdf** for a visual summary of target loci, probes, probe coverage, and features of loci including genes, mRNA/transcribed regions, and protein-coding (CDS) regions. This graph was generated with **graph_target_and_features.R** and then filesize reduction in Adobe Acrobat.
+
+**Table X.** Genomes from which synthesized baits were designed from.
+species | genome assembly accession | contig prefixes | n target loci with baits designed from species | n bait-containing contigs
+----|----|----|----
+*Thamnophis sirtalis* | GCF_001077635.1 | NW_0136; LFLD01 | 2,619  | 1,412 
+*Ophiophagus hannah* | GCA_000516915.1  | AZIM01 | 151 | 86 
+*Crotalus horridus* | GCA_001625485.1 | LVCR01 | 2  | 2 
+*Python bivittatus* | GCF_000186305.1 | NW_0065; AEQU02 | 18  | 7 
+*Probothrops mucrosquamatus* | GCF_001527695.1 | NW_0153; BCNE02 | 9  | 9
+*Pantherophis guttatus* | GCA_001185365.1 | JTLQ01 | 2  | 2
+*Thermophis baileyi* | GCA_003457575.1 | QLTV01 | 328  | 229
 
 <a name="Sampling"></a>
 ### Taxa Sampled
