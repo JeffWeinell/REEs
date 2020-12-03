@@ -64,7 +64,11 @@ All loci |  | 3,129 | 1,517,011 | 120–7,501 (mean = 531.62)
 <!-- <a name="Methods.SelectingREEs.detailed"></a> -->
 #### Detailed, step-by-step methods for how I chose the set of target REEs
 
-1. I downloaded the *Thamnophis sirtalis* genome, and its associated annotation table: **ref_Thamnophis_sirtalis-6.0_top_level_MHC.gff3** (n = 559,129 annotations). I renamed the sequences in the genome file to have the following format: **Thamnophis_sirtalis_GCF_001077635.1_read1**, etc., and wrote the renamed genome as a new file in sequential fasta format. I then made a two-column text file named **Scaffold-Name-Key.txt**, which has the following table (columns tab-delimited):
+1. I downloaded the *Thamnophis sirtalis* genome, and its associated annotation table: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz) (n = 559,129 annotations). I renamed the sequences in the genome file to have the following format: **Thamnophis_sirtalis_GCF_001077635.1_read1**, **Thamnophis_sirtalis_GCF_001077635.1_read2** etc., and save the genome in sequential fasta format. I then made a two-column, tab-delimited file named [Scaffold-Name-Key.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/main/exomes/Scaffold-Name-Key.txt?token=AJJOG2UQ6MDA7UY2U4R6BFS7ZDZYS), which includes the new sequence name in the first column and the original sequence name in the second column:
+
+<!---
+At some point this file becomes involved: ref_Thamnophis_sirtalis-6.0_top_level.gff3
+--->
 
 ScaffoldName | RefSeq.ScaffoldAccession
 ------------ | -------------
