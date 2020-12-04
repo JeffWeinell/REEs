@@ -180,13 +180,13 @@ rollSum <- function(x){
 }
 
 ######## string.list function
+### converts a character matrix into a character vector: ith element of output vector = values of ith row of input matrix collapsed into character string 
 string.list <- function(y){
 	paste.collapse <- function(z){
 		z <- paste(z,collapse="")
 		z
 	}
 	if(class(y)[1]!="matrix"){
-		#y <- as.character(y)
 		y <- as.matrix(y)
 	}
 	y <- apply(X=y,MARGIN=1,FUN=paste.collapse)
