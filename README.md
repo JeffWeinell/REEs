@@ -5,13 +5,13 @@
 [Description of SnakeCap Probe Set](#Description)
 
 [Methods](#Methods)
-  - [Choosing loci to include in the probe set](#Methods.SelectingTargetLoci)
-    - [Selecting the set of target Rapidly-evolving Exons (REEs)](#Methods.SelectingREEs)
-    - [Selecting the set of target Ultraconserved-elements (UCEs)](#Methods.SelectingUCEs)
-    - [Selecting the set of target ddRAD-like loci](#Methods.SelectingddRAD)
-    - [Selecting the set of target major histocompatibility loci (MHCs)](#Methods.SelectingMHC)
-    - [Selecting the set of target scalation loci](#Methods.SelectingScalation)
-    - [Selecting the set of target vision loci](#Methods.SelectingVision)
+  - [Choosing loci to capture](#Methods.SelectingTargetLoci)
+    - [Rapidly-evolving Exons (REEs)](#Methods.SelectingREEs)
+    - [Ultraconserved-elements (UCEs)](#Methods.SelectingUCEs)
+    - [ddRAD-like loci](#Methods.SelectingddRAD)
+    - [major histocompatibility loci (MHCs)](#Methods.SelectingMHC)
+    - [scalation loci](#Methods.SelectingScalation)
+    - [vision loci](#Methods.SelectingVision)
   - [Probe Synthesis](#ProbeSynthesis)
   - [Taxa Sampled](#Sampling)
   - [Sequence Capture Library Prep](#LibraryPrep)
@@ -64,7 +64,7 @@ All loci |  | 3,129 | 1,517,011 | 120–7,501 (mean = 531.62)
 <!-- <a name="Methods.SelectingREEs.detailed"></a> -->
 #### Detailed, step-by-step methods for how I chose the set of target REEs
 
-1. I downloaded the *Thamnophis sirtalis* genome, and its associated annotation table: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz) (n = 559,129 annotations). I renamed the sequences in the genome file to have the following format: **Thamnophis_sirtalis_GCF_001077635.1_read1**, **Thamnophis_sirtalis_GCF_001077635.1_read2** etc., and save the genome in sequential fasta format. I then made a two-column, tab-delimited file named [Scaffold-Name-Key.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/main/exomes/Scaffold-Name-Key.txt?token=AJJOG2UQ6MDA7UY2U4R6BFS7ZDZYS), which includes the new sequence name in the first column and the original sequence name in the second column:
+1. I downloaded the *Thamnophis sirtalis* genome, and its associated annotation table: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz) (n = 559,129 annotations). I renamed the contig sequences in the genome file to have the following format: **Thamnophis_sirtalis_GCF_001077635.1_read1**, **Thamnophis_sirtalis_GCF_001077635.1_read2**, etc., and saved the genome in sequential fasta format: [ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/exomes/ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip). The two-column, tab-delimited table [Scaffold-Name-Key.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/main/exomes/Scaffold-Name-Key.txt?token=AJJOG2UQ6MDA7UY2U4R6BFS7ZDZYS) includes the new contig name in the first column and the original contig name in the second column:
 
 <!---
 At some point this file becomes involved: ref_Thamnophis_sirtalis-6.0_top_level.gff3
@@ -120,7 +120,7 @@ get.exome.from.blastTable(species="Vipera_berus",genome.filepath="~/Vipera_berus
 5. Align shared exons and calculate stats. I used the R function **makeExomeStatsTable** to do all of the following:
   - obtain the set of *T. sirtalis* exons present in all exomes (from step 3), i.e., the shared exons
   - perform multiple sequence alignment (MAFFT algorithm) for each of the shared exons
-  - calculate a set of stats for each shared exon alignment, and save results to the file **stats_exome_data_TBLASTX.txt** (results: includes stats for 66,489 alignments). 
+  - calculate a set of stats for each shared exon alignment, and save results to the file **stats_exome_data_TBLASTX.txt** (results: stats for 66,489 alignments). 
   
 ```
 ### "species" parameter includes the set of the squamates
@@ -142,10 +142,9 @@ result.pident <- pick.loci(statsTable.path = "~/AlignedExonStats/stats_exome_dat
 Insert code showing the function used for selecting the optimal set of target exons given the constraints listed above. This script sorted the exons by % similarity to T. sirtalis (increasing simility), calculated the number of baits needed to capture each exon, and then performed a rolling summation across the vector of number of baits/exon, and a rolling summation of target exon length. The largest set of exons for which number of baits ≤ 20,000 and number of nucleotides ≤ 120,000,000 was chosen as the optimal set.
 ```
 
-Result = 2,068 REEs retained; the stats table for these loci was written to the file **stats_data_FastestExonPerGene_best.txt**; an updated version of this stats table that includes the WeinellEntry locus names is **stats_data_FastestExonPerGene_best_20Nov2020.txt**.
+Result = 2,068 REEs retained; the stats table for these loci was written to the file [stats_data_FastestExonPerGene_best.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/REEs/stats_data_FastestExonPerGene_best.txt); an updated version of this stats table that includes the WeinellEntry locus names is [stats_data_FastestExonPerGene_best_20Nov2020.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/REEs/stats_data_FastestExonPerGene_best_20Nov2020.tsv).
 
-These 2,068 REEs were submitted to Arbor Biosciences for probe design. Arbor performed ultrastringent filtration these loci which resulted in the removal of 70 REEs (**Version1_ZeroBaitCoverageLoci.tsv**), whereas 1,998 passed this step. An additional 123 REEs were removed because the baits designed to target these loci were all non-specific within the genomes of *T. sirtalis* and/or *Thermophis baileyi*; 212 other REEs were removed to allow some baits to be used to target other types of loci (UCEs, immune, scalation, vision, and ddRAD-like loci). The remaining 1,653 REEs were synthesized and included in the mybaits 20K bait kit (product no. 3001160). 
-
+These 2,068 REEs were submitted to Arbor Biosciences for probe design. Arbor performed ultrastringent filtration these loci which resulted in the removal of 70 REEs [Version1-loci-removed_ZeroBaitCoverageLoci.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version1-loci-removed_ZeroBaitCoverageLoci.tsv), whereas 1,998 passed this step. An additional 123 REEs were removed because the baits designed to target these loci were all non-specific within the genomes of *T. sirtalis* and/or *Thermophis baileyi*; 212 other REEs were removed to allow some baits to be used to target other types of loci (UCEs, immune, scalation, vision, and ddRAD-like loci). The remaining 1,653 REEs were synthesized and included in the mybaits 20K bait kit (product no. 3001160). 
 
 <!--
 REEs that failed ultrastringent filtration: 70
@@ -155,8 +154,6 @@ Total REEs removed: 70+123+212 = 405
 1,653 REEs were synthesized and included in the bait kit.
 10 REEs unaccounted for...
 -->
-
-
 
 <!--- Next step was done but wasn't necessary. It might be good to run this as a sanity check when picking REEs for future probe sets
 7. I used the R function align.and.concatenate.best.exons to perform multiple sequence alignment (MAFFT algorithm) for each exon in the "stats_data_FastestExonPerGene_best.txt" file (which was generated by the pick.loci function in step 5), and to concatenate exon alignments and generate an associated partition file. Single-locus alignments, the concatenated loci alignment, and the partition file were each saved to file. I estimated gene trees from these alignments (using IQTREE) to get a sense for how much phylogenetic information each locus contained.
