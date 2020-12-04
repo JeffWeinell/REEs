@@ -185,8 +185,9 @@ string.list <- function(y){
 		z <- paste(z,collapse="")
 		z
 	}
-	if(class(y)!="matrix"){
-		y <- as.character(y)
+	if(class(y)[1]!="matrix"){
+		#y <- as.character(y)
+		y <- as.matrix(y)
 	}
 	y <- apply(X=y,MARGIN=1,FUN=paste.collapse)
 	y
@@ -421,7 +422,7 @@ filter.alignment <- function (alignment,mdt=1,min.var=1,min.freq.common=1,min.fr
 			z <- paste(z,collapse="")
 			z
 		}
-		if(class(y)!="matrix"){
+		if(class(y)[1]!="matrix"){
 			#y <- as.character(y)
 			y <- as.matrix(y)
 		}
@@ -450,11 +451,17 @@ filter.alignment <- function (alignment,mdt=1,min.var=1,min.freq.common=1,min.fr
 	
 	if(store.class %in% c("DNAMultipleAlignment","DNAStringSet")){
 		alignment <- as.DNAbin(DNAMultipleAlignment(alignment))
-		data.type <- "DNA"
 	}
 	
 	if(store.class %in% c("AAMultipleAlignment","AAStringSet")){
 		alignment <- as.AAbin(AAMultipleAlignment(alignment))
+	}
+	
+	if(store.class == "DNAbin"){
+		data.type <- "DNA"
+	}
+	
+	if(store.class == "AAbin"){
 		data.type <- "AA"
 	}
 	
