@@ -74,7 +74,7 @@ Thamnophis.sirtalis_GFF.url       <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/G
 Thamnophis.sirtalis_GFF.url       <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz"
 Thamnophis.sirtalis_GFF           <- data.table::fread(Thamnophis.sirtalis_GFF.url,col.names=c("seqname","source","feature","start","end","score","strand","frame","attribute"),skip=8,sep="\t",fill=TRUE,blank.lines.skip=TRUE)
 
-### Removing incomplete:
+### Removing incomplete/empty feature lines:
 Thamnophis.sirtalis_GFF <- Thamnophis.sirtalis_GFF[-which(Thamnophis.sirtalis_GFF$feature=="")]
 
 ### Saving to file:
@@ -92,10 +92,11 @@ Thamnophis_sirtalis_GCF_001077635.1_read2 | ...
 ...|...
 Thamnophis_sirtalis_GCF_001077635.1_readN|...
 
-2. *Thamnophis sirtalis* exome extracted from genome. I used the function **filter.annotationTable** to: (1) filter the original annotation table to only include annotations for regions that are both CDS regions and ≥ 120bp in length (result: n = 115,907 annotations for 77,329 unique regions), and (2) write the filtered annotation table to a file: **CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_withGenBankAcc_longer120bp.gff3**. Then, I used the function **get.exome.from.annotationTable** to extract from the genome the DNA sequences included in the filtered annotation table, and to write the extracted DNA sequences (the exome) to a file in fasta format: **Thamnophis_sirtalis_exome_longer120bp.fas**.
+2. *Thamnophis sirtalis* exome extracted from genome. I used the function **filter.annotationTable** to: (1) filter the original annotation table to only include annotations for regions that are both CDS regions and ≥ 120bp in length (result: n = 115,907 annotations for 77,329 unique features), and (2) write the filtered annotation table to a file: **CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_withGenBankAcc_longer120bp.gff3**. Then, I used the function **get.exome.from.annotationTable** to extract from the genome the DNA sequences included in the filtered annotation table, and to write the extracted DNA sequences (the exome) to a file in fasta format: **Thamnophis_sirtalis_exome_longer120bp.fas**.
 
 ```
-filter.annotationTable(input.gff="~/ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3",output.gff="CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3",region.type="CDS",min.length=120)
+### Filtering the feature table.
+Thamnophis.sirtalis_GFF_CDS_longer120bp <- filter.annotationTable(input.gff=Thamnophis.sirtalis_GFF,output.gff="CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3",feature.type="CDS",min.length=120)
 
 get.exome.from.annotationTable(species.name="Thamnophis_sirtalis",genome.filepath="~/Thamnophis_sirtalis_GCF_001077635.1_genome_renamed_sequential.fas",input.gff="CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3",output.dir.exome = "~/exomes/",additional.ID="Scaffold-Name-Key.txt")
 ```
