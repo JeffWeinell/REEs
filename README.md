@@ -66,6 +66,21 @@ All loci |  | 3,129 | 1,517,011 | 120–7,501 (mean = 531.62)
 
 1. I downloaded the *Thamnophis sirtalis* genome, and its associated annotation table: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz) (n = 559,130 features annotated). I renamed the contig sequences in the genome file to have the following format: **Thamnophis_sirtalis_GCF_001077635.1_read1**, **Thamnophis_sirtalis_GCF_001077635.1_read2**, etc., and saved the genome in sequential fasta format: [ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/exomes/ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip). The two-column, tab-delimited table [Scaffold-Name-Key.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/main/exomes/Scaffold-Name-Key.txt?token=AJJOG2UQ6MDA7UY2U4R6BFS7ZDZYS) includes the new contig name in the first column and the original contig name in the second column:
 
+```
+### URL to the feature table.
+Thamnophis.sirtalis_GFF.url       <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz"
+
+### Loading feature annotation table into R
+Thamnophis.sirtalis_GFF.url       <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz"
+Thamnophis.sirtalis_GFF           <- data.table::fread(Thamnophis.sirtalis_GFF.url,col.names=c("seqname","source","feature","start","end","score","strand","frame","attribute"),skip=8,sep="\t",fill=TRUE,blank.lines.skip=TRUE)
+
+### Removing incomplete:
+Thamnophis.sirtalis_GFF <- Thamnophis.sirtalis_GFF[-which(Thamnophis.sirtalis_GFF$feature=="")]
+
+### Saving to file:
+write.table("~/ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3",sep="\t")
+```
+
 <!---
 At some point this file becomes involved: ref_Thamnophis_sirtalis-6.0_top_level.gff3
 --->
