@@ -122,9 +122,13 @@ Species  | Family | NCBI Genome Assembly Accession
 *Thamnophis sirtalis* | Colubridae (Natricinae) | GCF_001077635.1
 *Vipera berus berus* | Viperidae (Viperinae) | GCA_000800605.1
 
-I queried each *T. sirtalis* exon against each squamate genome using **tblastx** (allowing up to 50 matches to be saved per query). This step produces a Hit Table for each species with stats on each query/target match, including the bitscore, which is a measurement how good the match is (how likely the match corresponds to homology). **Note to self**: I used the cluster submission file **TBLASTX.sh** to perform this step.
+I queried each *T. sirtalis* exon against each squamate genome using **tblastx** (allowing up to 50 matches to be saved per query). This step produces a Hit Table for each species with stats on each query/target match, including the bitscore, which is a measurement how good the match is (how likely the match corresponds to homology).
 
 ```
+# Method implemented in the R wrapper function REEs::blast
+Anolis_carolinensis.tblastx.exons.50hits <- blast(method="tblastx",subject.path="./genomes/Anolis_carolinensis",query.path="./BlastQuery_ThamnophisExons/final_targetCDS_Longer120bp.fa",table.path="./TBlastXResults/Anolis_carolinensis.tblastx.exons.50hits.txt")
+
+# Which runs: 
 ./ncbi-blast-2.6.0+/bin/tblastx -db ./genomes/Anolis_carolinensis -query ./BlastQuery_ThamnophisExons/final_targetCDS_Longer120bp.fa -out ./TBlastXResults/Anolis_carolinensis.tblastx.exons.50hits.txt -evalue 1e-5 -outfmt 6 -max_target_seqs 50 -num_threads 16
 
 ```
