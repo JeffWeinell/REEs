@@ -512,7 +512,7 @@ demuxbyname.sh in="HF10_N2_USPD16097067_HY25JBBXX_L4_1.fq" in2="HF10_N2_USPD1609
 To processes sequence reads (assemble contigs for each sample) I followed the FrogCap pipeline (Hutter et al., 2019), which involved running the following R scripts:
 - **01_Pre_Process_Reads_Apr10.R**
 - **02_Assemble_Spades_Apr18.R**
-- **03_Target-loci_matching_20Feb2020.R** (= **03_Probe-Matching.R** of Hutter et al., 2019)
+- **03_Target-loci_matching_20Feb2020.R** (= **03_Probe-Matching.R** of Hutter et al., 2019) Summary of results:[Sample-Assessment.tsv](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/main/Sample-Assessment.tsv?token=AJJOG2XJAXWKGTBXVUBWCCK73N2LQ)
 - **03-2_Data-subsetting_JLW.R** (This is an extra step not in Hutter et al., 2019)
 - **04_Loci_alignment_1May2019.R**
 - **05_mtgenome_assembly_May8.R**
