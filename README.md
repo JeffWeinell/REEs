@@ -186,32 +186,32 @@ The output sequences were saved in fasta format and can be downloaded here: [Ano
 column number|column name|column description
 ---|---|---
 1|Thamnophis_sirtalis.locus|Contig accession and start and end position of the query sequence.
-2|num.Species|number of species (individuals) in the alignment
-3|CountCover|number of sites with at least four individuals with non-missing or ambiguous data
-4|absolutePIS|number of parsimony informative sites
+2|num.Species|Number of species (individuals) in the alignment
+3|CountCover|Number of sites with at least four individuals with non-missing or ambiguous data
+4|absolutePIS|Number of parsimony informative sites
 5|percentPIS|percent of the sites with at least four individuals with non-missing or ambiguous data that are parsimony informative (i.e., percent of sites that could be parsimony informative that actually are)
-6|mean.pident|mean pairwise percent of sites identical to *T. sirtalis*; this is the mean of columns 8–17.
-7|pident.Thamnophis_sirtalis|percent of sites identical between *T. sirtalis* query and *T. sirtalis* best match; this should always be 100 and any other value indicates the tblastx match that was chosen as the best match (step 4 reportBestMatches function) is not the true best match.
-8|pident.Anolis_carolinensis|
-9|pident.Gekko_japonicus|
-10|pident.Pagona_vitticeps|
-11|pident.Crotalus_horridus|
-12|pident.Crotalus_mitchellii|
-13|pident.Ophiophagus_hannah|
-14|pident.Pantherophis_guttatus|
-15|pident.Protobothrops_mucrosquamatus|
-16|pident.Python_bivittatus|
-17|pident.Viperus_berus|
-18|alignment.width|
-19|gene.name|
-20|locus.length.Thamnophis_sirtalis|
-21|mean.variable.sites|
+6|mean.pident|Mean pairwise percent of sites identical to *T. sirtalis*; this is the mean of columns 8–17.
+7|pident.Thamnophis_sirtalis|Percent of sites identical between *T. sirtalis* query and *T. sirtalis* best match; this should always be 100 and any other value indicates the tblastx match that was chosen as the best match (step 4 reportBestMatches function) is not the true best match.
+8|pident.Anolis_carolinensis|Percent of sites identical between *T. sirtalis* query and *A. carolinensis* best match.
+9|pident.Gekko_japonicus|Percent of sites identical between *T. sirtalis* query and *G. japonicus* best match.
+10|pident.Pagona_vitticeps|Percent of sites identical between *T. sirtalis* query and *P. vitticeps* best match.
+11|pident.Crotalus_horridus|Percent of sites identical between *T. sirtalis* query and *C. horridus* best match.
+12|pident.Crotalus_mitchellii|Percent of sites identical between *T. sirtalis* query and *C. mitchellii* best match.
+13|pident.Ophiophagus_hannah|Percent of sites identical between *T. sirtalis* query and *O. hannah* best match.
+14|pident.Pantherophis_guttatus|Percent of sites identical between *T. sirtalis* query and *P. guttatus* best match.
+15|pident.Protobothrops_mucrosquamatus|Percent of sites identical between *T. sirtalis* query and *P. mucrosquamatus* best match.
+16|pident.Python_bivittatus|Percent of sites identical between *T. sirtalis* query and *P. bivittatus* best match.
+17|pident.Viperus_berus|Percent of sites identical between *T. sirtalis* query and *V. berus* best match.
+18|alignment.width|Width of the alignment
+19|gene.name|Name of the gene of the *T. sirtalis* query locus. The is the name associated with the query sequence's CDS feature in the *T. sirtalis* GFF genome feature table.
+20|locus.length.Thamnophis_sirtalis|Length of the query sequence
+21|mean.variable.sites| Mean pairwise percent of sites variable. This is simply (100-mean.pident)/100
 22|min.pident.all|
 23|min.pident.subgroup|
 
  
 ```
-### Create a character vector holding the paths (or object names) to each of the ".*.best.hits_seqs.fas" files generated in step 5. 
+### Create a character vector holding the paths to each of the ".*.best.hits_seqs.fas" files generated in step 5. 
 input.seqs.paths <- c("Anolis.carolinensis.best.hits_seqs.fas", "Gekko.japonicus.best.hits_seqs.fas", "Pagona.vitticeps.best.hits_seqs.fas", "Crotalus.horridus.best.hits_seqs.fas", "Crotalus.mitchellii.best.hits_seqs.fas", "Ophiophagus.hannah.best.hits_seqs.fas", "Pantherophis.guttatus.best.hits_seqs.fas", "Protobothrops.mucrosquamatus.best.hits_seqs.fas", "Python.bivittatus.best.hits_seqs.fas", "Viperus.berus.best.hits_seqs.fas", "Thamnophis.sirtalis.best.hits_seqs.fas")
 
 ### Align homologous sequences and make a table to summarize data in each alignment (one row per aligned locus).
