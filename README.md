@@ -90,10 +90,7 @@ The output (filtered) GFF3 feature table can be downloaded here: **CDS_ref_Thamn
 ### URL to the Thamnophis sirtalis genome (fasta formatted sequences).
 Thamnophis.sirtalis_genome.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz"
 
-### Define URL path to the Thamnophis sirtalis genome sequences (fasta format)
-Thamnophis.sirtalis_genome.path <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz"
-
-### Use get.seqs.from.gff to extract the sequences for the loci in the filtered GFF (Thamnophis.sirtalis_GFF_CDS_longer120bp from step 1).
+### Extract the sequences for the loci in the filtered GFF (Thamnophis.sirtalis_GFF_CDS_longer120bp from step 1).
 Thamnophis.sirtalis_exome   <- get.seqs.from.gff(input.seqs=Thamnophis.sirtalis_genome.path,input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp) 
 ```
 Output DNA sequences were saved in fasta format and can be downloaded here: **Thamnophis_sirtalis_exome_longer120bp.fas**.
