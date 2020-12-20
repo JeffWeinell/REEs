@@ -212,21 +212,10 @@ column number|column name|column description
  
 ```
 ### Create a character vector holding the paths (or object names) to each of the ".*.best.hits_seqs.fas" files generated in step 5. 
-input.seqs.paths <- c("Anolis.carolinensis.best.hits_seqs.fas","Gekko.japonicus.best.hits_seqs.fas","Pagona.vitticeps.best.hits_seqs.fas","Crotalus.horridus.best.hits_seqs.fas", "Crotalus.mitchellii.best.hits_seqs.fas","Ophiophagus.hannah.best.hits_seqs.fas","Pantherophis.guttatus.best.hits_seqs.fas", "Protobothrops.mucrosquamatus.best.hits_seqs.fas","Python.bivittatus.best.hits_seqs.fas","Viperus.berus.best.hits_seqs.fas")
-
+input.seqs.paths <- c("Anolis.carolinensis.best.hits_seqs.fas", "Gekko.japonicus.best.hits_seqs.fas", "Pagona.vitticeps.best.hits_seqs.fas", "Crotalus.horridus.best.hits_seqs.fas", "Crotalus.mitchellii.best.hits_seqs.fas", "Ophiophagus.hannah.best.hits_seqs.fas", "Pantherophis.guttatus.best.hits_seqs.fas", "Protobothrops.mucrosquamatus.best.hits_seqs.fas", "Python.bivittatus.best.hits_seqs.fas", "Viperus.berus.best.hits_seqs.fas", "Thamnophis.sirtalis.best.hits_seqs.fas")
 
 ### Align homologous sequences and make a table to summarize data in each alignment (one row per aligned locus).
-stats.table  <- makeStatsTable(input.seqs=input.seqs.paths,species=species.temp,input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp,output.path=table.out,alignments.out=alignments.dir,species.gff=10)
-
-
-
-
-
-### "species" parameter includes the set of the squamates
-### "subgroup" parameter includes the set of the snakes
-### "is.primary.exome" was set to 1 because Thamnophis sirtalis is the first species in the "species" parameter vector, and this is the species that baits were designed from
-
-stats_exome <- makeExomeStatsTable(exomes.filepaths=list.files(path="~/exomes/",full.names=T), annotationTable.path="CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_withGenBankAcc_longer120bp.gff3", species=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus","Protobothrops_mucrosquamatus","Pantherophis_guttatus","Anolis_carolinensis","Pogona_vitticeps","Gekko_japonicus"), subgroup=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus","Protobothrops_mucrosquamatus","Pantherophis_guttatus"), output.dir="~/exomes/", is.primary.exome=1)
+stats.table  <- makeStatsTable(input.seqs=input.seqs.paths,species=species=c("Anolis carolinensis","Gekko japonicus","Pogona vitticeps","Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"), input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp, output.path="./stats_exome_data_TBLASTX.txt", subgroup=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),alignments.out=alignments.dir, species.gff=11)
 ```
 
 The output table includes stats for 66,489 alignments was saved to the file [stats_exome_data_TBLASTX.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/stats_exome_data_TBLASTX.txt.gz?raw=true). 
