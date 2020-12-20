@@ -39,7 +39,7 @@ ddRAD-like loci are shared, single-copy loci identified from in-silico ddRAD usi
 
 Functional loci included entire or partial gene regions that have previously been predicted or known to function in either (1) vertebrate immune systems, (2) vision, (3) or scalation.
 
-#### Table 2.1 For each type of locus: genomic region targeted, number of loci (nloci), total number of nucleotides targeted (nnt), and nucleotide lengths (nt/locus) of the shortest and longest loci.
+#### Table 1. For each type of locus: genomic region targeted, number of loci (nloci), total number of nucleotides targeted (nnt), and nucleotide lengths (nt/locus) of the shortest and longest loci.
 
 Locus type | Region targeted | nloci | nnt | nt/locus (min–max)
 ---- | ---- | ---- | ---- | ----
@@ -105,9 +105,9 @@ Thamnophis.sirtalis_GFF_CDS_longer120bp <- filter.annotationTable(input.gff=Tham
 get.exome.from.annotationTable(species.name="Thamnophis_sirtalis",genome.filepath="~/Thamnophis_sirtalis_GCF_001077635.1_genome_renamed_sequential.fas",input.gff="CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_longer120bp.gff3",output.dir.exome = "~/exomes/",additional.ID="Scaffold-Name-Key.txt")
 ```
 
-3. I downloaded all squamate genomes available from NCBI and then searched within each for exons homologous to those in the *T. sirtalis* exome (**Table 4**).
+3. I queried each *T. sirtalis* exon against each squamate genome (Table 2) using **TBLASTX** as implemented in the REEs::blast function, allowing up to 50 matches to be saved per query.
 
-**Table 4**. Genomes used to select REEs included all squamate genomes available from NCBI.
+**Table 2**. Genomes used to select REEs included all squamate genomes available from NCBI in 2017.
 Species  | Family | NCBI Genome Assembly Accession
 ----|----|---- 
 *Anolis carolinensis* | Dactyloidae | GCF_000090745.1
@@ -122,10 +122,9 @@ Species  | Family | NCBI Genome Assembly Accession
 *Thamnophis sirtalis* | Colubridae (Natricinae) | GCF_001077635.1
 *Vipera berus berus* | Viperidae (Viperinae) | GCA_000800605.1
 
-I queried each *T. sirtalis* exon against each squamate genome using **tblastx** (allowing up to 50 matches to be saved per query). This step produces a Hit Table for each species with stats on each query/target match, including the bitscore, which is a measurement how good the match is (how likely the match corresponds to homology).
 
 ```
-### URLs to the genomes used are held in a matrix that can be accessed using the REEs::datasets function.
+### URLs to the genomes used are held in a matrix that can be accessed with the REEs::datasets function.
 Anolis.carolinensis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Anolis carolinensis"),2]
 Gekko.japonicus.genome_url              <- REEs::datasets(1)[which(datasets(1)[,1]=="Gekko japonicus"),2]
 Pagona.vitticeps.genome_url             <- REEs::datasets(1)[which(datasets(1)[,1]=="Pagona vitticeps"),2]
@@ -152,8 +151,12 @@ Viperus.berus.50hits                <- REEs::blast(method="tblastx",subject=Vipe
 Thamnophis.sirtalis.50hits          <- REEs::blast(method="tblastx",subject=Thamnophis.sirtalis.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Thamnophis.sirtalis.tblastx.exons.50hits.txt")
 ```
 
+The output TBLASTX hit tables containing the set of up to 50 matches per query can be downloaded here: 
 
-Then, I filtered each of the full (i.e., 50 matches/query) hit tables to include only the best match/query (max bitscore) using the function **REEs::reportBestMatches**.
+ [Anolis.carolinensis.tblastx.exons.50hits.txt](https://osf.io/8x2yb/download), [Gekko.japonicus.tblastx.exons.50hits.txt](https://osf.io/wus6k/download), [Pagona.vitticeps.tblastx.exons.50hits.txt](https://osf.io/hv4rq/download), [Crotalus.horridus.tblastx.exons.50hits.txt](https://osf.io/gr5wk/download), [Crotalus.mitchellii.tblastx.exons.50hits.txt](https://osf.io/x8wfa/download), [Ophiophagus.hannah.tblastx.exons.50hits.txt](https://osf.io/7vup9/download), [Pantherophis.guttatus.tblastx.exons.50hits.txt](https://osf.io/dv3am/download), [Protobothrops.mucrosquamatus.tblastx.exons.50hits.txt](https://osf.io/rgkfe/download), [Python.bivittatus.tblastx.exons.50hits.txt](https://osf.io/n4jzq/download), [Viperus.berus.tblastx.exons.50hits.txt](https://osf.io/e2m74/download), [Thamnophis.sirtalis.tblastx.exons.50hits.txt](https://osf.io/sf6wt/download).
+
+
+4. Then, I filtered each of the full (i.e., 50 matches/query) hit tables to include only the best match/query (max bitscore) using the function REEs::reportBestMatches.
 
 ```
 best.hits.Anolis.carolinensis           <- REEs::reportBestMatches(input.table=Anolis.carolinensis.50hits,output.table.path="./Anolis.carolinensis.best.hits.txt")
@@ -170,7 +173,7 @@ best.hits.Viperus.berus                 <- REEs::reportBestMatches(input.table=V
 
 Output tables containing the set of best matches: [Anolis.carolinensis.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Anolis.carolinensis.tblastx.exons.best.hits.txt?raw=true), [Gekko.japonicus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Gekko.japonicus.tblastx.exons.best.hits.txt?raw=true), [Pagona.vitticeps.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Pagona.vitticeps.tblastx.exons.best.hits.txt?raw=true), [Crotalus.horridus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Crotalus.horridus.tblastx.exons.best.hits.txt?raw=true), [Crotalus.mitchellii.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Crotalus.mitchellii.tblastx.exons.best.hits.txt?raw=true), [Ophiophagus.hannah.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Ophiophagus.hannah.tblastx.exons.best.hits.txt?raw=true), [Pantherophis.guttatus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Pantherophis.guttatus.tblastx.exons.best.hits.txt?raw=true), [Protobothrops.mucrosquamatus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Protobothrops.mucrosquamatus.tblastx.exons.best.hits.txt?raw=true), [Python.bivittatus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Python.bivittatus.tblastx.exons.best.hits.txt?raw=true), [Viperus.berus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Viperus.berus.tblastx.exons.best.hits.txt?raw=true).
 
-4. Extract exomes (minimum exon length 120nt) for each squamate species. For each species and exon, I extracted the DNA sequence of the best match in the filtered hit table from step 2, and I saved these sequences to a fasta file; this step was performed using the function **get.seqs.from.blastTable**.
+5. Extract exomes (minimum exon length 120nt) for each squamate species. For each species and exon, I extracted the DNA sequence of the best match in the filtered hit table from step 2, and I saved these sequences to a fasta file; this step was performed using the function **get.seqs.from.blastTable**.
 
 ```
 #### Extracts the sequence of the best match of each exon query from each genome.
@@ -189,7 +192,7 @@ Thamnophis.sirtalis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(in
 
 Output fasta format sequence files: [Anolis.carolinensis.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Anolis.carolinensis.tblastx.best.hits_seqs.fas?raw=true), [Gekko.japonicus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Gekko.japonicus.tblastx.best.hits_seqs.fas?raw=true), [Pagona.vitticeps.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Pagona.vitticeps.tblastx.best.hits_seqs.fas?raw=true), [Crotalus.horridus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Crotalus.horridus.tblastx.best.hits_seqs.fas?raw=true), [Crotalus.mitchellii.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Crotalus.mitchellii.tblastx.best.hits_seqs.fas?raw=true), [Ophiophagus.hannah.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Ophiophagus.hannah.tblastx.best.hits_seqs.fas?raw=true), [Pantherophis.guttatus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Pantherophis.guttatus.tblastx.best.hits_seqs.fas?raw=true), [Protobothrops.mucrosquamatus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Protobothrops.mucrosquamatus.tblastx.best.hits_seqs.fas?raw=true), [Python.bivittatus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Python.bivittatus.tblastx.best.hits_seqs.fas?raw=true), [Viperus.berus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Viperus.berus.tblastx.best.hits_seqs.fas?raw=true).
 
-5. Align shared exons and calculate stats. I used the R function **makeStatsTable** to do all of the following:
+6. Align shared exons and calculate stats. I used the R function **makeStatsTable** to do all of the following:
   - obtain the set of *T. sirtalis* exons present in all exomes (from step 3), i.e., the shared exons
   - perform multiple sequence alignment (MAFFT algorithm) for each of the shared exons
   - calculate a set of stats for each shared exon alignment, and save results to the file **stats_exome_data_TBLASTX.txt** (results: stats for 66,489 alignments). 
@@ -204,7 +207,7 @@ stats_exome <- makeExomeStatsTable(exomes.filepaths=list.files(path="~/exomes/",
 
 The file **stats_exome_data_TBLASTX.txt** contains a table with NCBI annotation information for each exon. Rows correspond to exons, and columns include the following: (1) *Thamnophis sirtalis* NCBI Reference Sequence ID and location of exon (stop_start) **(start_stop?)** (2) number of species in alignment (always 11, because 11 species included, and only shared loci were aligned), (3) number of sites with at least four species represented, (4) number of parsimony informative sites, (5) percent of sites parsimony informative, (6) mean pairwise percent genetic similarity to *T. sirtalis*, (7–17) percent genetic similarity of each species to *T. sirtalis*, (18) exon alignment width, (19) width of *T. sirtalis* exon, (20) gene name associated with the exon (extracted from the last column of the filtered annotation table of *T. sirtalis*), (21) mean number of variable sites compared to *T. sirtalis*, (22) minimum percent genetic similarity to *T. sirtalis* (among the 11 species included), (23) minimum percent genetic similarity to *T. sirtalis* among the snakes included.
 
-6. Filter loci to include the most rapidly evolving loci while considering constraints imposed by the bait kit. To do this, I used the function **pick.loci**, which: (1) filtered out loci if minimum percent genetic similarity (among snakes) to *T. sirtalis* was < 65% or = 100% (result: 64,546 exons pass step 1). (2) For genes with multiple exons, kept only the exon with the lowest mean pairwise genetic distance to *T. sirtalis* (16,650 exons pass step 2 and are saved to [stats_data_FastestExonPerGene_best.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/REEs/stats_data_FastestExonPerGene_best.txt)). (3) Identified the set of exons maximizing the total number of variable sites (all exons in set) while meeting the following constraints and conditions: total number of nucleotides targetted ≤ 1.2Mb and number of baits ≤ 20,000 (these are constraints of the 20K my-baits kit), bait size = 120nt, and bait tiling = 50% overlap.
+7. Filter loci to include the most rapidly evolving loci while considering constraints imposed by the bait kit. To do this, I used the function **pick.loci**, which: (1) filtered out loci if minimum percent genetic similarity (among snakes) to *T. sirtalis* was < 65% or = 100% (result: 64,546 exons pass step 1). (2) For genes with multiple exons, kept only the exon with the lowest mean pairwise genetic distance to *T. sirtalis* (16,650 exons pass step 2 and are saved to [stats_data_FastestExonPerGene_best.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/REEs/stats_data_FastestExonPerGene_best.txt)). (3) Identified the set of exons maximizing the total number of variable sites (all exons in set) while meeting the following constraints and conditions: total number of nucleotides targetted ≤ 1.2Mb and number of baits ≤ 20,000 (these are constraints of the 20K my-baits kit), bait size = 120nt, and bait tiling = 50% overlap.
 
 ```
 result.pident <- pick.loci(statsTable.path = "~/AlignedExonStats/stats_exome_data_TBLASTX.txt", output.dir = "~/AlignedExonStats/", primary.species = "Thamnophis_sirtalis", use.min.pident.subgroup = T, species.subgroup = c(7:14), min.pident.keep = c(65,100), max.capture.coverage = 1200000, write.stats.tables = T, plot.results = T, fast.stat = "pident")
