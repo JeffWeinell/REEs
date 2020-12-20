@@ -134,31 +134,55 @@ Anolis_carolinensis.tblastx.exons.50hits <- blast(method="tblastx",subject.path=
 ```
 
 
-Then, I filtered each of the full (i.e., 50 matches/query) hit tables to include only the best match/query (max bitscore) using the R function **reportBestMatches**.
+Then, I filtered each of the full (i.e., 50 matches/query) hit tables to include only the best match/query (max bitscore) using the function **REEs::reportBestMatches**.
 
 ```
-best.hits.Anolis.carolinensis           <- reportBestMatches(input.table=Anolis.carolinensis.50hits,output.table.path="./Anolis.carolinensis.best.hits.txt")
-best.hits.Gekko.japonicus               <- reportBestMatches(input.table=Gekko.japonicus.50hits,output.table.path="./Gekko.japonicus.best.hits.txt")
-best.hits.Pagona.vitticeps              <- reportBestMatches(input.table=Pagona.vitticeps.50hits,output.table.path="./Pagona.vitticeps.best.hits.txt")
-best.hits.Crotalus.horridus             <- reportBestMatches(input.table=Crotalus.horridus.50hits,output.table.path="./Crotalus.horridus.best.hits.txt")
-best.hits.Crotalus.mitchellii           <- reportBestMatches(input.table=Crotalus.mitchellii.50hits,output.table.path="./Crotalus.mitchellii.best.hits.txt")
-best.hits.Ophiophagus.hannah            <- reportBestMatches(input.table=Ophiophagus.hannah.50hits,output.table.path="./Ophiophagus.hannah.best.hits.txt")
-best.hits.Pantherophis.guttatus         <- reportBestMatches(input.table=Pantherophis.guttatus.50hits,output.table.path="./Pantherophis.guttatus.best.hits.txt")
-best.hits.Protobothrops.mucrosquamatus  <- reportBestMatches(input.table=Protobothrops.mucrosquamatus.50hits,output.table.path="./Protobothrops.mucrosquamatus.best.hits.txt")
-best.hits.Python.bivittatus             <- reportBestMatches(input.table=Python.bivittatus.50hits,output.table.path="./Python.bivittatus.best.hits.txt")
-best.hits.Viperus.berus                 <- reportBestMatches(input.table=Viperus.berus.50hits,output.table.path="./Viperus.berus.best.hits.txt")
+best.hits.Anolis.carolinensis           <- REEs::reportBestMatches(input.table=Anolis.carolinensis.50hits,output.table.path="./Anolis.carolinensis.best.hits.txt")
+best.hits.Gekko.japonicus               <- REEs::reportBestMatches(input.table=Gekko.japonicus.50hits,output.table.path="./Gekko.japonicus.best.hits.txt")
+best.hits.Pagona.vitticeps              <- REEs::reportBestMatches(input.table=Pagona.vitticeps.50hits,output.table.path="./Pagona.vitticeps.best.hits.txt")
+best.hits.Crotalus.horridus             <- REEs::reportBestMatches(input.table=Crotalus.horridus.50hits,output.table.path="./Crotalus.horridus.best.hits.txt")
+best.hits.Crotalus.mitchellii           <- REEs::reportBestMatches(input.table=Crotalus.mitchellii.50hits,output.table.path="./Crotalus.mitchellii.best.hits.txt")
+best.hits.Ophiophagus.hannah            <- REEs::reportBestMatches(input.table=Ophiophagus.hannah.50hits,output.table.path="./Ophiophagus.hannah.best.hits.txt")
+best.hits.Pantherophis.guttatus         <- REEs::reportBestMatches(input.table=Pantherophis.guttatus.50hits,output.table.path="./Pantherophis.guttatus.best.hits.txt")
+best.hits.Protobothrops.mucrosquamatus  <- REEs::reportBestMatches(input.table=Protobothrops.mucrosquamatus.50hits,output.table.path="./Protobothrops.mucrosquamatus.best.hits.txt")
+best.hits.Python.bivittatus             <- REEs::reportBestMatches(input.table=Python.bivittatus.50hits,output.table.path="./Python.bivittatus.best.hits.txt")
+best.hits.Viperus.berus                 <- REEs::reportBestMatches(input.table=Viperus.berus.50hits,output.table.path="./Viperus.berus.best.hits.txt")
 ```
 
 Output tables containing the set of best matches: [Anolis.carolinensis.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Anolis.carolinensis.tblastx.exons.best.hits.txt?raw=true), [Gekko.japonicus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Gekko.japonicus.tblastx.exons.best.hits.txt?raw=true), [Pagona.vitticeps.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Pagona.vitticeps.tblastx.exons.best.hits.txt?raw=true), [Crotalus.horridus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Crotalus.horridus.tblastx.exons.best.hits.txt?raw=true), [Crotalus.mitchellii.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Crotalus.mitchellii.tblastx.exons.best.hits.txt?raw=true), [Ophiophagus.hannah.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Ophiophagus.hannah.tblastx.exons.best.hits.txt?raw=true), [Pantherophis.guttatus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Pantherophis.guttatus.tblastx.exons.best.hits.txt?raw=true), [Protobothrops.mucrosquamatus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Protobothrops.mucrosquamatus.tblastx.exons.best.hits.txt?raw=true), [Python.bivittatus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Python.bivittatus.tblastx.exons.best.hits.txt?raw=true), [Viperus.berus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Viperus.berus.tblastx.exons.best.hits.txt?raw=true).
 
-4. Extract exomes (minimum exon length 120nt) for each squamate species. For each species and exon, I extracted the DNA sequence of the best match in the filtered hit table from step 2, and I saved these sequences to a fasta file; this step was performed using the function **get.exome.from.blastTable**.
+4. Extract exomes (minimum exon length 120nt) for each squamate species. For each species and exon, I extracted the DNA sequence of the best match in the filtered hit table from step 2, and I saved these sequences to a fasta file; this step was performed using the function **get.seqs.from.blastTable**.
 
 ```
-### Example for Vipera berus
 get.exome.from.blastTable(species="Vipera_berus",genome.filepath="~/Vipera_berus_GCA_000800605.1_Vber.be_1.0_genomic.fna",input.blastTable="Vipera_berus.tblastx.exons.best.txt",output.dir.exome="~/exomes/")
+
+### URLs to the genomes used are held in a matrix that can be accessed using the REEs::datasets function.
+Anolis.carolinensis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Anolis carolinensis"),2]
+Gekko.japonicus.genome_url              <- REEs::datasets(1)[which(datasets(1)[,1]=="Gekko japonicus"),2]
+Pagona.vitticeps.genome_url             <- REEs::datasets(1)[which(datasets(1)[,1]=="Pagona vitticeps"),2]
+Crotalus.horridus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,1]=="Crotalus horridus"),2]
+Crotalus.mitchellii.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Crotalus mitchellii"),2]
+Ophiophagus.hannah.genome_url           <- REEs::datasets(1)[which(datasets(1)[,1]=="Ophiophagus hannah"),2]
+Pantherophis.guttatus.genome_url        <- REEs::datasets(1)[which(datasets(1)[,1]=="Pantherophis guttatus"),2]
+Protobothrops.mucrosquamatus.genome_url <- REEs::datasets(1)[which(datasets(1)[,1]=="Protobothrops mucrosquamatus"),2]
+Python.bivittatus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,1]=="Python bivittatus"),2]
+Viperus.berus.genome_url                <- REEs::datasets(1)[which(datasets(1)[,1]=="Viperus berus"),2]
+
+#### Extracts the sequence of the best match of each exon query from each genome.
+Anolis.carolinensis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Anolis.carolinensis,input.seqs=Anolis.carolinensis.genome_url,output.path="./")
+Gekko.japonicus.best.hits.seqs              <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Gekko.japonicus,input.seqs=Gekko.japonicus.genome_url,output.path="./")
+Pagona.vitticeps.best.hits.seqs             <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Pagona.vitticeps,input.seqs=Pagona.vitticeps.genome_url,output.path="./")
+Crotalus.horridus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Crotalus.horridus,input.seqs=Crotalus.horridus.genome_url,output.path="./")
+Crotalus.mitchellii.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Crotalus.mitchellii,input.seqs=Crotalus.mitchellii.genome_url,output.path="./")
+Ophiophagus.hannah.best.hits.seqs           <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Ophiophagus.hannah,input.seqs=Ophiophagus.hannah.genome_url,output.path="./")
+Pantherophis.guttatus.best.hits.seqs        <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Pantherophis.guttatus,input.seqs=Pantherophis.guttatus.genome_url,output.path="./")
+Protobothrops.mucrosquamatus.best.hits.seqs <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Protobothrops.mucrosquamatus,input.seqs=Protobothrops.mucrosquamatus_genome.url,output.path="./")
+Python.bivittatus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Python.bivittatus,input.seqs=Python.bivittatus.genome_url,output.path="./")
+Viperus.berus.best.hits.seqs                <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Viperus.berus,input.seqs=Viperus.berus.genome_url,output.path="./")
+
 ```
 
-5. Align shared exons and calculate stats. I used the R function **makeExomeStatsTable** to do all of the following:
+5. Align shared exons and calculate stats. I used the R function **makeStatsTable** to do all of the following:
   - obtain the set of *T. sirtalis* exons present in all exomes (from step 3), i.e., the shared exons
   - perform multiple sequence alignment (MAFFT algorithm) for each of the shared exons
   - calculate a set of stats for each shared exon alignment, and save results to the file **stats_exome_data_TBLASTX.txt** (results: stats for 66,489 alignments). 
