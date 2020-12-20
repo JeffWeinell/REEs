@@ -125,12 +125,31 @@ Species  | Family | NCBI Genome Assembly Accession
 I queried each *T. sirtalis* exon against each squamate genome using **tblastx** (allowing up to 50 matches to be saved per query). This step produces a Hit Table for each species with stats on each query/target match, including the bitscore, which is a measurement how good the match is (how likely the match corresponds to homology).
 
 ```
-# Method implemented in the R wrapper function REEs::blast
-Anolis_carolinensis.tblastx.exons.50hits <- blast(method="tblastx",subject.path="./genomes/Anolis_carolinensis",query.path="./BlastQuery_ThamnophisExons/final_targetCDS_Longer120bp.fa",table.path="./TBlastXResults/Anolis_carolinensis.tblastx.exons.50hits.txt")
+### URLs to the genomes used are held in a matrix that can be accessed using the REEs::datasets function.
+Anolis.carolinensis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Anolis carolinensis"),2]
+Gekko.japonicus.genome_url              <- REEs::datasets(1)[which(datasets(1)[,1]=="Gekko japonicus"),2]
+Pagona.vitticeps.genome_url             <- REEs::datasets(1)[which(datasets(1)[,1]=="Pagona vitticeps"),2]
+Crotalus.horridus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,1]=="Crotalus horridus"),2]
+Crotalus.mitchellii.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Crotalus mitchellii"),2]
+Ophiophagus.hannah.genome_url           <- REEs::datasets(1)[which(datasets(1)[,1]=="Ophiophagus hannah"),2]
+Pantherophis.guttatus.genome_url        <- REEs::datasets(1)[which(datasets(1)[,1]=="Pantherophis guttatus"),2]
+Protobothrops.mucrosquamatus.genome_url <- REEs::datasets(1)[which(datasets(1)[,1]=="Protobothrops mucrosquamatus"),2]
+Python.bivittatus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,1]=="Python bivittatus"),2]
+Viperus.berus.genome_url                <- REEs::datasets(1)[which(datasets(1)[,1]=="Viperus berus"),2]
+Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Thamnophis sirtalis"),2]
 
-# Which runs: 
-./ncbi-blast-2.6.0+/bin/tblastx -db ./genomes/Anolis_carolinensis -query ./BlastQuery_ThamnophisExons/final_targetCDS_Longer120bp.fa -out ./TBlastXResults/Anolis_carolinensis.tblastx.exons.50hits.txt -evalue 1e-5 -outfmt 6 -max_target_seqs 50 -num_threads 16
-
+# Runs TBLASTX
+Anolis.carolinensis.50hits          <- REEs::blast(method="tblastx",subject=Anolis.carolinensis.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Anolis.carolinensis.tblastx.exons.50hits.txt")
+Gekko.japonicus.50hits              <- REEs::blast(method="tblastx",subject=Gekko.japonicus.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Gekko.japonicus.tblastx.exons.50hits.txt")
+Pagona.vitticeps.50hits             <- REEs::blast(method="tblastx",subject=Pagona.vitticeps.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Pagona.vitticeps.tblastx.exons.50hits.txt")
+Crotalus.horridus.50hits            <- REEs::blast(method="tblastx",subject=Crotalus.horridus.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Crotalus.horridus.tblastx.exons.50hits.txt")
+Crotalus.mitchellii.50hits          <- REEs::blast(method="tblastx",subject=Crotalus.mitchellii.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Crotalus.mitchellii.tblastx.exons.50hits.txt")
+Ophiophagus.hannah.50hits           <- REEs::blast(method="tblastx",subject=Ophiophagus.hannah.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Ophiophagus.hannah.tblastx.exons.50hits.txt")
+Pantherophis.guttatus.50hits        <- REEs::blast(method="tblastx",subject=Pantherophis.guttatus.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Pantherophis.guttatus.tblastx.exons.50hits.txt")
+Protobothrops.mucrosquamatus.50hits <- REEs::blast(method="tblastx",subject=Protobothrops.mucrosquamatus.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Protobothrops.mucrosquamatus.tblastx.exons.50hits.txt")
+Python.bivittatus.50hits            <- REEs::blast(method="tblastx",subject=Python.bivittatus.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Python.bivittatus.tblastx.exons.50hits.txt")
+Viperus.berus.50hits                <- REEs::blast(method="tblastx",subject=Viperus.berus.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Viperus.berus.tblastx.exons.50hits.txt")
+Thamnophis.sirtalis.50hits          <- REEs::blast(method="tblastx",subject=Thamnophis.sirtalis.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Thamnophis.sirtalis.tblastx.exons.50hits.txt")
 ```
 
 
@@ -154,19 +173,6 @@ Output tables containing the set of best matches: [Anolis.carolinensis.exons.bes
 4. Extract exomes (minimum exon length 120nt) for each squamate species. For each species and exon, I extracted the DNA sequence of the best match in the filtered hit table from step 2, and I saved these sequences to a fasta file; this step was performed using the function **get.seqs.from.blastTable**.
 
 ```
-### URLs to the genomes used are held in a matrix that can be accessed using the REEs::datasets function.
-Anolis.carolinensis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Anolis carolinensis"),2]
-Gekko.japonicus.genome_url              <- REEs::datasets(1)[which(datasets(1)[,1]=="Gekko japonicus"),2]
-Pagona.vitticeps.genome_url             <- REEs::datasets(1)[which(datasets(1)[,1]=="Pagona vitticeps"),2]
-Crotalus.horridus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,1]=="Crotalus horridus"),2]
-Crotalus.mitchellii.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Crotalus mitchellii"),2]
-Ophiophagus.hannah.genome_url           <- REEs::datasets(1)[which(datasets(1)[,1]=="Ophiophagus hannah"),2]
-Pantherophis.guttatus.genome_url        <- REEs::datasets(1)[which(datasets(1)[,1]=="Pantherophis guttatus"),2]
-Protobothrops.mucrosquamatus.genome_url <- REEs::datasets(1)[which(datasets(1)[,1]=="Protobothrops mucrosquamatus"),2]
-Python.bivittatus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,1]=="Python bivittatus"),2]
-Viperus.berus.genome_url                <- REEs::datasets(1)[which(datasets(1)[,1]=="Viperus berus"),2]
-Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Thamnophis sirtalis"),2]
-
 #### Extracts the sequence of the best match of each exon query from each genome.
 Anolis.carolinensis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Anolis.carolinensis,input.seqs=Anolis.carolinensis.genome_url,output.path="./Anolis.carolinensis.tblastx.best.hits_seqs.fas")
 Gekko.japonicus.best.hits.seqs              <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Gekko.japonicus,input.seqs=Gekko.japonicus.genome_url,output.path="./Gekko.japonicus.tblastx.best.hits_seqs.fas")
@@ -178,7 +184,7 @@ Pantherophis.guttatus.best.hits.seqs        <- REEs::get.seqs.from.blastTable(in
 Protobothrops.mucrosquamatus.best.hits.seqs <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Protobothrops.mucrosquamatus,input.seqs=Protobothrops.mucrosquamatus_genome.url,output.path="./Protobothrops.mucrosquamatus.tblastx.best.hits_seqs.fas")
 Python.bivittatus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Python.bivittatus,input.seqs=Python.bivittatus.genome_url,output.path="./Python.bivittatus.tblastx.best.hits_seqs.fas")
 Viperus.berus.best.hits.seqs                <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Viperus.berus,input.seqs=Viperus.berus.genome_url,output.path="./Viperus.berus.tblastx.best.hits_seqs.fas")
-Thamnophis.sirtalis.best.hits.seqs                <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Thamnophis.sirtalis,input.seqs=Thamnophis.sirtalis.genome_url,output.path="./Thamnophis.sirtalis.tblastx.best.hits_seqs.fas")
+Thamnophis.sirtalis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Thamnophis.sirtalis,input.seqs=Thamnophis.sirtalis.genome_url,output.path="./Thamnophis.sirtalis.tblastx.best.hits_seqs.fas")
 ```
 
 Output fasta format sequence files: [Anolis.carolinensis.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Anolis.carolinensis.tblastx.best.hits_seqs.fas?raw=true), [Gekko.japonicus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Gekko.japonicus.tblastx.best.hits_seqs.fas?raw=true), [Pagona.vitticeps.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Pagona.vitticeps.tblastx.best.hits_seqs.fas?raw=true), [Crotalus.horridus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Crotalus.horridus.tblastx.best.hits_seqs.fas?raw=true), [Crotalus.mitchellii.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Crotalus.mitchellii.tblastx.best.hits_seqs.fas?raw=true), [Ophiophagus.hannah.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Ophiophagus.hannah.tblastx.best.hits_seqs.fas?raw=true), [Pantherophis.guttatus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Pantherophis.guttatus.tblastx.best.hits_seqs.fas?raw=true), [Protobothrops.mucrosquamatus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Protobothrops.mucrosquamatus.tblastx.best.hits_seqs.fas?raw=true), [Python.bivittatus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Python.bivittatus.tblastx.best.hits_seqs.fas?raw=true), [Viperus.berus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Viperus.berus.tblastx.best.hits_seqs.fas?raw=true).
