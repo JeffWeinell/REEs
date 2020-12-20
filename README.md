@@ -161,7 +161,7 @@ best.hits.Viperus.berus                 <- REEs::reportBestMatches(input.table=V
 
 Output tables containing the set of best matches: [Anolis.carolinensis.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Anolis.carolinensis.tblastx.exons.best.hits.txt?raw=true), [Gekko.japonicus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Gekko.japonicus.tblastx.exons.best.hits.txt?raw=true), [Pagona.vitticeps.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Pagona.vitticeps.tblastx.exons.best.hits.txt?raw=true), [Crotalus.horridus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Crotalus.horridus.tblastx.exons.best.hits.txt?raw=true), [Crotalus.mitchellii.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Crotalus.mitchellii.tblastx.exons.best.hits.txt?raw=true), [Ophiophagus.hannah.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Ophiophagus.hannah.tblastx.exons.best.hits.txt?raw=true), [Pantherophis.guttatus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Pantherophis.guttatus.tblastx.exons.best.hits.txt?raw=true), [Protobothrops.mucrosquamatus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Protobothrops.mucrosquamatus.tblastx.exons.best.hits.txt?raw=true), [Python.bivittatus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Python.bivittatus.tblastx.exons.best.hits.txt?raw=true), [Viperus.berus.exons.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/Viperus.berus.tblastx.exons.best.hits.txt?raw=true).
 
-5. Extract exomes (minimum exon length 120nt) for each squamate species. For each species and exon, I extracted the DNA sequence of the best match in the filtered hit table from step 2, and I saved these sequences to a fasta file; this step was performed using the function **get.seqs.from.blastTable**.
+5. I used get.seqs.from.blastTable function (REEs package) to extract sequences for the best matches identified in step 4.
 
 ```
 #### Extracts the sequence of the best match of each exon query from each genome.
@@ -178,13 +178,48 @@ Viperus.berus.best.hits.seqs                <- REEs::get.seqs.from.blastTable(in
 Thamnophis.sirtalis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Thamnophis.sirtalis,input.seqs=Thamnophis.sirtalis.genome_url,output.path="./Thamnophis.sirtalis.tblastx.best.hits_seqs.fas")
 ```
 
-Output fasta format sequence files: [Anolis.carolinensis.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Anolis.carolinensis.tblastx.best.hits_seqs.fas?raw=true), [Gekko.japonicus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Gekko.japonicus.tblastx.best.hits_seqs.fas?raw=true), [Pagona.vitticeps.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Pagona.vitticeps.tblastx.best.hits_seqs.fas?raw=true), [Crotalus.horridus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Crotalus.horridus.tblastx.best.hits_seqs.fas?raw=true), [Crotalus.mitchellii.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Crotalus.mitchellii.tblastx.best.hits_seqs.fas?raw=true), [Ophiophagus.hannah.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Ophiophagus.hannah.tblastx.best.hits_seqs.fas?raw=true), [Pantherophis.guttatus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Pantherophis.guttatus.tblastx.best.hits_seqs.fas?raw=true), [Protobothrops.mucrosquamatus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Protobothrops.mucrosquamatus.tblastx.best.hits_seqs.fas?raw=true), [Python.bivittatus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Python.bivittatus.tblastx.best.hits_seqs.fas?raw=true), [Viperus.berus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Viperus.berus.tblastx.best.hits_seqs.fas?raw=true).
+The output sequences were saved in fasta format and can be downloaded here: [Anolis.carolinensis.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Anolis.carolinensis.tblastx.best.hits_seqs.fas?raw=true), [Gekko.japonicus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Gekko.japonicus.tblastx.best.hits_seqs.fas?raw=true), [Pagona.vitticeps.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Pagona.vitticeps.tblastx.best.hits_seqs.fas?raw=true), [Crotalus.horridus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Crotalus.horridus.tblastx.best.hits_seqs.fas?raw=true), [Crotalus.mitchellii.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Crotalus.mitchellii.tblastx.best.hits_seqs.fas?raw=true), [Ophiophagus.hannah.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Ophiophagus.hannah.tblastx.best.hits_seqs.fas?raw=true), [Pantherophis.guttatus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Pantherophis.guttatus.tblastx.best.hits_seqs.fas?raw=true), [Protobothrops.mucrosquamatus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Protobothrops.mucrosquamatus.tblastx.best.hits_seqs.fas?raw=true), [Python.bivittatus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Python.bivittatus.tblastx.best.hits_seqs.fas?raw=true), [Viperus.berus.best.hits_seqs.fas](https://github.com/JeffWeinell/SnakeCap/blob/main/Viperus.berus.tblastx.best.hits_seqs.fas?raw=true).
 
-6. Align shared exons and calculate stats. I used the R function **makeStatsTable** to do all of the following:
+6. I used the makeStatsTable function (REEs package) to perform multiple sequence alignment (using MAFFT) for the best matches to each query exon sequence and to create a table of alignment statistics for each alignment. The information and statistics in the output table are summarized in Table 3.
+
+**Table 3.** Description of information and statistics in each column of the output table generated by the function makeStatsTable in step 6. If you are using this table to interpret your own results with a different number of input species, then the column number will differ from what is shown here. Also, column names that include a species name will differ if you used different input species. The species name in columns 1 and 7 will always be the name of the primary species chosen in step 1.
+column number|column name|column description
+---|---|---
+1|Thamnophis_sirtalis.locus|Contig accession and start and end position of the query sequence.
+2|num.Species|number of species (individuals) in the alignment
+3|CountCover|number of sites with at least four individuals with non-missing or ambiguous data
+4|absolutePIS|number of parsimony informative sites
+5|percentPIS|percent of the sites with at least four individuals with non-missing or ambiguous data that are parsimony informative (i.e., percent of sites that could be parsimony informative that actually are)
+6|mean.pident|mean pairwise percent of sites identical to *T. sirtalis*; this is the mean of columns 8–17.
+7|pident.Thamnophis_sirtalis|percent of sites identical between *T. sirtalis* query and *T. sirtalis* best match; this should always be 100 and any other value indicates the tblastx match that was chosen as the best match (step 4 reportBestMatches function) is not the true best match.
+8|pident.Anolis_carolinensis|
+9|pident.Gekko_japonicus|
+10|pident.Pagona_vitticeps|
+11|pident.Crotalus_horridus|
+12|pident.Crotalus_mitchellii|
+13|pident.Ophiophagus_hannah|
+14|pident.Pantherophis_guttatus|
+15|pident.Protobothrops_mucrosquamatus|
+16|pident.Python_bivittatus|
+17|pident.Viperus_berus|
+18|alignment.width|
+19|gene.name|
+20|locus.length.Thamnophis_sirtalis|
+21|mean.variable.sites|
+22|min.pident.all|
+23|min.pident.subgroup|
+
+
+include: (2) "num.Species" = ; (3) "CountCover" ; (3) , (4) ; (4) alignment width; (5) ; (6) ; (7) percent of sites identical between *T. sirtalis* query and *T. sirtalis* match
+
+and calculate stats. I used the R function  to do all of the following:
   - obtain the set of *T. sirtalis* exons present in all exomes (from step 3), i.e., the shared exons
   - perform multiple sequence alignment (MAFFT algorithm) for each of the shared exons
   - calculate a set of stats for each shared exon alignment, and save results to the file **stats_exome_data_TBLASTX.txt** (results: stats for 66,489 alignments). 
-  
+ 
+
+ 
+ 
 ```
 ### "species" parameter includes the set of the squamates
 ### "subgroup" parameter includes the set of the snakes
