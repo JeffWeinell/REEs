@@ -187,7 +187,7 @@ The output sequences were saved in fasta format and can be downloaded here: [Ano
 input.seqs.paths <- c("Anolis.carolinensis.best.hits_seqs.fas", "Gekko.japonicus.best.hits_seqs.fas", "Pagona.vitticeps.best.hits_seqs.fas", "Crotalus.horridus.best.hits_seqs.fas", "Crotalus.mitchellii.best.hits_seqs.fas", "Ophiophagus.hannah.best.hits_seqs.fas", "Pantherophis.guttatus.best.hits_seqs.fas", "Protobothrops.mucrosquamatus.best.hits_seqs.fas", "Python.bivittatus.best.hits_seqs.fas", "Viperus.berus.best.hits_seqs.fas", "Thamnophis.sirtalis.best.hits_seqs.fas")
 
 ### Align homologous sequences and make a table to summarize data in each alignment (one row per aligned locus).
-stats.table  <- makeStatsTable(input.seqs=input.seqs.paths,species=species=c("Anolis carolinensis","Gekko japonicus","Pogona vitticeps","Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"), input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp, output.path="./stats_exome_data_TBLASTX.txt", subgroup=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),alignments.out=alignments.dir, species.gff=11)
+stats.table  <- makeStatsTable(input.seqs=input.seqs.paths,species=c("Anolis carolinensis","Gekko japonicus","Pogona vitticeps","Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"), input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp, output.path="./stats_exome_data_TBLASTX.txt", subgroup=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),alignments.out=alignments.dir, species.gff=11)
 ```
 The output table includes summary statistics and information for 66,489 alignments, and this table awas saved to the file [stats_exome_data_TBLASTX.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/stats_exome_data_TBLASTX.txt.gz?raw=true).
 
@@ -226,9 +226,7 @@ column number|column name|column description
 -->
 
 ```
-result.pident <- pick.loci(statsTable.path = "~/AlignedExonStats/stats_exome_data_TBLASTX.txt", output.dir = "~/AlignedExonStats/", primary.species = "Thamnophis_sirtalis", use.min.pident.subgroup = T, species.subgroup = c(7:14), min.pident.keep = c(65,100), max.capture.coverage = 1200000, write.stats.tables = T, plot.results = T, fast.stat = "pident")
-
-targets.REEs <- pick.loci(statsTable.path="./stats_exome_data_TBLASTX.txt",primary.species="Thamnophis sirtalis",max.loci.per.gene=1)
+targets.REEs <- pick.loci(statsTable.path="./stats_exome_data_TBLASTX.txt",primary.species="Thamnophis sirtalis", output.path="./stats_data_FastestExonPerGene_best.txt", species.subgroup=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),pident.keep=c(65,100),max.loci.per.gene=1, min.num.species="all",max.capture.coverage=1200000,fast.stat="pident")
 ```
 
 Result = 2,068 REEs retained; the stats table for these loci was written to the file [stats_data_FastestExonPerGene_best.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/REEs/stats_data_FastestExonPerGene_best.txt); an updated version of this stats table that includes the WeinellEntry locus names is [stats_data_FastestExonPerGene_best_20Nov2020.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/REEs/stats_data_FastestExonPerGene_best_20Nov2020.tsv).
