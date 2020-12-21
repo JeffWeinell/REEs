@@ -211,13 +211,12 @@ column number|column name|column description
 15|pident.Protobothrops_mucrosquamatus|Percent of sites identical between *T. sirtalis* query and *P. mucrosquamatus* best match.
 16|pident.Python_bivittatus|Percent of sites identical between *T. sirtalis* query and *P. bivittatus* best match.
 17|pident.Viperus_berus|Percent of sites identical between *T. sirtalis* query and *V. berus* best match.
-18|alignment.width|Width of the alignment
-19|gene.name|Name of the gene of the *T. sirtalis* query locus. The is the name associated with the query sequence's CDS feature in the *T. sirtalis* GFF genome feature table.
-20|locus.length.Thamnophis_sirtalis|Length of the query sequence
-21|mean.variable.sites| Mean pairwise fraction of sites variable compared to *T. sirtalis*. This is simply (100-mean.pident)/100
-22|min.pident.all|Minimum of percent of sites identical to *T. sirtalis* among the species. In other words, the minimum of columns 8–17. This would be calculated across different columns if different species were used.
-23|min.pident.subgroup|Minimum of percent of sites identical to *T. sirtalis* among the snake species compared. In other words, the minimum of columns 11–17. The would be calculated across different columns if the subgroup was defined differently.
-
+18|gene.name|Name of the gene of the *T. sirtalis* query locus. The is the name associated with the query sequence's CDS feature in the *T. sirtalis* GFF genome feature table.
+19|locus.length.Thamnophis_sirtalis|Length of the query sequence
+20|mean.variable.sites| Mean pairwise fraction of sites variable compared to *T. sirtalis*. This is simply (100-mean.pident)/100
+21|min.pident.all|Minimum of percent of sites identical to *T. sirtalis* among the species. In other words, the minimum of columns 8–17. This would be calculated across different columns if different species were used.
+22|min.pident.subgroup|Minimum of percent of sites identical to *T. sirtalis* among the snake species compared. In other words, the minimum of columns 11–17. The would be calculated across different columns if the subgroup was defined differently.
+23|alignment.width|Width of the alignment. This column was not generated for the SnakeCap dataset because I used an older version of makeStatsTable, which did not include this column in the output table.
 
   7. I used the function pick.loci (REEs package) to choose a set of REEs for sequence capture. I applied the following criteria to select REEs: (1) I filtered out loci if minimum percent genetic similarity (mean among snakes) to *T. sirtalis* was < 65% or = 100%; (2) for genes with multiple exons, kept only the exon with the lowest mean pairwise genetic distance to *T. sirtalis* (16,650 exons pass step 2 and are saved to [stats_data_FastestExonPerGene_best.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/REEs/stats_data_FastestExonPerGene_best.txt); (3) the maximum number of baits required to target the exons was set to 20,000 (this constraint was imposed by the 20K my-baits kit) with bait size = 120nt and 50% bait tiling; (4) the maximum number of nucleotides to target was set to 1.2Mb (also constrained by the my-baits kit); (5) of the sets of exons that meet criteria 1–4, I chose the set that maximizes the total number of variable sites relative to *T. sirtalis*.
 
