@@ -219,10 +219,16 @@ column number|column name|column description
 23|min.pident.subgroup|
 
 
-  7. Filter loci to include the most rapidly evolving loci while considering constraints imposed by the bait kit. To do this, I used the function **pick.loci**, which: (1) filtered out loci if minimum percent genetic similarity (among snakes) to *T. sirtalis* was < 65% or = 100% (result: 64,546 exons pass step 1). (2) For genes with multiple exons, kept only the exon with the lowest mean pairwise genetic distance to *T. sirtalis* (16,650 exons pass step 2 and are saved to [stats_data_FastestExonPerGene_best.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/REEs/stats_data_FastestExonPerGene_best.txt)). (3) Identified the set of exons maximizing the total number of variable sites (all exons in set) while meeting the following constraints and conditions: total number of nucleotides targetted ≤ 1.2Mb and number of baits ≤ 20,000 (these are constraints of the 20K my-baits kit), bait size = 120nt, and bait tiling = 50% overlap.
+  7. I used the function pick.loci (REEs package) to choose a set of REEs for sequence capture. I applied the following criteria to select REEs: (1) I filtered out loci if minimum percent genetic similarity (mean among snakes) to *T. sirtalis* was < 65% or = 100%; (2) for genes with multiple exons, kept only the exon with the lowest mean pairwise genetic distance to *T. sirtalis* (16,650 exons pass step 2 and are saved to [stats_data_FastestExonPerGene_best.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/REEs/stats_data_FastestExonPerGene_best.txt); (3) the maximum number of baits required to target the exons was set to 20,000 (this constraint was imposed by the 20K my-baits kit) with bait size = 120nt and 50% bait tiling; (4) the maximum number of nucleotides to target was set to 1.2Mb (also constrained by the my-baits kit); (5) of the sets of exons that meet criteria 1–4, I chose the set that maximizes the total number of variable sites relative to *T. sirtalis*.
+
+<!--
+**The number of nucleotides targetted should be determined by the number of baits in the kit, length of baits, and tiling amount...For each row in the input stats matrix, calculate how many baits would be needed to target the exon using the bait length and tiling amount, and then use rollSum function on the number of baits (after other filtering steps and sorting steps are completed). Keep rows in which rollSum(number.of.baits) < 20,000. However, check if the 1.2Mb threshold wasn't determined by Arbor...
+-->
 
 ```
 result.pident <- pick.loci(statsTable.path = "~/AlignedExonStats/stats_exome_data_TBLASTX.txt", output.dir = "~/AlignedExonStats/", primary.species = "Thamnophis_sirtalis", use.min.pident.subgroup = T, species.subgroup = c(7:14), min.pident.keep = c(65,100), max.capture.coverage = 1200000, write.stats.tables = T, plot.results = T, fast.stat = "pident")
+
+targets.REEs <- pick.loci(statsTable.path="./stats_exome_data_TBLASTX.txt",primary.species="Thamnophis sirtalis",max.loci.per.gene=1)
 ```
 
 Result = 2,068 REEs retained; the stats table for these loci was written to the file [stats_data_FastestExonPerGene_best.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/REEs/stats_data_FastestExonPerGene_best.txt); an updated version of this stats table that includes the WeinellEntry locus names is [stats_data_FastestExonPerGene_best_20Nov2020.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/REEs/stats_data_FastestExonPerGene_best_20Nov2020.tsv).
