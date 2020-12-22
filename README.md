@@ -228,7 +228,7 @@ targets.REEs <- pick.loci(statsTable.path="./stats_exome_data_TBLASTX.txt",prima
 
 Result = 2,068 REEs retained; the stats table for these loci was written to the file [stats_data_FastestExonPerGene_best.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best.txt); an updated version of this stats table that includes the WeinellEntry locus names is [stats_data_FastestExonPerGene_best_20Nov2020.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best_20Nov2020.tsv).
 
-These 2,068 REEs were submitted to Arbor Biosciences for probe design. Arbor performed ultrastringent filtration these loci which resulted in the removal of 70 REEs [Version1-loci-removed_ZeroBaitCoverageLoci.tsv](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version1-loci-removed_ZeroBaitCoverageLoci.tsv), whereas 1,998 passed this step. An additional 123 REEs were removed because the baits designed to target these loci were all non-specific within the genomes of *T. sirtalis* and/or *Thermophis baileyi*; 212 other REEs were removed to allow some baits to be used to target other types of loci (UCEs, immune, scalation, vision, and ddRAD-like loci). The remaining 1,653 REEs were synthesized and included in the mybaits 20K bait kit (product no. 3001160).
+These 2,068 REEs were submitted to Arbor Biosciences for probe design. Arbor performed ultrastringent filtration these loci which resulted in the removal of 70 REEs [Version1-loci-removed_ZeroBaitCoverageLoci.tsv](https://git.io/JLiEu), whereas 1,998 passed this step. An additional 123 REEs were removed because the baits designed to target these loci were all non-specific within the genomes of *T. sirtalis* and/or *Thermophis baileyi*; 212 other REEs were removed to allow some baits to be used to target other types of loci (UCEs, immune, scalation, vision, and ddRAD-like loci). The remaining 1,653 REEs were synthesized and included in the mybaits 20K bait kit (product no. 3001160).
 
 <!--
 REEs that failed ultrastringent filtration: 70
@@ -266,9 +266,9 @@ Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus ful
 <!-- <a name="Methods.SelectingUCEs.detailed"></a> -->
 #### Detailed, step-by-step methods for how I chose the set of target UCEs:
 
-1. I downloaded the set of *Micurus fulvius* UCEs (n = 3,260) identified by Streicher and Wiens (2017). These were available as a fasta file called [micrurus_UCEs.fa](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/UCEs/micrurus_UCEs.fa).
+1. I downloaded the set of *Micurus fulvius* UCEs (n = 3,260) identified by Streicher and Wiens (2017). These were available as a fasta file called [micrurus_UCEs.fa](https://git.io/JLiu2).
 
-2. To find *Micrurus* UCEs in each of the other snake genomes, I queried each *Micrurus* UCE against each snake genome using blastn algorithm (saving ≤ 50 matches per query), which was implemented using the R wrapper function **blastnR**. Results were saved to the files: **Crotalus_horridus.blastn.UCEs.50hits.txt**, **Crotalus_mitchellii.blastn.UCEs.50hits.txt**, **Ophiophagus_hannah.blastn.UCEs.50hits.txt**, **Pantherophis_guttatus.blastn.UCEs.50hits.txt*, **Protobothrops_mucrosquamatus.blastn.UCEs.50hits.txt**, **Python_bivittatus.blastn.UCEs.50hits.txt**, **Thamnophis_sirtalis.blastn.UCEs.50hits.txt**, and **Vipera_berus.blastn.UCEs.50hits.txt**.
+2. To find *Micrurus* UCEs in each of the other snake genomes, I queried each *Micrurus* UCE against each snake genome using blastn algorithm (saving ≤ 50 matches per query), which was implemented using the R wrapper function REEs::blast. **Update the code below**.
 
 ```
 blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/GCA_000737285.1_CrotMitch1.0_genomic.fna",query.path="~/micrurus_UCEs.fa",output.path="~/Crotalus_mitchellii.blastn.UCEs.50hits.txt")
@@ -281,11 +281,22 @@ blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Vipera_beru
 blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Crotalus_horridus_GCA_001625485.1_ASM162548v1_genomic.fna", query.path="~/micrurus_UCEs.fa",output.path="~/Crotalus_horridus.blastn.UCEs.50hits.txt")
 ```
 
-3. Then, I filtered the hit tables to include only the best match/query (max bitscore) using the R function **reportBestMatches**. Results were saved to the files: [Crotalus_horridus.blastn.UCEs.best.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus_horridus.blastn.UCEs.best.txt), [Crotalus_mitchellii.blastn.UCEs.best.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus_mitchellii.blastn.UCEs.best.txt), [Ophiophagus_hannah.blastn.UCEs.best.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus_hannah.blastn.UCEs.best.txt) , [Pantherophis_guttatus.blastn.UCEs.best.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis_guttatus.blastn.UCEs.best.txt), [Protobothrops_mucrosquamatus.blastn.UCEs.best.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops_mucrosquamatus.blastn.UCEs.best.txt), [Python_bivittatus.blastn.UCEs.best.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Python_bivittatus.blastn.UCEs.best.txt), [Thamnophis_sirtalis.blastn.UCEs.best.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis_sirtalis.blastn.UCEs.best.txt), [Vipera_berus.blastn.UCEs.best.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Vipera_berus.blastn.UCEs.best.txt).
+Output tables from BLASTN: **Crotalus_horridus.blastn.UCEs.50hits.txt**, **Crotalus_mitchellii.blastn.UCEs.50hits.txt**, **Ophiophagus_hannah.blastn.UCEs.50hits.txt**, **Pantherophis_guttatus.blastn.UCEs.50hits.txt*, **Protobothrops_mucrosquamatus.blastn.UCEs.50hits.txt**, **Python_bivittatus.blastn.UCEs.50hits.txt**, **Thamnophis_sirtalis.blastn.UCEs.50hits.txt**, and **Vipera_berus.blastn.UCEs.50hits.txt**.
+
+ 3. I used the function reportBestMatches to filter the hit tables to include only the best match for each query UCE.
 
 ```
-reportBestMatches(input.dir="~/BLAST_Micrurus-UCEs_vs_SnakeGenomes/",species.names=c("Crotalus_mitchellii","Crotalus_horridus","Ophiophagus_hannah","Pantherophis_guttatus","Protobothrops_mucrosquamatus","Python_bivittatus","Thamnophis_sirtalis","Vipera_berus"),output.dir=input.dir,blastMethod="blastn",locusType="UCEs")
+UCEs.best.hits.Crotalus.horridus             <- reportBestMatches(input.table=Crotalus.horridus.blastn.UCEs.50hits, output.table.path="Crotalus.horridus.blastn.UCEs.best.hits.txt")
+UCEs.best.hits.Crotalus.mitchellii           <- reportBestMatches(input.table=Crotalus.mitchellii.blastn.UCEs.50hits, output.table.path="Crotalus.mitchellii.blastn.UCEs.best.hits.txt")
+UCEs.best.hits.Ophiophagus.hannah            <- reportBestMatches(input.table=Ophiophagus.hannah.blastn.UCEs.50hits, output.table.path="Ophiophagus.hannah.blastn.UCEs.best.hits.txt")
+UCEs.best.hits.Pantherophis.guttatus         <- reportBestMatches(input.table=Pantherophis.guttatus.blastn.UCEs.50hit, output.table.path="Pantherophis.guttatus.blastn.UCEs.50hit")
+UCEs.best.hits.Protobothrops.mucrosquamatus  <- reportBestMatches(input.table=Protobothrops.mucrosquamatus.blastn.UCEs.50hits, output.table.path="Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt")
+UCEs.best.hits.Python.bivittatus             <- reportBestMatches(input.table=Python.bivittatus.blastn.UCEs.50hits, output.table.path="Python.bivittatus.blastn.UCEs.best.hits.txt")
+UCEs.best.hits.Thamnophis.sirtalis           <- reportBestMatches(input.table=Thamnophis.sirtalis.blastn.UCEs.50hits, output.table.path="Thamnophis.sirtalis.blastn.UCEs.best.hits.txt")
+UCEs.best.hits.Viperus.berus                 <- reportBestMatches(input.table=Vipera.berus.blastn.UCEs.50hits, output.table.path="Vipera.berus.blastn.UCEs.best.hits.txt")
 ```
+
+Output tables were saved to the files: [Crotalus.horridus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.blastn.UCEs.best.hits.txt), [Crotalus.mitchellii.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.blastn.UCEs.best.hits.txt), [Ophiophagus.hannah.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.blastn.UCEs.best.hits.txt) , [Pantherophis.guttatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.blastn.UCEs.best.hits.txt), [Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt), [Python.bivittatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.blastn.UCEs.best.hits.txt), [Thamnophis.sirtalis.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.blastn.UCEs.best.hits.txt), [Vipera.berus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.blastn.UCEs.best.hits.txt).
 
 4. To extract and save the set of best-match UCEs from each genome I used the function **get.UCEs.from.blastTable**.
 
@@ -299,11 +310,15 @@ get.UCEs.from.blastTable(species="Python_bivittatus",genome.filepath=,input.blas
 get.UCEs.from.blastTable(species="Thamnophis_sirtalis",genome.filepath=,input.blastTable="Thamnophis_sirtalis.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
 get.UCEs.from.blastTable(species="Vipera_berus",genome.filepath=,input.blastTable="Vipera_berus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
 ```
+UCE sequences were saved in fasta format for each species and can be downloaded here: [Crotalus_horridus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus_horridus_UCEs.fasta), [Crotalus_mitchellii_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus_mitchellii_UCEs.fasta), [Ophiophagus_hannah_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus_hannah_UCEs.fasta), [Pantherophis_guttatus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis_guttatus_UCEs.fasta), [Protobothrops_mucrosquamatus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops_mucrosquamatus_UCEs.fasta), [Python_bivittatus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python_bivittatus_UCEs.fasta), [Thamnophis_sirtalis_UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis_sirtalis_UCEs.fas), [Vipera_berus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera_berus_UCEs.fasta)
 
 5. To identify and align the set of UCEs found in all snake genomes, I used the function **align.bestHit.UCEs**. This function invokes MAFFT to perform multisequence alignment.
 
 ```
 align.bestHit.UCEs(species.UCEs.filepaths=list.files(path="~/UCEs.In.Snake.Genomes/",full.names=T), output.dir="~/MAFFT-aligned-UCEs", species=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus", "Protobothrops_mucrosquamatus","Pantherophis_guttatus"))
+
+
+
 ```
 
 6. Final size filtering, sorting, and UCE selection steps were performed in R. *Thamnophis sirtalis* sequences for the selected UCEs (n = 1,000) were submitted to Arbor Biosciences for probe design. Requires Biostrings and ape packages.
