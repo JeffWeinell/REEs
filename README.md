@@ -289,7 +289,7 @@ Output tables from BLASTN: **Crotalus_horridus.blastn.UCEs.50hits.txt**, **Crota
 UCEs.best.hits.Crotalus.horridus             <- reportBestMatches(input.table=Crotalus.horridus.blastn.UCEs.50hits, output.table.path="Crotalus.horridus.blastn.UCEs.best.hits.txt")
 UCEs.best.hits.Crotalus.mitchellii           <- reportBestMatches(input.table=Crotalus.mitchellii.blastn.UCEs.50hits, output.table.path="Crotalus.mitchellii.blastn.UCEs.best.hits.txt")
 UCEs.best.hits.Ophiophagus.hannah            <- reportBestMatches(input.table=Ophiophagus.hannah.blastn.UCEs.50hits, output.table.path="Ophiophagus.hannah.blastn.UCEs.best.hits.txt")
-UCEs.best.hits.Pantherophis.guttatus         <- reportBestMatches(input.table=Pantherophis.guttatus.blastn.UCEs.50hit, output.table.path="Pantherophis.guttatus.blastn.UCEs.50hit")
+UCEs.best.hits.Pantherophis.guttatus         <- reportBestMatches(input.table=Pantherophis.guttatus.blastn.UCEs.50hits, output.table.path="Pantherophis.guttatus.blastn.UCEs.best.hits.txt")
 UCEs.best.hits.Protobothrops.mucrosquamatus  <- reportBestMatches(input.table=Protobothrops.mucrosquamatus.blastn.UCEs.50hits, output.table.path="Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt")
 UCEs.best.hits.Python.bivittatus             <- reportBestMatches(input.table=Python.bivittatus.blastn.UCEs.50hits, output.table.path="Python.bivittatus.blastn.UCEs.best.hits.txt")
 UCEs.best.hits.Thamnophis.sirtalis           <- reportBestMatches(input.table=Thamnophis.sirtalis.blastn.UCEs.50hits, output.table.path="Thamnophis.sirtalis.blastn.UCEs.best.hits.txt")
