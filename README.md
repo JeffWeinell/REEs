@@ -228,6 +228,18 @@ targets.REEs <- pick.loci(statsTable.path="./stats_exome_data_TBLASTX.txt",prima
 
 Result = 2,068 REEs retained; the stats table for these loci was written to the file [stats_data_FastestExonPerGene_best.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best.txt); an updated version of this stats table that includes the WeinellEntry locus names is [stats_data_FastestExonPerGene_best_20Nov2020.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best_20Nov2020.tsv).
 
+```
+# For the REEs, define contig coordinates (*T. sirtalis*) to include the entire exon plus as much of the 5' and 3' noncoding regions such that the target region is a multiple of 120bp (the bait length).
+stats.table            <- as.data.frame(data.table::fread("stats_data_FastestExonPerGene_best.txt",header=T,sep="\t"))
+locus.lengths          <- stats.table[,"locus.length.Thamnophis_sirtalis"]
+REEs.coordinates       <- mat.strsplit(gsub(".*:","",stats.table[,"Thamnophis_sirtalis.locus"]),split="-")
+mode(REEs.coordinates) <- "numeric"
+bait.length    <- 120
+target.lengths <- ceiling(locus.lengths/bait.length)*bait.length
+targets.start  <- REEs.coordinates[,1]-(target.lengths/2)
+targets.end    <- REEs.coordinates[,2]+(target.lengths/2)
+```
+
 These 2,068 REEs were submitted to Arbor Biosciences for probe design. Arbor performed ultrastringent filtration these loci which resulted in the removal of 70 REEs [Version1-loci-removed_ZeroBaitCoverageLoci.tsv](https://git.io/JLiEu), whereas 1,998 passed this step. An additional 123 REEs were removed because the baits designed to target these loci were all non-specific within the genomes of *T. sirtalis* and/or *Thermophis baileyi*; 212 other REEs were removed to allow some baits to be used to target other types of loci (UCEs, immune, scalation, vision, and ddRAD-like loci). The remaining 1,653 REEs were synthesized and included in the mybaits 20K bait kit (product no. 3001160).
 
 <!--
