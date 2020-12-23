@@ -281,7 +281,22 @@ blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Vipera_beru
 blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Crotalus_horridus_GCA_001625485.1_ASM162548v1_genomic.fna", query.path="~/micrurus_UCEs.fa",output.path="~/Crotalus_horridus.blastn.UCEs.50hits.txt")
 ```
 
-Output tables from BLASTN: **Crotalus_horridus.blastn.UCEs.50hits.txt**, **Crotalus_mitchellii.blastn.UCEs.50hits.txt**, **Ophiophagus_hannah.blastn.UCEs.50hits.txt**, **Pantherophis_guttatus.blastn.UCEs.50hits.txt*, **Protobothrops_mucrosquamatus.blastn.UCEs.50hits.txt**, **Python_bivittatus.blastn.UCEs.50hits.txt**, **Thamnophis_sirtalis.blastn.UCEs.50hits.txt**, and **Vipera_berus.blastn.UCEs.50hits.txt**.
+```
+# Runs BLASTN
+Anolis.carolinensis.UCEs.50hits          <- REEs::blast(method="blastn",subject=Anolis.carolinensis.genome_url,query="./micrurus_UCEs.fa",table.out="./Anolis.carolinensis.blastn.UCEs.50hits.txt")
+Gekko.japonicus.UCEs.50hits              <- REEs::blast(method="blastn",subject=Gekko.japonicus.genome_url,query="./micrurus_UCEs.fa",table.out="./Gekko.japonicus.blastn.UCEs.50hits.txt")
+Pogona.vitticeps.UCEs.50hits             <- REEs::blast(method="blastn",subject=Pogona.vitticeps.genome_url,query="./micrurus_UCEs.fa",table.out="./Pogona.vitticeps.blastn.UCEs.50hits.txt")
+Crotalus.horridus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Crotalus.horridus.genome_url,query="./micrurus_UCEs.fa",table.out="./Crotalus.horridus.blastn.UCEs.50hits.txt")
+Crotalus.mitchellii.UCEs.50hits          <- REEs::blast(method="blastn",subject=Crotalus.mitchellii.genome_url,query="./micrurus_UCEs.fa",table.out="./Crotalus.mitchellii.blastn.UCEs.50hits.txt")
+Ophiophagus.hannah.UCEs.50hits           <- REEs::blast(method="blastn",subject=Ophiophagus.hannah.genome_url,query="./micrurus_UCEs.fa",table.out="./Ophiophagus.hannah.blastn.UCEs.50hits.txt")
+Pantherophis.guttatus.UCEs.50hits        <- REEs::blast(method="blastn",subject=Pantherophis.guttatus.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Pantherophis.guttatus.blastn.UCEs.50hits.txt")
+Protobothrops.mucrosquamatus.UCEs.50hits <- REEs::blast(method="blastn",subject=Protobothrops.mucrosquamatus.genome_url,query="./micrurus_UCEs.fa",table.out="./Protobothrops.mucrosquamatus.blastn.UCEs.50hits.txt")
+Python.bivittatus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Python.bivittatus.genome_url,query="./micrurus_UCEs.fa",table.out="./Python.bivittatus.blastn.UCEs.50hits.txt")
+Viperus.berus.UCEs.50hits                <- REEs::blast(method="blastn",subject=Viperus.berus.genome_url,query="./micrurus_UCEs.fa",table.out="./Viperus.berus.blastn.UCEs.50hits.txt")
+Thamnophis.sirtalis.UCEs.50hits          <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url,query="./micrurus_UCEs.fa",table.out="./Thamnophis.sirtalis.blastn.UCEs.50hits.txt")
+```
+
+Output tables from BLASTN: **Crotalus.horridus.blastn.UCEs.50hits.txt**, **Crotalus.mitchellii.blastn.UCEs.50hits.txt**, **Ophiophagus.hannah.blastn.UCEs.50hits.txt**, **Pantherophis.guttatus.blastn.UCEs.50hits.txt*, **Protobothrops.mucrosquamatus.blastn.UCEs.50hits.txt**, **Python.bivittatus.blastn.UCEs.50hits.txt**, **Thamnophis.sirtalis.blastn.UCEs.50hits.txt**, and **Vipera.berus.blastn.UCEs.50hits.txt**.
 
  3. I used the function reportBestMatches to filter the hit tables to include only the best match for each query UCE.
 
