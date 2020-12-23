@@ -282,7 +282,7 @@ Viperus.berus.UCEs.50hits                <- REEs::blast(method="blastn",subject=
 Thamnophis.sirtalis.UCEs.50hits          <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url,query="./micrurus_UCEs.fa",table.out="./Thamnophis.sirtalis.blastn.UCEs.50hits.txt")
 ```
 
-Output tables from BLASTN: **Crotalus.horridus.blastn.UCEs.50hits.txt**, **Crotalus.mitchellii.blastn.UCEs.50hits.txt**, **Ophiophagus.hannah.blastn.UCEs.50hits.txt**, **Pantherophis.guttatus.blastn.UCEs.50hits.txt*, **Protobothrops.mucrosquamatus.blastn.UCEs.50hits.txt**, **Python.bivittatus.blastn.UCEs.50hits.txt**, **Thamnophis.sirtalis.blastn.UCEs.50hits.txt**, and **Vipera.berus.blastn.UCEs.50hits.txt**.
+Output tables from BLASTN: **Crotalus.horridus.blastn.UCEs.50hits.txt**, **Crotalus.mitchellii.blastn.UCEs.50hits.txt**, **Ophiophagus.hannah.blastn.UCEs.50hits.txt**, **Pantherophis.guttatus.blastn.UCEs.50hits.txt**, **Protobothrops.mucrosquamatus.blastn.UCEs.50hits.txt**, **Python.bivittatus.blastn.UCEs.50hits.txt**, **Thamnophis.sirtalis.blastn.UCEs.50hits.txt**, and **Vipera.berus.blastn.UCEs.50hits.txt**.
 
  3. I used the function reportBestMatches to filter the hit tables to include only the best match for each query UCE.
 
@@ -319,9 +319,6 @@ UCE sequences were saved in fasta format for each species and can be downloaded 
 
 ```
 align.bestHit.UCEs(species.UCEs.filepaths=list.files(path="~/UCEs.In.Snake.Genomes/",full.names=T), output.dir="~/MAFFT-aligned-UCEs", species=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus", "Protobothrops_mucrosquamatus","Pantherophis_guttatus"))
-
-
-
 ```
 
 6. Final size filtering, sorting, and UCE selection steps were performed in R. *Thamnophis sirtalis* sequences for the selected UCEs (n = 1,000) were submitted to Arbor Biosciences for probe design. Requires Biostrings and ape packages.
