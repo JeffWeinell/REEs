@@ -268,24 +268,10 @@ Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus ful
 
 1. I downloaded the set of *Micurus fulvius* UCEs (n = 3,260) identified by Streicher and Wiens (2017). These were available as a fasta file called [micrurus_UCEs.fa](https://git.io/JLiu2).
 
-2. To find *Micrurus* UCEs in each of the other snake genomes, I queried each *Micrurus* UCE against each snake genome using blastn algorithm (saving ≤ 50 matches per query), which was implemented using the R wrapper function REEs::blast. **Update the code below**.
-
-```
-blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/GCA_000737285.1_CrotMitch1.0_genomic.fna",query.path="~/micrurus_UCEs.fa",output.path="~/Crotalus_mitchellii.blastn.UCEs.50hits.txt")
-blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Protobothrops_mucrosquamatus_GCF_001527695.2_P.Mucros_1.0_genomic.fna", query.path="~/micrurus_UCEs.fa",output.path="~/Protobothrops_mucrosquamatus.blastn.UCEs.50hits.txt")
-blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Pantherophus_guttatus_GCA_001185365.1_PanGut1.0_genomic.fna", query.path="~/micrurus_UCEs.fa",output.path="~/Pantherophis_guttatus.blastn.UCEs.50hits.txt")
-blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Python_bivittatus_GCF_000186305.1_Python_molurus_bivittatus-5.0.2_genomic.fna", query.path="~/micrurus_UCEs.fa",output.path="~/Python_bivittatus.blastn.UCEs.50hits.txt")
-blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Thamnophis_sirtalis_GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna" ,query.path="~/micrurus_UCEs.fa",output.path="~/Thamnophis_sirtalis.blastn.UCEs.50hits.txt")
-blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Ophiophagus_hannah_GCA_000516915.1_OphHan1.0_genomic.fna", query.path="~/micrurus_UCEs.fa",output.path="~/Ophiophagus_hannah.blastn.UCEs.50hits.txt")
-blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Vipera_berus_GCA_000800605.1_Vber.be_1.0_genomic.fna", query.path="~/micrurus_UCEs.fa",output.path="~/Vipera_berus.blastn.UCEs.50hits.txt")
-blastnR(blastn.path="~/ncbi-blast-2.5.0+/bin/blastn",subject.path="~/Crotalus_horridus_GCA_001625485.1_ASM162548v1_genomic.fna", query.path="~/micrurus_UCEs.fa",output.path="~/Crotalus_horridus.blastn.UCEs.50hits.txt")
-```
+2. To find *Micrurus* UCEs in each of the other snake genomes, I queried each *Micrurus* UCE against each snake genome using blastn algorithm (saving ≤ 50 matches per query), which was implemented using the R wrapper function REEs::blast.
 
 ```
 # Runs BLASTN
-Anolis.carolinensis.UCEs.50hits          <- REEs::blast(method="blastn",subject=Anolis.carolinensis.genome_url,query="./micrurus_UCEs.fa",table.out="./Anolis.carolinensis.blastn.UCEs.50hits.txt")
-Gekko.japonicus.UCEs.50hits              <- REEs::blast(method="blastn",subject=Gekko.japonicus.genome_url,query="./micrurus_UCEs.fa",table.out="./Gekko.japonicus.blastn.UCEs.50hits.txt")
-Pogona.vitticeps.UCEs.50hits             <- REEs::blast(method="blastn",subject=Pogona.vitticeps.genome_url,query="./micrurus_UCEs.fa",table.out="./Pogona.vitticeps.blastn.UCEs.50hits.txt")
 Crotalus.horridus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Crotalus.horridus.genome_url,query="./micrurus_UCEs.fa",table.out="./Crotalus.horridus.blastn.UCEs.50hits.txt")
 Crotalus.mitchellii.UCEs.50hits          <- REEs::blast(method="blastn",subject=Crotalus.mitchellii.genome_url,query="./micrurus_UCEs.fa",table.out="./Crotalus.mitchellii.blastn.UCEs.50hits.txt")
 Ophiophagus.hannah.UCEs.50hits           <- REEs::blast(method="blastn",subject=Ophiophagus.hannah.genome_url,query="./micrurus_UCEs.fa",table.out="./Ophiophagus.hannah.blastn.UCEs.50hits.txt")
@@ -313,18 +299,20 @@ UCEs.best.hits.Viperus.berus                 <- reportBestMatches(input.table=Vi
 
 Output tables were saved to the files: [Crotalus.horridus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.blastn.UCEs.best.hits.txt), [Crotalus.mitchellii.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.blastn.UCEs.best.hits.txt), [Ophiophagus.hannah.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.blastn.UCEs.best.hits.txt) , [Pantherophis.guttatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.blastn.UCEs.best.hits.txt), [Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt), [Python.bivittatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.blastn.UCEs.best.hits.txt), [Thamnophis.sirtalis.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.blastn.UCEs.best.hits.txt), [Vipera.berus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.blastn.UCEs.best.hits.txt).
 
-4. To extract and save the set of best-match UCEs from each genome I used the function **get.UCEs.from.blastTable**.
+4. I used the function get.seqs.from.blastTable to extract and save the set of best-match UCEs from each genome.
 
 ```
-get.UCEs.from.blastTable(species="Crotalus_horridus",genome.filepath=,input.blastTable="Crotalus_horridus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
-get.UCEs.from.blastTable(species="Crotalus_mitchellii",genome.filepath=,input.blastTable="Crotalus_mitchellii.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
-get.UCEs.from.blastTable(species="Ophiophagus_hannah",genome.filepath=,input.blastTable="Ophiophagus_hannah.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
-get.UCEs.from.blastTable(species="Pantherophis_guttatus",genome.filepath=,input.blastTable="Pantherophis_guttatus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
-get.UCEs.from.blastTable(species="Protobothrops_mucrosquamatus",genome.filepath=,input.blastTable="Protobothrops_mucrosquamatus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
-get.UCEs.from.blastTable(species="Python_bivittatus",genome.filepath=,input.blastTable="Python_bivittatus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
-get.UCEs.from.blastTable(species="Thamnophis_sirtalis",genome.filepath=,input.blastTable="Thamnophis_sirtalis.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
-get.UCEs.from.blastTable(species="Vipera_berus",genome.filepath=,input.blastTable="Vipera_berus.blastn.UCEs.best.txt",output.dir="~/UCEs.In.Snake.Genomes/")
+#### Extracts the sequence of the best match of each UCE from each snake genome.
+Crotalus.horridus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Crotalus.horridus, input.seqs=Crotalus.horridus.genome_url, output.path="./Crotalus_horridus_UCEs.fasta")
+Crotalus.mitchellii.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Crotalus.mitchellii, input.seqs=Crotalus.mitchellii.genome_url, output.path="./Crotalus_mitchellii_UCEs.fasta")
+Ophiophagus.hannah.best.hits.seqs           <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Ophiophagus.hannah, input.seqs=Ophiophagus.hannah.genome_url, output.path="./Ophiophagus_hannah_UCEs.fasta")
+Pantherophis.guttatus.best.hits.seqs        <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Pantherophis.guttatus, input.seqs=Pantherophis.guttatus.genome_url, output.path="./Pantherophis_guttatus_UCEs.fasta")
+Protobothrops.mucrosquamatus.best.hits.seqs <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Protobothrops.mucrosquamatus, input.seqs=Protobothrops.mucrosquamatus_genome.url, output.path="./Protobothrops_mucrosquamatus_UCEs.fasta")
+Python.bivittatus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Python.bivittatus, input.seqs=Python.bivittatus.genome_url, output.path="./Python_bivittatus_UCEs.fasta")
+Viperus.berus.best.hits.seqs                <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Viperus.berus, input.seqs=Viperus.berus.genome_url, output.path="./Viperus_berus_UCEs.fasta")
+Thamnophis.sirtalis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Thamnophis.sirtalis, input.seqs=Thamnophis.sirtalis.genome_url, output.path="./Thamnophis_sirtalis_UCEs.fas")
 ```
+
 UCE sequences were saved in fasta format for each species and can be downloaded here: [Crotalus_horridus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus_horridus_UCEs.fasta), [Crotalus_mitchellii_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus_mitchellii_UCEs.fasta), [Ophiophagus_hannah_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus_hannah_UCEs.fasta), [Pantherophis_guttatus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis_guttatus_UCEs.fasta), [Protobothrops_mucrosquamatus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops_mucrosquamatus_UCEs.fasta), [Python_bivittatus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python_bivittatus_UCEs.fasta), [Thamnophis_sirtalis_UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis_sirtalis_UCEs.fas), [Vipera_berus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera_berus_UCEs.fasta)
 
 5. To identify and align the set of UCEs found in all snake genomes, I used the function **align.bestHit.UCEs**. This function invokes MAFFT to perform multisequence alignment.
