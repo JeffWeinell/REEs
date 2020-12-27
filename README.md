@@ -223,14 +223,14 @@ column number|column name|column description
 -->
 
 ```
-targets.REEs <- pick.loci(statsTable.path="./stats_exome_data_TBLASTX.txt",primary.species="Thamnophis sirtalis", output.path="./stats_data_FastestExonPerGene_best.txt", species.subgroup=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),pident.keep=c(65,100),max.loci.per.gene=1, min.num.species="all",max.capture.coverage=1200000,fast.stat="pident")
+targets.REEs <- pick.loci(statsTable.path="./stats_exome_data_TBLASTX.txt",primary.species="Thamnophis sirtalis", output.path="./stats_data_FastestExonPerGene_best.tsv", species.subgroup=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),pident.keep=c(65,100),max.loci.per.gene=1, min.num.species="all",max.capture.coverage=1200000,fast.stat="pident")
 ```
 
-Result = 2,068 REEs retained; the stats table for these loci was written to the file [stats_data_FastestExonPerGene_best.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best.txt); an updated version of this stats table that includes the WeinellEntry locus names is [stats_data_FastestExonPerGene_best_20Nov2020.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best_20Nov2020.tsv).
+Result = 2,068 REEs retained; the stats table for these loci was written to the file [stats_data_FastestExonPerGene_best.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best.tsv); an updated version of this stats table that includes the WeinellEntry locus names is [stats_data_FastestExonPerGene_best_20Nov2020.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best_20Nov2020.tsv).
 
 ```
 # For the REEs, define contig coordinates (*T. sirtalis*) to include the entire exon plus as much of the 5' and 3' noncoding regions such that the target region is a multiple of 120bp (the bait length).
-stats.table            <- as.data.frame(data.table::fread("stats_data_FastestExonPerGene_best.txt",header=T,sep="\t"))
+stats.table            <- as.data.frame(data.table::fread("stats_data_FastestExonPerGene_best.tsv",header=T,sep="\t"))
 locus.lengths          <- stats.table[,"locus.length.Thamnophis_sirtalis"]
 REEs.coordinates       <- mat.strsplit(gsub(".*:","",stats.table[,"Thamnophis_sirtalis.locus"]),split="-")
 mode(REEs.coordinates) <- "numeric"
