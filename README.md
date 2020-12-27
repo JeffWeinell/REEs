@@ -223,21 +223,36 @@ column number|column name|column description
 -->
 
 ```
-targets.REEs <- pick.loci(statsTable.path="./statsTable_REEs_SnakeCap.txt",primary.species="Thamnophis sirtalis", output.path="./stats_data_FastestExonPerGene_best.tsv", species.subgroup=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),pident.keep=c(65,100),max.loci.per.gene=1, min.num.species="all",max.capture.coverage=1200000,fast.stat="pident")
+stats.table.best <- pick.loci(statsTable.path="./statsTable_REEs_SnakeCap.txt",primary.species="Thamnophis sirtalis", output.path="./stats_data_FastestExonPerGene_best.tsv", species.subgroup=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),pident.keep=c(65,100),max.loci.per.gene=1, min.num.species="all",max.capture.coverage=1200000,fast.stat="pident")
 ```
 
-Result = 2,068 REEs retained; the stats table for these loci was written to the file [stats_data_FastestExonPerGene_best.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best.tsv); an updated version of this stats table that includes the WeinellEntry locus names is [stats_data_FastestExonPerGene_best_20Nov2020.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best_20Nov2020.tsv).
+Result = 2,071 REEs retained; the stats table for these loci was written to the file [stats_data_FastestExonPerGene_best.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best.tsv); an updated version of this stats table that includes the WeinellEntry locus names is [stats_data_FastestExonPerGene_best_20Nov2020.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best_20Nov2020.tsv). Three of the REEs picked in this step were dropped in the next step; these were NW_013657725.1:467328-467695, NW_013657725.1:516491-516858, and NW_013659343.1:156011-156388; check if these were duplicates.
+
+8. Expand the target region to include noncoding DNA upstream and downstream of the loci identified in step 7. The amount of noncoding DNA included in the expanded target was determined by the bait length (120) and each exon length, such that the expanded target length is a multiple of the bait length.
 
 ```
 # For the REEs, define contig coordinates (*T. sirtalis*) to include the entire exon plus as much of the 5' and 3' noncoding regions such that the target region is a multiple of 120bp (the bait length).
-stats.table            <- as.data.frame(data.table::fread("stats_data_FastestExonPerGene_best.tsv",header=T,sep="\t"))
-locus.lengths          <- stats.table[,"locus.length.Thamnophis_sirtalis"]
-REEs.coordinates       <- mat.strsplit(gsub(".*:","",stats.table[,"Thamnophis_sirtalis.locus"]),split="-")
+stats.table.best       <- as.data.frame(data.table::fread("stats_data_FastestExonPerGene_best.tsv",header=T,sep="\t"))
+locus.lengths          <- stats.table.best[,"locus.length.Thamnophis_sirtalis"]
+REEs.coordinates       <- mat.strsplit(gsub(".*:","",stats.table.best[,"Thamnophis_sirtalis.locus"]),split="-")
 mode(REEs.coordinates) <- "numeric"
 bait.length    <- 120
+# Length of expanded target length (= locus.lengths rounded up to the nearest multiple of bait.length)
 target.lengths <- ceiling(locus.lengths/bait.length)*bait.length
-targets.start  <- REEs.coordinates[,1]-(target.lengths/2)
-targets.end    <- REEs.coordinates[,2]+(target.lengths/2)
+# Amount of upstream noncoding DNA to target
+upstream.lengths   <- ceiling((target.lengths-locus.lengths)/2)
+# Calculate amount of downstream noncoding DNA to target
+downstream.lengths <- target.lengths-(locus.lengths+upstream.lengths)
+# Define contig coordinates for the expanded targets
+targets.start  <- REEs.coordinates[,1]-upstream.lengths
+targets.end    <- REEs.coordinates[,2]+downstream.lengths
+targets.contig <- mat.strsplit(gsub(":.*","",stats.table.best[,"Thamnophis_sirtalis.locus"]),split="-")
+
+### Now use the get_ncbi_sequences function to obtain the expanded targets....
+get_ncbi_sequences(outfile="......",accessionList=targets.contig,startList=targets.start,endList=targets.end,strandList="1",db="nuccore",rettype="fasta",retmode="text")
+
+
+
 ```
 
 These 2,068 REEs were submitted to Arbor Biosciences for probe design. Arbor performed ultrastringent filtration these loci which resulted in the removal of 70 REEs [Version1-loci-removed_ZeroBaitCoverageLoci.tsv](https://git.io/JLiEu), whereas 1,998 passed this step. An additional 123 REEs were removed because the baits designed to target these loci were all non-specific within the genomes of *T. sirtalis* and/or *Thermophis baileyi*; 212 other REEs were removed to allow some baits to be used to target other types of loci (UCEs, immune, scalation, vision, and ddRAD-like loci). The remaining 1,653 REEs were synthesized and included in the mybaits 20K bait kit (product no. 3001160).
