@@ -1,6 +1,6 @@
-# SnakeCap Sequence Capture Probe Set:
+# SnakeCap Sequence Capture Probe Set
 
-## Contents
+# Contents
 
 [Description of SnakeCap Probe Set](#Description)
 
@@ -27,7 +27,7 @@
 [References](#References)
 
 <a name="Description"></a>
-## Description of SnakeCap Probe Set
+# Description of SnakeCap Probe (Bait) Set
 
 The probe set includes 20,020 probes for 3,129 single-copy loci (1,517,011 nt) shared across snakes. The target loci are categorized into four types: (1) rapidly evolving exons (REEs; n = 1,653), (2) ultra-conserved elements (UCEs; n = 907), (3) ddRAD-like loci (n = 328), (4) and functionally interesting genes, which includes 27 major histocompatibility complex (MHC) genes, 119 vision genes, and 95 scalation genes.
 
@@ -53,18 +53,18 @@ All loci |  | 3,129 | 1,517,011 | 120–7,501 (mean = 531.62)
 
 
 <a name="Methods"></a>
-## Methods
+# Methods
 
 <a name="Methods.SelectingREEs"></a>
-### Selecting the set of target REEs
+## Selecting the set of target REEs
 
 <!-- <a name="Methods.SelectingREEs.overview"></a> -->
 #### Overview: 
 
-<!-- <a name="Methods.SelectingREEs.detailed"></a> -->
-#### Detailed, step-by-step methods for how I chose the set of target REEs
 
-1. 
+
+<!-- <a name="Methods.SelectingREEs.detailed"></a> -->
+#### Details:
 
 <!--
 I downloaded the [*Thamnophis sirtalis* genome](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz) and its associated annotation table: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz) (n = 559,130 features annotated). Then, I renamed the contigs in the genome file to have the following format: **Thamnophis_sirtalis_GCF_001077635.1_read1**, **Thamnophis_sirtalis_GCF_001077635.1_read2**, etc., and saved this renamed genome in sequential fasta format: [ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/exomes/ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip). The two-column, tab-delimited table [Scaffold-Name-Key.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/main/exomes/Scaffold-Name-Key.txt?token=AJJOG2UQ6MDA7UY2U4R6BFS7ZDZYS) includes the new contig name in the first column and the original contig name in the second column:
@@ -73,18 +73,21 @@ I downloaded the [*Thamnophis sirtalis* genome](https://ftp.ncbi.nlm.nih.gov/gen
 1. I used the functions load.gff and filter.gff (REEs R package) to filter the *Thamnophis sirtalis* genome feature table (GFF3 format) to include only CDS feature tracks ≥ 120bp in length. The input (unfiltered) GFF3 file can be found here: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz). Learn about GFF3 file format [here](https://uswest.ensembl.org/info/website/upload/gff3.html).
 
 ```
-### URL to the Thamnophis sirtalis genome feature table.
+### Load REEs package
+library(REEs)
+
+### Define URL to the Thamnophis sirtalis genome feature table.
 Thamnophis.sirtalis_GFF.url       <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz"
 
-### Loading the input feature table into R
+### Load the input feature table into R
 Thamnophis.sirtalis_GFF     <- load.gff(input=Thamnophis.sirtalis_GFF.url,local=F)
 
-# Filter Thamnophis.sirtalis_GFF to only include CDS features with length at least 120bp
+# Filter Thamnophis.sirtalis_GFF to only include CDS features with length at least 120bp (the size of the baits).
 Thamnophis.sirtalis_GFF_CDS_longer120bp <- filter.gff(input.gff=Thamnophis.sirtalis_GFF,feature.type="CDS",min.length=120)
 ```
-The output (filtered) GFF3 feature table can be downloaded here: **CDS_ref_Thamnophis_sirtalis-6.0_top_level_JLW_withGenBankAcc_longer120bp.gff3**.
+The output feature table can be downloaded here: [Thamnophis.sirtalis_GFF_CDS_longer120bp.txt](https://osf.io/tm7qw/download).  Note 1: This filtered GFF table is also included as a data table object in the REEs R package (object name: Thamnophis.sirtalis_GFF_CDS_longer120bp). Note 2: the filtered GFF table is not true GFF format, because the header/comment lines are not included; nevertheless, the format used for the columns follows GFF3 format.
 
-2. I used the function **get.seqs.from.gff** to extract the sequences corresponding the CDS features in the table generated in step 1.
+2. I used the function get.seqs.from.gff to extract the sequences corresponding the CDS features in the table generated in step 1. 
 
 ```
 ### URL to the Thamnophis sirtalis genome (fasta formatted sequences).
@@ -289,7 +292,7 @@ nflank.3',i = # of nucleotides targeted downstream of exon
 --->
 
 <a name="Methods.SelectingUCEs"></a>
-### Selecting the set of target UCEs
+## Selecting the set of target UCEs
 
 <!-- <a name="Methods.SelectingUCEs.overview"></a> -->
 #### Overview:
@@ -297,7 +300,7 @@ nflank.3',i = # of nucleotides targeted downstream of exon
 Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus fulvius* (Streicher and Wiens, 2017; **Table X**). First, I filtered the full set of *Micrurus* UCEs to only include those present in all NCBI snake genomes (n = 2,968 UCEs). Then, I filtered the shared set of UCEs to only include those with an alignment width > 200nt (2,551 UCEs retained; each UCE alignment included the eight snakes with published genomes). Next, I removed the following UCEs: uce-1843, uce-2179, uce-2433, uce-2465, uce-2498, uce-2890, uce-2960, and uce-3354 (not sure why I did this yet). I sorted the remaining 2,543 UCEs by UCE name and retained the first 1,000 loci in this set. Arbor Biosciences was able to synthesize probes for 907 of the 1,000 proposed target UCEs.
 
 <!-- <a name="Methods.SelectingUCEs.detailed"></a> -->
-#### Detailed, step-by-step methods for how I chose the set of target UCEs:
+#### Details:
 
 1. I downloaded the set of *Micurus fulvius* UCEs (n = 3,260) identified by Streicher and Wiens (2017). These were available as a fasta file called [micrurus_UCEs.fa](https://git.io/JLiu2).
 
@@ -404,11 +407,11 @@ writeXStringSet(x=target.UCEs,filepath=<outputFilepath>,format="fasta")
 7. Probes were designed for 907 of the 1,000 UCEs submitted to Arbor Biosciences.
 
 <a name="Methods.SelectingddRAD"></a>
-### Selecting the set of target ddRAD-like loci
+## Selecting the set of target ddRAD-like loci
 
 #### Overview:
 
-#### Detailed, step-by-step methods for how I chose the set of target ddRAD-like loci:
+#### Details:
 
 1. grep Sbfi recognition site in *T. baileyi* genome (sense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
 2. grep EcoRI recognition site in *T. baileyi* genome (sense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
@@ -436,7 +439,7 @@ Proposed target loci using SbfI and EcoR1 recognition sites (USED 328 of these):
 Set of 900–1000bp regions of the Sense Strand containing Sbfi and EcoRI recognition sites: **ddRAD-like-loci_SenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt**
 
 <a name="Methods.SelectingMHC"></a>
-### Selecting MHC loci:
+## Selecting MHC loci:
 
 I used grep to search within the annotation table of the *T. sirtalis* genome (**ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3**) for CDS features of major histocompatibility genes, using the following grep search terms: (1) "MHC", (2) "major histocompatibility". Results = 86 CDS regions corresponding to exons of 19 genes (**ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3**).
 
@@ -542,19 +545,19 @@ See the README file in ArborFiles folder for a description about how the bait ki
 -->
 
 <a name="Methods.SelectingScalation"></a>
-### Selecting scalation loci:
+## Selecting scalation loci:
 
 I targeted a subset of the genes included in the study by Holthaus et al. (2017). In that study, the authors identified homologous genes of the Epidermal Differentiation Complex (which are putatively involved in scalation) of *Python bivittatus* and *Ophiophagus hannah*. I downloaded the *Ophiophagus* scalation gene sequences using the table of genomic coordinates provided by Holthaus et al. (2017), and then used tblastn to search for and obtain homologous loci in *T. sirtalis*, *Protobothrops mucrosquamatus*, and *Crotalus horridus*.
 
 
 <a name="Methods.SelectingVision"></a>
-### Selecting vision loci:
+## Selecting vision loci:
 
 I used blastn to search for the vision loci probes from Schott et al. (2017) (which were from *Anolis*, *Columba*, *Gallus*, and *Pelodiscus*, *Sceloporus*, or *Python*) within the snake genomes. Most of the SnakeCap probes for these loci are designed from *Ophiophagus* (n = 88), but some probes were designed from *Thamnophis* (n = 21), *Protobothrops* (n = 5), *Pantherophis* (n = 3), or *Python* (n = 2), when blastn of Schott et al 2017 probes did not yield a strong match in *Ophiophagus*.
 
 
 <a name="ProbeSynthesis"></a>
-### Probe Synthesis
+## Probe Synthesis
 
 After choosing the target loci, probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total. See **Target-loci_Coverage_graph_22October2020.pdf** for a visual summary of target loci, probes, probe coverage, and features of loci including genes, mRNA/transcribed regions, and protein-coding (CDS) regions. This graph was generated with **graph_target_and_features.R** and then filesize reduction in Adobe Acrobat.
 
@@ -571,22 +574,22 @@ species | genome assembly accession | contig prefixes | n target loci with baits
 *Thermophis baileyi* | GCA_003457575.1 | QLTV01 | 328  | 229
 
 <a name="Sampling"></a>
-### Taxa sampled
+## Taxa sampled
 
 The following species were sequenced: *Achalinus spinalis*, *Aparallactus capensis*, *Aplopeltura boa*, *Elapsoidea sundevalli*, *Boiga irregularis*, *Buhoma depressiceps*, *Cerberus schneideri*, *Chamaelycus fasciatus*, *Cyclocorus lineatus*, *Oxyrhabdium* cf. *modestum*, *Oxyrhabdium leporinum*, *Oxyrhabdium modestum*, *Prosymna visseri*, *Psammodynastes pulverulentus*, *Pseudaspis cana*, *Pseudoxyrhopus tritaeniatus*, *Rhamphiophis oxyrhynchus*, *Scolecophis atrocinctus*, *Tantilla taeniata*.
 
 <a name="LibraryPrep"></a>
-### Sequence capture library prep
+## Sequence capture library prep
 
 Conducted by Arbor Biosciences; eight samples/pool; ...
 
 <a name="DNASequencing"></a>
-### DNA sequencing
+## DNA sequencing
 
 Novogene Illumina HiSeqX; paired-end sequencing, read length 150nt, insert size 400nt?.
 
 <a name="PostSequencing"></a>
-### Post-sequencing
+## Post-sequencing
 
 <a name="Demultiplexing"></a>
 #### Demultiplexing
