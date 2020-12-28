@@ -239,11 +239,12 @@ stats.table.all <- data.table::fread("./statsTable_REEs_SnakeCap.txt",header=T)
 
 ### Filter the stats table to the optimal set of REEs
 stats.table.best <- pick.loci(statsTable.path=stats.table.all,primary.species="Thamnophis sirtalis", output.path="./stats_data_FastestExonPerGene_best_28Dec2020.tsv", species.subgroup=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),pident.keep=c(65,100),max.loci.per.gene=1, min.num.species="all",max.capture.coverage=1200500,fast.stat="pident",use.min.pident.subgroup=T)
-
+```
+<!---
 ### Note 1: Using the code above retains 2,068 REEs in stats.table.best, of which 2,067 are the same as those previously picked and included in the file "stats_data_FastestExonPerGene_best.tsv". The output table stats.table.best includes "NW_013658076.1:768357-769730", which was not previously selected for inclusion in "stats_data_FastestExonPerGene_best.tsv"; conversely, "stats_data_FastestExonPerGene_best.tsv" includes "NW_013658076.1:768360-769730", "NW_013657914.1:650880-651587", "NW_013662230.1:5224-5446", and "NW_013659343.1:156011-156388", which are not included in the output table stats.table.best
 ### Note 2: "NW_013658076.1:768357-769730" of stats.table.best is essentially the same locus as "NW_013658076.1:768360-769730" in stats_data_FastestExonPerGene_best.tsv; The difference is because the latest version of the REEs::reportBestMatches function filters matches that are subsequences of other matches.
 ### Note 3: running pick.loci with max.capture.coverage=1200500 (rather than 1200000) includes the loci "NW_013657914.1:650880-651587" and "NW_013662230.1:5224-5446", which were included in "stats_data_FastestExonPerGene_best.tsv", but "NW_013659343.1:156011-156388" is still missing.
-```
+--->
 
 The output table includes 2,070 REEs and can be downloaded here [stats_data_FastestExonPerGene_best_28Dec2020.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best_28Dec2020.tsv). The format of the output table is the same as the format of the input table; see Table 3 for column descriptions.
 
@@ -291,11 +292,11 @@ REEs.expanded <- get_ncbi_sequences(outfile="./REEs.expanded.fas",input.seqs=Tha
 
 ```
 
-The output sequences (expanded REEs targets) can be downloaded here: [REEs.expanded.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.fas).
+The output sequences (expanded REEs targets) can be downloaded here: [REEs.expanded.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.fas). **Re-run step 8 using stats_data_FastestExonPerGene_best_28Dec2020.tsv as the input instead of stats_data_FastestExonPerGene_best.tsv; the results should be the same as REEs.expanded.fas, but double check.**
 
 Three of the expanded targets were only partially expanded, meaning that their sequence length was not a multiple of the bait length because they were located near one of the ends of their corresponding contig sequence. Therefore, one of the two noncoding flanking regions was shorter than the other. The WeinellEntry names and contig accession and ranges of the three partially expanded targets (attempted/impossible fully expanded in parantheses) include: WeinellEntry959: NW_013657802.1:1404174-1405963 (NW_013657802.1:1404174-1405974); WeinellEntry1800: NW_013662380.1:5926-6377 (NW_013662380.1:5926-6406); WeinellEntry2040: NW_013661694.1:23750-23983 (NW_013661694.1:23750-23990).
 
-The remaining 2,068 REEs (expanded targets) were submitted to Arbor Biosciences for ulstrastringent filtering and probe design. Note: Five duplicate pairs of REEs (each pair with identical sequences) were present in the output of step 8 (Table 4). Only one of these duplicate pairs was recognized/identified (and filtered manually) prior to submitting target sequences to Arbor Biosciences (pair 1: NW_013657725.1:467328-467695 = NW_013657725.1:516491-516858). The other duplicate pairs were subsequently filtered by the Arbor's ulstrastringent algorithm.
+Note: Five duplicate pairs of REEs (each pair with identical sequences) were present in the output of step 8 (Table 4). Only one of these duplicate pairs was recognized/identified (and filtered manually) prior to submitting target sequences to Arbor Biosciences. The remaining 2,068 REEs (expanded targets) were submitted to Arbor Biosciences for ulstrastringent filtering and probe design.
 
 Table 4. Pairs of REEs having identical sequences that were included in the ouput of the pick.loci function (step 8). These were subsequently filtered, either immediately before or after application of Arbor's ultrastringent filtering algorithm. The latest version of the pick.loci function has an option to filter REEs if there sequences are too similar.
 Contig Accession ID|Start Position|End Position|Sequence/Pair ID|Other ID|Step when filtered
