@@ -257,12 +257,16 @@ targets.start  <- REEs.coordinates[,1]-upstream.lengths
 targets.end    <- REEs.coordinates[,2]+downstream.lengths
 targets.contig <- mat.strsplit(gsub(":.*","",stats.table.best[,"Thamnophis_sirtalis.locus"]),split="-")
 
-### Now use the get_ncbi_sequences function to obtain the expanded targets....
-get_ncbi_sequences(outfile="......",accessionList=targets.contig,startList=targets.start,endList=targets.end,strandList="1",db="nuccore",rettype="fasta",retmode="text")
+### Define URL to T. sirtalis genome sequences. This URL is stored in a matrix in the REEs package, and can be accessed with the datasets() function.
+Thamnophis.sirtalis_genome.url <- REEs::datasets(1)[1,2]
+
+### Extract and save sequences for the expanded targets
+REEs.expanded <- get_ncbi_sequences(outfile="./REEs.expanded.fas",input.seqs=Thamnophis.sirtalis_genome.url, accessionList=targets.contig, startList= targets.start, endList=targets.end, if.outside.range="partial)
 
 ```
+The output sequences (expanded REEs targets) can be downloaded here: [REEs.expanded.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.fas).
 
-Three of the expanded targets were only partially expanded, meaning that their sequence lengths were not a multiple of the bait length, because these REEs were located near one of the ends of their corresponding contig sequence. Therefore, one of the two noncoding flanking regions was shorter than the other. The WeinellEntry names and contig accession and ranges of the three partially expanded targets (attempted/impossible fully expanded in parantheses) include: WeinellEntry959: NW_013657802.1:1404174-1405963 (NW_013657802.1:1404174-1405974); WeinellEntry1800: NW_013662380.1:5926-6377 (NW_013662380.1:5926-6406); WeinellEntry2040: NW_013661694.1:23750-23983 (NW_013661694.1:23750-23990).
+Three of the expanded targets were only partially expanded, meaning that their sequence length was not a multiple of the bait length because they were located near one of the ends of their corresponding contig sequence. Therefore, one of the two noncoding flanking regions was shorter than the other. The WeinellEntry names and contig accession and ranges of the three partially expanded targets (attempted/impossible fully expanded in parantheses) include: WeinellEntry959: NW_013657802.1:1404174-1405963 (NW_013657802.1:1404174-1405974); WeinellEntry1800: NW_013662380.1:5926-6377 (NW_013662380.1:5926-6406); WeinellEntry2040: NW_013661694.1:23750-23983 (NW_013661694.1:23750-23990).
 
 Additionally, three of the REEs picked in step 7 were filtered manually; two of these were filtered because their sequences are identical (NW_013657725.1:467328-467695 = NW_013657725.1:516491-516858); and NW_013659343.1:156011-156388 was filtered because **it consisted mostly of poly-G/C sequences? or because non-REE loci were considered instead?**. The remaining 2,068 REEs (expanded targets) were submitted to Arbor Biosciences for probe design. 
 
