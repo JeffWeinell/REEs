@@ -82,8 +82,11 @@ Thamnophis.sirtalis_GFF.url       <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/G
 ### Load the input feature table into R
 Thamnophis.sirtalis_GFF     <- load.gff(input=Thamnophis.sirtalis_GFF.url,local=F)
 
-# Filter Thamnophis.sirtalis_GFF to only include CDS features with length at least 120bp (the size of the baits).
+### Filter Thamnophis.sirtalis_GFF to only include CDS features with length at least 120bp (the size of the baits).
 Thamnophis.sirtalis_GFF_CDS_longer120bp <- filter.gff(input.gff=Thamnophis.sirtalis_GFF,feature.type="CDS",min.length=120)
+
+### Save the filtered feature table
+write.table(x=output.gff,file="./Thamnophis.sirtalis_GFF_CDS_longer120bp.txt",quote=F,sep="\t",row.names=F,col.names=T)
 ```
 The output feature table can be downloaded here: [Thamnophis.sirtalis_GFF_CDS_longer120bp.txt](https://osf.io/tm7qw/download).  Note 1: This filtered GFF table is also included as a data table object in the REEs R package (object name: Thamnophis.sirtalis_GFF_CDS_longer120bp). Note 2: the filtered GFF table is not true GFF format, because the header/comment lines are not included; nevertheless, the format used for the columns follows GFF3 format.
 
@@ -95,10 +98,14 @@ Thamnophis.sirtalis_genome.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/
 
 ### Extract the sequences for the loci in the filtered GFF (Thamnophis.sirtalis_GFF_CDS_longer120bp from step 1).
 Thamnophis.sirtalis_exome   <- get.seqs.from.gff(input.seqs=Thamnophis.sirtalis_genome.path,input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp) 
-```
-Output DNA sequences were saved in fasta format and can be downloaded here: **Thamnophis_sirtalis_exome_longer120bp.fas**.
 
-3. I searched for each *T. sirtalis* sequence (obtained from step 2) in each squamate genome in Table 2, using **TBLASTX** as implemented in the REEs::blast function and allowing up to 50 saved matches per query sequence.
+### Save extracted sequences
+writeXStringSet(x=Thamnophis.sirtalis_exome,filepath="./Thamnophis_sirtalis_exome_longer120bp.fas")
+
+```
+Output DNA sequences were saved in fasta format and can be downloaded here: [Thamnophis_sirtalis_exome_longer120bp.fas](https://osf.io/v7ecb/download).
+
+3. I used TBLASTX as implemented in the REEs::blast function to search for each *T. sirtalis* CDS sequence (from step 2) in each squamate genome listed in Table 2. I saved up to 50 matches per query sequence.
 
 **Table 2**. Genomes used to select REEs included all squamate genomes available from NCBI in 2017.
 Species  | Family | NCBI Genome Assembly Accession
@@ -114,7 +121,6 @@ Species  | Family | NCBI Genome Assembly Accession
 *Python bivitattus* | Pythonidae | GCF_000186305.1
 *Thamnophis sirtalis* | Colubridae (Natricinae) | GCF_001077635.1
 *Vipera berus berus* | Viperidae (Viperinae) | GCA_000800605.1
-
 
 ```
 ### URLs to the genomes used are held in a matrix that can be accessed with the REEs::datasets function.
