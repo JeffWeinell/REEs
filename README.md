@@ -238,51 +238,80 @@ stats.table.best <- pick.loci(statsTable.path="./statsTable_REEs_SnakeCap.txt",p
 stats.table.all <- data.table::fread("./statsTable_REEs_SnakeCap.txt",header=T)
 
 ### Filter the stats table to the optimal set of REEs
-stats.table.best <- pick.loci(statsTable.path=stats.table.all,primary.species="Thamnophis sirtalis", output.path=NULL, species.subgroup=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),pident.keep=c(65,100),max.loci.per.gene=1, min.num.species="all",max.capture.coverage=1200000,fast.stat="pident",use.min.pident.subgroup=T)
+stats.table.best <- pick.loci(statsTable.path=stats.table.all,primary.species="Thamnophis sirtalis", output.path="./stats_data_FastestExonPerGene_best_28Dec2020.tsv", species.subgroup=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),pident.keep=c(65,100),max.loci.per.gene=1, min.num.species="all",max.capture.coverage=1200500,fast.stat="pident",use.min.pident.subgroup=T)
 
-### Note 1: using the code above retains 2,068 REEs in stats.table.best, of which 2,067 are the same as those previously picked and included in the file "stats_data_FastestExonPerGene_best.tsv". The output table stats.table.best includes "NW_013658076.1:768357-769730", which was not previously selected for inclusion in "stats_data_FastestExonPerGene_best.tsv"; conversely, "stats_data_FastestExonPerGene_best.tsv" includes "NW_013658076.1:768360-769730", "NW_013657914.1:650880-651587", "NW_013662230.1:5224-5446", and "NW_013659343.1:156011-156388", which are not included in the output table stats.table.best
+### Note 1: Using the code above retains 2,068 REEs in stats.table.best, of which 2,067 are the same as those previously picked and included in the file "stats_data_FastestExonPerGene_best.tsv". The output table stats.table.best includes "NW_013658076.1:768357-769730", which was not previously selected for inclusion in "stats_data_FastestExonPerGene_best.tsv"; conversely, "stats_data_FastestExonPerGene_best.tsv" includes "NW_013658076.1:768360-769730", "NW_013657914.1:650880-651587", "NW_013662230.1:5224-5446", and "NW_013659343.1:156011-156388", which are not included in the output table stats.table.best
 ### Note 2: "NW_013658076.1:768357-769730" of stats.table.best is essentially the same locus as "NW_013658076.1:768360-769730" in stats_data_FastestExonPerGene_best.tsv; The difference is because the latest version of the REEs::reportBestMatches function filters matches that are subsequences of other matches.
 ### Note 3: running pick.loci with max.capture.coverage=1200500 (rather than 1200000) includes the loci "NW_013657914.1:650880-651587" and "NW_013662230.1:5224-5446", which were included in "stats_data_FastestExonPerGene_best.tsv", but "NW_013659343.1:156011-156388" is still missing.
 ```
 
-Result = 2,071 REEs retained; the stats table for these loci was written to the file [stats_data_FastestExonPerGene_best.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best.tsv); an updated version of this stats table that includes the WeinellEntry locus names is [stats_data_FastestExonPerGene_best_20Nov2020.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best_20Nov2020.tsv).
+The output table includes 2,070 REEs and can be downloaded here [stats_data_FastestExonPerGene_best_28Dec2020.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best_28Dec2020.tsv). The format of the output table is the same as the format of the input table; see Table 3 for column descriptions.
 
-8. Expand the target region to include noncoding DNA upstream and downstream of the loci identified in step 7. The amount of noncoding DNA included in the expanded target was determined by the bait length (120) and each exon length, such that the expanded target length is a multiple of the bait length.
+<!--
+An updated version of this stats table stats_data_FastestExonPerGene_best.tsv that includes the WeinellEntry locus names is [stats_data_FastestExonPerGene_best_20Nov2020.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best_20Nov2020.tsv).
+-->
+
+8. Expand the target region to include noncoding DNA upstream and downstream of the loci identified in step 7. The amount of noncoding DNA included in each expanded target is a function of the bait length (120nt) and exon length, such that the expanded target length is a multiple of the bait length.
 
 ```
-# For the REEs, define contig coordinates (*T. sirtalis*) to include the entire exon plus as much of the 5' and 3' noncoding regions such that the target region is a multiple of 120bp (the bait length).
-stats.table.best       <- as.data.frame(data.table::fread("stats_data_FastestExonPerGene_best.tsv",header=T,sep="\t"))
+### Calculate start and end coordinates of expanded targets (REEs + flanking noncoding regions) such that the expanded target length is a multiple of the bait length.
+
+### Read the output table of the function pick.loci
+stats.table.best       <- as.data.frame(data.table::fread("stats_data_FastestExonPerGene_best_28Dec2020.tsv",header=T,sep="\t"))
+
+### Define a vector holding the locus lengths
 locus.lengths          <- stats.table.best[,"locus.length.Thamnophis_sirtalis"]
+
+### Create a numeric matrix of the start and end coordinates of the REEs. This information is extracted from the first column of the input table.
 REEs.coordinates       <- mat.strsplit(gsub(".*:","",stats.table.best[,"Thamnophis_sirtalis.locus"]),split="-")
 mode(REEs.coordinates) <- "numeric"
+
+### Define the length of baits
 bait.length    <- 120
-# Length of expanded target length (= locus.lengths rounded up to the nearest multiple of bait.length)
+
+### Calculate lengths for the expanded targets (= locus.lengths rounded up to the nearest multiple of bait.length)
 target.lengths <- ceiling(locus.lengths/bait.length)*bait.length
-# Amount of upstream noncoding DNA to target
+
+### Calculate amount of upstream noncoding DNA to include
 upstream.lengths   <- ceiling((target.lengths-locus.lengths)/2)
-# Calculate amount of downstream noncoding DNA to target
+
+### Calculate amount of downstream noncoding DNA to include
 downstream.lengths <- target.lengths-(locus.lengths+upstream.lengths)
-# Define contig coordinates for the expanded targets
+
+### Define coordinates for the expanded targets (contig accession ID, start position, end position). The contig accession IDs are extracted from the first column of the input table. 
+targets.contig <- mat.strsplit(gsub(":.*","",stats.table.best[,"Thamnophis_sirtalis.locus"]),split="-")
 targets.start  <- REEs.coordinates[,1]-upstream.lengths
 targets.end    <- REEs.coordinates[,2]+downstream.lengths
-targets.contig <- mat.strsplit(gsub(":.*","",stats.table.best[,"Thamnophis_sirtalis.locus"]),split="-")
 
-### Define URL to T. sirtalis genome sequences. This URL is stored in a matrix in the REEs package, and can be accessed with the datasets() function.
+### Define URL to the T. sirtalis genome sequences. This URL is stored as a character string in the REEs package, and can be accessed with the datasets() function.
 Thamnophis.sirtalis_genome.url <- REEs::datasets(1)[1,2]
 
 ### Extract and save sequences for the expanded targets
 REEs.expanded <- get_ncbi_sequences(outfile="./REEs.expanded.fas",input.seqs=Thamnophis.sirtalis_genome.url, accessionList=targets.contig, startList= targets.start, endList=targets.end, if.outside.range="partial)
 
 ```
+
 The output sequences (expanded REEs targets) can be downloaded here: [REEs.expanded.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.fas).
 
 Three of the expanded targets were only partially expanded, meaning that their sequence length was not a multiple of the bait length because they were located near one of the ends of their corresponding contig sequence. Therefore, one of the two noncoding flanking regions was shorter than the other. The WeinellEntry names and contig accession and ranges of the three partially expanded targets (attempted/impossible fully expanded in parantheses) include: WeinellEntry959: NW_013657802.1:1404174-1405963 (NW_013657802.1:1404174-1405974); WeinellEntry1800: NW_013662380.1:5926-6377 (NW_013662380.1:5926-6406); WeinellEntry2040: NW_013661694.1:23750-23983 (NW_013661694.1:23750-23990).
 
-Additionally, three of the REEs picked in step 7 were filtered manually; two of these were filtered because their sequences are identical (NW_013657725.1:467328-467695 = NW_013657725.1:516491-516858); and NW_013659343.1:156011-156388 was filtered because **it consisted mostly of poly-G/C sequences? or because non-REE loci were considered instead?**. The remaining 2,068 REEs (expanded targets) were submitted to Arbor Biosciences for probe design. 
+The remaining 2,068 REEs (expanded targets) were submitted to Arbor Biosciences for ulstrastringent filtering and probe design. Note: Five duplicate pairs of REEs (each pair with identical sequences) were present in the output of step 8 (Table 4). Only one of these duplicate pairs was recognized/identified (and filtered manually) prior to submitting target sequences to Arbor Biosciences (pair 1: NW_013657725.1:467328-467695 = NW_013657725.1:516491-516858). The other duplicate pairs were subsequently filtered by the Arbor's ulstrastringent algorithm.
 
-Several other duplicate REEs were present in the output of step 8 and were retained because they were not recognized as duplicates. The duplicate sequence targets retained were: NW_013659646.1:15015-15975 (WeinellEntry44) = NW_013659646.1:24066-25026 (WeinellEntry45); NW_013657804.1:817033-817753 (WeinellEntry496) = NW_013657804.1:820482-821202 (WeinellEntry497); NW_013658610.1:34634-34874 (WeinellEntry589) = NW_013658610.1:59790-60030 (WeinellEntry590); NW_013658165.1:745869-746109 (WeinellEntry1670) = NW_013658165.1:748461-748701 (WeinellEntry1671). These duplicate loci were among those filtered after application of Arbor's ulstrastingent filtering algorithm. The latest version of the pick.loci function (step 7) has the option to filter loci if the bitscores of the best and second-best matches are too similar, but this option was not available at the time when it was used for the SnakeCap project.
+Table 4. Pairs of REEs having identical sequences that were included in the ouput of the pick.loci function (step 8). These were subsequently filtered, either immediately before or after application of Arbor's ultrastringent filtering algorithm. The latest version of the pick.loci function has an option to filter REEs if there sequences are too similar.
+Contig Accession ID|Start Position|End Position|Sequence/Pair ID|Other ID|Step when filtered
+---|---|---|---|---|---
+NW_013657725.1:467328-467695|||1||manually, after using pick.loci function and before ultrastringent filtering
+NW_013657725.1:516491-516858|||1||manually, after using pick.loci function and before ultrastringent filtering
+NW_013659646.1|15015|15975|2|WeinellEntry44|during ultrastringent filtering
+NW_013659646.1:24066-25026|||2|WeinellEntry45|during ultrastringent filtering
+NW_013657804.1:817033-817753|||3|WeinellEntry496|during ultrastringent filtering
+NW_013657804.1:820482-821202|||3|WeinellEntry497|during ultrastringent filtering
+NW_013658610.1:34634-34874|||4|WeinellEntry589|during ultrastringent filtering
+NW_013658610.1:59790-60030|||4|WeinellEntry590|during ultrastringent filtering
+NW_013658165.1:745869-746109|||5|WeinellEntry1670|during ultrastringent filtering
+NW_013658165.1:748461-748701|||5|WeinellEntry1671|during ultrastringent filtering
 
-Arbor performed ultrastringent filtration on the 2,068 REEs retained from step 8, which resulted in the removal of 203 REEs (1,865 REEs retained). Of the 203 REEs that were filtered, 76 were filtered because baits could not be designed for these loci (70 of these are listed in [Version1-loci-removed_ZeroBaitCoverageLoci.tsv](https://git.io/JLiEu) and six are listed in [Version2-loci-removed_ZeroBaitCoverageLoci.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version2-loci-removed_ZeroBaitCoverageLoci.tsv)); and 127 REEs were filtered because all of their baits were non-specific within the *T. sirtalis* genome (8 of these are listed in [Version1-loci-removed_baits-nonspecific.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version1-loci-removed_nonspecific-baits.tsv) and 119 are listed in [Version2-loci-removed_baits-nonspecific.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version2-loci-removed_baits-nonspecific.tsv)).
+Arbor performed ultrastringent filtration on the 2,068 REEs retained from step 8 (after removing two identical sequences; pair 1 Table 4). Ultrastringent filtering resulted in the removal of 203 REEs (1,865 REEs retained). Of the 203 REEs that were filtered, 76 were filtered because no baits could be designed for these loci (70 of these are listed in [Version1-loci-removed_ZeroBaitCoverageLoci.tsv](https://git.io/JLiEu) and six are listed in [Version2-loci-removed_ZeroBaitCoverageLoci.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version2-loci-removed_ZeroBaitCoverageLoci.tsv)); and 127 REEs were filtered because all proposed baits were non-specific within the *T. sirtalis* genome (eight of these are listed in [Version1-loci-removed_baits-nonspecific.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version1-loci-removed_nonspecific-baits.tsv) and 119 are listed in [Version2-loci-removed_baits-nonspecific.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version2-loci-removed_baits-nonspecific.tsv)).
 
 Of the 1,865 REEs that passed ultrastringent filtering, 212 were removed to allow a fraction of the 20K baits to be used to target other types of loci (UCEs, MHC genes, scalation genes, vision genes, and ddRAD-like loci), and these removed REEs are listed in the file [Version3-loci-removed_others.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version3-loci-removed_others.tsv). Baits for the remaining 1,653 REEs were synthesized by Arbor (mybaits 20K bait kit: product no. 3001160).
 
