@@ -263,7 +263,9 @@ stats.table.best       <- as.data.frame(data.table::fread("stats_data_FastestExo
 ### Define a vector holding the locus lengths
 locus.lengths          <- stats.table.best[,"locus.length.Thamnophis_sirtalis"]
 
-### Subtract one from locus.lengths. Note: this step added for reproducibility of SnakeCap methods, but don't do this when designing new bait kits.
+### Subtract one from each value in locus.lengths
+### NOTE: this is done for reproducibility of SnakeCap methods,
+### but skip the next line when designing baits for your own project.
 locus.lengths <- locus.lengths-1
 
 ### Create a numeric matrix of the start and end coordinates of the REEs. This information is extracted from the first column of the input table.
