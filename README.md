@@ -263,6 +263,9 @@ stats.table.best       <- as.data.frame(data.table::fread("stats_data_FastestExo
 ### Define a vector holding the locus lengths
 locus.lengths          <- stats.table.best[,"locus.length.Thamnophis_sirtalis"]
 
+### Subtract one from locus.lengths. Note: this step added for reproducibility of SnakeCap methods, but don't do this when designing new bait kits.
+locus.lengths <- locus.lengths-1
+
 ### Create a numeric matrix of the start and end coordinates of the REEs. This information is extracted from the first column of the input table.
 REEs.coordinates       <- mat.strsplit(gsub(".*:","",stats.table.best[,"Thamnophis_sirtalis.locus"]),split="-")
 mode(REEs.coordinates) <- "numeric"
@@ -274,7 +277,7 @@ bait.length    <- 120
 target.lengths <- ceiling(locus.lengths/bait.length)*bait.length
 
 ### Calculate amount of upstream noncoding DNA to include
-upstream.lengths   <- ceiling((target.lengths-locus.lengths)/2)
+upstream.lengths   <- floor(((target.lengths-locus.lengths)/2))
 
 ### Calculate amount of downstream noncoding DNA to include
 downstream.lengths <- target.lengths-(locus.lengths+upstream.lengths)
@@ -289,7 +292,6 @@ Thamnophis.sirtalis_genome.url <- REEs::datasets(1)[1,2]
 
 ### Extract and save sequences for the expanded targets
 REEs.expanded <- get_ncbi_sequences(outfile="./REEs.expanded.fas",input.seqs=Thamnophis.sirtalis_genome.url, accessionList=targets.contig, startList= targets.start, endList=targets.end, if.outside.range="partial)
-
 ```
 
 The output sequences (expanded REEs targets) can be downloaded here: [REEs.expanded.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.fas). **Re-run step 8 using stats_data_FastestExonPerGene_best_28Dec2020.tsv as the input instead of stats_data_FastestExonPerGene_best.tsv; the results should be the same as REEs.expanded.fas, but double check.**
