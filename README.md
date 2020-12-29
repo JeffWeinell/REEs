@@ -305,27 +305,32 @@ Note: Five duplicate pairs of REEs (each pair with identical sequences) were pre
 Table 4. Pairs of REEs having identical sequences that were included in the ouput of the pick.loci function (step 8). These were subsequently filtered, either immediately before or after application of Arbor's ultrastringent filtering algorithm. The latest version of the pick.loci function has an option to filter REEs if there sequences are too similar.
 Contig Accession ID|Start Position|End Position|Sequence/Pair ID|Other ID|Step when filtered
 ---|---|---|---|---|---
-NW_013657725.1:467272-467752|||1||manually, after using pick.loci function and before ultrastringent filtering
-NW_013657725.1:516435-516915|||1||manually, after using pick.loci function and before ultrastringent filtering
-
+NW_013657725.1|467272|467752|1||manually, after using pick.loci function and before ultrastringent filtering
+NW_013657725.1|516435|516915|1||manually, after using pick.loci function and before ultrastringent filtering
 NW_013659646.1|15015|15975|2|WeinellEntry44|during ultrastringent filtering
-NW_013659646.1:24066-25026|||2|WeinellEntry45|during ultrastringent filtering
-NW_013657804.1:817033-817753|||3|WeinellEntry496|during ultrastringent filtering
-NW_013657804.1:820482-821202|||3|WeinellEntry497|during ultrastringent filtering
-NW_013658610.1:34634-34874|||4|WeinellEntry589|during ultrastringent filtering
-NW_013658610.1:59790-60030|||4|WeinellEntry590|during ultrastringent filtering
-NW_013658165.1:745869-746109|||5|WeinellEntry1670|during ultrastringent filtering
-NW_013658165.1:748461-748701|||5|WeinellEntry1671|during ultrastringent filtering
+NW_013659646.1|24066|25026|2|WeinellEntry45|during ultrastringent filtering
+NW_013657804.1|817033|817753|3|WeinellEntry496|during ultrastringent filtering
+NW_013657804.1|820482|821202|3|WeinellEntry497|during ultrastringent filtering
+NW_013658610.1|34634|34874|4|WeinellEntry589|during ultrastringent filtering
+NW_013658610.1|59790|60030|4|WeinellEntry590|during ultrastringent filtering
+NW_013658165.1|745869|746109|5|WeinellEntry1670|during ultrastringent filtering
+NW_013658165.1|748461|748701|5|WeinellEntry1671|during ultrastringent filtering
 
 <!---
 # After removing duplicate pair loci (and not including the changes related to end-of-contig loci),
 # These are the differences between the target REEs requested from Arbor and those in (or soon to be in) REEs.expanded.fas file.
+#
+Different start and end positions, but same total length:
 WeinellEntry1658 "NW_013658076.1:768325-769765" extracted instead of "NW_013658076.1:768324-769764"
+#
+# Same start position but different end position:
 WeinellEntry2147 "NW_013657804.1:885274-886205" extracted instead of "NW_013657804.1:885274-886234"
 WeinellEntry2148 "NW_013659850.1:163196-163554" extracted instead of "NW_013659850.1:163196-163556"
 WeinellEntry2149 "NW_013659217.1:238701-238933" extracted instead of "NW_013659217.1:238701-238941"
-WeinellEntry2150 "NW_013658733.1:434060-434488" extracted instead of "NW_013658733.1:434008-434488"
 WeinellEntry2151 "NW_013658527.1:12230-12575" extracted instead of "NW_013658527.1:12230-12590"
+#
+# Same end position but different start position:
+WeinellEntry2150 "NW_013658733.1:434060-434488" extracted instead of "NW_013658733.1:434008-434488"
 WeinellEntry2152 "NW_013658527.1:14050-14395" extracted instead of "NW_013658527.1:14035-14395"
 --->
 
