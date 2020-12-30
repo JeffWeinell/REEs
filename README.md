@@ -293,28 +293,31 @@ targets.end    <- REEs.coordinates[,2]+downstream.lengths
 Thamnophis.sirtalis_genome.url <- REEs::datasets(1)[1,2]
 
 ### Extract and save sequences for the expanded targets
-REEs.expanded <- get_ncbi_sequences(outfile="./REEs.expanded.fas",input.seqs=Thamnophis.sirtalis_genome.url, accessionList=targets.contig, startList= targets.start, endList=targets.end, if.outside.range="partial)
+REEs.expanded <- get_ncbi_sequences(outfile="./REEs.expanded.fas",input.seqs=Thamnophis.sirtalis_genome.url, accessionList=targets.contig, startList= targets.start, endList=targets.end, if.outside.range="partial")
 ```
 
-The output sequences (expanded REEs targets) can be downloaded here: [REEs.expanded.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.fas). **Re-run step 8 using stats_data_FastestExonPerGene_best_28Dec2020.tsv as the input instead of stats_data_FastestExonPerGene_best.tsv; the results should be the same as REEs.expanded.fas, but double check.**
+The output sequences (expanded REEs targets) can be downloaded here: [REEs.expanded.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.fas).
 
-Ten of the expanded targets were only partially expanded, meaning that their sequence length was not a multiple of the bait length. Three of these were located near the end of the reference contig, and seven had terminal strings of ambiguous bases (Ns) that were truncated. These partially expanded targets include: 
-WeinellEntry959: NW_013657802.1:1404174-1405963 targetted instead of NW_013657802.1:1404174-1405974, because contig length 140,5963 nt.
-WeinellEntry1800: NW_013662380.1:5926-6377  targetted instead of NW_013662380.1:5926-6406, because contig length = 6,377 nt.
-WeinellEntry2040: NW_013661694.1:23750-23983  targetted instead of NW_013661694.1:23750-23990, because contig length = 23,983 nt.
-WeinellEntry2147: NW_013657804.1:885274-886205 targetted instead of NW_013657804.1:885274-886234, because 886206-886234 all Ns
-WeinellEntry2148: NW_013659850.1:163196-163554 targetted instead of NW_013659850.1:163196-163556, 163555-163556 all Ns
-WeinellEntry2149: NW_013659217.1:238701-238933 targetted instead of NW_013659217.1:238701-238941, because 238933-238941 all Ns
-WeinellEntry2151: NW_013658527.1:12230-12575 targetted instead of NW_013658527.1:12230-12590, because 12576-12590 all Ns
-WeinellEntry2150: NW_013658733.1:434060-434488 targetted instead of NW_013658733.1:434008-434488, because 434008-434059 all Ns
-WeinellEntry2152: NW_013658527.1:14050-14395 targetted instead of NW_013658527.1:14035-14395, because 14035-14049 all Ns
+Nine of the expanded targets were only partially expanded, meaning that their sequence length was not a multiple of the bait length. Three of these were located near the end of the reference contig, and six had terminal strings of ambiguous bases (Ns) that were truncated (Table 4).
 
-Additionally, the following expanded target was manually changed...?
-WeinellEntry1658: NW_013658076.1:768325-769765 targetted instead of NW_013658076.1:768324-769764 because... 
+Table 4. The nine partially expanded targets from output of step 8 and reason why targets were partially rather than fully expanded.
+WeinellEntry name|Contig accession ID|Nucleotide range of partially expanded target|Nucleotide range that would have been targetted if it had been possible|Reason why target sequence partially rather than fully expanded
+---|---|---|---|---
+WeinellEntry959 |NW_013657802.1|1404174-1405963 |1404174-1405974|contig length 140,5963 nt
+WeinellEntry1800|NW_013662380.1|5926-6377       |5926-6406      |contig length 6,377 nt
+WeinellEntry2040|NW_013661694.1|23750-23983     |23750-23990    |contig length = 23,983 nt
+WeinellEntry2147|NW_013657804.1|885274-886205   |885274-886234  |nt in range 886206-886234 all Ns
+WeinellEntry2148|NW_013659850.1|163196-163554   |163196-163556  |nt in range 163555-163556 all Ns
+WeinellEntry2149|NW_013659217.1|238701-238933   |238701-238941  |nt in range 238933-238941 all Ns
+WeinellEntry2151|NW_013658527.1|12230-12575     |12230-12590    |nt in range 12576-12590 all Ns
+WeinellEntry2150|NW_013658733.1|434060-434488   |434008-434488  |nt in range 434008-434059 all Ns
+WeinellEntry2152|NW_013658527.1|14050-14395     |14035-14395    |nt in range 14035-14049 all Ns
 
-Note: Five duplicate pairs of REEs (each pair with identical sequences) were present in the output of step 8 (Table 4). Only one of these duplicate pairs was recognized/identified (and filtered manually) prior to submitting target sequences to Arbor Biosciences. The remaining 2,068 REEs (expanded targets) were submitted to Arbor Biosciences for ulstrastringent filtering and probe design.
+Additionally, NW_013658076.1:768325-769765 (WeinellEntry1658) was targetted instead of NW_013658076.1:768324-769764, because... 
 
-Table 4. Pairs of REEs having identical sequences that were included in the ouput of the pick.loci function (step 8). These were subsequently filtered, either immediately before or after application of Arbor's ultrastringent filtering algorithm. The latest version of the pick.loci function has an option to filter REEs if there sequences are too similar.
+Five duplicate pairs of REEs (each pair with identical sequences) were present in the output of step 8 (Table 5). Only one of these duplicate pairs was recognized/identified (and filtered manually) prior to submitting target sequences to Arbor Biosciences. The remaining 2,068 REEs (expanded targets) were submitted to Arbor Biosciences for ulstrastringent filtering and probe design.
+
+Table 5. Pairs of REEs having identical sequences that were included in the ouput of the pick.loci function (step 8). These were subsequently filtered, either immediately before or after application of Arbor's ultrastringent filtering algorithm. The latest version of the pick.loci function has an option to filter REEs if there sequences are too similar.
 Contig Accession ID|Start Position|End Position|Sequence/Pair ID|Other ID|Step when filtered
 ---|---|---|---|---|---
 NW_013657725.1|467272|467752|1||manually, after using pick.loci function and before ultrastringent filtering
@@ -328,7 +331,7 @@ NW_013658610.1|59790|60030|4|WeinellEntry590|during ultrastringent filtering
 NW_013658165.1|745869|746109|5|WeinellEntry1670|during ultrastringent filtering
 NW_013658165.1|748461|748701|5|WeinellEntry1671|during ultrastringent filtering
 
-Arbor performed ultrastringent filtration on the 2,068 REEs retained from step 8 (after removing two identical sequences; pair 1 Table 4). Ultrastringent filtering resulted in the removal of 203 REEs (1,865 REEs retained). Of the 203 REEs that were filtered, 76 were filtered because no baits could be designed for these loci (70 of these are listed in [Version1-loci-removed_ZeroBaitCoverageLoci.tsv](https://git.io/JLiEu) and six are listed in [Version2-loci-removed_ZeroBaitCoverageLoci.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version2-loci-removed_ZeroBaitCoverageLoci.tsv)); and 127 REEs were filtered because all proposed baits were non-specific within the *T. sirtalis* genome (eight of these are listed in [Version1-loci-removed_baits-nonspecific.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version1-loci-removed_nonspecific-baits.tsv) and 119 are listed in [Version2-loci-removed_baits-nonspecific.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version2-loci-removed_baits-nonspecific.tsv)).
+Arbor performed ultrastringent filtration on the 2,068 REEs retained from step 8 (after removing two identical sequences; pair 1 Table 5). Ultrastringent filtering resulted in the removal of 203 REEs (1,865 REEs retained). Of the 203 REEs that were filtered, 76 were filtered because no baits could be designed for these loci (70 of these are listed in [Version1-loci-removed_ZeroBaitCoverageLoci.tsv](https://git.io/JLiEu) and six are listed in [Version2-loci-removed_ZeroBaitCoverageLoci.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version2-loci-removed_ZeroBaitCoverageLoci.tsv)); and 127 REEs were filtered because all proposed baits were non-specific within the *T. sirtalis* genome (eight of these are listed in [Version1-loci-removed_baits-nonspecific.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version1-loci-removed_nonspecific-baits.tsv) and 119 are listed in [Version2-loci-removed_baits-nonspecific.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version2-loci-removed_baits-nonspecific.tsv)).
 
 Of the 1,865 REEs that passed ultrastringent filtering, 212 were removed to allow a fraction of the 20K baits to be used to target other types of loci (UCEs, MHC genes, scalation genes, vision genes, and ddRAD-like loci), and these removed REEs are listed in the file [Version3-loci-removed_others.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version3-loci-removed_others.tsv). Baits for the remaining 1,653 REEs were synthesized by Arbor (mybaits 20K bait kit: product no. 3001160).
 
