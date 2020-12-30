@@ -293,7 +293,9 @@ targets.end    <- REEs.coordinates[,2]+downstream.lengths
 Thamnophis.sirtalis_genome.url <- REEs::datasets(1)[1,2]
 
 ### Extract and save sequences for the expanded targets
-REEs.expanded <- get_ncbi_sequences(outfile="./REEs.expanded.fas",input.seqs=Thamnophis.sirtalis_genome.url, accessionList=targets.contig, startList= targets.start, endList=targets.end, if.outside.range="partial")
+### When selecting targets, I suggest setting the trim.ambiguous parameter to TRUE when using the get_ncbi_sequences function (REEs package); this parameter was not implemented in the SnakeCap project, and, therefore, for the sake of reproducibility, trim.ambiguous is set to FALSE here.
+
+REEs.expanded <- get_ncbi_sequences(outfile="./REEs.expanded.fas",input.seqs=Thamnophis.sirtalis_genome.url, accessionList=targets.contig, startList= targets.start, endList=targets.end, if.outside.range="partial",trim.ambiguous = FALSE)
 ```
 
 The output sequences (expanded REEs targets) can be downloaded here: [REEs.expanded.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.fas).
