@@ -324,10 +324,10 @@ Different start and end positions, but same total length:
 WeinellEntry1658 "NW_013658076.1:768325-769765" extracted instead of "NW_013658076.1:768324-769764"
 #
 # Same start position but different end position:
-WeinellEntry2147 "NW_013657804.1:885274-886205" extracted instead of "NW_013657804.1:885274-886234"
-WeinellEntry2148 "NW_013659850.1:163196-163554" extracted instead of "NW_013659850.1:163196-163556"
-WeinellEntry2149 "NW_013659217.1:238701-238933" extracted instead of "NW_013659217.1:238701-238941"
-WeinellEntry2151 "NW_013658527.1:12230-12575" extracted instead of "NW_013658527.1:12230-12590"
+WeinellEntry2147 "NW_013657804.1:885274-886205" extracted instead of "NW_013657804.1:885274-886234", because 886206-886234 Ns
+WeinellEntry2148 "NW_013659850.1:163196-163554" extracted instead of "NW_013659850.1:163196-163556", 163555-163556 Ns
+WeinellEntry2149 "NW_013659217.1:238701-238933" extracted instead of "NW_013659217.1:238701-238941", because 238933-238941 Ns
+WeinellEntry2151 "NW_013658527.1:12230-12575" extracted instead of "NW_013658527.1:12230-12590", because 12576-12590 Ns
 #
 # Same end position but different start position:
 WeinellEntry2150 "NW_013658733.1:434060-434488" extracted instead of "NW_013658733.1:434008-434488"
