@@ -298,7 +298,7 @@ REEs.expanded <- get_ncbi_sequences(outfile="./REEs.expanded.fas",input.seqs=Tha
 
 The output sequences (expanded REEs targets) can be downloaded here: [REEs.expanded.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.fas).
 
-Nine of the expanded targets were only partially expanded, meaning that their sequence length was not a multiple of the bait length. Three of these were located near the end of the reference contig, and six had terminal strings of ambiguous bases (Ns) that were truncated (Table 4).
+Nine of the expanded targets were only partially expanded, meaning that their sequence length was not a multiple of the bait length. Three of these were located near the end of the reference contig, and six had terminal strings of ambiguous bases (Ns) that were truncated (Table 4); 57 other targets that were fully expanded included terminal Ns, but these Ns were not trimmed because they were not detected prior to submission of targets to Arbor. The latest version of the get_ncbi_sequences function (REEs package) has an option to trim terminal Ns, but this option was not present when SnakeCap targets were chosen.
 
 Table 4. The nine partially expanded targets from output of step 8 and reason why targets were partially rather than fully expanded.
 WeinellEntry name|Contig accession ID|Nucleotide range of partially expanded target|Nucleotide range that would have been targetted if it had been possible|Reason why target sequence partially rather than fully expanded
@@ -313,11 +313,11 @@ WeinellEntry2151|NW_013658527.1|12230-12575     |12230-12590    |12576-12590 all
 WeinellEntry2150|NW_013658733.1|434060-434488   |434008-434488  |434008-434059 all Ns
 WeinellEntry2152|NW_013658527.1|14050-14395     |14035-14395    |14035-14049 all Ns
 
-Additionally, NW_013658076.1:768325-769765 (WeinellEntry1658) was targetted instead of NW_013658076.1:768324-769764, because... 
+Additionally, NW_013658076.1:768325-769765 (WeinellEntry1658) was targetted instead of NW_013658076.1:768324-769764, because...?
 
 Five duplicate pairs of REEs (each pair with identical sequences) were present in the output of step 8 (Table 5). Only one of these duplicate pairs was recognized/identified (and filtered manually) prior to submitting target sequences to Arbor Biosciences. The remaining 2,068 REEs (expanded targets) were submitted to Arbor Biosciences for ulstrastringent filtering and probe design.
 
-Table 5. Pairs of REEs having identical sequences that were included in the ouput of the pick.loci function (step 8). These were subsequently filtered, either immediately before or after application of Arbor's ultrastringent filtering algorithm. The latest version of the pick.loci function has an option to filter REEs if there sequences are too similar.
+Table 5. Pairs of REEs having identical sequences that were included in the ouput of the pick.loci function (step 8). These were subsequently filtered, either immediately before or after application of Arbor's ultrastringent filtering algorithm. The latest version of the pick.loci function has an option to filter REEs if the bitscores of the top matches are too similar according to a user-defined threshold.
 Contig Accession ID|Start Position|End Position|Sequence/Pair ID|Other ID|Step when filtered
 ---|---|---|---|---|---
 NW_013657725.1|467272|467752|1||manually, after using pick.loci function and before ultrastringent filtering
