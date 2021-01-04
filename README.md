@@ -385,14 +385,14 @@ Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus ful
 
 ```
 # Runs BLASTN
-Crotalus.horridus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Crotalus.horridus.genome_url,query="./micrurus_UCEs.fa",table.out="./Crotalus.horridus.blastn.UCEs.50hits.txt")
-Crotalus.mitchellii.UCEs.50hits          <- REEs::blast(method="blastn",subject=Crotalus.mitchellii.genome_url,query="./micrurus_UCEs.fa",table.out="./Crotalus.mitchellii.blastn.UCEs.50hits.txt")
-Ophiophagus.hannah.UCEs.50hits           <- REEs::blast(method="blastn",subject=Ophiophagus.hannah.genome_url,query="./micrurus_UCEs.fa",table.out="./Ophiophagus.hannah.blastn.UCEs.50hits.txt")
-Pantherophis.guttatus.UCEs.50hits        <- REEs::blast(method="blastn",subject=Pantherophis.guttatus.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Pantherophis.guttatus.blastn.UCEs.50hits.txt")
-Protobothrops.mucrosquamatus.UCEs.50hits <- REEs::blast(method="blastn",subject=Protobothrops.mucrosquamatus.genome_url,query="./micrurus_UCEs.fa",table.out="./Protobothrops.mucrosquamatus.blastn.UCEs.50hits.txt")
-Python.bivittatus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Python.bivittatus.genome_url,query="./micrurus_UCEs.fa",table.out="./Python.bivittatus.blastn.UCEs.50hits.txt")
-Viperus.berus.UCEs.50hits                <- REEs::blast(method="blastn",subject=Viperus.berus.genome_url,query="./micrurus_UCEs.fa",table.out="./Viperus.berus.blastn.UCEs.50hits.txt")
-Thamnophis.sirtalis.UCEs.50hits          <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url,query="./micrurus_UCEs.fa",table.out="./Thamnophis.sirtalis.blastn.UCEs.50hits.txt")
+Crotalus.horridus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Crotalus.horridus.genome_url, query="./micrurus_UCEs.fa",table.out="./Crotalus.horridus.blastn.UCEs.50hits.txt")
+Crotalus.mitchellii.UCEs.50hits          <- REEs::blast(method="blastn",subject=Crotalus.mitchellii.genome_url, query="./micrurus_UCEs.fa",table.out="./Crotalus.mitchellii.blastn.UCEs.50hits.txt")
+Ophiophagus.hannah.UCEs.50hits           <- REEs::blast(method="blastn",subject=Ophiophagus.hannah.genome_url, query="./micrurus_UCEs.fa",table.out="./Ophiophagus.hannah.blastn.UCEs.50hits.txt")
+Pantherophis.guttatus.UCEs.50hits        <- REEs::blast(method="blastn",subject=Pantherophis.guttatus.genome_url, query=Thamnophis.sirtalis_exome,table.out="./Pantherophis.guttatus.blastn.UCEs.50hits.txt")
+Protobothrops.mucrosquamatus.UCEs.50hits <- REEs::blast(method="blastn",subject=Protobothrops.mucrosquamatus.genome_url, query="./micrurus_UCEs.fa",table.out="./Protobothrops.mucrosquamatus.blastn.UCEs.50hits.txt")
+Python.bivittatus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Python.bivittatus.genome_url, query="./micrurus_UCEs.fa",table.out="./Python.bivittatus.blastn.UCEs.50hits.txt")
+Viperus.berus.UCEs.50hits                <- REEs::blast(method="blastn",subject=Viperus.berus.genome_url, query="./micrurus_UCEs.fa",table.out="./Viperus.berus.blastn.UCEs.50hits.txt")
+Thamnophis.sirtalis.UCEs.50hits          <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url, query="./micrurus_UCEs.fa",table.out="./Thamnophis.sirtalis.blastn.UCEs.50hits.txt")
 ```
 
 Output tables from BLASTN: **Crotalus.horridus.blastn.UCEs.50hits.txt**, **Crotalus.mitchellii.blastn.UCEs.50hits.txt**, **Ophiophagus.hannah.blastn.UCEs.50hits.txt**, **Pantherophis.guttatus.blastn.UCEs.50hits.txt**, **Protobothrops.mucrosquamatus.blastn.UCEs.50hits.txt**, **Python.bivittatus.blastn.UCEs.50hits.txt**, **Thamnophis.sirtalis.blastn.UCEs.50hits.txt**, and **Vipera.berus.blastn.UCEs.50hits.txt**.
@@ -400,19 +400,19 @@ Output tables from BLASTN: **Crotalus.horridus.blastn.UCEs.50hits.txt**, **Crota
  3. I used the function reportBestMatches to filter the hit tables to include only the best match for each query UCE.
 
 ```
-UCEs.best.hits.Crotalus.horridus             <- reportBestMatches(input.table=Crotalus.horridus.blastn.UCEs.50hits, output.table.path="Crotalus.horridus.blastn.UCEs.best.hits.txt")
-UCEs.best.hits.Crotalus.mitchellii           <- reportBestMatches(input.table=Crotalus.mitchellii.blastn.UCEs.50hits, output.table.path="Crotalus.mitchellii.blastn.UCEs.best.hits.txt")
-UCEs.best.hits.Ophiophagus.hannah            <- reportBestMatches(input.table=Ophiophagus.hannah.blastn.UCEs.50hits, output.table.path="Ophiophagus.hannah.blastn.UCEs.best.hits.txt")
-UCEs.best.hits.Pantherophis.guttatus         <- reportBestMatches(input.table=Pantherophis.guttatus.blastn.UCEs.50hits, output.table.path="Pantherophis.guttatus.blastn.UCEs.best.hits.txt")
-UCEs.best.hits.Protobothrops.mucrosquamatus  <- reportBestMatches(input.table=Protobothrops.mucrosquamatus.blastn.UCEs.50hits, output.table.path="Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt")
-UCEs.best.hits.Python.bivittatus             <- reportBestMatches(input.table=Python.bivittatus.blastn.UCEs.50hits, output.table.path="Python.bivittatus.blastn.UCEs.best.hits.txt")
-UCEs.best.hits.Thamnophis.sirtalis           <- reportBestMatches(input.table=Thamnophis.sirtalis.blastn.UCEs.50hits, output.table.path="Thamnophis.sirtalis.blastn.UCEs.best.hits.txt")
-UCEs.best.hits.Viperus.berus                 <- reportBestMatches(input.table=Vipera.berus.blastn.UCEs.50hits, output.table.path="Vipera.berus.blastn.UCEs.best.hits.txt")
+UCEs.best.hits.Crotalus.horridus             <- REEs::reportBestMatches(input.table=Crotalus.horridus.blastn.UCEs.50hits, output.table.path="Crotalus.horridus.blastn.UCEs.best.hits.txt")
+UCEs.best.hits.Crotalus.mitchellii           <- REEs::reportBestMatches(input.table=Crotalus.mitchellii.blastn.UCEs.50hits, output.table.path="Crotalus.mitchellii.blastn.UCEs.best.hits.txt")
+UCEs.best.hits.Ophiophagus.hannah            <- REEs::reportBestMatches(input.table=Ophiophagus.hannah.blastn.UCEs.50hits, output.table.path="Ophiophagus.hannah.blastn.UCEs.best.hits.txt")
+UCEs.best.hits.Pantherophis.guttatus         <- REEs::reportBestMatches(input.table=Pantherophis.guttatus.blastn.UCEs.50hits, output.table.path="Pantherophis.guttatus.blastn.UCEs.best.hits.txt")
+UCEs.best.hits.Protobothrops.mucrosquamatus  <- REEs::reportBestMatches(input.table=Protobothrops.mucrosquamatus.blastn.UCEs.50hits, output.table.path="Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt")
+UCEs.best.hits.Python.bivittatus             <- REEs::reportBestMatches(input.table=Python.bivittatus.blastn.UCEs.50hits, output.table.path="Python.bivittatus.blastn.UCEs.best.hits.txt")
+UCEs.best.hits.Thamnophis.sirtalis           <- REEs::reportBestMatches(input.table=Thamnophis.sirtalis.blastn.UCEs.50hits, output.table.path="Thamnophis.sirtalis.blastn.UCEs.best.hits.txt")
+UCEs.best.hits.Viperus.berus                 <- REEs::reportBestMatches(input.table=Vipera.berus.blastn.UCEs.50hits, output.table.path="Vipera.berus.blastn.UCEs.best.hits.txt")
 ```
 
 Output tables were saved to the files: [Crotalus.horridus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.blastn.UCEs.best.hits.txt), [Crotalus.mitchellii.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.blastn.UCEs.best.hits.txt), [Ophiophagus.hannah.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.blastn.UCEs.best.hits.txt) , [Pantherophis.guttatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.blastn.UCEs.best.hits.txt), [Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt), [Python.bivittatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.blastn.UCEs.best.hits.txt), [Thamnophis.sirtalis.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.blastn.UCEs.best.hits.txt), [Vipera.berus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.blastn.UCEs.best.hits.txt).
 
-4. I used the function get.seqs.from.blastTable to extract and save the set of best-match UCEs from each genome.
+4. I used the function REEs::get.seqs.from.blastTable to extract and save the set of best-match UCEs from each genome.
 
 ```
 #### Extracts the sequence of the best match of each UCE from each snake genome.
@@ -428,10 +428,24 @@ Thamnophis.sirtalis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(in
 
 UCE sequences were saved in fasta format for each species and can be downloaded here: [Crotalus_horridus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus_horridus_UCEs.fasta), [Crotalus_mitchellii_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus_mitchellii_UCEs.fasta), [Ophiophagus_hannah_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus_hannah_UCEs.fasta), [Pantherophis_guttatus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis_guttatus_UCEs.fasta), [Protobothrops_mucrosquamatus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops_mucrosquamatus_UCEs.fasta), [Python_bivittatus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python_bivittatus_UCEs.fasta), [Thamnophis_sirtalis_UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis_sirtalis_UCEs.fas), [Vipera_berus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera_berus_UCEs.fasta)
 
-5. To identify and align the set of UCEs found in all snake genomes, I used the function **align.bestHit.UCEs**. This function invokes MAFFT to perform multisequence alignment.
-
+<!---
+5. I used the function REEs::align.bestHit.UCEs to identify and align the set of UCEs found in all snake genomes. This function invokes MAFFT to perform multisequence alignment.
 ```
 align.bestHit.UCEs(species.UCEs.filepaths=list.files(path="~/UCEs.In.Snake.Genomes/",full.names=T), output.dir="~/MAFFT-aligned-UCEs", species=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus", "Protobothrops_mucrosquamatus","Pantherophis_guttatus"))
+```
+--->
+
+5. I used the makeStatsTable function (REEs package) to perform multiple sequence alignment (MAFFT algorithm) for the best matches to each UCE, and to create a table holding some statistics for each alignment.
+
+```
+### Create a character vector holding the paths to the fasta files generated in step 5. 
+input.seqs.UCEs.paths <- c("Crotalus_horridus_UCEs.fasta", "Crotalus_mitchellii_UCEs.fasta", "Ophiophagus_hannah_UCEs.fasta", "Pantherophis_guttatus_UCEs.fasta", "Protobothrops_mucrosquamatus_UCEs.fasta", "Python_bivittatus_UCEs.fasta", "Vipera_berus_UCEs.fasta", "Thamnophis_sirtalis_UCEs.fas")
+
+### Define output directory for UCE alignments
+UCEs.alignments.dir <- "~/MAFFT-aligned-UCEs"
+
+### Align sequences for each UCE and make a table to summarize data in each alignment (one row per UCE locus).
+stats.table.UCEs.all  <- makeStatsTable(input.seqs=input.seqs.UCEs.paths, input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp, output.path="./statsTable_REEs_SnakeCap.txt", species=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),alignments.out=UCEs.alignments.dir, species.gff=8)
 ```
 
 6. Final size filtering, sorting, and UCE selection steps were performed in R. *Thamnophis sirtalis* sequences for the selected UCEs (n = 1,000) were submitted to Arbor Biosciences for probe design. Requires Biostrings and ape packages.
