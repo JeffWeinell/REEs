@@ -302,11 +302,11 @@ The output sequences (expanded REEs targets) can be downloaded here: [REEs.expan
 Results:
 Nine of the expanded targets were only partially expanded, meaning that their sequence lengths (actually sequence lengths minus one, because of a bug in the code that has since been fixed) were not a multiple of the bait length. Three of these targets were located near the end of the reference contig and another six had terminal strings of ambiguous bases (Ns) that were trimmed (Table 4). Note: 57 other targets that were fully expanded had terminal Ns, but these Ns were not trimmed because they were not detected. The latest version of the get_ncbi_sequences function (REEs package) has an option to trim terminal Ns, but this option was not present when SnakeCap targets were chosen.
 
-Additionally, NW_013658076.1:768325-769765 (WeinellEntry1658) was targetted instead of NW_013658076.1:768324-769764. These are nearly identical ranges (shifted by one base) and I am not sure why this change was made.
+Additionally, NW_013658076.1:768325-769765 (WeinellEntry1658) was targetted instead of NW_013658076.1:768324-769764; these are nearly identical (shifted by only one base on the contig) and I am not sure why this change was made.
 
 Five duplicate pairs of REEs (each pair with identical sequences) were present in the output of step 8 (Table 5). Only one of these pairs was recognized/identified (and filtered manually) prior to submitting target sequences to Arbor Biosciences.
 
-The remaining 2,068 REEs (expanded targets) were submitted to Arbor Biosciences for ulstrastringent filtering and probe design, and can be downloaded here: [REEs.expanded.final.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.final.fas). Note that these were actually submitted in two batches: [Version1_Target-loci_Jeff-Weinell_10Sep2018.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version1_Target-Loci_Jeff-Weinell_10Sep2018.fasta) and [Version2_additional-targets_20Sep2018.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version2_additional-targets_Entry1899to3152_20Sep2018.fasta).
+The remaining 2,068 REEs (expanded targets) were submitted to Arbor Biosciences for ulstrastringent filtering and probe design, and can be downloaded here: [REEs.expanded.final.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.final.fas). These were actually submitted to Arbor in two batches: [Version1_Target-loci_Jeff-Weinell_10Sep2018.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version1_Target-Loci_Jeff-Weinell_10Sep2018.fasta) and [Version2_additional-targets_20Sep2018.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version2_additional-targets_Entry1899to3152_20Sep2018.fasta). See [ultra-stringent filtering](#ultrastringentFiltering) section.
 
 Arbor performed ultrastringent filtration on the 2,068 REEs retained from step 8 (after removing two identical sequences; pair 1 Table 5). Ultrastringent filtering resulted in the removal of 203 REEs (1,865 REEs retained). Of the 203 REEs that were filtered, 76 were filtered because no baits could be designed for these loci (70 of these are listed in [Version1-loci-removed_ZeroBaitCoverageLoci.tsv](https://git.io/JLiEu) and six are listed in [Version2-loci-removed_ZeroBaitCoverageLoci.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version2-loci-removed_ZeroBaitCoverageLoci.tsv)); and 127 REEs were filtered because all proposed baits were non-specific within the *T. sirtalis* genome (eight of these are listed in [Version1-loci-removed_baits-nonspecific.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version1-loci-removed_nonspecific-baits.tsv) and 119 are listed in [Version2-loci-removed_baits-nonspecific.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version2-loci-removed_baits-nonspecific.tsv)).
 
@@ -628,9 +628,9 @@ I targeted a subset of the genes included in the study by Holthaus et al. (2017)
 
 I used blastn to search for the vision loci probes from Schott et al. (2017) (which were from *Anolis*, *Columba*, *Gallus*, and *Pelodiscus*, *Sceloporus*, or *Python*) within the snake genomes. Most of the SnakeCap probes for these loci are designed from *Ophiophagus* (n = 88), but some probes were designed from *Thamnophis* (n = 21), *Protobothrops* (n = 5), *Pantherophis* (n = 3), or *Python* (n = 2), when blastn of Schott et al 2017 probes did not yield a strong match in *Ophiophagus*.
 
-
+<a name="ultrastringentFiltering"></a>
 <a name="ProbeSynthesis"></a>
-## Probe Synthesis
+## Ultra-stringent filtration and probe synthesis
 
 After choosing the target loci, probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total. See **Target-loci_Coverage_graph_22October2020.pdf** for a visual summary of target loci, probes, probe coverage, and features of loci including genes, mRNA/transcribed regions, and protein-coding (CDS) regions. This graph was generated with **graph_target_and_features.R** and then filesize reduction in Adobe Acrobat.
 
