@@ -413,8 +413,27 @@ UCEs.best.hits.Viperus.berus                 <- REEs::reportBestMatches(input.ta
 Output tables were saved to the files: [Crotalus.horridus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.blastn.UCEs.best.hits.txt), [Crotalus.mitchellii.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.blastn.UCEs.best.hits.txt), [Ophiophagus.hannah.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.blastn.UCEs.best.hits.txt) , [Pantherophis.guttatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.blastn.UCEs.best.hits.txt), [Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt), [Python.bivittatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.blastn.UCEs.best.hits.txt), [Thamnophis.sirtalis.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.blastn.UCEs.best.hits.txt), [Vipera.berus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.blastn.UCEs.best.hits.txt).
 
 4. I used the function REEs::get.seqs.from.blastTable to extract and save the set of best-match UCEs from each genome.
-
 ```
+#### Read in the tables of best matches generated from step 3 (if these are not already loaded).
+UCEs.best.hits.Crotalus.horridus             <- as.data.frame(data.table::fread("./Crotalus.horridus.blastn.UCEs.best.hits.txt"),header=T)
+UCEs.best.hits.Crotalus.mitchellii           <- as.data.frame(data.table::fread("./Crotalus.mitchellii.blastn.UCEs.best.hits.txt"),header=T)
+UCEs.best.hits.Ophiophagus.hannah            <- as.data.frame(data.table::fread("./Ophiophagus.hannah.blastn.UCEs.best.hits.txt"),header=T)
+UCEs.best.hits.Pantherophis.guttatus         <- as.data.frame(data.table::fread("./Pantherophis.guttatus.blastn.UCEs.best.hits.txt"),header=T)
+UCEs.best.hits.Protobothrops.mucrosquamatus  <- as.data.frame(data.table::fread("./Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt"),header=T)
+UCEs.best.hits.Python.bivittatus             <- as.data.frame(data.table::fread("./Python.bivittatus.blastn.UCEs.best.hits.txt"),header=T)
+UCEs.best.hits.Thamnophis.sirtalis           <- as.data.frame(data.table::fread("./Thamnophis.sirtalis.blastn.UCEs.best.hits.txt"),header=T)
+UCEs.best.hits.Viperus.berus                 <- as.data.frame(data.table::fread("./Vipera.berus.blastn.UCEs.best.hits.txt"),header=T)
+
+#### Define the genome URL paths. The URLs for genomes used in the SnakeCap study can be called using the datasets function of REEs package.
+Crotalus.horridus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,1]=="Crotalus horridus"),2]
+Crotalus.mitchellii.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Crotalus mitchellii"),2]
+Ophiophagus.hannah.genome_url           <- REEs::datasets(1)[which(datasets(1)[,1]=="Ophiophagus hannah"),2]
+Pantherophis.guttatus.genome_url        <- REEs::datasets(1)[which(datasets(1)[,1]=="Pantherophis guttatus"),2]
+Protobothrops.mucrosquamatus.genome_url <- REEs::datasets(1)[which(datasets(1)[,1]=="Protobothrops mucrosquamatus"),2]
+Python.bivittatus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,1]=="Python bivittatus"),2]
+Viperus.berus.genome_url                <- REEs::datasets(1)[which(datasets(1)[,1]=="Viperus berus"),2]
+Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Thamnophis sirtalis"),2]
+
 #### Extracts the sequence of the best match of each UCE from each snake genome.
 Crotalus.horridus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Crotalus.horridus, input.seqs=Crotalus.horridus.genome_url, output.path="./Crotalus_horridus_UCEs.fasta")
 Crotalus.mitchellii.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Crotalus.mitchellii, input.seqs=Crotalus.mitchellii.genome_url, output.path="./Crotalus_mitchellii_UCEs.fasta")
