@@ -61,7 +61,11 @@ All loci |  | 3,129 | 1,517,011 | 120–7,501 (mean = 531.62)
 <!-- <a name="Methods.SelectingREEs.overview"></a> -->
 #### Overview: 
 
+I used the following R functions (shown as packageName::functionName):
 
+REEs::load.gff --> REEs::filter.gff --> REEs::get.seqs.from.gff --> Biostrings::writeXStringSet --> REEs::blast --> REEs::reportBestMatches --> REEs::get.seqs.from.blastTable --> REEs::makeStatsTable --> REEs::pick.loci --> (then functions in step 8  to get REEs + small region of exon-flanking DNA).
+
+Further description and implementation of these functions is shown below in Details section.
 
 <!-- <a name="Methods.SelectingREEs.detailed"></a> -->
 #### Details:
