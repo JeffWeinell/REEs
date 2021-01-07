@@ -445,7 +445,36 @@ Viperus.berus.best.hits.seqs                <- REEs::get.seqs.from.blastTable(in
 Thamnophis.sirtalis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Thamnophis.sirtalis, input.seqs=Thamnophis.sirtalis.genome_url, output.path="./Thamnophis_sirtalis_UCEs.fas")
 ```
 
-UCE sequences were saved in fasta format for each species and can be downloaded here: [Crotalus_horridus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus_horridus_UCEs.fasta), [Crotalus_mitchellii_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus_mitchellii_UCEs.fasta), [Ophiophagus_hannah_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus_hannah_UCEs.fasta), [Pantherophis_guttatus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis_guttatus_UCEs.fasta), [Protobothrops_mucrosquamatus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops_mucrosquamatus_UCEs.fasta), [Python_bivittatus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python_bivittatus_UCEs.fasta), [Thamnophis_sirtalis_UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis_sirtalis_UCEs.fas), [Vipera_berus_UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera_berus_UCEs.fasta)
+Output sequences in fasta format can be downloaded here: [Crotalus.horridus.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.UCEs.fas), [Crotalus.mitchellii.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.UCEs.fas), [Ophiophagus.hannah.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.UCEs.fas), [Pantherophis.guttatus.UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.UCEs.fas), [Protobothrops.mucrosquamatus.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.UCEs.fas), [Python.bivittatus.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.UCEs.fas), [Thamnophis.sirtalis.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.UCEs.fas), [Vipera.berus.UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.UCEs.fas)
+
+Important note: Sequence headers in output fasta files (i.e., the text on lines starting with ">") have the format "querySequenceName_Subject=subjectContigName_ContigStart_ContigEnd". For example, the *Crotalus horridus* sequence that is the best match to UCE 1003 of *Micrurus fulvius* has the header "micrurus_fulvius_uce-1003_Subject=LVCR01005387.1_10818_10626". This can be a bit confusing at first because the only species mentioned in the sequence header is Micrurus fulvius, even though the sequence is actually from *Crotalus horridus*.
+
+To avoid confusion, I saved a copy of each species' UCE sequences after renaming sequences with the more intuitive header format "Genus_species_uce-XXXX", where XXXX is a number. For example: "Crotalus_horridus_uce-1003" is used as the name for the homolog of "micrurus_fulvius_uce-1003".
+
+```
+### Renaming each species' UCE sequences to match the format of sequence names used by Streicher and Wiens (2017): "Genus_species_uce-XXXX", where XXXX is a number.
+
+names(Crotalus.horridus.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Crotalus_horridus_",""),names(Crotalus.horridus.best.hits.seqs))
+names(Crotalus.mitchellii.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Crotalus_mitchellii_",""),names(Crotalus.mitchellii.best.hits.seqs))
+names(Ophiophagus.hannah.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Ophiophagus_hannah_",""),names(Ophiophagus.hannah.best.hits.seqs))
+names(Pantherophis.guttatus.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Pantherophis_guttatus_",""),names(Pantherophis.guttatus.best.hits.seqs))
+names(Protobothrops.mucrosquamatus.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Protobothrops_mucrosquamatus_",""),names(Protobothrops.mucrosquamatus.best.hits.seqs))
+names(Python.bivittatus.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Python_bivittatus_",""),names(Python.bivittatus.best.hits.seqs))
+names(Viperus.berus.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Viperus_berus_",""),names(Viperus.berus.best.hits.seqs))
+names(Thamnophis.sirtalis.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Thamnophis_sirtalis_",""),names(Thamnophis.sirtalis.best.hits.seqs))
+
+### Save a copy of each of each species' renamed UCE sequences
+writeXStringSet(Crotalus.horridus.best.hits.seqs,"Crotalus.horridus.UCEs_renamed.fas")
+writeXStringSet(Crotalus.mitchellii.best.hits.seqs,"Crotalus.mitchellii.UCEs_renamed.fas")
+writeXStringSet(Ophiophagus.hannah.best.hits.seqs,"Ophiophagus.hannah.UCEs_renamed.fas")
+writeXStringSet(Pantherophis.guttatus.best.hits.seqs,"Pantherophis.guttatus.UCEs_renamed.fas")
+writeXStringSet(Protobothrops.mucrosquamatus.best.hits.seqs,"Protobothrops.mucrosquamatus.UCEs_renamed.fas")
+writeXStringSet(Python.bivittatus.best.hits.seqs,"Python.bivittatus.UCEs_renamed.fas")
+writeXStringSet(Viperus.berus.best.hits.seqs,"Thamnophis.sirtalis.UCEs_renamed.fas")
+writeXStringSet(Thamnophis.sirtalis.best.hits.seqs,"Vipera.berus.UCEs_renamed.fas")
+```
+
+The renamed sequences can be downloaded here: [Crotalus.horridus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.UCEs_renamed.fas), [Crotalus.mitchellii.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.UCEs_renamed.fas), [Ophiophagus.hannah.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.UCEs_renamed.fas), [Pantherophis.guttatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.UCEs_renamed.fas), [Protobothrops.mucrosquamatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.UCEs_renamed.fas), [Python.bivittatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.UCEs_renamed.fas), [Thamnophis.sirtalis.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.UCEs_renamed.fas), [Vipera.berus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.UCEs_renamed.fas)
 
 <!---
 5. I used the function REEs::align.bestHit.UCEs to identify and align the set of UCEs found in all snake genomes. This function invokes MAFFT to perform multisequence alignment.
