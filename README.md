@@ -435,14 +435,14 @@ Viperus.berus.genome_url                <- REEs::datasets(1)[which(datasets(1)[,
 Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Thamnophis sirtalis"),2]
 
 #### Extracts the sequence of the best match of each UCE from each snake genome.
-Crotalus.horridus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Crotalus.horridus, input.seqs=Crotalus.horridus.genome_url, output.path="./Crotalus_horridus_UCEs.fasta")
-Crotalus.mitchellii.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Crotalus.mitchellii, input.seqs=Crotalus.mitchellii.genome_url, output.path="./Crotalus_mitchellii_UCEs.fasta")
-Ophiophagus.hannah.best.hits.seqs           <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Ophiophagus.hannah, input.seqs=Ophiophagus.hannah.genome_url, output.path="./Ophiophagus_hannah_UCEs.fasta")
-Pantherophis.guttatus.best.hits.seqs        <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Pantherophis.guttatus, input.seqs=Pantherophis.guttatus.genome_url, output.path="./Pantherophis_guttatus_UCEs.fasta")
-Protobothrops.mucrosquamatus.best.hits.seqs <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Protobothrops.mucrosquamatus, input.seqs=Protobothrops.mucrosquamatus_genome.url, output.path="./Protobothrops_mucrosquamatus_UCEs.fasta")
-Python.bivittatus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Python.bivittatus, input.seqs=Python.bivittatus.genome_url, output.path="./Python_bivittatus_UCEs.fasta")
-Viperus.berus.best.hits.seqs                <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Viperus.berus, input.seqs=Viperus.berus.genome_url, output.path="./Viperus_berus_UCEs.fasta")
-Thamnophis.sirtalis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Thamnophis.sirtalis, input.seqs=Thamnophis.sirtalis.genome_url, output.path="./Thamnophis_sirtalis_UCEs.fas")
+Crotalus.horridus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Crotalus.horridus, input.seqs=Crotalus.horridus.genome_url, output.path="./Crotalus.horridus.UCEs.fas")
+Crotalus.mitchellii.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Crotalus.mitchellii, input.seqs=Crotalus.mitchellii.genome_url, output.path="./Crotalus.mitchellii.UCEs.fas")
+Ophiophagus.hannah.best.hits.seqs           <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Ophiophagus.hannah, input.seqs=Ophiophagus.hannah.genome_url, output.path="./Ophiophagus.hannah.UCEs.fas")
+Pantherophis.guttatus.best.hits.seqs        <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Pantherophis.guttatus, input.seqs=Pantherophis.guttatus.genome_url, output.path="./Pantherophis.guttatus.UCEs.fas")
+Protobothrops.mucrosquamatus.best.hits.seqs <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Protobothrops.mucrosquamatus, input.seqs=Protobothrops.mucrosquamatus.genome_url, output.path="./Protobothrops.mucrosquamatus.UCEs.fas")
+Python.bivittatus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Python.bivittatus, input.seqs=Python.bivittatus.genome_url, output.path="./Python.bivittatus.UCEs.fas")
+Viperus.berus.best.hits.seqs                <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Viperus.berus, input.seqs=Viperus.berus.genome_url, output.path="./Viperus.berus.UCEs.fas")
+Thamnophis.sirtalis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Thamnophis.sirtalis, input.seqs=Thamnophis.sirtalis.genome_url, output.path="./Thamnophis.sirtalis.UCEs.fas")
 ```
 
 Output sequences in fasta format can be downloaded here: [Crotalus.horridus.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.UCEs.fas), [Crotalus.mitchellii.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.UCEs.fas), [Ophiophagus.hannah.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.UCEs.fas), [Pantherophis.guttatus.UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.UCEs.fas), [Protobothrops.mucrosquamatus.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.UCEs.fas), [Python.bivittatus.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.UCEs.fas), [Thamnophis.sirtalis.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.UCEs.fas), [Vipera.berus.UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.UCEs.fas)
@@ -476,18 +476,26 @@ writeXStringSet(Thamnophis.sirtalis.best.hits.seqs,"Vipera.berus.UCEs_renamed.fa
 
 The renamed sequences can be downloaded here: [Crotalus.horridus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.UCEs_renamed.fas), [Crotalus.mitchellii.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.UCEs_renamed.fas), [Ophiophagus.hannah.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.UCEs_renamed.fas), [Pantherophis.guttatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.UCEs_renamed.fas), [Protobothrops.mucrosquamatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.UCEs_renamed.fas), [Python.bivittatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.UCEs_renamed.fas), [Thamnophis.sirtalis.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.UCEs_renamed.fas), [Vipera.berus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.UCEs_renamed.fas)
 
-<!---
-5. I used the function REEs::align.bestHit.UCEs to identify and align the set of UCEs found in all snake genomes. This function invokes MAFFT to perform multisequence alignment.
-```
-align.bestHit.UCEs(species.UCEs.filepaths=list.files(path="~/UCEs.In.Snake.Genomes/",full.names=T), output.dir="~/MAFFT-aligned-UCEs", species=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus", "Protobothrops_mucrosquamatus","Pantherophis_guttatus"))
-```
---->
 
+5. I used the function REEs::align.bestHit.UCEs to align the set of UCEs found in all snake genomes. This function invokes MAFFT to perform multisequence alignment. Output files include (1) aligned sequences in fasta format (one file for each locus), (2) alignment containing all loci concatenated, (3) partition file associated with the concatenated alignment.
+
+```
+### Define an character vector of paths to the input, unaligned UCE sequence files, which are sequences obtained in step 4.
+
+
+### Use align.bestHit.UCEs to generate multiple sequence alignments of UCEs shared among all species (single locus alignments plus a concatenated alignment with partition file).
+
+UCEs.paths <- c("","","",...)
+
+REEs::align.bestHit.UCEs(species.UCEs.filepaths=UCEs.paths, output.dir="~/MAFFT-aligned-UCEs", species=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus", "Protobothrops_mucrosquamatus","Pantherophis_guttatus"))
+```
+
+<!---
 5. I used the makeStatsTable function (REEs package) to perform multiple sequence alignment (MAFFT algorithm) for the best matches to each UCE, and to create a table holding some statistics for each alignment.
 
 ```
 ### Create a character vector holding the paths to the fasta files generated in step 5. 
-input.seqs.UCEs.paths <- c("Crotalus_horridus_UCEs.fasta", "Crotalus_mitchellii_UCEs.fasta", "Ophiophagus_hannah_UCEs.fasta", "Pantherophis_guttatus_UCEs.fasta", "Protobothrops_mucrosquamatus_UCEs.fasta", "Python_bivittatus_UCEs.fasta", "Vipera_berus_UCEs.fasta", "Thamnophis_sirtalis_UCEs.fas")
+input.seqs.UCEs.paths <- c("Crotalus.horridus.UCEs.fas", "Crotalus.mitchellii.UCEs.fas", "Ophiophagus.hannah.UCEs.fas", "Pantherophis.guttatus.UCEs.fas", "Protobothrops.mucrosquamatus.UCEs.fas", "Python.bivittatus.UCEs.fas", "Vipera.berus.UCEs.fas", "Thamnophis.sirtalis.UCEs.fas")
 
 ### Define output directory for UCE alignments
 UCEs.alignments.dir <- "~/MAFFT-aligned-UCEs"
@@ -495,6 +503,7 @@ UCEs.alignments.dir <- "~/MAFFT-aligned-UCEs"
 ### Align sequences for each UCE and make a table to summarize data in each alignment (one row per UCE locus).
 stats.table.UCEs.all  <- makeStatsTable(input.seqs=input.seqs.UCEs.paths, input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp, output.path="./statsTable_REEs_SnakeCap.txt", species=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),alignments.out=UCEs.alignments.dir, species.gff=8)
 ```
+--->
 
 6. Final size filtering, sorting, and UCE selection steps were performed in R. *Thamnophis sirtalis* sequences for the selected UCEs (n = 1,000) were submitted to Arbor Biosciences for probe design. Requires Biostrings and ape packages.
 
