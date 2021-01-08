@@ -447,7 +447,7 @@ Thamnophis.sirtalis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(in
 
 Output sequences in fasta format can be downloaded here: [Crotalus.horridus.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.UCEs.fas), [Crotalus.mitchellii.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.UCEs.fas), [Ophiophagus.hannah.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.UCEs.fas), [Pantherophis.guttatus.UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.UCEs.fas), [Protobothrops.mucrosquamatus.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.UCEs.fas), [Python.bivittatus.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.UCEs.fas), [Thamnophis.sirtalis.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.UCEs.fas), [Vipera.berus.UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.UCEs.fas). **Important note**: Sequence headers in the output fasta files (the text on lines starting with ">") have the format "querySequenceName_Subject=subjectContigName_ContigStart_ContigEnd". For example, the *Crotalus horridus* sequence that is the best match to UCE 1003 of *Micrurus fulvius* has the header "micrurus_fulvius_uce-1003_Subject=LVCR01005387.1_10818_10626". This is not intuitive because the only species in the header is *Micrurus fulvius*, even though the sequence is actually from *Crotalus horridus*.
 
-To avoid confusion, I saved a copy of each species' UCE sequences after renaming sequences with the more intuitive header format "Genus_species_uce-XXXX", where XXXX is a number. For example: "Crotalus_horridus_uce-1003" is used as the name for the homolog of "micrurus_fulvius_uce-1003".
+To avoid confusion, I renamed sequences to the more intuitive header format "Genus_species_uce-XXXX", which matches the format used by Streicher and Weins (2017), where XXXX is a ID number for the UCE. For example: "Crotalus_horridus_uce-1003" is used as the name for the homolog of "micrurus_fulvius_uce-1003".
 
 ```
 ### Renaming each species' UCE sequences to match the format of sequence names used by Streicher and Wiens (2017): "Genus_species_uce-XXXX", where XXXX is a number.
@@ -475,20 +475,17 @@ writeXStringSet(Vipera.berus.best.hits.seqs,"Vipera.berus.UCEs_renamed.fas")
 The renamed sequences can be downloaded here: [Crotalus.horridus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.UCEs_renamed.fas), [Crotalus.mitchellii.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.UCEs_renamed.fas), [Ophiophagus.hannah.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.UCEs_renamed.fas), [Pantherophis.guttatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.UCEs_renamed.fas), [Protobothrops.mucrosquamatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.UCEs_renamed.fas), [Python.bivittatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.UCEs_renamed.fas), [Thamnophis.sirtalis.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.UCEs_renamed.fas), [Vipera.berus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.UCEs_renamed.fas)
 
 
-5. I used the function REEs::align.bestHit.UCEs to align the set of UCEs found in all snake genomes. This function invokes MAFFT to perform multisequence alignment. Output files include (1) aligned sequences in fasta format (one file for each locus), (2) alignment containing all loci concatenated, (3) partition file associated with the concatenated alignment.
+5. I used the function REEs::align.shared.loci to align the set of UCEs found in all snake genomes; this function invokes MAFFT for multisequence alignment.
 
 ```
-### Define an character vector of paths to the input, unaligned UCE sequence files, which are sequences obtained in step 4.
+### Define an character vector of paths to the input (unaligned) UCE sequence files. These are the sequences obtained from step 4. Note: Using the original or "renamed" (with headers renamed) sequences produces the same output.
+UCEs.paths <- c("Crotalus.horridus.UCEs_renamed.fas","Crotalus.mitchellii.UCEs_renamed.fas","Ophiophagus.hannah.UCEs_renamed.fas","Pantherophis.guttatus.UCEs_renamed.fas","Protobothrops.mucrosquamatus.UCEs_renamed.fas","Python.bivittatus.UCEs_renamed.fas","Thamnophis.sirtalis.UCEs_renamed.fas","Vipera.berus.UCEs_renamed.fas")
 
+### Align the UCEs that are found in each of the files specified by UCEs.paths
+aligned.UCEs <- align.shared.loci(input.seqs=UCEs.paths, indv=c("Pantherophis.guttatus", "Thamnophis.sirtalis", "Vipera.berus", "Python.bivittatus", "Protobothrops.mucrosquamatus", "Ophiophagus.hannah", "Crotalus.mitchellii", "Crotalus.horridus"), reference.indv=7, seqname.str.delim="_", seqname.str.loc=3, output.dir="./MAFFT-aligned-UCEs")
 
-### Use align.bestHit.UCEs to generate multiple sequence alignments of UCEs shared among all species (single locus alignments plus a concatenated alignment with partition file).
-
-UCEs.paths <- c("","","",...)
-
-REEs::align.bestHit.UCEs(species.UCEs.filepaths=UCEs.paths, output.dir="~/MAFFT-aligned-UCEs", species=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus", "Protobothrops_mucrosquamatus","Pantherophis_guttatus"))
 ```
-
-Download UCE alignments here: [MAFFT-aligned-UCEs.zip](https://osf.io/wpcr7/download).
+Result: 2,968 of the UCEs from *Micrurus fulvius* were found in all of the snake genomes. The alignments for these shared UCEs can be download here: [MAFFT-aligned-UCEs.zip](https://osf.io/wpcr7/download).
 
 <!---
 5. I used the makeStatsTable function (REEs package) to perform multiple sequence alignment (MAFFT algorithm) for the best matches to each UCE, and to create a table holding some statistics for each alignment.
