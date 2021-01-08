@@ -573,7 +573,9 @@ target.UCEs          <- Thamnophis.sirtalis.UCEs.120[1:1000]
 writeXStringSet(x=target.UCEs,filepath="./targetUCEs.1000.fas",format="fasta")
 ```
 
-7. Probes were designed for 907 of the 1,000 UCEs submitted to Arbor Biosciences.
+Result: 1,000 *T. sirtalis* UCEs chosen as targets, and these cane be downloaded here: [targetUCEs.1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/targetUCEs.1000.fas). **Verify that these are the same as those sent to Arbor**
+
+After ultrastringent filtering, probes were designed for 907 of the 1,000 UCEs submitted to Arbor Biosciences.
 
 <a name="Methods.SelectingddRAD"></a>
 ## Selecting the set of target ddRAD-like loci
