@@ -488,6 +488,8 @@ UCEs.paths <- c("","","",...)
 REEs::align.bestHit.UCEs(species.UCEs.filepaths=UCEs.paths, output.dir="~/MAFFT-aligned-UCEs", species=c("Thamnophis_sirtalis","Ophiophagus_hannah","Crotalus_mitchellii","Python_bivittatus","Vipera_berus","Crotalus_horridus", "Protobothrops_mucrosquamatus","Pantherophis_guttatus"))
 ```
 
+Download UCE alignments here: [MAFFT-aligned-UCEs.zip](https://osf.io/wpcr7/download).
+
 <!---
 5. I used the makeStatsTable function (REEs package) to perform multiple sequence alignment (MAFFT algorithm) for the best matches to each UCE, and to create a table holding some statistics for each alignment.
 
