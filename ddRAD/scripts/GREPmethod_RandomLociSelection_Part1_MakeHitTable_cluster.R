@@ -21,7 +21,9 @@ for(i in 1:length(files)){
 	}
 	accession     <- gsub(".fasta","",files[i]) ### accession ID of ith contig 
 	filename.temp <- paste0(directory,files[i]) ### full filepath to ith contig
+	### Read in ith contig as a table
 	sequences     <- read.table(file=filename.temp,header=T,sep="\t")
+	### Collapse bases of ith contig into a character string.
 	sequence.temp <- paste(as.character(unlist(sequences)),collapse="")
 
 	RecognitionSeqA.start.pos <- unlist(gregexpr(RecognitionSeqA.pattern, sequence.temp))		## start positions of Recognition Sequence A relative to query sequence (ith contig)
