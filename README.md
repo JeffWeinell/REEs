@@ -542,27 +542,35 @@ Thamnophis.sirtalis.seqs         <- collapse.DNAStringSet(lapply(X=alignments.so
 ### Remove gaps from Thamnophis sirtalis sequences
 Thamnophis.sirtalis.noGaps.seqs <- DECIPHER::RemoveGaps(Thamnophis.sirtalis.seqs)
 
-### UCEs with short T. sirtalist sequence
-Thamnophis.short.UCEs.120 <- Thamnophis.sirtalis.noGaps.seqs[which(width(Thamnophis.sirtalis.noGaps.seqs)<120)]
+### UCEs with short T. sirtalis sequences
+# Thamnophis.short.UCEs.120 <- Thamnophis.sirtalis.noGaps.seqs[which(width(Thamnophis.sirtalis.noGaps.seqs)<120)]
 
 ## Manually filter out "UCE.1843" "UCE.2179" "UCE.2433" "UCE.2465" "UCE.2498" "UCE.2890" "UCE.2960" "UCE.3354" "UCE.3501"
 ## alignments.sorted.filtered[c("UCE.1843","UCE.2179","UCE.2433","UCE.2465","UCE.2498","UCE.2890","UCE.2960","UCE.3354","UCE.3501")] <- NULL
 
 ### Remove UCE alignments if Thamnophis sirtalis sequence < 200nt after removing gaps. Result: 149 UCEs removed and 2,919 retained.
-alignments.sorted.filtered <- alignments.sorted[setdiff(names(alignments.sorted),names(Thamnophis.short.UCEs.120))]
+# alignments.sorted.filtered <- alignments.sorted[setdiff(names(alignments.sorted),names(Thamnophis.short.UCEs.120))]
 
 ### Keep first 1,000 UCE alignments in alignments.sorted.filtered
-alignments.sorted.filtered.1000 <- alignments.sorted.filtered[1:1000]
+# alignments.sorted.filtered.1000 <- alignments.sorted.filtered[1:1000]
 
-# Extract and save the Thamnophis sirtalis sequence (gaps removed) from each alignment in alignments.sorted.filtered.1000
-library(DECIPHER) # need this package for the RemoveGaps function
-target.UCEs <- list(); length(target.UCEs) <- length(alignments.sorted.filtered.1000)
-for(i in 1:length(alignments.sorted.filtered.1000)){
-	target.UCEs[[i]] <- alignments.sorted.filtered.1000[[i]]$Thamnophis_sirtalis
-}
-target.UCEs        <- RemoveGaps(DNAStringSet(target.UCEs))
-names(target.UCEs) <- names(alignments.sorted.filtered.1000)
-writeXStringSet(x=target.UCEs,filepath=<outputFilepath>,format="fasta")
+### Extract and save the Thamnophis sirtalis sequence (gaps removed) from each alignment in alignments.sorted.filtered.1000
+#library(DECIPHER) # need this package for the RemoveGaps function
+#target.UCEs <- list(); length(target.UCEs) <- length(alignments.sorted.filtered.1000)
+#for(i in 1:length(alignments.sorted.filtered.1000)){
+#	target.UCEs[[i]] <- alignments.sorted.filtered.1000[[i]]$Thamnophis_sirtalis
+#}
+# target.UCEs        <- RemoveGaps(DNAStringSet(target.UCEs))
+# names(target.UCEs) <- names(alignments.sorted.filtered.1000)
+
+### Filter UCEs if T. sirtalis sequence length is less than 200nt
+Thamnophis.sirtalis.UCEs.120 <- Thamnophis.sirtalis.noGaps.seqs[which(width(Thamnophis.sirtalis.noGaps.seqs)>=120)]
+
+### Save first 1000 UCEs of Thamnophis.sirtalis.UCEs.120
+target.UCEs          <- Thamnophis.sirtalis.UCEs.120[1:1000]
+
+### Save T. sirtalis target UCEs
+writeXStringSet(x=target.UCEs,filepath="./targetUCEs.1000.fas",format="fasta")
 ```
 
 7. Probes were designed for 907 of the 1,000 UCEs submitted to Arbor Biosciences.
