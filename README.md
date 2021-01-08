@@ -374,7 +374,7 @@ nflank.3',i = # of nucleotides targeted downstream of exon
 <!-- <a name="Methods.SelectingUCEs.overview"></a> -->
 #### Overview:
 
-Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus fulvius* (Streicher and Wiens, 2017; **Table X**). First, I filtered the full set of *Micrurus* UCEs to only include those present in all NCBI snake genomes (n = 2,968 UCEs). Then, I filtered the shared set of UCEs to only include those with an alignment width > 200nt (2,551 UCEs retained; each UCE alignment included the eight snakes with published genomes). Next, I removed the following UCEs: uce-1843, uce-2179, uce-2433, uce-2465, uce-2498, uce-2890, uce-2960, and uce-3354 (not sure why I did this yet). I sorted the remaining 2,543 UCEs by UCE name and retained the first 1,000 loci in this set. Arbor Biosciences was able to synthesize probes for 907 of the 1,000 proposed target UCEs.
+Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus fulvius* (Streicher and Wiens, 2017; **Table X**). First, I filtered the full set of *Micrurus* UCEs to only include those present in all NCBI snake genomes (n = 2,968 UCEs). Then, I filtered the set of shared UCEs to include only loci in which the *T. sirtalis* sequence included at least 200nt of non-gap sites in the UCE alignment. I sorted the set of passing *T. sirtalis* UCEs by UCE name and then retained only the first 1,000 loci. From each of these 1,000 loci, I extracted the middle 161nt bases to be used at a template for probe design. Arbor Biosciences was able to synthesize probes for 907 of the 1,000 proposed target UCEs.
 
 <!-- <a name="Methods.SelectingUCEs.detailed"></a> -->
 #### Details:
@@ -488,7 +488,7 @@ aligned.UCEs <- align.shared.loci(input.seqs=UCEs.paths, indv=c("Pantherophis.gu
 Result: 2,968 of the UCEs from *Micrurus fulvius* were found in all of the snake genomes. The alignments for these shared UCEs can be download here: [MAFFT-aligned-UCEs.zip](https://osf.io/wpcr7/download).
 
 
-6. Final size filtering, sorting, and UCE selection steps were performed in R. *Thamnophis sirtalis* sequences for the selected UCEs (n = 1,000) were submitted to Arbor Biosciences for probe design. Requires Biostrings and ape packages.
+6. Extract *Thamnophis sirtalis* sequences and filter by minimum size. Sort the remaining sequences by UCE name and then extract the middle 161nt of the first 1,000 loci.
 
 ```
 ### Character vector of paths to the UCE alignments
