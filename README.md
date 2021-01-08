@@ -487,52 +487,56 @@ aligned.UCEs <- align.shared.loci(input.seqs=UCEs.paths, indv=c("Pantherophis.gu
 ```
 Result: 2,968 of the UCEs from *Micrurus fulvius* were found in all of the snake genomes. The alignments for these shared UCEs can be download here: [MAFFT-aligned-UCEs.zip](https://osf.io/wpcr7/download).
 
-<!---
-5. I used the makeStatsTable function (REEs package) to perform multiple sequence alignment (MAFFT algorithm) for the best matches to each UCE, and to create a table holding some statistics for each alignment.
-
-```
-### Create a character vector holding the paths to the fasta files generated in step 5. 
-input.seqs.UCEs.paths <- c("Crotalus.horridus.UCEs.fas", "Crotalus.mitchellii.UCEs.fas", "Ophiophagus.hannah.UCEs.fas", "Pantherophis.guttatus.UCEs.fas", "Protobothrops.mucrosquamatus.UCEs.fas", "Python.bivittatus.UCEs.fas", "Vipera.berus.UCEs.fas", "Thamnophis.sirtalis.UCEs.fas")
-
-### Define output directory for UCE alignments
-UCEs.alignments.dir <- "~/MAFFT-aligned-UCEs"
-
-### Align sequences for each UCE and make a table to summarize data in each alignment (one row per UCE locus).
-stats.table.UCEs.all  <- makeStatsTable(input.seqs=input.seqs.UCEs.paths, input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp, output.path="./statsTable_REEs_SnakeCap.txt", species=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),alignments.out=UCEs.alignments.dir, species.gff=8)
-```
---->
 
 6. Final size filtering, sorting, and UCE selection steps were performed in R. *Thamnophis sirtalis* sequences for the selected UCEs (n = 1,000) were submitted to Arbor Biosciences for probe design. Requires Biostrings and ape packages.
 
 ```
+### Character vector of paths to the UCE alignments
 UCE.alignment.filenames    <- list.files(path="~/MAFFT-aligned-UCEs",full.names=T)
-UCE.shortnames             <- mgsub(patt=c(".fasta","uce-"),repl=c("","UCE."),subj=list.files(path="~/MAFFT-aligned-UCEs",full.names=F))
 
-# Reads in UCE alignments.
-for(i in 1:length(UCE.shortnames)){                                                           
-	assign(x=UCE.shortnames[i],value=readDNAStringSet(filepath=UCE.alignment.filenames[i]))
-}
+### Character vector of locus nanes (UCE ID number), with format "UCE.XXXX"
+UCE.shortnames             <- mgsub(c(".fas","uce-"),c("","UCE."),nameFromPath(UCE.alignment.filenames))
 
-# Hold UCE alignments in a list, sorted by UCE name
-alignments.sorted <- mget(sort(UCE.shortnames))
+# Read in UCE alignments (if they arent already loaded).
+#for(i in 1:length(UCE.shortnames)){                                                           
+#	assign(x=UCE.shortnames[i],value=readDNAStringSet(filepath=UCE.alignment.filenames[i]))
+#}
+# Store UCE alignments in a list sorted by UCE names
+# alignments.sorted <- mget(sort(UCE.shortnames))
+
+### Read in UCE alignments (if they arent already loaded).
+aligned.UCEs <- lapply(X=UCE.alignment.filenames,FUN=function(x){Biostrings::readDNAStringSet(x)})
+
+### Set alignment names to values in UCE.shortnames
+names(aligned.UCEs) <- UCE.shortnames
+
+### Sort the list of alignments by alignment name
+alignments.sorted <- aligned.UCEs[sort(UCE.shortnames)]
 
 ### Renaming the individuals in each alignment (because names were truncated when saving alignments in the previous step).
-for(i in 1:length(alignments.sorted)){
-	names(alignments.sorted[[i]]) <- c("Thamnophis_sirtalis", "Crotalus_horridus", "Protobothrops_mucrosquamatus", "Ophiophagus_hannah", "Vipera_berus", "Crotalus_mitchellii", "Pantherophis_guttatus", "Python_bivittatus")
-}
+#for(i in 1:length(alignments.sorted)){
+#	names(alignments.sorted[[i]]) <- c("Thamnophis_sirtalis", "Crotalus_horridus", "Protobothrops_mucrosquamatus", "Ophiophagus_hannah", "Vipera_berus", "Crotalus_mitchellii", "Pantherophis_guttatus", "Python_bivittatus")
+#}
 
 ### Calculate mean pairwise genetic distance among individuals in each UCE alignment
-mean.pdist <- vector(mode="numeric",length=length(alignments))
-for(i in 1:length(alignments.sorted)){
-	mean.pdist[i] <- round(mean(dist.dna(as.DNAbin(alignments.sorted[[i]]),model="raw",pairwise.deletion=T)),digits=3)
-}
-names(mean.pdist) <- names(alignments.sorted)
-alignment.lengths <- unlist(lapply(alignments.sorted,FUN=function(X){unique(width(X))}))
+# mean.pdist <- vector(mode="numeric",length=length(alignments.sorted))
+# for(i in 1:length(alignments.sorted)){
+#	mean.pdist[i] <- function(x) round(mean(dist.dna(as.DNAbin(alignments.sorted[[i]]),model="raw",pairwise.deletion=T)),digits=3)
+#}
+#names(mean.pdist) <- names(alignments.sorted)
+
+### Calculate mean pairwise genetic distance between individuals of each alignment.
+### This information does not seem to be used later.
+mean.pdist <- sapply(X=alignments.sorted,FUN=function(x){round(mean(ape::dist.dna(ape::as.DNAbin(x),model="raw",pairwise.deletion=T)),digits=3)})
+
+### Calculate width (aka length) of each alignment
+alignment.lengths <- sapply(alignments.sorted,FUN=function(X){unique(width(X))})
 
 # Remove UCE alignments if alignment width ≤ 200nt. Result: 417 UCEs removed and 2,551 retained
 alignments.sorted.filtered <- alignments.sorted[which(alignment.lengths > 200)]
 
-# Manually filter out "UCE.1843" "UCE.2179" "UCE.2433" "UCE.2465" "UCE.2498" "UCE.2890" "UCE.2960" "UCE.3354" "UCE.3501".
+# Manually filter out "UCE.1843" "UCE.2179" "UCE.2433" "UCE.2465" "UCE.2498" "UCE.2890" "UCE.2960" "UCE.3354" "UCE.3501", because Thamnophis sirtalis has (terminal?) gaps, or maybe is just too short?.
+
 alignments.sorted.filtered[c("UCE.1843","UCE.2179","UCE.2433","UCE.2465","UCE.2498","UCE.2890","UCE.2960","UCE.3354","UCE.3501")] <- NULL
 
 # Keep first 1,000 UCE alignments in alignments.sorted.filtered
