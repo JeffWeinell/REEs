@@ -495,14 +495,7 @@ Result: 2,968 of the UCEs from *Micrurus fulvius* were found in all of the snake
 UCE.alignment.filenames    <- list.files(path="~/MAFFT-aligned-UCEs",full.names=T)
 
 ### Character vector of locus nanes (UCE ID number), with format "UCE.XXXX"
-UCE.shortnames             <- mgsub(c(".fas","uce-"),c("","UCE."),nameFromPath(UCE.alignment.filenames))
-
-# Read in UCE alignments (if they arent already loaded).
-#for(i in 1:length(UCE.shortnames)){                                                           
-#	assign(x=UCE.shortnames[i],value=readDNAStringSet(filepath=UCE.alignment.filenames[i]))
-#}
-# Store UCE alignments in a list sorted by UCE names
-# alignments.sorted <- mget(sort(UCE.shortnames))
+UCE.shortnames             <- mgsub(c(".fas","uce-"),c("","UCE."),REEs::nameFromPath(UCE.alignment.filenames))
 
 ### Read in UCE alignments (if they arent already loaded).
 aligned.UCEs <- lapply(X=UCE.alignment.filenames,FUN=function(x){Biostrings::readDNAStringSet(x)})
@@ -513,55 +506,11 @@ names(aligned.UCEs) <- UCE.shortnames
 ### Sort the list of alignments by alignment name
 alignments.sorted <- aligned.UCEs[sort(UCE.shortnames)]
 
-### Renaming the individuals in each alignment (because names were truncated when saving alignments in the previous step).
-#for(i in 1:length(alignments.sorted)){
-#	names(alignments.sorted[[i]]) <- c("Thamnophis_sirtalis", "Crotalus_horridus", "Protobothrops_mucrosquamatus", "Ophiophagus_hannah", "Vipera_berus", "Crotalus_mitchellii", "Pantherophis_guttatus", "Python_bivittatus")
-#}
-
-### Calculate mean pairwise genetic distance among individuals in each UCE alignment
-# mean.pdist <- vector(mode="numeric",length=length(alignments.sorted))
-# for(i in 1:length(alignments.sorted)){
-#	mean.pdist[i] <- function(x) round(mean(dist.dna(as.DNAbin(alignments.sorted[[i]]),model="raw",pairwise.deletion=T)),digits=3)
-#}
-#names(mean.pdist) <- names(alignments.sorted)
-
-### Calculate mean pairwise genetic distance between individuals of each alignment.
-### This information does not seem to be used later.
-### mean.pdist <- sapply(X=alignments.sorted,FUN=function(x){round(mean(ape::dist.dna(ape::as.DNAbin(x),model="raw",pairwise.deletion=T)),digits=3)})
-
-### Calculate width (aka length) of each alignment. Also dont need this.
-### alignment.lengths <- sapply(alignments.sorted,FUN=function(X){unique(width(X))})
-
-### Remove UCE alignments if alignment width ≤ 200nt. Result: 417 UCEs removed and 2,551 retained
-### Actually didnt do this yet. Instead I filtered loci for which T. sirtalis sequence length >= 200 (after gaps removed)
-### alignments.sorted.filtered <- alignments.sorted[which(alignment.lengths > 200)]
-
 ### Get Thamnophis sirtalis sequence from the filtered alignments
-Thamnophis.sirtalis.seqs         <- collapse.DNAStringSet(lapply(X=alignments.sorted,FUN=function(X){X["Thamnophis.sirtalis"]}),use.seqnames=F)
+Thamnophis.sirtalis.seqs         <- REEs::collapse.DNAStringSet(lapply(X=alignments.sorted,FUN=function(X){X["Thamnophis.sirtalis"]}),use.seqnames=F)
 
 ### Remove gaps from Thamnophis sirtalis sequences
 Thamnophis.sirtalis.noGaps.seqs <- DECIPHER::RemoveGaps(Thamnophis.sirtalis.seqs)
-
-### UCEs with short T. sirtalis sequences
-# Thamnophis.short.UCEs.120 <- Thamnophis.sirtalis.noGaps.seqs[which(width(Thamnophis.sirtalis.noGaps.seqs)<120)]
-
-## Manually filter out "UCE.1843" "UCE.2179" "UCE.2433" "UCE.2465" "UCE.2498" "UCE.2890" "UCE.2960" "UCE.3354" "UCE.3501"
-## alignments.sorted.filtered[c("UCE.1843","UCE.2179","UCE.2433","UCE.2465","UCE.2498","UCE.2890","UCE.2960","UCE.3354","UCE.3501")] <- NULL
-
-### Remove UCE alignments if Thamnophis sirtalis sequence < 200nt after removing gaps. Result: 149 UCEs removed and 2,919 retained.
-# alignments.sorted.filtered <- alignments.sorted[setdiff(names(alignments.sorted),names(Thamnophis.short.UCEs.120))]
-
-### Keep first 1,000 UCE alignments in alignments.sorted.filtered
-# alignments.sorted.filtered.1000 <- alignments.sorted.filtered[1:1000]
-
-### Extract and save the Thamnophis sirtalis sequence (gaps removed) from each alignment in alignments.sorted.filtered.1000
-#library(DECIPHER) # need this package for the RemoveGaps function
-#target.UCEs <- list(); length(target.UCEs) <- length(alignments.sorted.filtered.1000)
-#for(i in 1:length(alignments.sorted.filtered.1000)){
-#	target.UCEs[[i]] <- alignments.sorted.filtered.1000[[i]]$Thamnophis_sirtalis
-#}
-# target.UCEs        <- RemoveGaps(DNAStringSet(target.UCEs))
-# names(target.UCEs) <- names(alignments.sorted.filtered.1000)
 
 ### Filter UCEs if T. sirtalis sequence length is less than 200nt
 Thamnophis.sirtalis.UCEs.200 <- Thamnophis.sirtalis.noGaps.seqs[which(width(Thamnophis.sirtalis.noGaps.seqs)>=200)]
@@ -578,13 +527,15 @@ end.target    <- middle.base+80
 # Define an IRanges and GRanges objects defining the UCE target ranges in Thamnophis.sirtalis.UCEs.200.1000
 subranges     <- IRanges::IRanges(start=start.target ,end=end.target,names=names(Thamnophis.sirtalis.UCEs.200.1000))
 gsubranges    <- GenomicRanges::GRanges(seqnames=names(Thamnophis.sirtalis.UCEs.200.1000),ranges=subranges)
+# Extract UCE targets from Thamnophis.sirtalis.UCEs.200.1000
 target.UCEs   <- Biostrings::getSeq(Thamnophis.sirtalis.UCEs.200.1000, gsubranges)
 
-### Save T. sirtalis target UCEs
-writeXStringSet(x=target.UCEs,filepath="./targetUCEs.1000.fas",format="fasta")
+### Save UCE targets
+Biostrings::writeXStringSet(x=target.UCEs,filepath="./targetUCEs.1000.fas",format="fasta")
 ```
 
-Result: 1,000 *T. sirtalis* UCEs chosen as targets, and these cane be downloaded here: [targetUCEs.1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/targetUCEs.1000.fas). **Verify that these are the same as those sent to Arbor**
+Result: 1,000 *T. sirtalis* UCEs chosen as targets: [targetUCEs.1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/targetUCEs.1000.fas). These correspond to WeinellEntry targets 2153–3152 in [Version2_additional-targets_Entry1899to3152_20Sep2018.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version2_additional-targets_Entry1899to3152_20Sep2018.fasta). See [ultra-stringent filtering](#ultrastringentFiltering) section.
+
 
 After ultrastringent filtering, probes were designed for 907 of the 1,000 UCEs submitted to Arbor Biosciences.
 
