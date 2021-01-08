@@ -527,19 +527,31 @@ alignments.sorted <- aligned.UCEs[sort(UCE.shortnames)]
 
 ### Calculate mean pairwise genetic distance between individuals of each alignment.
 ### This information does not seem to be used later.
-mean.pdist <- sapply(X=alignments.sorted,FUN=function(x){round(mean(ape::dist.dna(ape::as.DNAbin(x),model="raw",pairwise.deletion=T)),digits=3)})
+### mean.pdist <- sapply(X=alignments.sorted,FUN=function(x){round(mean(ape::dist.dna(ape::as.DNAbin(x),model="raw",pairwise.deletion=T)),digits=3)})
 
-### Calculate width (aka length) of each alignment
-alignment.lengths <- sapply(alignments.sorted,FUN=function(X){unique(width(X))})
+### Calculate width (aka length) of each alignment. Also dont need this.
+### alignment.lengths <- sapply(alignments.sorted,FUN=function(X){unique(width(X))})
 
-# Remove UCE alignments if alignment width ≤ 200nt. Result: 417 UCEs removed and 2,551 retained
-alignments.sorted.filtered <- alignments.sorted[which(alignment.lengths > 200)]
+### Remove UCE alignments if alignment width ≤ 200nt. Result: 417 UCEs removed and 2,551 retained
+### Actually didnt do this yet. Instead I filtered loci for which T. sirtalis sequence length >= 200 (after gaps removed)
+### alignments.sorted.filtered <- alignments.sorted[which(alignment.lengths > 200)]
 
-# Manually filter out "UCE.1843" "UCE.2179" "UCE.2433" "UCE.2465" "UCE.2498" "UCE.2890" "UCE.2960" "UCE.3354" "UCE.3501", because Thamnophis sirtalis has (terminal?) gaps, or maybe is just too short?.
+### Get Thamnophis sirtalis sequence from the filtered alignments
+Thamnophis.sirtalis.seqs         <- collapse.DNAStringSet(lapply(X=alignments.sorted,FUN=function(X){X["Thamnophis.sirtalis"]}),use.seqnames=F)
 
-alignments.sorted.filtered[c("UCE.1843","UCE.2179","UCE.2433","UCE.2465","UCE.2498","UCE.2890","UCE.2960","UCE.3354","UCE.3501")] <- NULL
+### Remove gaps from Thamnophis sirtalis sequences
+Thamnophis.sirtalis.noGaps.seqs <- DECIPHER::RemoveGaps(Thamnophis.sirtalis.seqs)
 
-# Keep first 1,000 UCE alignments in alignments.sorted.filtered
+### UCEs with short T. sirtalist sequence
+Thamnophis.short.UCEs.120 <- Thamnophis.sirtalis.noGaps.seqs[which(width(Thamnophis.sirtalis.noGaps.seqs)<120)]
+
+## Manually filter out "UCE.1843" "UCE.2179" "UCE.2433" "UCE.2465" "UCE.2498" "UCE.2890" "UCE.2960" "UCE.3354" "UCE.3501"
+## alignments.sorted.filtered[c("UCE.1843","UCE.2179","UCE.2433","UCE.2465","UCE.2498","UCE.2890","UCE.2960","UCE.3354","UCE.3501")] <- NULL
+
+### Remove UCE alignments if Thamnophis sirtalis sequence < 200nt after removing gaps. Result: 149 UCEs removed and 2,919 retained.
+alignments.sorted.filtered <- alignments.sorted[setdiff(names(alignments.sorted),names(Thamnophis.short.UCEs.120))]
+
+### Keep first 1,000 UCE alignments in alignments.sorted.filtered
 alignments.sorted.filtered.1000 <- alignments.sorted.filtered[1:1000]
 
 # Extract and save the Thamnophis sirtalis sequence (gaps removed) from each alignment in alignments.sorted.filtered.1000
