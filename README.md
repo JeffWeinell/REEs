@@ -544,8 +544,6 @@ After ultrastringent filtering, probes were designed for 907 of the 1,000 UCEs s
 
 #### Overview:
 
-#### Details:
-
 1. grep Sbfi recognition site in *T. baileyi* genome (sense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
 2. grep EcoRI recognition site in *T. baileyi* genome (sense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
 3. grep Sbfi recognition site in *T. baileyi* genome (antisense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
@@ -558,6 +556,82 @@ After ultrastringent filtering, probes were designed for 907 of the 1,000 UCEs s
 10. Keep the set of single-copy sequences present in all snakes genomes, and design probes for these target loci.
 
 Most of the important files and scripts for selecting ddRAD-like loci are in the zip file **RandomLoci.zip**
+
+#### Details:
+
+1. 
+
+Need to turn this method into a function or set of functions.
+```
+### Define the URL path to the Thermophis baileyi genome.
+Thermophis.baileyi_genome.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/457/575/GCA_003457575.1_DSBC_Tbai_1.0/GCA_003457575.1_DSBC_Tbai_1.0_genomic.fna.gz"
+
+### The datasets() function of the REEs package can be used to do the same thing as above.
+Thermophis.baileyi_genome.url <- REEs::datasets(1)[which(datasets(1)[,"species"]=="Thermophis baileyi"),"genome.url"]
+
+### Define path that will be used to download the genome as a temporary file.
+subject.path <- tempfile()
+
+### Set time limit for downloading files to 1000 seconds (or longer if needed)
+options(timeout=1000)
+
+### Download genome to the temporary file
+input.seqs <- Thermophis.baileyi_genome.url
+utils::download.file(url=input.seqs, destfile=subject.path)
+
+### Read input sequences into R
+fa0                  <- Biostrings::readDNAStringSet(subject.path)
+
+### Set sequence names to be the contig accession names.
+headers              <- gsub(" .+","",names(fa0))
+names(fa0)           <- headers
+
+### Define path to directory to work in
+directory= "./WorkingDirName"
+
+### Define restriction enzyme (RE) recognition sequences
+RecognitionSeqA.pattern <- "CTGCAG"    ## PstI recognition site
+RecognitionSeqB.pattern <- "CCGG"      ## HpaII recognition site
+
+### Calculate lengths of RE recognition sequences
+RecognitionSeqA.length <- nchar(RecognitionSeqA.pattern) ### nucleotide length of Recognition Sequence A
+RecognitionSeqB.length <- nchar(RecognitionSeqB.pattern) ### nucleotide length of Recognition Sequence B
+
+### Define names to use for output files
+outfile1 <- paste0(directory,RecognitionSeqA.pattern,"_RecognitionSeqATable.txt")
+outfile2 <- paste0(directory,RecognitionSeqB.pattern,"_RecognitionSeqBTable.txt")
+
+#### Havent tested this loop but it should be close!
+for(i in 1:length(fa0)){
+	### Ith contig
+	sequence.temp <- fa0[i]
+
+	### Genbank accession ID of ith contig
+	accession     <- names(sequence.temp)
+
+	### Etart positions of Recognition Sequence A relative to query sequence (ith contig)
+	RecognitionSeqA.start.pos <- unlist(gregexpr(RecognitionSeqA.pattern, sequence.temp))		
+
+	## End positions of Recognition Sequence A relative to query sequence (ith contig)
+	RecognitionSeqA.end.pos   <- RecognitionSeqA.start.pos+RecognitionSeqA.length-1			
+	
+	### Start positions of Recognition Sequence B relative to query sequence (ith contig)
+	RecognitionSeqB.start.pos <- unlist(gregexpr(RecognitionSeqB.pattern, sequence.temp))           
+	
+	### End positions of Recognition Sequence B relative to query sequence (ith contig)
+	RecognitionSeqB.end.pos   <- RecognitionSeqB.start.pos+RecognitionSeqB.length-1                 
+	
+	### A vector containing the info for Recognition Sequence A hits relative to the query sequence
+	RecognitionSeqA.data <- cbind(accession,RecognitionSeqA.start.pos,RecognitionSeqA.end.pos)      
+	RecognitionSeqB.data <- cbind(accession,RecognitionSeqB.start.pos,RecognitionSeqB.end.pos)      
+
+	### Append ith sites to output files.
+	write.table(RecognitionSeqA.data,file=outfile1 ,sep="\t",append=T,col.names=F,row.names=F,quote=F)
+	write.table(RecognitionSeqB.data,file=outfile2,sep="\t",append=T,col.names=F,row.names=F,quote=F)
+}
+
+```
+
 
 **GREPmethod_RandomLociSelection.txt**
 
