@@ -564,10 +564,21 @@ Thamnophis.sirtalis.noGaps.seqs <- DECIPHER::RemoveGaps(Thamnophis.sirtalis.seqs
 # names(target.UCEs) <- names(alignments.sorted.filtered.1000)
 
 ### Filter UCEs if T. sirtalis sequence length is less than 200nt
-Thamnophis.sirtalis.UCEs.120 <- Thamnophis.sirtalis.noGaps.seqs[which(width(Thamnophis.sirtalis.noGaps.seqs)>=120)]
+Thamnophis.sirtalis.UCEs.200 <- Thamnophis.sirtalis.noGaps.seqs[which(width(Thamnophis.sirtalis.noGaps.seqs)>=200)]
 
-### Save first 1000 UCEs of Thamnophis.sirtalis.UCEs.120
-target.UCEs          <- Thamnophis.sirtalis.UCEs.120[1:1000]
+### Keep first 1000 UCEs of Thamnophis.sirtalis.UCEs.200
+Thamnophis.sirtalis.UCEs.200.1000 <- Thamnophis.sirtalis.UCEs.200[1:1000]
+
+### Get the middle 160nt (actually 161nt) from each sequence in Thamnophis.sirtalis.UCEs.200.1000. These are the UCE sequences submitted to Arbor for ultrastringent filtration and probe design. SnakeCap Probes are 120nt – choosing slightly larger targets allowed for some adjustments when designing probes.
+# To get the position of the middle base of sequences in Thamnophis.sirtalis.UCEs.200.1000, divide sequence lengths by 2 (rounding down) 
+middle.base   <- ceiling(width(Thamnophis.sirtalis.UCEs.200.1000)/2)
+# Define the start and end positions of targets as 80nt upstream and downstream of the middle base.
+start.target  <- middle.base-80
+end.target    <- middle.base+80
+# Define an IRanges and GRanges objects defining the UCE target ranges in Thamnophis.sirtalis.UCEs.200.1000
+subranges     <- IRanges::IRanges(start=start.target ,end=end.target,names=names(Thamnophis.sirtalis.UCEs.200.1000))
+gsubranges    <- GenomicRanges::GRanges(seqnames=names(Thamnophis.sirtalis.UCEs.200.1000),ranges=subranges)
+target.UCEs   <- Biostrings::getSeq(Thamnophis.sirtalis.UCEs.200.1000, gsubranges)
 
 ### Save T. sirtalis target UCEs
 writeXStringSet(x=target.UCEs,filepath="./targetUCEs.1000.fas",format="fasta")
