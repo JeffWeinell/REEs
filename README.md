@@ -602,33 +602,50 @@ outfile1 <- paste0(directory,RecognitionSeqA.pattern,"_RecognitionSeqATable.txt"
 outfile2 <- paste0(directory,RecognitionSeqB.pattern,"_RecognitionSeqBTable.txt")
 
 #### Havent tested this loop but it should be close!
-for(i in 1:length(fa0)){
+#for(i in 1:length(fa0)){
 	### Ith contig
-	sequence.temp <- fa0[i]
+#	sequence.temp <- fa0[i]
 
 	### Genbank accession ID of ith contig
-	accession     <- names(sequence.temp)
+#	accession     <- names(sequence.temp)
 
 	### Etart positions of Recognition Sequence A relative to query sequence (ith contig)
-	RecognitionSeqA.start.pos <- unlist(gregexpr(RecognitionSeqA.pattern, sequence.temp))		
+#	RecognitionSeqA.start.pos <- unlist(gregexpr(RecognitionSeqA.pattern, sequence.temp))		
 
-	## End positions of Recognition Sequence A relative to query sequence (ith contig)
-	RecognitionSeqA.end.pos   <- RecognitionSeqA.start.pos+RecognitionSeqA.length-1			
-	
+### Find start positions of recognition sequence A on each contig
+RecognitionSeqA.start.pos        <- gregexpr(RecognitionSeqA.pattern, fa0)
+names(RecognitionSeqA.start.pos) <- names(fa0)
+RecognitionSeqA.start.pos        <- unlist(RecognitionSeqA.start.pos)
+
+### Drop entries with value "-1", which means the recognition site was not found on the contig.
+if(any(RecognitionSeqA.start.pos==-1)){
+	RecognitionSeqA.start.pos <- RecognitionSeqA.start.pos[-which(RecognitionSeqA.start.pos== -1)]
+}
+
+### Calculate end positions of recognition sequence A on each contig
+RecognitionSeqA.end.pos   <- RecognitionSeqA.start.pos+RecognitionSeqA.length-1
+
 	### Start positions of Recognition Sequence B relative to query sequence (ith contig)
-	RecognitionSeqB.start.pos <- unlist(gregexpr(RecognitionSeqB.pattern, sequence.temp))           
+#	RecognitionSeqB.start.pos <- unlist(gregexpr(RecognitionSeqB.pattern, sequence.temp))
+
+### Find start positions of recognition sequence B on each contig
+RecognitionSeqB.start.pos        <- gregexpr(RecognitionSeqB.pattern, fa0)
+names(RecognitionSeqB.start.pos) <- names(fa0)
+RecognitionSeqB.start.pos        <- unlist(RecognitionSeqB.start.pos)
+
+### End positions of Recognition Sequence B relative to query sequence (ith contig)
+RecognitionSeqB.end.pos   <- RecognitionSeqB.start.pos+RecognitionSeqB.length-1                 
 	
-	### End positions of Recognition Sequence B relative to query sequence (ith contig)
-	RecognitionSeqB.end.pos   <- RecognitionSeqB.start.pos+RecognitionSeqB.length-1                 
-	
-	### A vector containing the info for Recognition Sequence A hits relative to the query sequence
-	RecognitionSeqA.data <- cbind(accession,RecognitionSeqA.start.pos,RecognitionSeqA.end.pos)      
-	RecognitionSeqB.data <- cbind(accession,RecognitionSeqB.start.pos,RecognitionSeqB.end.pos)      
+### A vector containing the info for Recognition Sequence A hits relative to the query sequence
+RecognitionSeqA.data <- cbind(names(RecognitionSeqA.start.pos),RecognitionSeqA.start.pos,RecognitionSeqA.end.pos)      
+RecognitionSeqB.data <- cbind(names(RecognitionSeqB.start.pos),RecognitionSeqB.start.pos,RecognitionSeqB.end.pos)      
+
+### Update the Genbank accession numbers in column 1 of RecognitionSeqA.data and RecognitionSeqB.data so that only 1 digit.
 
 	### Append ith sites to output files.
 	write.table(RecognitionSeqA.data,file=outfile1 ,sep="\t",append=T,col.names=F,row.names=F,quote=F)
 	write.table(RecognitionSeqB.data,file=outfile2,sep="\t",append=T,col.names=F,row.names=F,quote=F)
-}
+#}
 
 ```
 
