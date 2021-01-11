@@ -560,89 +560,88 @@ Most of the important files and scripts for selecting ddRAD-like loci are in the
 
 1. 
 
-Need to turn this method into a function or set of functions.
+
 ```
+### Define the recognition sequence for SbfI restriction enzyme
+SbfI.Seq                              <- "CCTGCAGG"
+### Define the recognition sequence for EcoR1 restriction enzyme
+EcoR1.Seq                             <- "GAATTC"
+### Define URL path to Thermophis baileyi genome
+Thermophis.baileyi_genome.url         <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/457/575/GCA_003457575.1_DSBC_Tbai_1.0/GCA_003457575.1_DSBC_Tbai_1.0_genomic.fna.gz"
+
+### Use the function proposeLoci.ddRADlike (REEs package) to find 900-1000nt regions of contigs that begin with one of the two recognition sequences (SbfI.Seq or EcoR1.Seq) and end with the other recognition sequence.
+proposed.ddRAD.loci.coordinates       <- REEs::proposeLoci.ddRADlike(input.seqs=Thermophis.baileyi_genome.url,output.dir="/ddRAD-like/",recognitionSeqs=c(SbfI.Seq,EcoR1.Seq),lim.lengths=c(900,1000),save.tables=T)
+
+# Thermophis.in.Thamnophis.hits.forward <- data.table::fread("VAXHSAFZ014-Alignment-HitTable_ForwardLoci_Thermophis-vs-Thamnophis.txt")
+# Thermophis.in.Thamnophis.hits.reverse <- data.table::fread("VAXSE45R014-Alignment-HitTable_RVComplementLoci_Thermophis-vs-Thamnophis.txt")
+#
+# bestMatches.ddRADlike.forward <- reportBestMatches(input.table=Thermophis.in.Thamnophis.hits.forward)
+# bestMatches.ddRADlike.reverse <- reportBestMatches(input.table=Thermophis.in.Thamnophis.hits.reverse)
+
+```
+
+<!---
+Need to turn this method into a function or set of functions.
 ### Define the URL path to the Thermophis baileyi genome.
 Thermophis.baileyi_genome.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/457/575/GCA_003457575.1_DSBC_Tbai_1.0/GCA_003457575.1_DSBC_Tbai_1.0_genomic.fna.gz"
-
 ### The datasets() function of the REEs package can be used to do the same thing as above.
 Thermophis.baileyi_genome.url <- REEs::datasets(1)[which(datasets(1)[,"species"]=="Thermophis baileyi"),"genome.url"]
-
 ### Define path that will be used to download the genome as a temporary file.
 subject.path <- tempfile()
-
 ### Set time limit for downloading files to 1000 seconds (or longer if needed)
 options(timeout=1000)
-
 ### Download genome to the temporary file
 input.seqs <- Thermophis.baileyi_genome.url
 utils::download.file(url=input.seqs, destfile=subject.path)
-
 ### Read input sequences into R
 fa0                  <- Biostrings::readDNAStringSet(subject.path)
-
 ### Set sequence names to be the contig accession names.
 headers              <- gsub(" .+","",names(fa0))
 names(fa0)           <- headers
-
 ### Define path to directory to work in
 directory= "./WorkingDirName"
-
 ### Define restriction enzyme (RE) recognition sequences
 RecognitionSeqA.pattern <- "CTGCAG"    ## PstI recognition site
 RecognitionSeqB.pattern <- "CCGG"      ## HpaII recognition site
-
 ### Calculate lengths of RE recognition sequences
 RecognitionSeqA.length <- nchar(RecognitionSeqA.pattern) ### nucleotide length of Recognition Sequence A
 RecognitionSeqB.length <- nchar(RecognitionSeqB.pattern) ### nucleotide length of Recognition Sequence B
-
 ### Define names to use for output files
 outfile1 <- paste0(directory,RecognitionSeqA.pattern,"_RecognitionSeqATable.txt")
 outfile2 <- paste0(directory,RecognitionSeqB.pattern,"_RecognitionSeqBTable.txt")
-
 ### Find start positions of recognition sequence A on each contig
 RecognitionSeqA.start.pos        <- gregexpr(RecognitionSeqA.pattern, fa0)
 names(RecognitionSeqA.start.pos) <- names(fa0)
 RecognitionSeqA.start.pos        <- unlist(RecognitionSeqA.start.pos)
-
 ### Drop entries with value "-1", which means the recognition site was not found on the contig.
 if(any(RecognitionSeqA.start.pos==-1)){
 	RecognitionSeqA.start.pos <- RecognitionSeqA.start.pos[-which(RecognitionSeqA.start.pos== -1)]
 }
-
 ### Calculate end positions of recognition sequence A on each contig
 RecognitionSeqA.end.pos   <- RecognitionSeqA.start.pos+RecognitionSeqA.length-1
-
 ### Find start positions of recognition sequence B on each contig
 RecognitionSeqB.start.pos        <- gregexpr(RecognitionSeqB.pattern, fa0)
 names(RecognitionSeqB.start.pos) <- names(fa0)
 RecognitionSeqB.start.pos        <- unlist(RecognitionSeqB.start.pos)
-
 ### Drop entries with value "-1", which means the recognition site was not found on the contig.
 if(any(RecognitionSeqB.start.pos==-1)){
 	RecognitionSeqB.start.pos <- RecognitionSeqB.start.pos[-which(RecognitionSeqB.start.pos== -1)]
 }
-
 ### End positions of Recognition Sequence B relative to query sequence (ith contig)
 RecognitionSeqB.end.pos   <- RecognitionSeqB.start.pos+RecognitionSeqB.length-1                 
-	
-### A vector containing the info for Recognition Sequence A hits relative to the query sequence
+	### A vector containing the info for Recognition Sequence A hits relative to the query sequence
 RecognitionSeqA.data <- cbind(names(RecognitionSeqA.start.pos),RecognitionSeqA.start.pos,RecognitionSeqA.end.pos)
 RecognitionSeqB.data <- cbind(names(RecognitionSeqB.start.pos),RecognitionSeqB.start.pos,RecognitionSeqB.end.pos)
-
 ### Define column names for RecognitionSeqA.data and RecognitionSeqB.data
 colnames(RecognitionSeqA.data) <- c("contig.accession","RecognitionSeqA.start.pos","RecognitionSeqA.end.pos")
 colnames(RecognitionSeqB.data) <- c("contig.accession","RecognitionSeqB.start.pos","RecognitionSeqB.end.pos")
-
 ### Update the Genbank accession numbers in column 1 of RecognitionSeqA.data and RecognitionSeqB.data so that only 1 digit.
 RecognitionSeqA.data[,"contig.accession"] <- gsub("\\.1.+$","\\.1",RecognitionSeqA.data[,"contig.accession"])
 RecognitionSeqB.data[,"contig.accession"] <- gsub("\\.1.+$","\\.1",RecognitionSeqB.data[,"contig.accession"])
-
 ### Write RecognitionSeqA.data and RecognitionSeqB.data tables to files
 write.table(RecognitionSeqA.data,file=outfile1 ,sep="\t",append=F,col.names=T,row.names=F,quote=F)
 write.table(RecognitionSeqB.data,file=outfile2 ,sep="\t",append=F,col.names=T,row.names=F,quote=F)
-
-```
+--->
 
 
 **GREPmethod_RandomLociSelection.txt**
@@ -659,16 +658,9 @@ Set of 900–1000bp regions of the Sense and Antisense strands containing Sbfi a
 
 **Note:** Slight changes between targetted ddRADlike loci compared to proposed targets listed in ddRAD-like-loci_SenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt and ddRAD-like-loci_AntiSenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt: QLTV01002273.1:857142-857613 targetted instead of QLTV01002273.1:857142-858124; QLTV01004096.1:622037-622703 targetted instead of QLTV01004096.1:621766-622703; QLTV01002430.1:rc603258-603541 = QLTV01002430.1:c603541-602618.
 
-Additionally, these 76 loci were filtered: QLTV01000225.1:c99575-98616, QLTV01000331.1:c1514525-1513611, QLTV01000377.1:c355954-354989, QLTV01000576.1:c81247-80319, QLTV01000598.1:c2344838-2343842, QLTV01000800.1:c652914-651927, QLTV01000994.1:c1182081-1181109, QLTV01000994.1:c1182081-1181166, QLTV01000994.1:c939817-938888, QLTV01001007.1:c291309-290329, QLTV01001146.1:c2113031-2112088, QLTV01001315.1:c1859393-1858485, QLTV01001705.1:c675195-674227, QLTV01002005.1:c813370-812437, QLTV01002132.1:c1835986-1834996, QLTV01002449.1:c396593-395595, QLTV01002469.1:c147414-146470, QLTV01002680.1:c1744083-1743161, QLTV01002845.1:c2690843-2689860, QLTV01003114.1:c493546-492602, QLTV01003121.1:c301019-300034, QLTV01003123.1:c182922-181937, QLTV01003161.1:c70719-69740, QLTV01003275.1:c1568564-1567613, QLTV01003279.1:c1314139-1313203, QLTV01003388.1:c6651328-6650404, QLTV01003398.1:c1005420-1004496, QLTV01003470.1:c834832-833851, QLTV01003481.1:c870075-869103, QLTV01003654.1:c3517526-3516618, QLTV01003783.1:c313943-312944, QLTV01003803.1:c1403959-1403033, QLTV01004057.1:c16264-15314, QLTV01004083.1:c449674-448685, QLTV01004083.1:c449674-448711, QLTV01004095.1:c335369-334446, QLTV01004253.1:c311906-310966, QLTV01004293.1:c215485-214564, QLTV01004426.1:c1307194-1306221, QLTV01014916.1:c9133244-9132250, QLTV01000240.1:9171-10134, QLTV01000374.1:361307-362226, QLTV01000374.1:361307-362253, QLTV01000548.1:3044260-3045234, QLTV01000783.1:1055456-1056373, QLTV01000967.1:2238054-2239009, QLTV01001007.1:2168320-2169298, QLTV01001021.1:23918-24831, QLTV01001142.1:86130-87102, QLTV01001698.1:15465613-15466556, QLTV01001713.1:218325-219256, QLTV01001726.1:519585-520570, QLTV01001726.1:523446-524435, QLTV01001733.1:299105-300017, QLTV01002141.1:4416111-4417029, QLTV01002530.1:1246868-1247813, QLTV01002530.1:1246868-1247852, QLTV01002530.1:4037005-4037963, QLTV01002544.1:1011361-1012268, QLTV01002554.1:705287-706252, QLTV01002827.1:106879-107823, QLTV01002845.1:4905855-4906796, QLTV01002927.1:140628-141615, QLTV01002982.1:185703-186604, QLTV01003104.1:814750-815672, QLTV01003132.1:624182-625098, QLTV01003401.1:1036483-1037427, QLTV01003982.1:392677-393598, QLTV01004007.1:1152482-1153414, QLTV01004082.1:6189833-6190760, QLTV01004095.1:551642-552638, QLTV01004222.1:2793418-2794329, QLTV01004232.1:313408-314317, QLTV01004386.1:234140-235052, QLTV01004389.1:809128-810084, QLTV01004445.1:1811248-1812188.
+<!---Additionally, these 76 loci were filtered: QLTV01000225.1:c99575-98616, QLTV01000331.1:c1514525-1513611, QLTV01000377.1:c355954-354989, QLTV01000576.1:c81247-80319, QLTV01000598.1:c2344838-2343842, QLTV01000800.1:c652914-651927, QLTV01000994.1:c1182081-1181109, QLTV01000994.1:c1182081-1181166, QLTV01000994.1:c939817-938888, QLTV01001007.1:c291309-290329, QLTV01001146.1:c2113031-2112088, QLTV01001315.1:c1859393-1858485, QLTV01001705.1:c675195-674227, QLTV01002005.1:c813370-812437, QLTV01002132.1:c1835986-1834996, QLTV01002449.1:c396593-395595, QLTV01002469.1:c147414-146470, QLTV01002680.1:c1744083-1743161, QLTV01002845.1:c2690843-2689860, QLTV01003114.1:c493546-492602, QLTV01003121.1:c301019-300034, QLTV01003123.1:c182922-181937, QLTV01003161.1:c70719-69740, QLTV01003275.1:c1568564-1567613, QLTV01003279.1:c1314139-1313203, QLTV01003388.1:c6651328-6650404, QLTV01003398.1:c1005420-1004496, QLTV01003470.1:c834832-833851, QLTV01003481.1:c870075-869103, QLTV01003654.1:c3517526-3516618, QLTV01003783.1:c313943-312944, QLTV01003803.1:c1403959-1403033, QLTV01004057.1:c16264-15314, QLTV01004083.1:c449674-448685, QLTV01004083.1:c449674-448711, QLTV01004095.1:c335369-334446, QLTV01004253.1:c311906-310966, QLTV01004293.1:c215485-214564, QLTV01004426.1:c1307194-1306221, QLTV01014916.1:c9133244-9132250, QLTV01000240.1:9171-10134, QLTV01000374.1:361307-362226, QLTV01000374.1:361307-362253, QLTV01000548.1:3044260-3045234, QLTV01000783.1:1055456-1056373, QLTV01000967.1:2238054-2239009, QLTV01001007.1:2168320-2169298, QLTV01001021.1:23918-24831, QLTV01001142.1:86130-87102, QLTV01001698.1:15465613-15466556, QLTV01001713.1:218325-219256, QLTV01001726.1:519585-520570, QLTV01001726.1:523446-524435, QLTV01001733.1:299105-300017, QLTV01002141.1:4416111-4417029, QLTV01002530.1:1246868-1247813, QLTV01002530.1:1246868-1247852, QLTV01002530.1:4037005-4037963, QLTV01002544.1:1011361-1012268, QLTV01002554.1:705287-706252, QLTV01002827.1:106879-107823, QLTV01002845.1:4905855-4906796, QLTV01002927.1:140628-141615, QLTV01002982.1:185703-186604, QLTV01003104.1:814750-815672, QLTV01003132.1:624182-625098, QLTV01003401.1:1036483-1037427, QLTV01003982.1:392677-393598, QLTV01004007.1:1152482-1153414, QLTV01004082.1:6189833-6190760, QLTV01004095.1:551642-552638, QLTV01004222.1:2793418-2794329, QLTV01004232.1:313408-314317, QLTV01004386.1:234140-235052, QLTV01004389.1:809128-810084, QLTV01004445.1:1811248-1812188.--->
 
 
-```
-Thermophis.in.Thamnophis.hits.forward <- data.table::fread("VAXHSAFZ014-Alignment-HitTable_ForwardLoci_Thermophis-vs-Thamnophis.txt")
-Thermophis.in.Thamnophis.hits.reverse <- data.table::fread("VAXSE45R014-Alignment-HitTable_RVComplementLoci_Thermophis-vs-Thamnophis.txt")
-
-bestMatches.ddRADlike.forward <- reportBestMatches(input.table=Thermophis.in.Thamnophis.hits.forward)
-bestMatches.ddRADlike.reverse <- reportBestMatches(input.table=Thermophis.in.Thamnophis.hits.reverse)
-```
 
 
 <a name="Methods.SelectingMHC"></a>
