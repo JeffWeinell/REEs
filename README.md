@@ -543,6 +543,9 @@ After ultrastringent filtering, probes were designed for 907 of the 1,000 UCEs s
 
 #### Overview:
 
+1-2. Identify and obtain all regions of the *Thermophis baileyi* genome that begin with the recognition sequence of the restriction enzyme (RE) *Sbfi* and end with the recognition sequence of the RE *EcoR1*, and which have a length of 900-1000nt. I trimmed the ends of sequences if there was a string of ambiguous bases nearby. Then I used BLASTn to search for homologs of the *Thermophis baileyi* ddRAD-like loci in the *T. sirtalis* genome. Filter the set of ddRAD-like loci to include only those with a single, high quality match found in *T. sirtalis* genome. A subset of the retained loci were submitted to Arbor for ultrastringent filtering and then probe design.
+
+<!---
 1. grep Sbfi recognition site in *T. baileyi* genome (sense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
 2. grep EcoRI recognition site in *T. baileyi* genome (sense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
 3. grep Sbfi recognition site in *T. baileyi* genome (antisense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
@@ -555,6 +558,7 @@ After ultrastringent filtering, probes were designed for 907 of the 1,000 UCEs s
 10. Keep the set of single-copy sequences present in all snakes genomes, and design probes for these target loci.
 
 Most of the important files and scripts for selecting ddRAD-like loci are in the zip file **RandomLoci.zip**
+--->
 
 #### Details:
 
