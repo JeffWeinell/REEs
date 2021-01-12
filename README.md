@@ -622,7 +622,7 @@ Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,
 Thamnophis.sirtalis.ddRADlike.50hits <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url, query=Thermophis.ddradlike.seqs,table.out="Thamnophis.sirtalis.ddRADlike.50hits.txt")
 
 ```
-The BLASTN output table can be downloaded here: [Thamnophis.sirtalis.ddRADlike.50hits.txt.zip](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.50hits.txt.zip).
+The BLASTN output table can be downloaded here: [Thamnophis.sirtalis.ddRADlike.50hits.txt.zip](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.50hits.txt.zip). Result: No *T. sirtalis* matches were found for 124 of the *Thermophis* query sequences. **Note: this "50 hits" table often has many more than 50 hits per query (up to 2,213 hits for QLTV01001023.1:c672318-671361); mean number of hits per query is 148)**.
 
 4. I used the function reportBestMatches (REEs package) to filter the hit table produced by blast to include only the best match of each query sequence.
 
