@@ -572,6 +572,18 @@ Thermophis.baileyi_genome.url         <- "https://ftp.ncbi.nlm.nih.gov/genomes/a
 ### Use the function proposeLoci.ddRADlike (REEs package) to find 900-1000nt regions of contigs that begin with one of the two recognition sequences (SbfI.Seq or EcoR1.Seq) and end with the other recognition sequence.
 proposed.ddRAD.loci.coordinates       <- REEs::proposeLoci.ddRADlike(input.seqs=Thermophis.baileyi_genome.url,output.dir="/ddRAD-like/",recognitionSeqs=c(SbfI.Seq,EcoR1.Seq),lim.lengths=c(900,1000),save.tables=T)
 
+
+### Reading in the table
+
+ContigAccession <- proposed.ddRAD.loci.coordinates$ContigAccession
+LocusStart      <- proposed.ddRAD.loci.coordinates$StartPosition
+LocusEnd        <- proposed.ddRAD.loci.coordinates$EndPosition
+Thermophis.ddradlike.proposed.seqs <- get_ncbi_sequences(outfile="Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas",input.seqs=Thermophis.baileyi_genome.url,accessionList=ContigAccession,startList=LocusStart,endList=LocusEnd,strandList="1",db="nuccore",rettype="fasta",retmode="text",if.outside.range="partial",trim.ambiguous = FALSE)
+
+### All of the downloaded sequences are the sense strand, and therefore I reverse complemented to obtain targets that were on the antisense strand. 
+which.reverse.complement <- grep(":c",proposed.ddRAD.loci.coordinates$coordinates)
+
+
 # Thermophis.in.Thamnophis.hits.forward <- data.table::fread("VAXHSAFZ014-Alignment-HitTable_ForwardLoci_Thermophis-vs-Thamnophis.txt")
 # Thermophis.in.Thamnophis.hits.reverse <- data.table::fread("VAXSE45R014-Alignment-HitTable_RVComplementLoci_Thermophis-vs-Thamnophis.txt")
 #
