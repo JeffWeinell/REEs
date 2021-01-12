@@ -576,15 +576,7 @@ Thermophis.baileyi_genome.url         <- "https://ftp.ncbi.nlm.nih.gov/genomes/a
 proposed.ddRAD.loci.coordinates       <- REEs::proposeLoci.ddRADlike(input.seqs=Thermophis.baileyi_genome.url,output.dir="/ddRAD-like/",recognitionSeqs=c(SbfI.Seq,EcoR1.Seq),lim.lengths=c(900,1000),save.tables=T)
 
 ```
-Result: 2,337 loci proposed and saved here: [ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt).
-
-Note to self: All of the final ddRAD-like loci are included in the file ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt except:
-target locus|proposed using proposeLoci.ddRADlike function|reason for difference.
----|---|---
-QLTV01002273.1:857142-857613 | QLTV01002273.1:857142-858124 | string of Ns beginning at 857614
-QLTV01004096.1:622037-622703 | QLTV01004096.1:621766-622703 | string of Ns before 622037
-QLTV01020412.1:1-995 | no similar locus proposed | not yet clear...
-
+Result: Table containing coordinates for the 2,337 ddRAD-like loci: [ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt).
 
 2. I used the function get_ncbi_sequences (REEs package) to obtain the sequences of the loci proposed in step 1. For loci on the antisense strands of contigs I first downloaded the corresponding reverse complement sequence (from the sense strand), and then I used the function reverseComplement (Biostrings package) to obtain the correct antisense strand target.
 
@@ -611,15 +603,65 @@ writeXStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas")
 ```
 Result: *Thermophis baileyi* sequences of the proposed ddRAD-like loci can be downloaded here: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas).
 
-2. 
+Note to self: All of the final (actually targetted) ddRAD-like loci are in the file ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt except:
+target locus|proposed using proposeLoci.ddRADlike function|reason for difference.
+---|---|---
+QLTV01002273.1:857142-857613 | QLTV01002273.1:857142-858124 | string of Ns beginning at 857614
+QLTV01004096.1:622037-622703 | QLTV01004096.1:621766-622703 | string of six Ns at 622031-622036, and therefore trimmed 621766-622036.
+QLTV01020412.1:1-995 | no similar locus proposed | not yet clear...
+
+3. I used BLASTn implemented in the REEs::blast function to search for *Thermophis* ddRAD-like loci in the *T. sirtalis* genome.
+
+```
+### Read in the set of sequences that were saved in step 2 (if not already loaded).
+Thermophis.ddradlike.seqs <- Biostrings::readDNAStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas")
+
+### Define the URL path to the Thamnophis sirtalis genome.
+Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Thamnophis sirtalis"),2]
+
+### Run BLASTn
+Thamnophis.sirtalis.ddRADlike.50hits <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url, query=Thermophis.ddradlike.seqs,table.out="Thamnophis.sirtalis.ddRADlike.50hits.txt")
+
+```
+
+4. I used the function reportBestMatches (REEs package) to filter the hit table produced by blast to include only the best match of each query sequence.
+
+```
+
+reportBestMatches()
+
+```
+
+5. I filtered the set of *Thermophis* ddRAD-like loci to include only loci present in the output table of reportBestMatches.
+
+
+6. Trim ends to remove some ambiguous bases.
+
+```
+### Read in the set of sequences that were saved in step 2 (if not already loaded).
+Thermophis.ddradlike.seqs.best <- Biostrings::readDNAStringSet("...")
+
+...
+
+### Find which (if any) sequences contain two or more adjacent ambiguous bases (here, ambigous bases = Ns; does not include other IUPAC defined amgiguities).
+## Result: 106 of the 2,337 sequences have a string of two or more Ns.
+seqs.with.Ns <- Thermophis.ddradlike.seqs[grep("NN",Thermophis.ddradlike.seqs.best)]
+## Number of ambiguous bases with an adjacent base also ambiguous. which  of strings of ambigous bases (or sum of a
+Ns.in.strings <- width(seqs.with.Ns)-width(DNAStringSet(gsub("N+N","",as.character(seqs.with.Ns))))
+```
+
+7. ...
+
+
+<!---
 ```
 # Thermophis.in.Thamnophis.hits.forward <- data.table::fread("VAXHSAFZ014-Alignment-HitTable_ForwardLoci_Thermophis-vs-Thamnophis.txt")
 # Thermophis.in.Thamnophis.hits.reverse <- data.table::fread("VAXSE45R014-Alignment-HitTable_RVComplementLoci_Thermophis-vs-Thamnophis.txt")
 #
 # bestMatches.ddRADlike.forward <- reportBestMatches(input.table=Thermophis.in.Thamnophis.hits.forward)
-# bestMatches.ddRADlike.reverse <- reportBestMatches(input.table=Thermophis.in.Thamnophis.hits.reverse)
+# bestMatches.ddRADlike.reverse <- 
 ```
-
+--->
 
 **GREPmethod_RandomLociSelection.txt**
 
