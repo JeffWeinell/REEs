@@ -573,11 +573,11 @@ Thermophis.baileyi_genome.url         <- "https://ftp.ncbi.nlm.nih.gov/genomes/a
 proposed.ddRAD.loci.coordinates       <- REEs::proposeLoci.ddRADlike(input.seqs=Thermophis.baileyi_genome.url,output.dir="/ddRAD-like/",recognitionSeqs=c(SbfI.Seq,EcoR1.Seq),lim.lengths=c(900,1000),save.tables=T)
 
 
-### Reading in the table
-
+### Defining vectors containing Genbank accession and range of positions to download. 
 ContigAccession <- proposed.ddRAD.loci.coordinates$ContigAccession
 LocusStart      <- proposed.ddRAD.loci.coordinates$StartPosition
 LocusEnd        <- proposed.ddRAD.loci.coordinates$EndPosition
+
 Thermophis.ddradlike.proposed.seqs <- get_ncbi_sequences(outfile="Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas",input.seqs=Thermophis.baileyi_genome.url,accessionList=ContigAccession,startList=LocusStart,endList=LocusEnd,strandList="1",db="nuccore",rettype="fasta",retmode="text",if.outside.range="partial",trim.ambiguous = FALSE)
 
 ### All of the downloaded sequences are the sense strand, and therefore I reverse complemented to obtain targets that were on the antisense strand. 
