@@ -580,16 +580,14 @@ proposed.ddRAD.loci.coordinates       <- REEs::proposeLoci.ddRADlike(input.seqs=
 
 ```
 
-Result: 2,318 loci proposed and saved here: [ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt).
+Result: 2,337 loci proposed and saved here: [ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt).
 
-Note to self: All of the final ddRAD-like loci are included in the file ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt except:
-QLTV01000592.1:285284-286283 (no similar coordinates proposed; missed this time because max length = 999 not 1000)
-QLTV01001021.1:1321637-1322636 (no similar coordinates proposed; missed this time because max length = 999 not 1000)
-QLTV01002273.1:857142-857613 (QLTV01002273.1:857142-858124 proposed instead)
-QLTV01004096.1:622037-622703 (QLTV01004096.1:621766-622703 proposed instead)
-QLTV01020412.1:1-995 (no similar coordinates proposed...)
-QLTV01002430.1:rc603258-603541 (= QLTV01002430.1:c603541-602618 proposed)
-QLTV01002549.1:c20884-19885 (no similar coordinates proposed; missed this time because max length = 999 not 1000)
+All of the final ddRAD-like loci are included in the file ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt except:
+target locus|proposed using proposeLoci.ddRADlike function|reason for difference
+---|---|---
+QLTV01002273.1:857142-857613 | QLTV01002273.1:857142-858124 | string of Ns beginning at 857614
+QLTV01004096.1:622037-622703 | QLTV01004096.1:621766-622703 | string of Ns before 622037
+QLTV01020412.1:1-995 | no similar locus proposed | not yet clear...
 
 <!---
 Need to turn this method into a function or set of functions.
