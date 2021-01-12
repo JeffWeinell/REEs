@@ -543,7 +543,7 @@ After ultrastringent filtering, probes were designed for 907 of the 1,000 UCEs s
 
 #### Overview:
 
-1-2. Identify and obtain all regions of the *Thermophis baileyi* genome that begin with the recognition sequence of the restriction enzyme (RE) *Sbfi* and end with the recognition sequence of the RE *EcoR1*, and which have a length of 900-1000nt. I trimmed the ends of sequences if there was a string of ambiguous bases nearby. Then I used BLASTn to search for homologs of the *Thermophis baileyi* ddRAD-like loci in the *T. sirtalis* genome. Filter the set of ddRAD-like loci to include only those with a single, high quality match found in *T. sirtalis* genome. A subset of the retained loci were submitted to Arbor for ultrastringent filtering and then probe design.
+1-2. Identify and obtain all regions of the *Thermophis baileyi* genome that begin with the recognition sequence of the restriction enzyme (RE) *Sbfi* and end with the recognition sequence of the RE *EcoR1*, and which have a length of 900-1000nt. Then I used BLASTn to search for homologs of the *Thermophis baileyi* ddRAD-like loci in the *T. sirtalis* genome. I filtered the set of ddRAD-like loci to include only those with a single, high quality match found in *T. sirtalis* genome. I trimmed the ends of sequences if there was a string of ambiguous bases nearby. A subset of the retained loci were submitted to Arbor for ultrastringent filtering and then probe design.
 
 <!---
 1. grep Sbfi recognition site in *T. baileyi* genome (sense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
@@ -556,7 +556,6 @@ After ultrastringent filtering, probes were designed for 907 of the 1,000 UCEs s
 8. Filter extracted regions to keep only those with length between 900–1000bp.
 9. BLAST (tblastx, tblastn, blastx, blastn?) each sequence in the set of 900-1000bp extracted regions to search within each snake genome
 10. Keep the set of single-copy sequences present in all snakes genomes, and design probes for these target loci.
-
 Most of the important files and scripts for selecting ddRAD-like loci are in the zip file **RandomLoci.zip**
 --->
 
@@ -623,6 +622,7 @@ Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,
 Thamnophis.sirtalis.ddRADlike.50hits <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url, query=Thermophis.ddradlike.seqs,table.out="Thamnophis.sirtalis.ddRADlike.50hits.txt")
 
 ```
+The BLASTN output table can be downloaded here: [Thamnophis.sirtalis.ddRADlike.50hits.txt.zip](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.50hits.txt.zip).
 
 4. I used the function reportBestMatches (REEs package) to filter the hit table produced by blast to include only the best match of each query sequence.
 
