@@ -705,7 +705,30 @@ names(Thermophis.ddradlike.filtered.trimmed.seqs) <- new.names
 ### Save the trimmed sequences
 writeXStringSet(Thermophis.ddradlike.filtered.trimmed.seqs,filepath="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/ddRAD-like/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered_trimmed.fas")
 ```
-Set of blast-filtered and then trimmed (one sequence) ddRAD-like loci: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered_trimmed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered_trimmed.fas). **Note:** Still five untrimmed proposed and one trimmed proposed sequence missing. The missing trimmed sequence may have been trimmed prior to running blast? 
+Set of filtered, manually trimmed ddRAD-like loci: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered_trimmed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered_trimmed.fas). **Note:** Still five untrimmed proposed and two trimmed proposed sequence missing. The missing trimmed sequence may have been trimmed prior to running blast? 
+
+Probably did something like this before running blast:
+```
+###
+missing.loci <- c("QLTV01002273.1:857142-858124","QLTV01004232.1:188994-189933","QLTV01001126.1:c908958-908049","QLTV01002430.1:c603541-602618","QLTV01003395.1:c431960-431054")
+
+###
+missing.loci.seqs <- proposed.loci[which(names(proposed.loci) %in% missing.loci)]
+
+###
+proposed.to.be.trimmed <- missing.loci.seqs[c("QLTV01002273.1:857142-858124","QLTV01002430.1:c603541-602618")]
+
+###
+proposed.trimmed.names <- c("QLTV01002273.1:857142-857613","QLTV01002430.1:c603541-603258")
+
+###
+proposed.trimmed <- c(subseq(proposed.to.be.trimmed[1],start=804,end=width(proposed.to.be.trimmed[1])),subseq(proposed.to.be.trimmed[2],start=706,end=width(proposed.to.be.trimmed[2])))
+names(proposed.trimmed) <- proposed.trimmed.names
+
+#### I probably searched for all loci with more than certain number of Ns in a string. For those loci, I would have used str_locate to find the coordinates of the Ns. Then I would have taken whichever side of the Ns string was larger, as long as it was above some threshhold.
+
+```
+
 
 <!--- These are in the final set of ddRAD loci but missing from Thermophis.ddradlike.filtered.seqs
 Missing Target                 | WeinellEntry ID  | Thamnophis sirtalis homolog coordinates | Other proposed targets on same Thermophis baileyii contig.
@@ -722,6 +745,10 @@ QLTV01003395.1:c431960-431054  | WeinellEntry5695 | none found                  
 missing.loci <- c("QLTV01002273.1:857142-858124","QLTV01004232.1:188994-189933","QLTV01001126.1:c908958-908049","QLTV01002430.1:c603541-602618","QLTV01003395.1:c431960-431054")
 missing.loci.seqs <- proposed.loci[which(names(proposed.loci) %in% missing.loci)]
 blast(missing.loci.seqs,Thamnophis sirtalis genome)
+#
+Probably trimmed before blast:
+QLTV01002430.1:c603541-603258 targetted instead of QLTV01002430.1:c603541-602618; proposed locus filtered during blast. Maybe it was trimmed before blast?
+QLTV01002273.1:857142-858124 targetted instead of QLTV01002273.1:857142-857613; proposed locus filtered during blast? Maybe it was trimmed prior to blast?
 --->
 
 
