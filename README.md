@@ -136,7 +136,7 @@ Ophiophagus.hannah.genome_url           <- REEs::datasets(1)[which(datasets(1)[,
 Pantherophis.guttatus.genome_url        <- REEs::datasets(1)[which(datasets(1)[,1]=="Pantherophis guttatus"),2]
 Protobothrops.mucrosquamatus.genome_url <- REEs::datasets(1)[which(datasets(1)[,1]=="Protobothrops mucrosquamatus"),2]
 Python.bivittatus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,1]=="Python bivittatus"),2]
-Vipera.berus.genome_url                <- REEs::datasets(1)[which(datasets(1)[,1]=="Vipera berus"),2]
+Vipera.berus.genome_url                 <- REEs::datasets(1)[which(datasets(1)[,1]=="Vipera berus"),2]
 Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Thamnophis sirtalis"),2]
 
 # Runs TBLASTX
@@ -149,7 +149,7 @@ Ophiophagus.hannah.50hits           <- REEs::blast(method="tblastx",subject=Ophi
 Pantherophis.guttatus.50hits        <- REEs::blast(method="tblastx",subject=Pantherophis.guttatus.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Pantherophis.guttatus.tblastx.exons.50hits.txt")
 Protobothrops.mucrosquamatus.50hits <- REEs::blast(method="tblastx",subject=Protobothrops.mucrosquamatus.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Protobothrops.mucrosquamatus.tblastx.exons.50hits.txt")
 Python.bivittatus.50hits            <- REEs::blast(method="tblastx",subject=Python.bivittatus.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Python.bivittatus.tblastx.exons.50hits.txt")
-Vipera.berus.50hits                <- REEs::blast(method="tblastx",subject=Vipera.berus.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Vipera.berus.tblastx.exons.50hits.txt")
+Vipera.berus.50hits                 <- REEs::blast(method="tblastx",subject=Vipera.berus.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Vipera.berus.tblastx.exons.50hits.txt")
 Thamnophis.sirtalis.50hits          <- REEs::blast(method="tblastx",subject=Thamnophis.sirtalis.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Thamnophis.sirtalis.tblastx.exons.50hits.txt")
 ```
 The TBLASTX output tables can be downloaded here (these are xz compressed): [Anolis.carolinensis.tblastx.exons.50hits.txt.xz](https://osf.io/3a4be/download), [Gekko.japonicus.tblastx.exons.50hits.txt.xz](https://osf.io/u2ec5/download), [Pogona.vitticeps.tblastx.exons.50hits.txt.xz](https://osf.io/9ehyf/download), [Crotalus.horridus.tblastx.exons.50hits.txt.xz](https://osf.io/j4gvk/download), [Crotalus.mitchellii.tblastx.exons.50hits.txt.xz](https://osf.io/5vxt7/download), [Ophiophagus.hannah.tblastx.exons.50hits.txt.xz](https://osf.io/jr5zd/download), [Pantherophis.guttatus.tblastx.exons.50hits.txt.xz](https://osf.io/tu3ve/download), [Protobothrops.mucrosquamatus.tblastx.exons.50hits.txt.xz](https://osf.io/7xmr4/download), [Python.bivittatus.tblastx.exons.50hits.txt.xz](https://osf.io/8s5na/download), [Vipera.berus.tblastx.exons.50hits.txt.xz](https://osf.io/48x7e/download), [Thamnophis.sirtalis.tblastx.exons.50hits.txt.xz](https://osf.io/ctz73/download).
@@ -184,7 +184,7 @@ Ophiophagus.hannah.best.hits.seqs           <- REEs::get.seqs.from.blastTable(in
 Pantherophis.guttatus.best.hits.seqs        <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Pantherophis.guttatus,input.seqs=Pantherophis.guttatus.genome_url,output.path="./Pantherophis.guttatus.tblastx.best.hits_seqs.fas")
 Protobothrops.mucrosquamatus.best.hits.seqs <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Protobothrops.mucrosquamatus,input.seqs=Protobothrops.mucrosquamatus_genome.url,output.path="./Protobothrops.mucrosquamatus.tblastx.best.hits_seqs.fas")
 Python.bivittatus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Python.bivittatus,input.seqs=Python.bivittatus.genome_url,output.path="./Python.bivittatus.tblastx.best.hits_seqs.fas")
-Vipera.berus.best.hits.seqs                <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Vipera.berus,input.seqs=Vipera.berus.genome_url,output.path="./Vipera.berus.tblastx.best.hits_seqs.fas")
+Vipera.berus.best.hits.seqs                 <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Vipera.berus,input.seqs=Vipera.berus.genome_url,output.path="./Vipera.berus.tblastx.best.hits_seqs.fas")
 Thamnophis.sirtalis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Thamnophis.sirtalis,input.seqs=Thamnophis.sirtalis.genome_url,output.path="./Thamnophis.sirtalis.tblastx.best.hits_seqs.fas")
 ```
 
@@ -399,12 +399,12 @@ Pantherophis.guttatus.genome_JTLQ01 <- c(Pantherophis.guttatus.genome_JTLQ01.1,P
 ### Save the genome.
 Biostrings::writeXStringSet(x=Pantherophis.guttatus.genome_JTLQ01,filepath="Pantherophis.guttatus_JTLQ01.fsa_nt.gz",compress=TRUE)
 ```
-Result: The *Pantherophis guttatus* genome (merged contigs file) of JTLQ00000000.1 can be downloaded here: **Pantherophis.guttatus_JTLQ01.fsa_nt.gz**.
+Result: The *Pantherophis guttatus* genome (merged contigs file) of JTLQ00000000.1 can be downloaded here: [Pantherophis.guttatus_JTLQ01.fsa_nt.gz](https://osf.io/r2xa3/download).
 
 ```
 ### Define URLs to fasta genome sequences
 # URL to Pantherophis guttatus genome version JTLQ00000000.1
-Pantherophis.guttatus.genome_url <- ""
+Pantherophis.guttatus.genome_url <- "https://osf.io/r2xa3/download"
 # The URLs to the other genomes are held in a matrix that can be accessed with the REEs::datasets function.
 Anolis.carolinensis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Anolis carolinensis"),2]
 Gekko.japonicus.genome_url              <- REEs::datasets(1)[which(datasets(1)[,1]=="Gekko japonicus"),2]
@@ -424,7 +424,7 @@ Ophiophagus.hannah.UCEs.50hits           <- REEs::blast(method="blastn",subject=
 Pantherophis.guttatus.UCEs.50hits        <- REEs::blast(method="blastn",subject=Pantherophis.guttatus.genome_url, query="./micrurus_UCEs.fa", table.out="./Pantherophis.guttatus.blastn.UCEs.50hits.txt")
 Protobothrops.mucrosquamatus.UCEs.50hits <- REEs::blast(method="blastn",subject=Protobothrops.mucrosquamatus.genome_url, query="./micrurus_UCEs.fa", table.out="./Protobothrops.mucrosquamatus.blastn.UCEs.50hits.txt")
 Python.bivittatus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Python.bivittatus.genome_url, query="./micrurus_UCEs.fa", table.out="./Python.bivittatus.blastn.UCEs.50hits.txt")
-Vipera.berus.UCEs.50hits                <- REEs::blast(method="blastn",subject=Vipera.berus.genome_url, query="./micrurus_UCEs.fa", table.out="./Vipera.berus.blastn.UCEs.50hits.txt")
+Vipera.berus.UCEs.50hits                 <- REEs::blast(method="blastn",subject=Vipera.berus.genome_url, query="./micrurus_UCEs.fa", table.out="./Vipera.berus.blastn.UCEs.50hits.txt")
 Thamnophis.sirtalis.UCEs.50hits          <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url, query="./micrurus_UCEs.fa", table.out="./Thamnophis.sirtalis.blastn.UCEs.50hits.txt")
 ```
 
@@ -440,7 +440,7 @@ UCEs.best.hits.Pantherophis.guttatus         <- REEs::reportBestMatches(input.ta
 UCEs.best.hits.Protobothrops.mucrosquamatus  <- REEs::reportBestMatches(input.table=Protobothrops.mucrosquamatus.UCEs.50hits, output.table.path="Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt")
 UCEs.best.hits.Python.bivittatus             <- REEs::reportBestMatches(input.table=Python.bivittatus.UCEs.50hits, output.table.path="Python.bivittatus.blastn.UCEs.best.hits.txt")
 UCEs.best.hits.Thamnophis.sirtalis           <- REEs::reportBestMatches(input.table=Thamnophis.sirtalis.UCEs.50hits, output.table.path="Thamnophis.sirtalis.blastn.UCEs.best.hits.txt")
-UCEs.best.hits.Vipera.berus                 <- REEs::reportBestMatches(input.table=Vipera.berus.UCEs.50hits, output.table.path="Vipera.berus.blastn.UCEs.best.hits.txt")
+UCEs.best.hits.Vipera.berus                  <- REEs::reportBestMatches(input.table=Vipera.berus.UCEs.50hits, output.table.path="Vipera.berus.blastn.UCEs.best.hits.txt")
 
 ### Getting a list of the shared loci. I didn't filter out non-shared loci yet though.
 shared.UCEs <- intersect.all(list(UCEs.best.hits.Crotalus.horridus$qseqid, UCEs.best.hits.Crotalus.mitchellii$qseqid,UCEs.best.hits.Ophiophagus.hannah$qseqid, UCEs.best.hits.Pantherophis.guttatus$qseqid,UCEs.best.hits.Protobothrops.mucrosquamatus$qseqid, UCEs.best.hits.Python.bivittatus$qseqid, UCEs.best.hits.Vipera.berus$qseqid, UCEs.best.hits.Thamnophis.sirtalis$qseqid))
@@ -479,7 +479,7 @@ Ophiophagus.hannah.best.hits.seqs           <- REEs::get.seqs.from.blastTable(in
 Pantherophis.guttatus.best.hits.seqs        <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Pantherophis.guttatus, input.seqs=Pantherophis.guttatus.genome_url, output.path="./Pantherophis.guttatus.UCEs.fas")
 Protobothrops.mucrosquamatus.best.hits.seqs <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Protobothrops.mucrosquamatus, input.seqs=Protobothrops.mucrosquamatus.genome_url, output.path="./Protobothrops.mucrosquamatus.UCEs.fas")
 Python.bivittatus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Python.bivittatus, input.seqs=Python.bivittatus.genome_url, output.path="./Python.bivittatus.UCEs.fas")
-Vipera.berus.best.hits.seqs                <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Vipera.berus, input.seqs=Vipera.berus.genome_url, output.path="./Vipera.berus.UCEs.fas")
+Vipera.berus.best.hits.seqs                 <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Vipera.berus, input.seqs=Vipera.berus.genome_url, output.path="./Vipera.berus.UCEs.fas")
 Thamnophis.sirtalis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Thamnophis.sirtalis, input.seqs=Thamnophis.sirtalis.genome_url, output.path="./Thamnophis.sirtalis.UCEs.fas")
 ```
 
@@ -490,14 +490,14 @@ To avoid confusion, I renamed sequences to the more intuitive header format "Gen
 ```
 ### Renaming each species' UCE sequences to match the format of sequence names used by Streicher and Wiens (2017): "Genus_species_uce-XXXX", where XXXX is a number.
 
-names(Crotalus.horridus.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Crotalus_horridus_",""),names(Crotalus.horridus.best.hits.seqs))
-names(Crotalus.mitchellii.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Crotalus_mitchellii_",""),names(Crotalus.mitchellii.best.hits.seqs))
-names(Ophiophagus.hannah.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Ophiophagus_hannah_",""),names(Ophiophagus.hannah.best.hits.seqs))
-names(Pantherophis.guttatus.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Pantherophis_guttatus_",""),names(Pantherophis.guttatus.best.hits.seqs))
-names(Protobothrops.mucrosquamatus.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Protobothrops_mucrosquamatus_",""),names(Protobothrops.mucrosquamatus.best.hits.seqs))
-names(Python.bivittatus.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Python_bivittatus_",""),names(Python.bivittatus.best.hits.seqs))
-names(Vipera.berus.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Vipera_berus_",""),names(Vipera.berus.best.hits.seqs))
-names(Thamnophis.sirtalis.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Thamnophis_sirtalis_",""),names(Thamnophis.sirtalis.best.hits.seqs))
+names(Crotalus.horridus.best.hits.seqs)            <- mgsub(c("micrurus_fulvius_","_Subject.+"), c("Crotalus_horridus_",""), names(Crotalus.horridus.best.hits.seqs))
+names(Crotalus.mitchellii.best.hits.seqs)          <- mgsub(c("micrurus_fulvius_","_Subject.+"), c("Crotalus_mitchellii_",""), names(Crotalus.mitchellii.best.hits.seqs))
+names(Ophiophagus.hannah.best.hits.seqs)           <- mgsub(c("micrurus_fulvius_","_Subject.+"), c("Ophiophagus_hannah_",""), names(Ophiophagus.hannah.best.hits.seqs))
+names(Pantherophis.guttatus.best.hits.seqs)        <- mgsub(c("micrurus_fulvius_","_Subject.+"), c("Pantherophis_guttatus_",""), names(Pantherophis.guttatus.best.hits.seqs))
+names(Protobothrops.mucrosquamatus.best.hits.seqs) <- mgsub(c("micrurus_fulvius_","_Subject.+"), c("Protobothrops_mucrosquamatus_",""), names(Protobothrops.mucrosquamatus.best.hits.seqs))
+names(Python.bivittatus.best.hits.seqs)            <- mgsub(c("micrurus_fulvius_","_Subject.+"),c("Python_bivittatus_",""), names(Python.bivittatus.best.hits.seqs))
+names(Vipera.berus.best.hits.seqs)                 <- mgsub(c("micrurus_fulvius_","_Subject.+"), c("Vipera_berus_",""), names(Vipera.berus.best.hits.seqs))
+names(Thamnophis.sirtalis.best.hits.seqs)          <- mgsub(c("micrurus_fulvius_","_Subject.+"), c("Thamnophis_sirtalis_",""), names(Thamnophis.sirtalis.best.hits.seqs))
 
 ### Save a copy of each of each species' renamed UCE sequences
 writeXStringSet(Crotalus.horridus.best.hits.seqs,"Crotalus.horridus.UCEs_renamed.fas")
