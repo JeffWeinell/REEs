@@ -688,13 +688,24 @@ Fasta file containing sequences of the filtered ddRAD-like loci: [Thermophis_Pro
 ### If not already loaded, read in the set of filtered ddRAD sequences.
 Thermophis.ddradlike.filtered.seqs <- Biostrings::readDNAStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered.fas")
 
-### Find which (if any) sequences contain two or more adjacent ambiguous bases (here, ambigous bases = Ns; does not include other IUPAC defined amgiguities).
-## Result: 90 of the 2,213 sequences have a string of two or more Ns.
-seqs.with.Ns <- Thermophis.ddradlike.seqs[grep("NN",Thermophis.ddradlike.filtered.seqs)]
+### Manually trimmed locus QLTV01004096.1:621766-622703 to QLTV01004096.1:622037-622703 to remove a long string of ambiguous bases.
+## First make a copy of the filtered sequences so that we can trim the one we want
+Thermophis.ddradlike.filtered.trimmed.seqs <- Thermophis.ddradlike.filtered.seqs
+## Locate the position of the string of Ns
+string.range <- stringr::str_locate(Thermophis.ddradlike.filtered.trimmed.seqs["QLTV01004096.1:621766-622703"],"N+N")
+## The Ns are at positions 266-271, which is relatively close to the 5' end of the sequence. Manually trim bases 1-271. Therefore, set the start position as 272 and the end position as 938, which is the width of the untrimmed sequence.
+trimmed.sequence <- subseq(Thermophis.ddradlike.filtered.trimmed.seqs["QLTV01004096.1:621766-622703"],start=272,end=938)
+## Replace the untrimmed sequence with the trimmed sequence
+Thermophis.ddradlike.filtered.trimmed.seqs["QLTV01004096.1:621766-622703"] <- trimmed.sequence
+## Update the sequence name so that it specifies the correct genomic coordinates.
+new.names <- names(Thermophis.ddradlike.filtered.trimmed.seqs)
+new.names[which(new.names=="QLTV01004096.1:621766-622703")] <- "QLTV01004096.1:622037-622703"
+names(Thermophis.ddradlike.filtered.trimmed.seqs) <- new.names
 
-## Number of ambiguous bases with an adjacent base also ambiguous.
-# Ns.in.strings <- width(seqs.with.Ns)-width(DNAStringSet(gsub("N+N","",as.character(seqs.with.Ns))))
+### Save the trimmed sequences
+writeXStringSet(Thermophis.ddradlike.filtered.trimmed.seqs,filepath="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/ddRAD-like/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered_trimmed.fas")
 ```
+Set of blast-filtered and then trimmed (one sequence) ddRAD-like loci: **Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered_trimmed.fas**. **Note:** Still five untrimmed proposed and one trimmed proposed sequence missing. The missing trimmed sequence may have been trimmed prior to running blast? 
 
 <!--- These are in the final set of ddRAD loci but missing from Thermophis.ddradlike.filtered.seqs
 Missing Target                 | WeinellEntry ID  | Thamnophis sirtalis homolog coordinates | Other proposed targets on same Thermophis baileyii contig.
