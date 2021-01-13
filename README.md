@@ -660,22 +660,26 @@ Thamnophis.sirtalis.ddRADlike.50hits <- REEs::blast(method="blastn",subject=Tham
 ```
 The BLASTN output table can be downloaded here: [Thamnophis.sirtalis.ddRADlike.50hits.txt.zip](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.50hits.txt.zip). Result: No *T. sirtalis* matches were found for 124 of the *Thermophis* query sequences. **Note: this "50 hits" table often has many more than 50 hits per query...up to 2,213 hits for QLTV01001023.1:c672318-671361; mean number of hits per query is 148**. Additionally: **Four loci are missing from "50 hits" output table but present in final set of target loci: QLTV01004232.1:188994-189933, QLTV01001126.1:c908958-908049, QLTV01002430.1:c603541-603258, QLTV01003395.1:c431960-431054; need to figure out why.**
 
-4. I used the function reportBestMatches (REEs package) to filter the "50 hits" table to include only the best match of each query sequence.
+4. I used the function reportBestMatches (REEs package) to filter the "50 hits" table to include only the best match of each query sequence. I set remove.subseq.matches to FALSE (setting to TRUE produces the same result in this case and is much slower to run), min.bitscore = 50, and min.bitscore.difference = 0.
 ```
 ### Use reportBestMatches to get the best match per query.
-Thamnophis.sirtalis.ddRADlike.best.hits <- REEs::reportBestMatches(input.table=Thamnophis.sirtalis.ddRADlike.50hits, output.table.path="Thamnophis.sirtalis.ddRADlike.best.hits.txt",remove.subseq.matches=T, min.bitscore=60,min.bitscore.difference=1)
+Thamnophis.sirtalis.ddRADlike.best.hits <- REEs::reportBestMatches(input.table=Thamnophis.sirtalis.ddRADlike.50hits, output.table.path="Thamnophis.sirtalis.ddRADlike.best.hits.txt",remove.subseq.matches=F)
 ```
-The best matches of proposed ddRAD-like loci in *T. sirtalis* genome (2,140 loci) can be downloaded here: [Thamnophis.sirtalis.ddRADlike.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.best.hits.txt). Two of the query loci that were present in the "50 hits" table are not in the best matches table, but are present in the final set of target loci. **Rerun with min.bitscore.difference=1**
-target locus|proposed using proposeLoci.ddRADlike function|reason for difference.
----|---|---
-QLTV01002103.1:c61938-60965 |not in best matches table|The two best matches both have bitscore=128, min.bitscore.difference=1 in rerun vs. 0 previously
-QLTV01004454.1:c1446020-1445084|not in best matches table| The two best matches both have bitscore=1328 and min.bitscore.difference=1 in rerun vs. 0 previously. However, the coordinates are nearly identical.
+The best matches of proposed ddRAD-like loci in *T. sirtalis* genome (2,213 loci) can be downloaded here: [Thamnophis.sirtalis.ddRADlike.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.best.hits.txt). In retrospect I should have set min.bitscore > 0 to exclude loci that have the same bitscore for the best two batches, because setting min.bitscore.difference = 0 could allow recently duplicated genes to be retained. Two of the targetted ddRAD-like loci had the same bitscore for their best two matches in *T. sirtalis*, but in each case the top two matches covered nearly the same region (i.e., not due to duplication).
 
-5. Filter ddRAD-like loci not found in *T. sirtalis* genome. Then, trim ends to remove some ambiguous bases that are near ends...
+5. Retain ddRAD-like loci present in "qseqid" column of best hits table.
 ```
 ### If not already loaded, read in the set of sequences that were saved in step two.
-Thermophis.ddradlike.seqs.best <- Biostrings::readDNAStringSet("...")
+Thermophis.ddradlike.seqs <- Biostrings::readDNAStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas")
 
+### If not already loaded, read in the table of best hits.
+Thamnophis.sirtalis.ddRADlike.best.hits <- data.table::fread("Thamnophis.sirtalis.ddRADlike.best.hits.txt")
+
+### Filter sequences that are not listed in the qseqid column of Thamnophis.sirtalis.ddRADlike.best.hits
+Thermophis.ddradlike.filtered.seqs <- Thermophis.ddradlike.seqs[which(names(Thermophis.ddradlike.seqs) %in% Thamnophis.sirtalis.ddRADlike.best.hits$qseqid)]
+
+### Save the filtered set of ddRAD-like sequences.
+writeXStringSet(Thermophis.ddradlike.filtered.seqs,filepath="Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered.fas")
 ...
 
 ### Find which (if any) sequences contain two or more adjacent ambiguous bases (here, ambigous bases = Ns; does not include other IUPAC defined amgiguities).
@@ -685,7 +689,23 @@ seqs.with.Ns <- Thermophis.ddradlike.seqs[grep("NN",Thermophis.ddradlike.seqs.be
 Ns.in.strings <- width(seqs.with.Ns)-width(DNAStringSet(gsub("N+N","",as.character(seqs.with.Ns))))
 ```
 
-6. ...
+6. Trim ends of sequences to remove ambiguous bases near the ends of some loci.
+```
+### If not already loaded, read in the set of filtered ddRAD sequences.
+Thermophis.ddradlike.filtered.seqs <- Biostrings::readDNAStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered.fas")
+
+
+```
+
+<!--- These are in the final set of ddRAD loci but missing from Thermophis.ddradlike.filtered.seqs
+QLTV01002273.1:857142-857613
+QLTV01004096.1:622037-622703
+QLTV01004232.1:188994-189933
+QLTV01020412.1:1-995
+QLTV01001126.1:c908958-908049
+QLTV01002430.1:c603541-603258
+QLTV01003395.1:c431960-431054
+--->
 
 
 <!---
