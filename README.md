@@ -705,7 +705,7 @@ names(Thermophis.ddradlike.filtered.trimmed.seqs) <- new.names
 ### Save the trimmed sequences
 writeXStringSet(Thermophis.ddradlike.filtered.trimmed.seqs,filepath="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/ddRAD-like/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered_trimmed.fas")
 ```
-Set of blast-filtered and then trimmed (one sequence) ddRAD-like loci: **Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered_trimmed.fas**. **Note:** Still five untrimmed proposed and one trimmed proposed sequence missing. The missing trimmed sequence may have been trimmed prior to running blast? 
+Set of blast-filtered and then trimmed (one sequence) ddRAD-like loci: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered_trimmed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered_trimmed.fas). **Note:** Still five untrimmed proposed and one trimmed proposed sequence missing. The missing trimmed sequence may have been trimmed prior to running blast? 
 
 <!--- These are in the final set of ddRAD loci but missing from Thermophis.ddradlike.filtered.seqs
 Missing Target                 | WeinellEntry ID  | Thamnophis sirtalis homolog coordinates | Other proposed targets on same Thermophis baileyii contig.
