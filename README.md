@@ -380,12 +380,32 @@ Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus ful
 
 1. I downloaded the set of *Micurus fulvius* UCEs (n = 3,260) identified by Streicher and Wiens (2017). These were available as a fasta file called [micrurus_UCEs.fa](https://git.io/JLiu2).
 
-2. To find *Micrurus* UCEs in each of the other snake genomes, I queried each *Micrurus* UCE against each snake genome using blastn algorithm (saving ≤ 50 matches per query), which was implemented using the R wrapper function REEs::blast. **Note: the *Pantherophis guttatus* genome used here for UCEs (JTLQ00000000.1) is no longer available on NCBI; it was "updated" to version JTLQ00000000.2, which is from a completely different individual. I need to re-run this and subsequent steps for *Pantherophis guttatus* and then check if the output sequences are the same as when using the earlier genome version.**
+2. To find *Micrurus* UCEs in each of the other snake genomes, I queried each *Micrurus* UCE against each snake genome using blastn algorithm (saving ≤ 50 matches per query), which was implemented using the R wrapper function REEs::blast. Note: The newest version of the *Pantherophis guttatus* genome (JTLQ00000000.2 as of January 13, 2021) was not available when I originally did these analyses. For reproducibility, "*Pantherophis guttatus* genome" refers to version JTLQ00000000.1. The contigs of version JTLQ00000000.1 are split into three fasta files available from NCBI. I downloaded these files and merged them into one file using the script shown here below. The other genomes can be downloaded as a single file from NCBI.
 
 ```
-### Define the URLs to fasta genome sequences
+#### Download the three fasta files containing contigs of the Pantherophis guttatus genome (JTLQ00000000.1). These will be saved to your current directory unless you specify otherwise.
+utils::download.file(url="https://sra-download.ncbi.nlm.nih.gov/traces/wgs03/wgs_aux/JT/LQ/JTLQ01/JTLQ01.1.fsa_nt.gz", destfile="JTLQ01.1.fsa_nt.gz")
+utils::download.file(url="https://sra-download.ncbi.nlm.nih.gov/traces/wgs03/wgs_aux/JT/LQ/JTLQ01/JTLQ01.2.fsa_nt.gz", destfile="JTLQ01.2.fsa_nt.gz")
+utils::download.file(url="https://sra-download.ncbi.nlm.nih.gov/traces/wgs03/wgs_aux/JT/LQ/JTLQ01/JTLQ01.3.fsa_nt.gz", destfile="JTLQ01.3.fsa_nt.gz")
 
-### URLs to the genomes used are held in a matrix that can be accessed with the REEs::datasets function.
+### Load the downloaded fasta files into R as DNAStringSet objects.
+Pantherophis.guttatus.genome_JTLQ01.1 <- Biostrings::readDNAStringSet("JTLQ01.1.fsa_nt.gz")
+Pantherophis.guttatus.genome_JTLQ01.2 <- Biostrings::readDNAStringSet("JTLQ01.2.fsa_nt.gz")
+Pantherophis.guttatus.genome_JTLQ01.3 <- Biostrings::readDNAStringSet("JTLQ01.3.fsa_nt.gz")
+
+### Merge the three DNAStringSet objects into one object containing all contigs of the genome.
+Pantherophis.guttatus.genome_JTLQ01 <- c(Pantherophis.guttatus.genome_JTLQ01.1,Pantherophis.guttatus.genome_JTLQ01.2,Pantherophis.guttatus.genome_JTLQ01.3)
+
+### Save the genome.
+Biostrings::writeXStringSet(x=Pantherophis.guttatus.genome_JTLQ01,filepath="Pantherophis.guttatus_JTLQ01.fsa_nt.gz",compress=TRUE)
+```
+Result: The *Pantherophis guttatus* genome (merged contigs file) of JTLQ00000000.1 can be downloaded here: **Pantherophis.guttatus_JTLQ01.fsa_nt.gz**.
+
+```
+### Define URLs to fasta genome sequences
+# URL to Pantherophis guttatus genome version JTLQ00000000.1
+Pantherophis.guttatus.genome_url <- ""
+# The URLs to the other genomes are held in a matrix that can be accessed with the REEs::datasets function.
 Anolis.carolinensis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Anolis carolinensis"),2]
 Gekko.japonicus.genome_url              <- REEs::datasets(1)[which(datasets(1)[,1]=="Gekko japonicus"),2]
 Pogona.vitticeps.genome_url             <- REEs::datasets(1)[which(datasets(1)[,1]=="Pogona vitticeps"),2]
@@ -396,11 +416,6 @@ Protobothrops.mucrosquamatus.genome_url <- REEs::datasets(1)[which(datasets(1)[,
 Python.bivittatus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,1]=="Python bivittatus"),2]
 Vipera.berus.genome_url                 <- REEs::datasets(1)[which(datasets(1)[,1]=="Vipera berus"),2]
 Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Thamnophis sirtalis"),2]
-
-### URL to Pantherophis guttatus genome version JTLQ00000000.1, not JTLQ00000000.2
-Pantherophis.guttatus.genome_url <- "https://sra-download.ncbi.nlm.nih.gov/traces/wgs03/wgs_aux/JT/LQ/JTLQ01/JTLQ01.1.fsa_nt.gz"
-##### Did not use the genome indicated on the next line (JTLQ00000000.2) at any point.
-## Pantherophis.guttatus.genome_url_JTLQ00000000.2 <- REEs::datasets(1)[which(datasets(1)[,1]=="Pantherophis guttatus"),2]
 
 ### Runs BLASTN
 Crotalus.horridus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Crotalus.horridus.genome_url, query="./micrurus_UCEs.fa", table.out="./Crotalus.horridus.blastn.UCEs.50hits.txt")
