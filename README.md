@@ -494,7 +494,7 @@ Result: 2,968 of the UCEs from *Micrurus fulvius* were found in all of the snake
 UCE.alignment.filenames    <- list.files(path="~/MAFFT-aligned-UCEs",full.names=T)
 
 ### Character vector of locus names (UCE ID number), with format "UCE.XXXX"
-UCE.shortnames             <- mgsub(c(".fas","uce-"),c("","UCE."),REEs::nameFromPath(UCE.alignment.filenames))
+UCE.shortnames             <- gsub("uce-","UCE.",REEs::nameFromPath(UCE.alignment.filenames,include.extension=F),ignore.case=T)
 
 ### Read in UCE alignments (if they arent already loaded).
 aligned.UCEs <- lapply(X=UCE.alignment.filenames,FUN=function(x){Biostrings::readDNAStringSet(x)})
