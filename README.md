@@ -680,21 +680,20 @@ Thermophis.ddradlike.filtered.seqs <- Thermophis.ddradlike.seqs[which(names(Ther
 
 ### Save the filtered set of ddRAD-like sequences.
 writeXStringSet(Thermophis.ddradlike.filtered.seqs,filepath="Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered.fas")
-...
-
-### Find which (if any) sequences contain two or more adjacent ambiguous bases (here, ambigous bases = Ns; does not include other IUPAC defined amgiguities).
-## Result: 106 of the 2,337 sequences have a string of two or more Ns.
-seqs.with.Ns <- Thermophis.ddradlike.seqs[grep("NN",Thermophis.ddradlike.seqs.best)]
-## Number of ambiguous bases with an adjacent base also ambiguous. which  of strings of ambigous bases (or sum of a
-Ns.in.strings <- width(seqs.with.Ns)-width(DNAStringSet(gsub("N+N","",as.character(seqs.with.Ns))))
 ```
+Fasta file containing sequences of the filtered ddRAD-like loci: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered.fas).
 
 6. Trim ends of sequences to remove ambiguous bases near the ends of some loci.
 ```
 ### If not already loaded, read in the set of filtered ddRAD sequences.
 Thermophis.ddradlike.filtered.seqs <- Biostrings::readDNAStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered.fas")
 
+### Find which (if any) sequences contain two or more adjacent ambiguous bases (here, ambigous bases = Ns; does not include other IUPAC defined amgiguities).
+## Result: 90 of the 2,213 sequences have a string of two or more Ns.
+seqs.with.Ns <- Thermophis.ddradlike.seqs[grep("NN",Thermophis.ddradlike.filtered.seqs)]
 
+## Number of ambiguous bases with an adjacent base also ambiguous.
+# Ns.in.strings <- width(seqs.with.Ns)-width(DNAStringSet(gsub("N+N","",as.character(seqs.with.Ns))))
 ```
 
 <!--- These are in the final set of ddRAD loci but missing from Thermophis.ddradlike.filtered.seqs
@@ -707,6 +706,11 @@ QLTV01020412.1:1-995           | WeinellEntry5565 | NW_013658181.1:92968-94086  
 QLTV01001126.1:c908958-908049  | WeinellEntry5604 | NW_013657739.1:586505-587376            | QLTV01001126.1:399748-400719 QLTV01001126.1:731338-732314 QLTV01001126.1:1461841-1462821 QLTV01001126.1:1756435-1757373 QLTV01001126.1:c1064389-1063428 QLTV01001126.1:c1355122-1354189 QLTV01001126.1:c1551940-1551010 QLTV01001126.1:c1551940-1551031 QLTV01001126.1:c2054906-2053973 QLTV01001126.1:c2122587-2121588"
 QLTV01002430.1:c603541-603258  | WeinellEntry5645 | NW_013657787.1:49228-49454 (partial)    | QLTV01002430.1:749079-750003
 QLTV01003395.1:c431960-431054  | WeinellEntry5695 | none found                              | QLTV01003395.1:150567-151471
+#
+#
+missing.loci <- c("QLTV01002273.1:857142-858124","QLTV01004232.1:188994-189933","QLTV01001126.1:c908958-908049","QLTV01002430.1:c603541-602618","QLTV01003395.1:c431960-431054")
+missing.loci.seqs <- proposed.loci[which(names(proposed.loci) %in% missing.loci)]
+blast(missing.loci.seqs,Thamnophis sirtalis genome)
 --->
 
 
