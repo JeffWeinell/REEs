@@ -384,17 +384,17 @@ Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus ful
 
 ```
 # Runs BLASTN
-Crotalus.horridus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Crotalus.horridus.genome_url, query="./micrurus_UCEs.fa",table.out="./Crotalus.horridus.blastn.UCEs.50hits.txt")
-Crotalus.mitchellii.UCEs.50hits          <- REEs::blast(method="blastn",subject=Crotalus.mitchellii.genome_url, query="./micrurus_UCEs.fa",table.out="./Crotalus.mitchellii.blastn.UCEs.50hits.txt")
-Ophiophagus.hannah.UCEs.50hits           <- REEs::blast(method="blastn",subject=Ophiophagus.hannah.genome_url, query="./micrurus_UCEs.fa",table.out="./Ophiophagus.hannah.blastn.UCEs.50hits.txt")
-Pantherophis.guttatus.UCEs.50hits        <- REEs::blast(method="blastn",subject=Pantherophis.guttatus.genome_url, query=Thamnophis.sirtalis_exome,table.out="./Pantherophis.guttatus.blastn.UCEs.50hits.txt")
-Protobothrops.mucrosquamatus.UCEs.50hits <- REEs::blast(method="blastn",subject=Protobothrops.mucrosquamatus.genome_url, query="./micrurus_UCEs.fa",table.out="./Protobothrops.mucrosquamatus.blastn.UCEs.50hits.txt")
-Python.bivittatus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Python.bivittatus.genome_url, query="./micrurus_UCEs.fa",table.out="./Python.bivittatus.blastn.UCEs.50hits.txt")
-Vipera.berus.UCEs.50hits                <- REEs::blast(method="blastn",subject=Vipera.berus.genome_url, query="./micrurus_UCEs.fa",table.out="./Vipera.berus.blastn.UCEs.50hits.txt")
-Thamnophis.sirtalis.UCEs.50hits          <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url, query="./micrurus_UCEs.fa",table.out="./Thamnophis.sirtalis.blastn.UCEs.50hits.txt")
+Crotalus.horridus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Crotalus.horridus.genome_url, query="./micrurus_UCEs.fa", table.out="./Crotalus.horridus.blastn.UCEs.50hits.txt")
+Crotalus.mitchellii.UCEs.50hits          <- REEs::blast(method="blastn",subject=Crotalus.mitchellii.genome_url, query="./micrurus_UCEs.fa", table.out="./Crotalus.mitchellii.blastn.UCEs.50hits.txt")
+Ophiophagus.hannah.UCEs.50hits           <- REEs::blast(method="blastn",subject=Ophiophagus.hannah.genome_url, query="./micrurus_UCEs.fa", table.out="./Ophiophagus.hannah.blastn.UCEs.50hits.txt")
+Pantherophis.guttatus.UCEs.50hits        <- REEs::blast(method="blastn",subject=Pantherophis.guttatus.genome_url, query="./micrurus_UCEs.fa", table.out="./Pantherophis.guttatus.blastn.UCEs.50hits.txt")
+Protobothrops.mucrosquamatus.UCEs.50hits <- REEs::blast(method="blastn",subject=Protobothrops.mucrosquamatus.genome_url, query="./micrurus_UCEs.fa", table.out="./Protobothrops.mucrosquamatus.blastn.UCEs.50hits.txt")
+Python.bivittatus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Python.bivittatus.genome_url, query="./micrurus_UCEs.fa", table.out="./Python.bivittatus.blastn.UCEs.50hits.txt")
+Vipera.berus.UCEs.50hits                <- REEs::blast(method="blastn",subject=Vipera.berus.genome_url, query="./micrurus_UCEs.fa", table.out="./Vipera.berus.blastn.UCEs.50hits.txt")
+Thamnophis.sirtalis.UCEs.50hits          <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url, query="./micrurus_UCEs.fa", table.out="./Thamnophis.sirtalis.blastn.UCEs.50hits.txt")
 ```
 
-Output tables from BLASTN: **Crotalus.horridus.blastn.UCEs.50hits.txt**, **Crotalus.mitchellii.blastn.UCEs.50hits.txt**, **Ophiophagus.hannah.blastn.UCEs.50hits.txt**, **Pantherophis.guttatus.blastn.UCEs.50hits.txt**, **Protobothrops.mucrosquamatus.blastn.UCEs.50hits.txt**, **Python.bivittatus.blastn.UCEs.50hits.txt**, **Thamnophis.sirtalis.blastn.UCEs.50hits.txt**, and **Vipera.berus.blastn.UCEs.50hits.txt**.
+Output tables from BLASTN: [Crotalus.horridus.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.blastn.UCEs.50hits.txt), [Crotalus.mitchellii.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.blastn.UCEs.50hits.txt), [Ophiophagus.hannah.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.blastn.UCEs.50hits.txt), [Pantherophis.guttatus.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.blastn.UCEs.50hits.txt), [Protobothrops.mucrosquamatus.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.blastn.UCEs.50hits.txt), [Python.bivittatus.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.blastn.UCEs.50hits.txt), [Thamnophis.sirtalis.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.blastn.UCEs.50hits.txt), and [Vipera.berus.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.blastn.UCEs.50hits.txt).
 
  3. I used the function reportBestMatches to filter the hit tables to include only the best match for each query UCE.
 
@@ -575,7 +575,7 @@ Thermophis.baileyi_genome.url         <- "https://ftp.ncbi.nlm.nih.gov/genomes/a
 proposed.ddRAD.loci.coordinates       <- REEs::proposeLoci.ddRADlike(input.seqs=Thermophis.baileyi_genome.url,output.dir="/ddRAD-like/",recognitionSeqs=c(SbfI.Seq,EcoR1.Seq),lim.lengths=c(900,1000),save.tables=T)
 
 ```
-Result: Table containing coordinates for the 2,337 ddRAD-like loci: [ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt).
+Result: Table containing coordinates for 2,337 proposed ddRAD-like loci: [ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt).
 
 2. I used the function get_ncbi_sequences (REEs package) to obtain the sequences of the loci proposed in step 1. For loci on the antisense strands of contigs I first downloaded the corresponding reverse complement sequence (from the sense strand), and then I used the function reverseComplement (Biostrings package) to obtain the correct antisense strand target.
 
@@ -600,46 +600,45 @@ names(Thermophis.ddradlike.seqs) <- proposed.ddRAD.loci.coordinates$coordinates
 ### Save sequences.
 writeXStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas")
 ```
-Result: *Thermophis baileyi* sequences of the proposed ddRAD-like loci can be downloaded here: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas).
-
-Note to self: All of the final (actually targetted) ddRAD-like loci are in the file ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt except:
+Result: *Thermophis baileyi* sequences of the proposed ddRAD-like loci can be downloaded here: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas). Three ddRAD-like loci targetted are different than those in the table of proposed loci; two of these are actually present but were trimmed later, but the third, QLTV01020412.1:1-995, is not. Need to figure out why.
 target locus|proposed using proposeLoci.ddRADlike function|reason for difference.
 ---|---|---
 QLTV01002273.1:857142-857613 | QLTV01002273.1:857142-858124 | string of Ns beginning at 857614
 QLTV01004096.1:622037-622703 | QLTV01004096.1:621766-622703 | string of six Ns at 622031-622036, and therefore trimmed 621766-622036.
 QLTV01020412.1:1-995 | no similar locus proposed | not yet clear...
 
-3. I used BLASTn implemented in the REEs::blast function to search for *Thermophis* ddRAD-like loci in the *T. sirtalis* genome.
+3. I used BLASTN as implemented in the REEs::blast function to search for *Thermophis* ddRAD-like loci in the *T. sirtalis* genome.
 
 ```
-### Read in the set of sequences that were saved in step 2 (if not already loaded).
+### If not already loaded, read in the set of proposed loci sequences from step two.
 Thermophis.ddradlike.seqs <- Biostrings::readDNAStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas")
 
 ### Define the URL path to the Thamnophis sirtalis genome.
-Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Thamnophis sirtalis"),2]
+Thamnophis.sirtalis.genome_url          <- ""https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz""
 
-### Run BLASTn
+### Run BLASTN to find proposed ddRAD-like loci in T. sirtalis genome.
 Thamnophis.sirtalis.ddRADlike.50hits <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url, query=Thermophis.ddradlike.seqs,table.out="Thamnophis.sirtalis.ddRADlike.50hits.txt")
 
 ```
-The BLASTN output table can be downloaded here: [Thamnophis.sirtalis.ddRADlike.50hits.txt.zip](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.50hits.txt.zip). Result: No *T. sirtalis* matches were found for 124 of the *Thermophis* query sequences. **Note: this "50 hits" table often has many more than 50 hits per query (up to 2,213 hits for QLTV01001023.1:c672318-671361); mean number of hits per query is 148)**. Four loci missing from "50 hits" table but present in final set of target loci: QLTV01004232.1:188994-189933, QLTV01001126.1:c908958-908049, QLTV01002430.1:c603541-603258, QLTV01003395.1:c431960-431054.
+The BLASTN output table can be downloaded here: [Thamnophis.sirtalis.ddRADlike.50hits.txt.zip](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.50hits.txt.zip). Result: No *T. sirtalis* matches were found for 124 of the *Thermophis* query sequences. **Note: this "50 hits" table often has many more than 50 hits per query...up to 2,213 hits for QLTV01001023.1:c672318-671361; mean number of hits per query is 148**. Four query loci missing from "50 hits" output table, but present in final set of target loci: QLTV01004232.1:188994-189933, QLTV01001126.1:c908958-908049, QLTV01002430.1:c603541-603258, QLTV01003395.1:c431960-431054; need to figure out why.
 
-4. I used the function reportBestMatches (REEs package) to filter the hit table produced by blast to include only the best match of each query sequence.
+4. I used the function reportBestMatches (REEs package) to filter the "50 hits" table to include only the best match of each query sequence.
 
 ```
 ### Use reportBestMatches to get the best match per query.
 Thamnophis.sirtalis.ddRADlike.best.hits <- REEs::reportBestMatches(input.table=Thamnophis.sirtalis.ddRADlike.50hits, output.table.path="Thamnophis.sirtalis.ddRADlike.best.hits.txt",remove.subseq.matches=T, min.bitscore=60,min.bitscore.difference=1)
+
 ```
-Result: Best matches in *T. sirtalis* genome of 2,140 ddRAD-like loci (Thamnophis.sirtalis.ddRADlike.best.hits.txt)[https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.best.hits.txt]. Two of the query loci that were present in the "50 hits" table are not in the best matches table, but are present in the final set of target loci. 
+Result: Best matches in *T. sirtalis* genome = 2,140 ddRAD-like loci: [Thamnophis.sirtalis.ddRADlike.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.best.hits.txt). Two of the query loci that were present in the "50 hits" table are not in the best matches table, but are present in the final set of target loci.
 target locus|proposed using proposeLoci.ddRADlike function|reason for difference.
 ---|---|---
 QLTV01002103.1:c61938-60965 |not in best matches table|The two best matches both have bitscore=128, min.bitscore.difference=1 in rerun vs. 0 previously
 QLTV01004454.1:c1446020-1445084|not in best matches table| The two best matches both have bitscore=1328 and min.bitscore.difference=1 in rerun vs. 0 previously. However, the coordinates are nearly identical.
 
-5. Trim ends to remove some ambiguous bases...
+5. Filter ddRAD-like loci not found in *T. sirtalis* genome. Then, trim ends to remove some ambiguous bases that are near ends...
 
 ```
-### Read in the set of sequences that were saved in step 2 (if not already loaded).
+### If not already loaded, read in the set of sequences that were saved in step two.
 Thermophis.ddradlike.seqs.best <- Biostrings::readDNAStringSet("...")
 
 ...
