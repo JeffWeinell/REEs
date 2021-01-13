@@ -622,20 +622,21 @@ Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,
 Thamnophis.sirtalis.ddRADlike.50hits <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url, query=Thermophis.ddradlike.seqs,table.out="Thamnophis.sirtalis.ddRADlike.50hits.txt")
 
 ```
-The BLASTN output table can be downloaded here: [Thamnophis.sirtalis.ddRADlike.50hits.txt.zip](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.50hits.txt.zip). Result: No *T. sirtalis* matches were found for 124 of the *Thermophis* query sequences. **Note: this "50 hits" table often has many more than 50 hits per query (up to 2,213 hits for QLTV01001023.1:c672318-671361); mean number of hits per query is 148)**.
+The BLASTN output table can be downloaded here: [Thamnophis.sirtalis.ddRADlike.50hits.txt.zip](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.50hits.txt.zip). Result: No *T. sirtalis* matches were found for 124 of the *Thermophis* query sequences. **Note: this "50 hits" table often has many more than 50 hits per query (up to 2,213 hits for QLTV01001023.1:c672318-671361); mean number of hits per query is 148)**. Four loci missing from "50 hits" table but present in final set of target loci: QLTV01004232.1:188994-189933, QLTV01001126.1:c908958-908049, QLTV01002430.1:c603541-603258, QLTV01003395.1:c431960-431054.
 
 4. I used the function reportBestMatches (REEs package) to filter the hit table produced by blast to include only the best match of each query sequence.
 
 ```
-
-reportBestMatches()
-
+### Use reportBestMatches to get the best match per query.
+Thamnophis.sirtalis.ddRADlike.best.hits <- REEs::reportBestMatches(input.table=Thamnophis.sirtalis.ddRADlike.50hits, output.table.path="Thamnophis.sirtalis.ddRADlike.best.hits.txt",remove.subseq.matches=T, min.bitscore=60,min.bitscore.difference=1)
 ```
+Result: Best matches in *T. sirtalis* genome of 2,140 ddRAD-like loci (Thamnophis.sirtalis.ddRADlike.best.hits.txt)[https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.best.hits.txt]. Two of the query loci that were present in the "50 hits" table are not in the best matches table, but are present in the final set of target loci. 
+target locus|proposed using proposeLoci.ddRADlike function|reason for difference.
+---|---|---
+QLTV01002103.1:c61938-60965 |not in best matches table|The two best matches both have bitscore=128, min.bitscore.difference=1 in rerun vs. 0 previously
+QLTV01004454.1:c1446020-1445084|not in best matches table| The two best matches both have bitscore=1328 and min.bitscore.difference=1 in rerun vs. 0 previously. However, the coordinates are nearly identical.
 
-5. I filtered the set of *Thermophis* ddRAD-like loci to include only loci present in the output table of reportBestMatches.
-
-
-6. Trim ends to remove some ambiguous bases.
+5. Trim ends to remove some ambiguous bases...
 
 ```
 ### Read in the set of sequences that were saved in step 2 (if not already loaded).
@@ -650,7 +651,7 @@ seqs.with.Ns <- Thermophis.ddradlike.seqs[grep("NN",Thermophis.ddradlike.seqs.be
 Ns.in.strings <- width(seqs.with.Ns)-width(DNAStringSet(gsub("N+N","",as.character(seqs.with.Ns))))
 ```
 
-7. ...
+6. ...
 
 
 <!---
