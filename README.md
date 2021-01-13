@@ -315,7 +315,7 @@ Arbor performed ultrastringent filtration on the 2,068 REEs retained from step 8
 
 Of the 1,865 REEs that passed ultrastringent filtering, 212 were removed to allow a fraction of the 20K baits to be used to target other types of loci (UCEs, MHC genes, scalation genes, vision genes, and ddRAD-like loci), and these removed REEs are listed in the file [Version3-loci-removed_others.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version3-loci-removed_others.tsv). Baits for the remaining 1,653 REEs were synthesized by Arbor (mybaits 20K bait kit: product no. 3001160).
 
-Table 4. The nine partially expanded targets from output of step 8 and reason why targets were partially rather than fully expanded.
+**Table 4**. The nine partially expanded targets from output of step 8 and reason why targets were partially rather than fully expanded.
 WeinellEntry name|Contig accession ID|Nucleotide range of partially expanded target|Nucleotide range that would have been targetted if it had been possible|Reason why target sequence partially rather than fully expanded.
 ---|---|---|---|---
 WeinellEntry959 |NW_013657802.1|1404174-1405963 |1404174-1405974|contig length 140,5963 nt
@@ -328,7 +328,7 @@ WeinellEntry2151|NW_013658527.1|12230-12575     |12230-12590    |12576-12590 all
 WeinellEntry2150|NW_013658733.1|434060-434488   |434008-434488  |434008-434059 all Ns
 WeinellEntry2152|NW_013658527.1|14050-14395     |14035-14395    |14035-14049 all Ns
 
-Table 5. Pairs of REEs having identical sequences that were included in the ouput of the pick.loci function (step 8). These were subsequently filtered, either immediately before or after application of Arbor's ultrastringent filtering algorithm. The latest version of the pick.loci function has an option to filter REEs if the bitscores of the top matches are too similar according to a user-defined threshold.
+**Table 5**. Pairs of REEs having identical sequences that were included in the ouput of the pick.loci function (step 8). These were subsequently filtered, either immediately before or after application of Arbor's ultrastringent filtering algorithm. The latest version of the pick.loci function has an option to filter REEs if the bitscores of the top matches are too similar according to a user-defined threshold.
 Contig Accession ID|Start Position|End Position|Sequence/Pair ID|Other ID|Step when filtered
 ---|---|---|---|---|---
 NW_013657725.1|467272|467752|1||manually, after using pick.loci function and before ultrastringent filtering
@@ -442,13 +442,14 @@ UCEs.best.hits.Python.bivittatus             <- REEs::reportBestMatches(input.ta
 UCEs.best.hits.Thamnophis.sirtalis           <- REEs::reportBestMatches(input.table=Thamnophis.sirtalis.UCEs.50hits, output.table.path="Thamnophis.sirtalis.blastn.UCEs.best.hits.txt")
 UCEs.best.hits.Vipera.berus                  <- REEs::reportBestMatches(input.table=Vipera.berus.UCEs.50hits, output.table.path="Vipera.berus.blastn.UCEs.best.hits.txt")
 
-### Getting a list of the shared loci. I didn't filter out non-shared loci yet though.
+### Getting a list of the shared loci.
 shared.UCEs <- intersect.all(list(UCEs.best.hits.Crotalus.horridus$qseqid, UCEs.best.hits.Crotalus.mitchellii$qseqid,UCEs.best.hits.Ophiophagus.hannah$qseqid, UCEs.best.hits.Pantherophis.guttatus$qseqid,UCEs.best.hits.Protobothrops.mucrosquamatus$qseqid, UCEs.best.hits.Python.bivittatus$qseqid, UCEs.best.hits.Vipera.berus$qseqid, UCEs.best.hits.Thamnophis.sirtalis$qseqid))
+
+### Result: 2,168 UCE loci were found in all of the species. The loci missing from one or more species are not filtered here, but are filtered later when the function align.shared.loci is used.
 
 ```
 Output tables were saved to the files: [Crotalus.horridus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.blastn.UCEs.best.hits.txt), [Crotalus.mitchellii.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.blastn.UCEs.best.hits.txt), [Ophiophagus.hannah.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.blastn.UCEs.best.hits.txt) , [Pantherophis.guttatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.blastn.UCEs.best.hits.txt), [Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt), [Python.bivittatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.blastn.UCEs.best.hits.txt), [Thamnophis.sirtalis.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.blastn.UCEs.best.hits.txt), [Vipera.berus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.blastn.UCEs.best.hits.txt).
 
-Note: 2,170 shared loci identified in a recent run of reportBestMatches, but only 2,168 shared loci included previously. Seven loci in the most recent set of shared UCEs but not the earlier set: UCE-869, UCE-7213, UCE-6517, UCE-3853, UCE-3215, UCE-2453, UCE-2233. Five UCEs in the earlier set of shared loci but not in the more recent set: UCE-1600, UCE-3313, UCE-5055, UCE-6830, UCE-7429. The differences are entirely the result of differences in the *Pantherophis guttatus* best hits tables obtained previously when blasting against JTLQ00000000.1 vs. more recently when blasting against JTLQ00000000.2; UCE-1600 and UCE-3313 were both included in the "targetUCEs.1000.fas" and in the final 907 UCEs that passed ultra-stringent filtration, confirming that JTLQ00000000.1 is the P. guttatus genome was used. **Summary** The *Pantherophis guttatus* genome URL and the *P. guttatus* "50 hits" table linked herein are based on JTLQ00000000.2, whereas the *P. guttatus* "best hits" (and subsequent output UCE files) are based on JTLQ00000000.1.
 
 4. I used the function REEs::get.seqs.from.blastTable to extract and save the set of best-match UCEs from each genome.
 ```
@@ -509,7 +510,6 @@ writeXStringSet(Python.bivittatus.best.hits.seqs,"Python.bivittatus.UCEs_renamed
 writeXStringSet(Thamnophis.sirtalis.best.hits.seqs,"Thamnophis.sirtalis.UCEs_renamed.fas")
 writeXStringSet(Vipera.berus.best.hits.seqs,"Vipera.berus.UCEs_renamed.fas")
 ```
-
 The renamed sequences can be downloaded here: [Crotalus.horridus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.UCEs_renamed.fas), [Crotalus.mitchellii.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.UCEs_renamed.fas), [Ophiophagus.hannah.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.UCEs_renamed.fas), [Pantherophis.guttatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.UCEs_renamed.fas), [Protobothrops.mucrosquamatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.UCEs_renamed.fas), [Python.bivittatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.UCEs_renamed.fas), [Thamnophis.sirtalis.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.UCEs_renamed.fas), [Vipera.berus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.UCEs_renamed.fas)
 
 
@@ -614,7 +614,6 @@ proposed.ddRAD.loci.coordinates       <- REEs::proposeLoci.ddRADlike(input.seqs=
 Result: Table containing coordinates for 2,337 proposed ddRAD-like loci: [ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt).
 
 2. I used the function get_ncbi_sequences (REEs package) to obtain the sequences of the loci proposed in step 1. For loci on the antisense strands of contigs I first downloaded the corresponding reverse complement sequence (from the sense strand), and then I used the function reverseComplement (Biostrings package) to obtain the correct antisense strand target.
-
 ```
 ### Defining vectors containing the Genbank accession and range of positions to download. This information is from the second, third, and fourth columns of the table that was generated by the function proposeLoci.ddRADlike. Note that the start and end positions are relative to the sense strand of the contig. The coordinates of proposed loci on the antisense strand have the format "ContigAccession:cEndPosition-StartPosition", which is equal to the reverse complement of a sequence with coordinates "ContigAccession:StartPosition-EndPosition".
 ContigAccession <- proposed.ddRAD.loci.coordinates$ContigAccession
@@ -636,12 +635,15 @@ names(Thermophis.ddradlike.seqs) <- proposed.ddRAD.loci.coordinates$coordinates
 ### Save sequences.
 writeXStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas")
 ```
-Result: *Thermophis baileyi* sequences of the proposed ddRAD-like loci can be downloaded here: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas). Three ddRAD-like loci targetted are different than those in the table of proposed loci; two of these are actually present but were trimmed later, but the third, QLTV01020412.1:1-995, is not. Need to figure out why.
+*Thermophis baileyi* sequences for proposed ddRAD-like loci can be downloaded here: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas). **Note: QLTV01020412.1:1-995, which was targetted, is not in the table of proposed loci (nor is any locus on that contig); need to figure out why.**
+
+<!--- Three ddRAD-like loci targetted are different than those in the table of proposed loci; two of these should be different because they were trimmed later, but the third, QLTV01020412.1:1-995, is not. Need to figure out why.
 target locus|proposed using proposeLoci.ddRADlike function|reason for difference.
 ---|---|---
 QLTV01002273.1:857142-857613 | QLTV01002273.1:857142-858124 | string of Ns beginning at 857614
 QLTV01004096.1:622037-622703 | QLTV01004096.1:621766-622703 | string of six Ns at 622031-622036, and therefore trimmed 621766-622036.
 QLTV01020412.1:1-995 | no similar locus proposed | not yet clear...
+--->
 
 3. I used BLASTN as implemented in the REEs::blast function to search for *Thermophis* ddRAD-like loci in the *T. sirtalis* genome.
 
@@ -656,23 +658,20 @@ Thamnophis.sirtalis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes
 Thamnophis.sirtalis.ddRADlike.50hits <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url, query=Thermophis.ddradlike.seqs,table.out="Thamnophis.sirtalis.ddRADlike.50hits.txt")
 
 ```
-The BLASTN output table can be downloaded here: [Thamnophis.sirtalis.ddRADlike.50hits.txt.zip](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.50hits.txt.zip). Result: No *T. sirtalis* matches were found for 124 of the *Thermophis* query sequences. **Note: this "50 hits" table often has many more than 50 hits per query...up to 2,213 hits for QLTV01001023.1:c672318-671361; mean number of hits per query is 148**. Four query loci missing from "50 hits" output table, but present in final set of target loci: QLTV01004232.1:188994-189933, QLTV01001126.1:c908958-908049, QLTV01002430.1:c603541-603258, QLTV01003395.1:c431960-431054; need to figure out why.
+The BLASTN output table can be downloaded here: [Thamnophis.sirtalis.ddRADlike.50hits.txt.zip](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.50hits.txt.zip). Result: No *T. sirtalis* matches were found for 124 of the *Thermophis* query sequences. **Note: this "50 hits" table often has many more than 50 hits per query...up to 2,213 hits for QLTV01001023.1:c672318-671361; mean number of hits per query is 148**. Additionally: **Four loci are missing from "50 hits" output table but present in final set of target loci: QLTV01004232.1:188994-189933, QLTV01001126.1:c908958-908049, QLTV01002430.1:c603541-603258, QLTV01003395.1:c431960-431054; need to figure out why.**
 
 4. I used the function reportBestMatches (REEs package) to filter the "50 hits" table to include only the best match of each query sequence.
-
 ```
 ### Use reportBestMatches to get the best match per query.
 Thamnophis.sirtalis.ddRADlike.best.hits <- REEs::reportBestMatches(input.table=Thamnophis.sirtalis.ddRADlike.50hits, output.table.path="Thamnophis.sirtalis.ddRADlike.best.hits.txt",remove.subseq.matches=T, min.bitscore=60,min.bitscore.difference=1)
-
 ```
-Result: Best matches in *T. sirtalis* genome = 2,140 ddRAD-like loci: [Thamnophis.sirtalis.ddRADlike.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.best.hits.txt). Two of the query loci that were present in the "50 hits" table are not in the best matches table, but are present in the final set of target loci.
+The best matches of proposed ddRAD-like loci in *T. sirtalis* genome (2,140 loci) can be downloaded here: [Thamnophis.sirtalis.ddRADlike.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thamnophis.sirtalis.ddRADlike.best.hits.txt). Two of the query loci that were present in the "50 hits" table are not in the best matches table, but are present in the final set of target loci. **Rerun with min.bitscore.difference=1**
 target locus|proposed using proposeLoci.ddRADlike function|reason for difference.
 ---|---|---
 QLTV01002103.1:c61938-60965 |not in best matches table|The two best matches both have bitscore=128, min.bitscore.difference=1 in rerun vs. 0 previously
 QLTV01004454.1:c1446020-1445084|not in best matches table| The two best matches both have bitscore=1328 and min.bitscore.difference=1 in rerun vs. 0 previously. However, the coordinates are nearly identical.
 
 5. Filter ddRAD-like loci not found in *T. sirtalis* genome. Then, trim ends to remove some ambiguous bases that are near ends...
-
 ```
 ### If not already loaded, read in the set of sequences that were saved in step two.
 Thermophis.ddradlike.seqs.best <- Biostrings::readDNAStringSet("...")
@@ -697,26 +696,16 @@ Ns.in.strings <- width(seqs.with.Ns)-width(DNAStringSet(gsub("N+N","",as.charact
 # bestMatches.ddRADlike.forward <- reportBestMatches(input.table=Thermophis.in.Thamnophis.hits.forward)
 # bestMatches.ddRADlike.reverse <- 
 ```
+**GREPmethod_RandomLociSelection.txt**
+**GREPmethod_RandomLociSelection_Part1_MakeHitTable_cluster.R** (run using **GREPmethod_RandomLociSelection_Part1_MakeHitTable_cluster.sh**)
+**GREPmethod_RandomLociSelection_Part2_MakeProposedLociTables_cluster.R** (run using **GREPmethod_RandomLociSelection_Part2_MakeProposedLociTables_cluster.sh**)
+Proposed target loci using PstI and HpaII recognition sites (didn't use any of these): **proposedLoci_CTGCAG-CCGG_output.txt** (result: 660,088 possible targets).
+Proposed target loci using SbfI and EcoR1 recognition sites (USED 328 of these): **proposedLoci_CCTGCAGG-GAATTC_output.txt** (1,178 possible targets) and **compProposedLoci_CCTGCAGG-GAATTC_output.txt** (1,170 possible targets).
+Set of 900–1000bp regions of the Sense and Antisense strands containing Sbfi and EcoRI recognition sites: **ddRAD-like-loci_SenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt** and **ddRAD-like-loci_AntiSenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt**
+**Note:** Slight changes between targetted ddRADlike loci compared to proposed targets listed in ddRAD-like-loci_SenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt and ddRAD-like-loci_AntiSenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt: QLTV01002273.1:857142-857613 targetted instead of QLTV01002273.1:857142-858124; QLTV01004096.1:622037-622703 targetted instead of QLTV01004096.1:621766-622703; QLTV01002430.1:rc603258-603541 = QLTV01002430.1:c603541-602618.
 --->
 
-**GREPmethod_RandomLociSelection.txt**
-
-**GREPmethod_RandomLociSelection_Part1_MakeHitTable_cluster.R** (run using **GREPmethod_RandomLociSelection_Part1_MakeHitTable_cluster.sh**)
-
-**GREPmethod_RandomLociSelection_Part2_MakeProposedLociTables_cluster.R** (run using **GREPmethod_RandomLociSelection_Part2_MakeProposedLociTables_cluster.sh**)
-
-Proposed target loci using PstI and HpaII recognition sites (didn't use any of these): **proposedLoci_CTGCAG-CCGG_output.txt** (result: 660,088 possible targets).
-
-Proposed target loci using SbfI and EcoR1 recognition sites (USED 328 of these): **proposedLoci_CCTGCAGG-GAATTC_output.txt** (1,178 possible targets) and **compProposedLoci_CCTGCAGG-GAATTC_output.txt** (1,170 possible targets).
-
-Set of 900–1000bp regions of the Sense and Antisense strands containing Sbfi and EcoRI recognition sites: **ddRAD-like-loci_SenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt** and **ddRAD-like-loci_AntiSenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt**
-
-**Note:** Slight changes between targetted ddRADlike loci compared to proposed targets listed in ddRAD-like-loci_SenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt and ddRAD-like-loci_AntiSenseStrand_SbfI-EcoRI_900to1000bp_PASSED_HitTable.txt: QLTV01002273.1:857142-857613 targetted instead of QLTV01002273.1:857142-858124; QLTV01004096.1:622037-622703 targetted instead of QLTV01004096.1:621766-622703; QLTV01002430.1:rc603258-603541 = QLTV01002430.1:c603541-602618.
-
 <!---Additionally, these 76 loci were filtered: QLTV01000225.1:c99575-98616, QLTV01000331.1:c1514525-1513611, QLTV01000377.1:c355954-354989, QLTV01000576.1:c81247-80319, QLTV01000598.1:c2344838-2343842, QLTV01000800.1:c652914-651927, QLTV01000994.1:c1182081-1181109, QLTV01000994.1:c1182081-1181166, QLTV01000994.1:c939817-938888, QLTV01001007.1:c291309-290329, QLTV01001146.1:c2113031-2112088, QLTV01001315.1:c1859393-1858485, QLTV01001705.1:c675195-674227, QLTV01002005.1:c813370-812437, QLTV01002132.1:c1835986-1834996, QLTV01002449.1:c396593-395595, QLTV01002469.1:c147414-146470, QLTV01002680.1:c1744083-1743161, QLTV01002845.1:c2690843-2689860, QLTV01003114.1:c493546-492602, QLTV01003121.1:c301019-300034, QLTV01003123.1:c182922-181937, QLTV01003161.1:c70719-69740, QLTV01003275.1:c1568564-1567613, QLTV01003279.1:c1314139-1313203, QLTV01003388.1:c6651328-6650404, QLTV01003398.1:c1005420-1004496, QLTV01003470.1:c834832-833851, QLTV01003481.1:c870075-869103, QLTV01003654.1:c3517526-3516618, QLTV01003783.1:c313943-312944, QLTV01003803.1:c1403959-1403033, QLTV01004057.1:c16264-15314, QLTV01004083.1:c449674-448685, QLTV01004083.1:c449674-448711, QLTV01004095.1:c335369-334446, QLTV01004253.1:c311906-310966, QLTV01004293.1:c215485-214564, QLTV01004426.1:c1307194-1306221, QLTV01014916.1:c9133244-9132250, QLTV01000240.1:9171-10134, QLTV01000374.1:361307-362226, QLTV01000374.1:361307-362253, QLTV01000548.1:3044260-3045234, QLTV01000783.1:1055456-1056373, QLTV01000967.1:2238054-2239009, QLTV01001007.1:2168320-2169298, QLTV01001021.1:23918-24831, QLTV01001142.1:86130-87102, QLTV01001698.1:15465613-15466556, QLTV01001713.1:218325-219256, QLTV01001726.1:519585-520570, QLTV01001726.1:523446-524435, QLTV01001733.1:299105-300017, QLTV01002141.1:4416111-4417029, QLTV01002530.1:1246868-1247813, QLTV01002530.1:1246868-1247852, QLTV01002530.1:4037005-4037963, QLTV01002544.1:1011361-1012268, QLTV01002554.1:705287-706252, QLTV01002827.1:106879-107823, QLTV01002845.1:4905855-4906796, QLTV01002927.1:140628-141615, QLTV01002982.1:185703-186604, QLTV01003104.1:814750-815672, QLTV01003132.1:624182-625098, QLTV01003401.1:1036483-1037427, QLTV01003982.1:392677-393598, QLTV01004007.1:1152482-1153414, QLTV01004082.1:6189833-6190760, QLTV01004095.1:551642-552638, QLTV01004222.1:2793418-2794329, QLTV01004232.1:313408-314317, QLTV01004386.1:234140-235052, QLTV01004389.1:809128-810084, QLTV01004445.1:1811248-1812188.--->
-
-
-
 
 <a name="Methods.SelectingMHC"></a>
 ## Selecting MHC loci:
