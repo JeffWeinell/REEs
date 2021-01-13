@@ -383,7 +383,26 @@ Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus ful
 2. To find *Micrurus* UCEs in each of the other snake genomes, I queried each *Micrurus* UCE against each snake genome using blastn algorithm (saving ≤ 50 matches per query), which was implemented using the R wrapper function REEs::blast. **Note: the *Pantherophis guttatus* genome used here for UCEs (JTLQ00000000.1) is no longer available on NCBI; it was "updated" to version JTLQ00000000.2, which is from a completely different individual. I need to re-run this and subsequent steps for *Pantherophis guttatus* and then check if the output sequences are the same as when using the earlier genome version.**
 
 ```
-# Runs BLASTN
+### Define the URLs to fasta genome sequences
+
+### URLs to the genomes used are held in a matrix that can be accessed with the REEs::datasets function.
+Anolis.carolinensis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Anolis carolinensis"),2]
+Gekko.japonicus.genome_url              <- REEs::datasets(1)[which(datasets(1)[,1]=="Gekko japonicus"),2]
+Pogona.vitticeps.genome_url             <- REEs::datasets(1)[which(datasets(1)[,1]=="Pogona vitticeps"),2]
+Crotalus.horridus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,1]=="Crotalus horridus"),2]
+Crotalus.mitchellii.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Crotalus mitchellii"),2]
+Ophiophagus.hannah.genome_url           <- REEs::datasets(1)[which(datasets(1)[,1]=="Ophiophagus hannah"),2]
+Protobothrops.mucrosquamatus.genome_url <- REEs::datasets(1)[which(datasets(1)[,1]=="Protobothrops mucrosquamatus"),2]
+Python.bivittatus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,1]=="Python bivittatus"),2]
+Vipera.berus.genome_url                 <- REEs::datasets(1)[which(datasets(1)[,1]=="Vipera berus"),2]
+Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Thamnophis sirtalis"),2]
+
+### URL to Pantherophis guttatus genome version JTLQ00000000.1, not JTLQ00000000.2
+Pantherophis.guttatus.genome_url <- "https://sra-download.ncbi.nlm.nih.gov/traces/wgs03/wgs_aux/JT/LQ/JTLQ01/JTLQ01.1.fsa_nt.gz"
+##### Did not use the genome indicated on the next line (JTLQ00000000.2) at any point.
+## Pantherophis.guttatus.genome_url_JTLQ00000000.2 <- REEs::datasets(1)[which(datasets(1)[,1]=="Pantherophis guttatus"),2]
+
+### Runs BLASTN
 Crotalus.horridus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Crotalus.horridus.genome_url, query="./micrurus_UCEs.fa", table.out="./Crotalus.horridus.blastn.UCEs.50hits.txt")
 Crotalus.mitchellii.UCEs.50hits          <- REEs::blast(method="blastn",subject=Crotalus.mitchellii.genome_url, query="./micrurus_UCEs.fa", table.out="./Crotalus.mitchellii.blastn.UCEs.50hits.txt")
 Ophiophagus.hannah.UCEs.50hits           <- REEs::blast(method="blastn",subject=Ophiophagus.hannah.genome_url, query="./micrurus_UCEs.fa", table.out="./Ophiophagus.hannah.blastn.UCEs.50hits.txt")
