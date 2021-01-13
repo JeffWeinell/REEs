@@ -493,7 +493,7 @@ Result: 2,968 of the UCEs from *Micrurus fulvius* were found in all of the snake
 ### Character vector of paths to the UCE alignments
 UCE.alignment.filenames    <- list.files(path="~/MAFFT-aligned-UCEs",full.names=T)
 
-### Character vector of locus nanes (UCE ID number), with format "UCE.XXXX"
+### Character vector of locus names (UCE ID number), with format "UCE.XXXX"
 UCE.shortnames             <- mgsub(c(".fas","uce-"),c("","UCE."),REEs::nameFromPath(UCE.alignment.filenames))
 
 ### Read in UCE alignments (if they arent already loaded).
@@ -532,18 +532,15 @@ target.UCEs   <- Biostrings::getSeq(Thamnophis.sirtalis.UCEs.200.1000, gsubrange
 ### Save UCE targets
 Biostrings::writeXStringSet(x=target.UCEs,filepath="./targetUCEs.1000.fas",format="fasta")
 ```
+Result: 1,000 *T. sirtalis* UCEs chosen as targets: [targetUCEs.1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/targetUCEs.1000.fas). These correspond to WeinellEntry targets 2153–3152 in [Version2_additional-targets_Entry1899to3152_20Sep2018.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version2_additional-targets_Entry1899to3152_20Sep2018.fasta). After ultrastringent filtering, probes were designed for 907 of the 1,000 UCEs submitted to Arbor Biosciences. See [ultra-stringent filtering](#ultrastringentFiltering) section.
 
-Result: 1,000 *T. sirtalis* UCEs chosen as targets: [targetUCEs.1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/targetUCEs.1000.fas). These correspond to WeinellEntry targets 2153–3152 in [Version2_additional-targets_Entry1899to3152_20Sep2018.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version2_additional-targets_Entry1899to3152_20Sep2018.fasta). See [ultra-stringent filtering](#ultrastringentFiltering) section.
-
-
-After ultrastringent filtering, probes were designed for 907 of the 1,000 UCEs submitted to Arbor Biosciences.
 
 <a name="Methods.SelectingddRAD"></a>
 ## Selecting the set of target ddRAD-like loci
 
 #### Overview:
 
-1-2. Identify and obtain all regions of the *Thermophis baileyi* genome that begin with the recognition sequence of the restriction enzyme (RE) *Sbfi* and end with the recognition sequence of the RE *EcoR1*, and which have a length of 900-1000nt. Then I used BLASTn to search for homologs of the *Thermophis baileyi* ddRAD-like loci in the *T. sirtalis* genome. I filtered the set of ddRAD-like loci to include only those with a single, high quality match found in *T. sirtalis* genome. I trimmed the ends of sequences if there was a string of ambiguous bases nearby. A subset of the retained loci were submitted to Arbor for ultrastringent filtering and then probe design.
+Identify and obtain all regions of the *Thermophis baileyi* genome that begin with the recognition sequence of the restriction enzyme (RE) *Sbfi* and end with the recognition sequence of the RE *EcoR1*, and which have a length of 900-1000nt. Then I used BLASTn to search for homologs of the *Thermophis baileyi* ddRAD-like loci in the *T. sirtalis* genome. I filtered the set of ddRAD-like loci to include only those with a single, high quality match found in *T. sirtalis* genome. I trimmed the ends of sequences if there was a string of ambiguous bases nearby. A subset of the retained loci were submitted to Arbor for ultrastringent filtering and then probe design.
 
 <!---
 1. grep Sbfi recognition site in *T. baileyi* genome (sense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
@@ -614,7 +611,7 @@ QLTV01020412.1:1-995 | no similar locus proposed | not yet clear...
 Thermophis.ddradlike.seqs <- Biostrings::readDNAStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas")
 
 ### Define the URL path to the Thamnophis sirtalis genome.
-Thamnophis.sirtalis.genome_url          <- ""https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz""
+Thamnophis.sirtalis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz"
 
 ### Run BLASTN to find proposed ddRAD-like loci in T. sirtalis genome.
 Thamnophis.sirtalis.ddRADlike.50hits <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url, query=Thermophis.ddradlike.seqs,table.out="Thamnophis.sirtalis.ddRADlike.50hits.txt")
