@@ -672,8 +672,12 @@ mode(old.coordinates.left)  <- "numeric"
 mode(old.coordinates.right) <- "numeric"
 
 ### New contig coordinates of loci to be trimmed
-new.coordinates.left  <- cbind(old.coordinates.left[,1],old.coordinates.left[,1]+(left.pos[which.left,2]-1))
-new.coordinates.right <- cbind((old.coordinates.right[,1]+right.pos[which.right,1]-1),old.coordinates.right[,2])
+new.coordinates.left        <- cbind(old.coordinates.left[,1],old.coordinates.left[,1]+(left.pos[which.left,2]-1))
+new.coordinates.left[grep(":c",names(loci.trimmed.left)),2] <- old.coordinates.left[grep(":c",(names(loci.trimmed.left))),1]-(left.pos[which.left[grep(":c",(names(loci.trimmed.left)))],2]-1)
+
+new.coordinates.right                                         <- cbind((old.coordinates.right[,1]+right.pos[which.right,1]-1),old.coordinates.right[,2])
+new.coordinates.right[grep(":c",names(loci.trimmed.right)),1] <- old.coordinates.right[grep(":c",(names(loci.trimmed.right))),2]+(right.pos[which.right[grep(":c",(names(loci.trimmed.right)))],2]-1)
+
 new.names.left        <- paste0(mgsub(c(":c[1-9].+",":[1-9].+"),c(":c",":"),names(loci.trimmed.left)),new.coordinates.left[,1],"-",new.coordinates.left[,2])
 new.names.right       <- paste0(mgsub(c(":c[1-9].+",":[1-9].+"),c(":c",":"),names(loci.trimmed.right)),new.coordinates.right[,1],"-",new.coordinates.right[,2])
 
@@ -695,10 +699,9 @@ writeXStringSet(proposed.loci.trimmed,"Thermophis_ProposedLoci_CCTGCAGG-GAATTC_9
 <!--- Three ddRAD-like loci targetted are different than those in the table of proposed loci; two of these should be different because they were trimmed later, but the third, QLTV01020412.1:1-995, is not. Need to figure out why.
 target locus|proposed using proposeLoci.ddRADlike function and then trimmed|reason for difference.
 ---|---|---
-QLTV01002430.1:c603541-603258| QLTV01002430.1:c603541-603258 |
-QLTV01004096.1:622037-622703 | QLTV01004096.1:621766-622703 | string of six Ns at 622031-622036, and therefore trimmed 621766-622036.
-QLTV01020412.1:1-995 | no similar locus proposed | not yet clear...         
-"QLTV01004096.1:621766-622703"
+QLTV01002430.1:c603541-603258| "QLTV01002430.1:c603541-602618"... QLTV01002430.1:c603541-603258 603824 |
+QLTV01020412.1:1-995 | no similar locus proposed | not yet clear...
+
 --->
 
 3. I used BLASTN as implemented in the REEs::blast function to search for *Thermophis* ddRAD-like loci in the *T. sirtalis* genome.
