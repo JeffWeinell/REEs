@@ -676,7 +676,7 @@ new.coordinates.left        <- cbind(old.coordinates.left[,1],old.coordinates.le
 new.coordinates.left[grep(":c",names(loci.trimmed.left)),2] <- old.coordinates.left[grep(":c",(names(loci.trimmed.left))),1]-(left.pos[which.left[grep(":c",(names(loci.trimmed.left)))],2]-1)
 
 new.coordinates.right                                         <- cbind((old.coordinates.right[,1]+right.pos[which.right,1]-1),old.coordinates.right[,2])
-new.coordinates.right[grep(":c",names(loci.trimmed.right)),1] <- old.coordinates.right[grep(":c",(names(loci.trimmed.right))),2]+(right.pos[which.right[grep(":c",(names(loci.trimmed.right)))],2]-1)
+new.coordinates.right[grep(":c",names(loci.trimmed.right)),1] <- old.coordinates.right[grep(":c",(names(loci.trimmed.right))),1]-(right.pos[which.right[grep(":c",(names(loci.trimmed.right)))],1]-1)
 
 new.names.left        <- paste0(mgsub(c(":c[1-9].+",":[1-9].+"),c(":c",":"),names(loci.trimmed.left)),new.coordinates.left[,1],"-",new.coordinates.left[,2])
 new.names.right       <- paste0(mgsub(c(":c[1-9].+",":[1-9].+"),c(":c",":"),names(loci.trimmed.right)),new.coordinates.right[,1],"-",new.coordinates.right[,2])
