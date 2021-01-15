@@ -638,6 +638,26 @@ which.right  <- which(which.longer==2)
 ### DNAStringSets containing the trimmed loci.
 loci.trimmed.left  <- subseq(loci.to.trim[which.left],start=rep(1,length(which.left)),end=left.pos[,2][which.left])
 loci.trimmed.right <- subseq(loci.to.trim[which.right],start=right.pos[,1][which.right],end=right.pos[,2][which.right])
+
+### Old contig coordinates of loci to be trimmed
+old.coordinates.left        <- mat.strsplit(mgsub(c(".+:c",".+:"),c("",""),names(loci.trimmed.left)),split="-")
+old.coordinates.right       <- mat.strsplit(mgsub(c(".+:c",".+:"),c("",""),names(loci.trimmed.right)),split="-")
+mode(old.coordinates.left)  <- "numeric"
+mode(old.coordinates.right) <- "numeric"
+
+### New contig coordinates of loci to be trimmed
+new.coordinates.left  <- cbind(old.coordinates.left[,1],old.coordinates.left[,1]+(left.pos[which.left,2]-1))
+new.coordinates.right <- cbind((old.coordinates.right[,1]+right.pos[which.right,1]-1),old.coordinates.right[,2])
+new.names.left  <- paste0(mgsub(c(":c[1-9].+",":[1-9].+"),c(":c",":"),names(loci.trimmed.left)),new.coordinates.left[,1],"-",new.coordinates.left[,2])
+new.names.right <- paste0(mgsub(c(":c[1-9].+",":[1-9].+"),c(":c",":"),names(loci.trimmed.right)),new.coordinates.right[,1],"-",new.coordinates.right[,2])
+
+### Rename the trimmed loci to the new genomic coordinates
+names(loci.trimmed.left)  <- new.names.left
+names(loci.trimmed.right) <- new.names.right
+
+###
+
+
 ```
 
 
