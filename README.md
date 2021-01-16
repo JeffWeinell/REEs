@@ -694,44 +694,63 @@ proposed.loci.trimmed                        <- c(proposed.loci[-which.Ns],loci.
 writeXStringSet(proposed.loci.trimmed,"Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas")
 
 ```
+Proposed ddRAD-like loci after trimming can be downloaded here: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas).
 
+4. I randomly selected loci from the set of trimmed, proposed ddRAD-like loci until all remaining baits (n = ) in the 20K bait kit were assigned. **Finish adding the code used to calculate baits per locus**
+```
+### Read in the trimmed loci if not already loaded
+proposed.loci.trimmed             <- Biostrings::readDNAStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas")
+
+### Randomly shuffle the order of the loci
+proposed.loci.trimmed.randomOrder <- proposed.loci.trimmed[sample(1:length(proposed.loci.trimmed),n=lenth(proposed.loci.trimmed),replace=F)]
+
+### Calculate the number of baits needed to target each locus in proposed.loci.trimmed.randomOrder
+baits.per.locus <- 
+
+### Create a vector of the rolling sum of baits per locus
+baits.per.locus.rollingSum <- REEs::rollSum(baits.per.locus)
+
+### Keep the first N loci in proposed.loci.trimmed.randomOrder in which rolling sum of baits per locus is closest to but not exceeding the number of unassigned baits remaining in the bait kit.
+
+ddrad.targets.seqs <- proposed.loci.trimmed.randomOrder[which(baits.per.locus.rollingSum < 3,695)]
+
+### Save the set of proposed ddRAD-like loci to target
+writeXStringSet(ddrad.targets.seqs,"/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/ddRAD-like/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed_targetted.fas")
+```
+Set of ddRAD-like loci to target can be downloaded here: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed_targetted.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed_targetted.fas).
+**Note: QLTV01020412.1:1-995, which was also targetted, is not in this file**
+
+<!---
 **Note:** I may have arbitrarily/randomly sampled loci from those in Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas to use as the target loci, without doing blast.
 4. I used BLASTN as implemented in the REEs::blast function to search for *Thermophis* ddRAD-like loci in the *T. sirtalis* genome.
 ```
 ### If not already loaded, read in the set of proposed loci sequences from step three.
 Thermophis.ddradlike.seqs <- Biostrings::readDNAStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas")
-
 ### Define the URL path to the Thamnophis sirtalis genome.
 Thamnophis.sirtalis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz"
-
 ### Run BLASTN to find proposed ddRAD-like loci in T. sirtalis genome.
 Thamnophis.sirtalis.ddRADlike.50hits <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url, query=Thermophis.ddradlike.seqs,table.out="Thamnophis.sirtalis.ddRADlike.50hits.txt")
 ```
 The BLASTN output table can be downloaded here: **Thamnophis.sirtalis.ddRADlike.50hits_v2.txt.zip**. Result: No *T. sirtalis* matches were found for 124 of the *Thermophis* query sequences.**Note: this "50 hits" table often has many more than 50 hits per query...up to 2,213 hits for QLTV01001023.1:c672318-671361; mean number of hits per query is 148**. Additionally: These loci in the final target loci are not present in the blast query column: **"QLTV01002273.1:857142-857613"  "QLTV01004096.1:622037-622703" "QLTV01004232.1:188994-189933" "QLTV01020412.1:1-995" "QLTV01001126.1:c908958-908049" "QLTV01002430.1:c603541-603258" "QLTV01003395.1:c431960-431054"**. Need to figure out why...
-
 5. I used the function reportBestMatches (REEs package) to filter the "50 hits" table to include only the best match of each query sequence. I set remove.subseq.matches to FALSE (setting to TRUE produces the same result in this case and is much slower to run), min.bitscore = 50, and min.bitscore.difference = 0.
 ```
 ### Use reportBestMatches to get the best match per query.
 Thamnophis.sirtalis.ddRADlike.best.hits <- REEs::reportBestMatches(input.table=Thamnophis.sirtalis.ddRADlike.50hits, output.table.path="Thamnophis.sirtalis.ddRADlike.best.hits.txt",remove.subseq.matches=F)
 ```
 The best matches of proposed ddRAD-like loci in *T. sirtalis* genome (2,201 loci) can be downloaded here: **Thamnophis.sirtalis.ddRADlike.best.hits_v2.txt**. In retrospect I should have set min.bitscore > 0 to exclude loci that have the same bitscore for the best two batches, because setting min.bitscore.difference = 0 could allow recently duplicated genes to be retained. Two of the targetted ddRAD-like loci had the same bitscore for their best two matches in *T. sirtalis*, but in each case the top two matches covered nearly the same region (i.e., not due to duplication).
-
 6. Retain ddRAD-like loci present in "qseqid" column of best hits table.
 ```
 ### If not already loaded, read in the set of sequences that were saved in step three.
 Thermophis.ddradlike.seqs <- Biostrings::readDNAStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas")
-
 ### If not already loaded, read in the table of best hits.
 Thamnophis.sirtalis.ddRADlike.best.hits <- data.table::fread("Thamnophis.sirtalis.ddRADlike.best.hits.txt")
-
 ### Filter sequences that are not listed in the qseqid column of Thamnophis.sirtalis.ddRADlike.best.hits
 Thermophis.ddradlike.filtered.seqs <- Thermophis.ddradlike.seqs[which(names(Thermophis.ddradlike.seqs) %in% Thamnophis.sirtalis.ddRADlike.best.hits$qseqid)]
-
 ### Save the filtered set of ddRAD-like sequences.
 writeXStringSet(Thermophis.ddradlike.filtered.seqs,filepath="Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered.fas")
 ```
 Fasta file containing sequences of the filtered ddRAD-like loci: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_filtered.fas).
-
+--->
 <!---
 7. Trim ends of sequences to remove ambiguous bases near the ends of some loci.
 ```
