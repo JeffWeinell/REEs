@@ -56,6 +56,15 @@ library(devtools)
 devtools::install_github("gschofl/biofiles",build_vignettes=F,lib=packages.dir)
 devtools::install_github("JeffWeinell/REEs",upgrade=F,dependencies=c("Depends", "Imports", "LinkingTo"),auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
 
+######
+## Try this next, instead of the above. It could save two lines...
+packages.dir   <- "/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/test_install_v3"
+.libPaths(packages.dir)
+install.packages(c(BicManager,devtools),lib=packages.dir,repos = "http://cran.us.r-project.org")
+library(BiocManager)
+library(devtools)
+BiocManager::install(c("gschofl/biofiles"","JeffWeinell/REEs"),lib=packages.dir,update=FALSE, version="3.10",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+
 ```
 
 <a name="InstallingBLAST"></a>
