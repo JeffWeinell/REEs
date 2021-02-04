@@ -1,6 +1,6 @@
 Package: REEs
 Title: Identifying Rapidly-evolving Exons Using Phylogenomic Datasets.
-Version: 1.5
+Version: 1.6
 Authors@R: 
     person(given = "Jeffrey",
            family = "Weinell",
