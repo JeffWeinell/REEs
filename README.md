@@ -54,7 +54,7 @@ BiocManager::install(c("BSgenome","DECIPHER","phangorn","dplyr","stringr","data.
 # Need to check if these can also be installed with BiocManager
 library(devtools)
 devtools::install_github("gschofl/biofiles",build_vignettes=F,lib=packages.dir)
-devtools::install_github("JeffWeinell/REEs",auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+devtools::install_github("JeffWeinell/REEs",upgrade=F,dependencies=c("Depends", "Imports", "LinkingTo"),auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
 
 ```
 
