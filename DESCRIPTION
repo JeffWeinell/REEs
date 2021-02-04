@@ -1,0 +1,25 @@
+Package: REEs
+Title: Identifying Rapidly-evolving Exons Using Phylogenomic Datasets.
+Version: 1.5
+Authors@R: 
+    person(given = "Jeffrey",
+           family = "Weinell",
+           role = c("aut", "cre"),
+           email = "jweine2@gmail.com",
+           comment = c(ORCID = "0000-0002-9568-0672"))
+Description: Functions for accessing, subsetting, and comparing genomic datasets to identify Rapidly-evolving Exons (REEs). Includes an assortment of convenience functions for pattern matching and wrapper functions for to calculate stats when performing multiple sequence alignment for up to thousands of loci.
+License: CCO
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports: ape, biofiles, data.table, DECIPHER, dplyr, GenomeInfoDb,
+        GenomicRanges, igraph, IRanges, parallel, phangorn, RCurl,
+        Rsamtools, stringr, tibble, utils
+Depends: R (>= 3.6.0), Biostrings, BSgenome
+Suggests: phytools
+NeedsCompilation: no
+Packaged: 2021-02-04 15:58:50 UTC; alyssaleinweber
+Author: Jeffrey Weinell [aut, cre] (<https://orcid.org/0000-0002-9568-0672>)
+Maintainer: Jeffrey Weinell <jweine2@gmail.com>
+Built: R 4.0.3; ; 2021-02-04 15:58:56 UTC; unix

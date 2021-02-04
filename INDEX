@@ -1,0 +1,189 @@
+CDS.from.gb             Get CDS Contained in Range
+RAD.digestion           SbfI.Seq <-
+                        REEs::datasets("restriction.enzymes")[datasets("restriction.enzymes"),"RE.name"=="SbfI","recognition.sequence"]
+                        EcoR1.Seq <-
+                        REEs::datasets("restriction.enzymes")[datasets("restriction.enzymes"),"RE.name"=="EcoRI","recognition.sequence"]
+                        Thermophis.baileyi_genome.url <-
+                        REEs::datasets(1)[which(datasets(1),"species"=="Thermophis
+                        baileyi"),"genome.url"]
+                        proposed.ddRAD.loci.coordinates <-
+                        REEs::proposeLoci.ddRADlike(input.seqs=Thermophis.baileyi_genome.url,output.dir="/ddRAD-like/",recognitionSeqs=c(SbfI.Seq,EcoR1.Seq),lim.lengths=c(900,1000),save.tables=T)
+                        In Silico ddRAD version2
+align.alignment.columns
+                        Left Justify Alignment
+align.and.concatenate.best.exons
+                        Align and Concatenate REEs Takes as input a set
+                        of exomes and an input table indicating which
+                        loci are the REEs, performs multiple sequence
+                        alignment (using mafft) for each REE, and
+                        outputs: (1) An alignments for each REE locus,
+                        (2) The concatenated alignment of REE loci, (3)
+                        The partition file associated with the
+                        concatenated locus alignment. This function is
+                        superceded by makeStatsTable.
+align.shared.loci       Align Shared Loci Takes as input a set of fasta
+                        sequence files, one per species (or
+                        individual). Perfoms multiple sequence
+                        alignment (using MAFFT) for loci that are
+                        shared among all species (determined by
+                        sequence names). Returns a list of DNAStringSet
+                        objects, each of which holds aligned sequences
+                        for a locus. Optionally writes alignments in
+                        fasta format (one alignment per file).
+alignment.stats         Get Alignment Stats Table Similar to the
+                        function makeExomeStatsTable, except this
+                        function takes as input the set of exon
+                        alignments rather than the unaligned exomes.
+                        The output is an abbreviated version of the
+                        stats table produce by the function
+                        makeExomeStatsTable. This function is
+                        superceded by makeStatsTable have been
+                        abandoned. Note that pis.new is used here
+                        rather than the pis function that was used in
+                        makeExomeStatsTable function.
+amb                     Expansion of IUPAC nucleotide symbols
+arrowLine               Plot Arrow
+bait.coverage           Bait Coverage
+blast                   Run blast from R Wrapper for running BLAST from
+                        R Requires a local copy of BLAST, which can be
+                        dowloaded from here:
+                        https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/
+                        If blasting against genomes, this function is
+                        best implemented on a cluster/cloud
+                        environment, rather than locally, unless you
+                        have a super-computer...
+blast.install           Install NCBI BLAST+
+bma                     IUPAC nucleotide symbols
+charTest.aa             Any AAs Present
+charTest.dna            Check if Nucleotides Present
+check.if.executable     Check Executable Checks if the input path is
+                        executable.
+codonsDNAStringSet      Get Sites at Codon Position
+collapse.DNAStringSet   Collapse DNAStringSets Collapse a list of
+                        DNAStringSet objects into a single DNAStringSet
+                        object.
+collapse.low.support.nodes
+                        Collapse Low Supported Nodes
+column.split            Split Columns by Delimiter
+concatenate.alignments
+                        Concatenate All Alignments in Directory
+concatenateDNAStringSets
+                        Concatenate DNAStringSets
+congruency.network      Phylogenetic Congruency Network from Congruency
+                        Matrix
+congruency.test         Congruency Test
+countChars              Count character occurences
+datasets                REEs Package Datasets
+dir.check.create        Create directory unless exists
+filter.alignment        Filter Alignment
+filter.gff              Filter Feature Annotation Table
+filter.md               Test Missing Data
+filter.var.aa           Filter by AA Variation
+filter.var.dna          Filter by DNA Variation
+find.orf                Find Open Reading Frames
+get.UCEs.from.blastTable
+                        Get UCEs From BLAST Table Extracts the
+                        sequences defined in an input table (a blast
+                        table with NCBI format 6) from an input genome.
+                        The input genome should be the same genome used
+                        as the subject in the blast table. If the query
+                        sequences in the blast table correspond to
+                        Ultraconserved Elements (UCEs), then the output
+                        is the UCEs of the species with input genome.
+                        The quality of the output UCE dataset depends
+                        on the quality/completeness of the blast
+                        search.
+get.all.quartets        Get All Quartets
+get.seqs.from.blastTable
+                        Get Sequences From BLAST Table Extracts the
+                        sequences defined in an input table (a blast
+                        table with NCBI format 6) from an input genome.
+                        The input genome should be the same genome used
+                        as the subject in the blast table. The
+                        quality/completeness of the output sequence
+                        dataset depends on the quality/completeness of
+                        the blast search. The functions
+                        get.exome.from.blastTable and
+                        get.UCEs.from.blastTable are the same as this
+                        one, but applied to a specific type of
+                        sequences in the blast table. This function
+                        could supercede those functions.
+get.seqs.from.gff       Get Sequences from GFF Table
+get_ncbi_sequences      Download NCBI Sequences
+include.accession.region.gb
+                        Add Region Info to GenBank Flatfile
+intersect.all           Intersect of all sets
+is.overlap              Test if Two Ranges Overlap This function takes
+                        as input two integer vectors. The min and max
+                        values of each vector represent the lower and
+                        upper limits of each range, respectively.
+                        Returns TRUE if input ranges overlap, otherwise
+                        FALSE.
+is.subset               Test if subset Test if a range of numbers is a
+                        subset of another range of numbers.
+is.wholenumber          Whole number test
+load.gff                Read a General Feature Format (GFF) file
+mafft                   MAFFT Multiple sequence alignment
+mafft.install           Install MAFFT
+make.consensus          Get Consensus Sequence
+make.partitioned.alignment
+                        Make Partitioned Alignments
+makeBlastDB             Make Local Blast Database Wrapper for the NCBI
+                        makeblastdb command. This function makes an
+                        NCBI blast database (which is needed to run
+                        blast against).
+makeStatsTable          Make Stats Table This function aligns and then
+                        creates a table of stats calculated for each
+                        exon alignment. The output stats table is used
+                        to identify/select the REEs. This function
+                        should be used instead of running the functions
+                        align.and.concatenate.best.exons and then
+                        alignment.stats
+mat.strsplit            Split character string to matrix
+mgrep                   Find patterns in subjects
+mgsub                   Replace multiple patterns
+mround                  Round in specific way
+multiple.congruency.test
+                        Multiple Congruency Test
+na.replace              Replace missing values
+nameFromPath            Filename from Filepath
+nmatch                  Find First N Matches
+nmatch.v2               Find First N Matches
+package.load.order      State Required Packages
+pairwise.inf.sites      Mean Pairwise Informative Sites
+pars.inf                Is Site Parsimony Informative
+pars.inf.aa             Test if AA Site Parsimony Informative
+pars.inf.dna            Test if DNA Site Parsimony Informative
+percent.gaps            Percentage of Alignment Gaps
+percent.missing.data    Percent Missing Data
+pick.loci               Pick Rapidly-evolving Exons
+pis                     Parsimony Informative Sites
+pis.new                 Parsimony Informative Sites
+plotAlignment           Plot Alignment
+proposeLoci.ddRADlike   In Silico ddRAD
+read.gb                 Read GenBank flatfile
+read.tree.multipleFiles
+                        Read Multiple Newick Trees
+reportBestMatches       Get Sequences From BLAST Table
+required.packages       State Required Packages
+rollSum                 Rolling Summation
+run.mafft               Run MAFFT
+run.trimal              Run trimal
+s2v                     Character String to Character Vector
+scanFa.multiple         Read Multiple Fasta Files
+simple.concatenate.DNA
+                        Simple Concatenate DNA Alignment
+slice.trim              Remove Poorly Aligned Regions
+snp.alignment           Get SNP Alignment
+snpsDNAStringSet        SNPs DNAStringSet Alignment
+str_locate_X            Locate Xth Occurrence in String
+str_locate_last         Locate Last in Strings
+string.list             Matrix to List of Strings
+t_col                   Make Transparent Color
+trim.alignment          Trim DNA alignment
+trim.ends               Trim ends of DNA alignment
+unique.tiplabels        All Unique Tree Tips
+write.phy               Write DNA phylip format
+writeDNAStringSet       Write DNAStringSet
+xprod.combn             All Combinations as Strings
+xprod.combn.mat         All Combinations as Matrix
