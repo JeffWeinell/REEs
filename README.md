@@ -19,35 +19,29 @@ sbatch --nodes=1 --ntasks-per-node=4 --time=6:00:00 --partition=sixhour /panfs/p
 Installation involves the following steps, which are executed in the block of code below: (1–2) define where packages should be installed and where source files should be downloaded, and add these directories to R's library path (3) install and load BiocManager package, which provides access to CRAN and Bioconductor repositories, (4) install dependencies from CRAN and Bioconductor, (5) define URLs to source code of biofiles package (v1.0.0 from CRAN archive) and REEs (SnakeCap project on Open Science Framework), (6) download and install biofiles and REEs from source.
 
 ```
-# Define where packages should be installed and where source files should be downloaded.
+# Define where packages should be installed.
 # If you want to install packages somewhere other than the default R library paths, replace .libPaths() on the next line with the path to where packages should be installed.
 packages.dir   <- .libPaths()
 # packages.dir <- "/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/test_install_v2"
-temp.dir       <- tempdir()
+# temp.dir       <- tempdir()
 
-# Add packages.dir and temp.dir to the R library path for the duration of the session.
-.libPaths(c(packages.dir,temp.dir))
+# Add packages.dir to the R library path for the duration of the session.
+.libPaths(packages.dir)
 
-# Install and load BiocManager
+# Install BiocManager
 install.packages(pkgs="BiocManager",lib=packages.dir,repos = "http://cran.us.r-project.org",dependencies=F)
-library(BiocManager,lib.loc=packages.dir)
 
-# Use BiocManager to install these REEs dependencies. Packages in their dependency graphs are also installed.
+# Use BiocManager to install REEs dependencies. Packages in their dependency graphs are also installed.
 # Setting the version argument to "3.10" is important if you are using R versions 3.6–<4.0.
 # For R v4.0+, you can likely omit the the version argument, although including it shouldn't cause problems.
+library(BiocManager)
 BiocManager::install(c("BSgenome","DECIPHER","phangorn","dplyr","stringr","data.table", "foreach","reutils","devtools"),lib=packages.dir,update=FALSE, version="3.10",dependencies=c("Depends", "Imports", "LinkingTo"),Ncpus=4)
 
-# Use install_github function from devtools package to install biofiles.
+# Use install_github function from devtools package to install biofiles and REEs.
+library(devtools)
 devtools::install_github("gschofl/biofiles",build_vignettes=F,lib=packages.dir)
+devtools::install_github("JeffWeinell/REEs",auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
 
-# Download and install REEs from source. In the future it will be possible to install REEs with devtools install_github function.
-REEs.url     <- "https://osf.io/6ubp5/download"
-download.file(url=REEs.url,destfile=paste0(temp.dir,"/REEs.tar.gz"))
-install.packages(pkgs=paste0(temp.dir,"/REEs.tar.gz"),repos=NULL,lib=packages.dir,type="source")
-
-# To save space you can remove the BH package after installing REEs, because BH was only needed during installation of some dependencies.
-# To delete BH, uncomment the next line.
-unlink(paste0(packages.dir,"/BH"),recursive=T)
 ```
 ### Installing BLAST
 
