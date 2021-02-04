@@ -53,7 +53,7 @@ BiocManager::install(c("BSgenome","DECIPHER","phangorn","dplyr","stringr","data.
 # Use install_github function from devtools package to install biofiles and REEs.
 library(devtools)
 devtools::install_github("gschofl/biofiles",build_vignettes=F,lib=packages.dir)
-devtools::install_github("JeffWeinell/REEs",auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+devtools::install_github("JeffWeinell/REEs",update=F,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
 
 ```
 
