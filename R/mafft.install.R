@@ -26,14 +26,10 @@ mafft.install <- function(install.loc="auto",source=F){
 		}
 	} else {
 		if(install.loc=="auto"){
-			install.loc       <- paste0(find.package("REEs"),"/blast-mafft")
-			if(!(dir.exists(install.loc))){
-				dir.create(install.loc)
-			}
+			install.loc       <- paste0(find.package("REEs"),"/blast-mafft/mafft")
+			dir.check.create(install.loc)
 			bindir <- paste0(install.loc,"/bin")
-			if(!(dir.exists(bindir))){
-				dir.create(bindir)
-			}
+			dir.check.create(bindir)
 		}
 		if(!(install.loc %in% c("auto","PATH"))) {
 			### Check for write access to install.loc
@@ -42,9 +38,7 @@ mafft.install <- function(install.loc="auto",source=F){
 				stop("install.loc is not writeable")
 			}
 			bindir <- paste0(install.loc,"/bin")
-			if(!(dir.exists(bindir))){
-				dir.create(bindir)
-			}
+			dir.check.create(bindir)
 		}
 		### download MAFFT source code
 		download.file(url=source.url,destfile=paste0(install.loc,"/",basename(source.url)))

@@ -16,4 +16,5 @@ BuildPath.dir <- function(path){
             result  <- c(subpath,result)
         }
     }
+    result
 }
