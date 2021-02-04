@@ -1,12 +1,12 @@
 # REEs Package
 
-[Introduction](#Introduction)
-[Software Dependencies](#Dependencies)
-[Installing REEs](#InstallingREEs)
-[Installing BLAST](#InstallingBLAST)
-[Installing MAFFT](#InstallingMAFFT)
-[How to use this package](#HowTo)
-[Example](#Example)
+  - [Introduction](#Introduction)
+  - [Software Dependencies](#Dependencies)
+  - [Installing REEs](#InstallingREEs)
+  - [Installing BLAST](#InstallingBLAST)
+  - [Installing MAFFT](#InstallingMAFFT)
+  - [How to use this package](#HowTo)
+  - [Example](#Example)
 
 <a name="Introduction"></a>
 ## Introduction.
