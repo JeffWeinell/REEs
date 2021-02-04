@@ -24,7 +24,7 @@
 blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-5,output.format=6,max.matches.per.query=50,num.threads="max",other.args=NULL){
 	#### Prepare the path to the executables
 	if(blast.path=="auto"){
-		REEs.blast.dir   <- paste0(find.package("REEs"),"/blast-mafft")
+		REEs.blast.dir   <- paste0(find.package("REEs"),"/blast-mafft/blast")
 		blast.dir.path   <- list.dirs(REEs.blast.dir)[grep("bin$",list.dirs(REEs.blast.dir))]
 	} else {
 		### In the future, include another if statement to check if any directories on the path contain blast executables.
