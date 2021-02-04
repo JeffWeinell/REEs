@@ -1,20 +1,33 @@
 # REEs Package
 
+[Introduction](#Introduction)
+[Software Dependencies](#Dependencies)
+[Installing REEs](#InstallingREEs)
+[Installing BLAST](#InstallingBLAST)
+[Installing MAFFT](#InstallingMAFFT)
+[How to use this package](#HowTo)
+[Example](#Example)
+
+<a name="Introduction"></a>
 ## Introduction.
 This R package includes functions for selecting **rapidly-evolving exons (REEs)** for targetted sequence capture for phylogenomics. The methods integrated into this package were used to design the [SnakeCap](https://github.com/JeffWeinell/SnakeCap/blob/main/README.md) probe set, a project that was inspired by [FrogCap (Hutter et al.)](https://github.com/chutter/FrogCap-Sequence-Capture) and the [RELEC study of Karin et al. 2019](https://doi.org/10.1093/molbev/msz263).
 
 The reasons for publishing these methods as an R package include (1) having a reproducible and citable pipeline for projects that use the SnakeCap probe set, and (2) to provide a method for researchers to select a set of loci for their phylogenomic studies.
 
+<a name="Dependencies"></a>
 ### Software Dependencies:
+  - [R](https://www.r-project.org/) >= v3.6
   - [BLAST](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)
   - [MAFFT](https://mafft.cbrc.jp/alignment/software/)
-  - [R](https://www.r-project.org/) >= v3.6
+
 
 **"Quick" install on KU cluster. Delete this before making this repository public.**
 ```
 sbatch --nodes=1 --ntasks-per-node=4 --time=6:00:00 --partition=sixhour /panfs/pfs.local/home/j926w878/programs/REEs_cluster_setup.sh
 ```
 
+
+<a name="InstallingREEs"></a>
 ### Installing REEs
 Installation involves the following steps, which are executed in the block of code below: (1–2) define where packages should be installed and where source files should be downloaded, and add these directories to R's library path (3) install and load BiocManager package, which provides access to CRAN and Bioconductor repositories, (4) install dependencies from CRAN and Bioconductor, (5) define URLs to source code of biofiles package (v1.0.0 from CRAN archive) and REEs (SnakeCap project on Open Science Framework), (6) download and install biofiles and REEs from source.
 
@@ -43,6 +56,8 @@ devtools::install_github("gschofl/biofiles",build_vignettes=F,lib=packages.dir)
 devtools::install_github("JeffWeinell/REEs",auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
 
 ```
+
+<a name="InstallingBLAST"></a>
 ### Installing BLAST
 
 You can follow the instructions [here](https://www.ncbi.nlm.nih.gov/books/NBK279671/), or use the REEs ```blast.install``` function to install BLAST to the REEs package directory. The ```blast.install``` method is convenient because you wont need to explicitely specify the path to the directory holding BLAST executables when using the REEs ```blast``` function. However, you will need to run ```blast.install``` after each time you upgrade or reinstall REEs.
@@ -55,6 +70,7 @@ library(REEs)
 blast.install()
 ```
 
+<a name="InstallingMAFFT"></a>
 ### Installing MAFFT
 
 Instructions for installing MAFFT can be found [here](https://mafft.cbrc.jp/alignment/software/).
@@ -69,6 +85,7 @@ library(REEs)
 mafft.install()
 ```
 
+<a name="HowTo"></a>
 ## How to use this package to identify rapidly-evolving exons:
 
 Data that you need at the start:
@@ -90,6 +107,7 @@ Functions in REEs Pipeline. To see usage details for each function type ```?REEs
  
  The REEs package also provides functions for performing *in-silico* ddRAD, which can be used to asses bias of REEs loci.
  
+<a name="Example"></a>
 #### Example 
 
 In this example we will identify REEs for the diverse lizard clade [Laterata](https://en.wikipedia.org/wiki/Lacertoidea) (aka Lacertoidea, which includes the Amphisbaenia, Gymnophthalmidae, Lacertidae, and Teiidae). Genomes are available on NCBI for five species of Lacertidae (we will use three of these) and two species of Teiidae. GFF tables are available for three species of Lacertidae: *Lacerta agilis*, *Podarcis muralis*, *Zootoca vivipara*; before we decide which of these three species will be the reference species we will query their GFF tables to get an idea about the quality of the genome and annotation completeness.
