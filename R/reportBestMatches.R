@@ -17,14 +17,20 @@ reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq
 	if("data.frame" %in% class(input.table)){
 		all.matches <- data.table::as.data.table(input.table)
 	}
+	### trying this out...
+#	if("data.table" %in% class(input.table)){
+#		all.matches <- as.data.frame(input.table)
+#	}
+
 	if("character" %in% class(input.table)){
 		all.matches       <- data.table::fread(input=input.table,sep="\t")
 	}
+
 	colnames(all.matches) <- c("qseqid","sseqid","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore")
 	#print("check 0")
 	### Filter matches with bitscore less than min.bitscore
 	if(any(all.matches$bitscore < min.bitscore)){
-		filtered.matches <- all.matches[-which(all.matches$bitscore < min.bitscore)]
+		filtered.matches <- all.matches[-which(all.matches$bitscore < min.bitscore),]
 	} else {
 		filtered.matches <- all.matches
 	}
