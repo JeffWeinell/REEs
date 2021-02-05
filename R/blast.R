@@ -38,7 +38,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 	test.blast.exe       <- check.if.executable(exe.path=blast.exe.path)
 	test.makeblastdb.exe <- check.if.executable(exe.path=makeblastdb.exe.path)
 	if(test.blast.exe!=0){
-		stop(paste0("'",blast.exe.path," is not executable. Aborting.'"))
+		stop(paste0("'",blast.exe.path," is not executable. Aborting. Run blast.install() with argument defaults to install BLAST to REEs package.'"))
 	}
 	if(test.makeblastdb.exe!=0){
 		stop(paste0("'",makeblastdb.exe.path," is not executable. Aborting.'"))
