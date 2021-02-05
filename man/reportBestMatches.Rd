@@ -17,7 +17,7 @@ reportBestMatches(
 
 \item{output.table.path}{Where to save the output table of best matches (default is NULL).}
 
-\item{remove.subseq.matches}{Whether or not to drop matches for which the subject sequence is a subsequence of another match. Default is TRUE.}
+\item{remove.subseq.matches}{Whether or not to drop matches for which the subject sequence is a subsequence of another match. Default is FALSE.}
 
 \item{min.bitscore}{Minimum bitscore required for the best match. Matches with a bitscore below this value are not included in the output table. This is useful for removing paralog matches. Default = 50.
 The reason for using a default min.bitscore of 50 is because values at or greater than this usually indicate that the sequences are homologous (doi: 10.1002/0471250953.bi0301s42).}

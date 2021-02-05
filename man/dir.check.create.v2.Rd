@@ -2,7 +2,7 @@
 % Please edit documentation in R/dir.check.create.R
 \name{dir.check.create.v2}
 \alias{dir.check.create.v2}
-\title{Create directory unless exists}
+\title{Create directory unless it already exists}
 \usage{
 dir.check.create.v2(directory)
 }
@@ -14,5 +14,4 @@ A new directory unless it already existed
 }
 \description{
 Checks if a directory exists, and if not, creates it. Parent directories are also created if they do not already exist.
-Possibly more robust algorithm check and create all directories on an input path.
 }

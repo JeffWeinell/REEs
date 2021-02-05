@@ -20,7 +20,6 @@ get.seqs.from.blastTable <- function(input.blastTable,input.seqs,output.path=NUL
 	subject.id          <- gsub(" .+","",as.character(data.best$sseqid))
 	subject.start       <- data.best$sstart
 	subject.end         <- data.best$send
-
 	if("DNAStringSet" %in% class(input.seqs)){
 		headers             <- gsub(" .+","",names(input.seqs))
 		names(input.seqs)   <- headers
@@ -55,9 +54,12 @@ get.seqs.from.blastTable <- function(input.blastTable,input.seqs,output.path=NUL
 			subject.path <- tempfile()
 			# Sets time limit for downloading files to 1000 seconds
 			options(timeout=1000)
-			utils::download.file(url=input.seqs, destfile=subject.path)
+			conn <- utils::download.file(url=input.seqs, destfile=subject.path)
 			## Read input sequences into R
 			fa0                  <- Biostrings::readDNAStringSet(subject.path)
+			## Close connection to downloaded file to prevent warning about unused connections.
+			# Close(conn)
+			## Update headers to only include NCBI accession
 			headers              <- gsub(" .+","",names(fa0))
 			names(fa0)           <- headers
 			#headers             <- fai$desc
