@@ -49,7 +49,7 @@ library(BiocManager)
 # Set the version argument to "3.10" if using R v3.6; "3.12" for R v4.0; check https://bioconductor.org/about/release-announcements/ to determine which BioConductor version to use for later versions of R.
 BiocManager::install(c("BSgenome","DECIPHER","phangorn","dplyr","data.table", "foreach","reutils","gschofl/biofiles"),lib=packages.dir,update=FALSE, version="3.12",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4)
 # Install REEs. This can be added to the end of the previous line once the REEs repository is public.
-BiocManager::install("JeffWeinell/REEs",lib=packages.dir,update=FALSE, version="3.10",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+BiocManager::install("JeffWeinell/REEs",lib=packages.dir,update=FALSE, version="3.12",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
 ```
 
 <a name="InstallingBLAST"></a>
