@@ -36,7 +36,7 @@ Installation involves the following steps, which are executed in the block of co
 # If you want to install packages somewhere other than the default R library paths, replace .libPaths() on the next line with the path to where packages should be installed.
 packages.dir   <- .libPaths()
 # packages.dir <- "/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv3.6"
-# temp.dir     <- tempdir()
+# packages.dir <- "/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv4.0"
 
 # Add packages.dir to the R library path for the duration of the session.
 .libPaths(packages.dir)
@@ -50,7 +50,6 @@ library(BiocManager)
 BiocManager::install(c("BSgenome","DECIPHER","phangorn","dplyr","data.table", "foreach","reutils","gschofl/biofiles"),lib=packages.dir,update=FALSE, version="3.10",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4)
 # Install REEs. This can be added to the end of the previous line once the REEs repository is public.
 BiocManager::install("JeffWeinell/REEs",lib=packages.dir,update=FALSE, version="3.10",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
-
 ```
 
 <a name="InstallingBLAST"></a>
