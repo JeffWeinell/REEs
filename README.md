@@ -42,12 +42,12 @@ packages.dir   <- .libPaths()
 .libPaths(packages.dir)
 
 # Install BiocManager and several other dependencies
-install.packages(pkgs=c("BiocManager", "remotes", "testthat", "withr", "curl", "knitr"),lib=packages.dir,repos = "http://cran.us.r-project.org")
+install.packages(pkgs=c("BiocManager"),lib=packages.dir,repos = "http://cran.us.r-project.org")
 library(BiocManager)
 
 # Use BiocManager to install REEs and its other dependencies. Packages in their dependency graphs are also installed.
 # Set the version argument to "3.10" if using R v3.6; "3.12" for R v4.0; check https://bioconductor.org/about/release-announcements/ to determine which BioConductor version to use for later versions of R.
-BiocManager::install(c("BSgenome","DECIPHER","phangorn","dplyr","data.table", "foreach","reutils","gschofl/biofiles"),lib=packages.dir,update=FALSE, version="3.12",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4)
+BiocManager::install(c("BSgenome","DECIPHER","phangorn","dplyr","data.table", "foreach","reutils","curl","knitr","devtools","gschofl/biofiles"),lib=packages.dir,update=FALSE, version="3.12",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4)
 # Install REEs. This can be added to the end of the previous line once the REEs repository is public.
 BiocManager::install("JeffWeinell/REEs",lib=packages.dir,update=FALSE, version="3.12",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
 ```
