@@ -9,7 +9,7 @@
 blast.install <- function(install.loc="auto",source=F){
 	if(install.loc=="auto"){
 			install.loc       <- paste0(find.package("REEs"),"/blast-mafft/blast")
-			dir.check.create.v2(install.loc)
+			dir.check.create(install.loc)
 	} else {
 		is.writeable <- file.access(install.loc,mode=2)
 		if(is.writeable!=0){
