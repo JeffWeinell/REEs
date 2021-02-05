@@ -42,7 +42,7 @@ packages.dir   <- .libPaths()
 .libPaths(packages.dir)
 
 # Install BiocManager and several other dependencies
-install.packages(pkgs=c("BiocManager"),lib=packages.dir,repos = "http://cran.us.r-project.org")
+install.packages(pkgs="BiocManager",lib=packages.dir,repos = "http://cran.us.r-project.org")
 library(BiocManager)
 
 # Use BiocManager to install REEs and its other dependencies. Packages in their dependency graphs are also installed.
