@@ -17,9 +17,6 @@ get.seqs.from.blastTable <- function(input.blastTable,input.seqs,output.path=NUL
 		data.best   <- data.table::fread(file=input.blastTable,sep=",",header=T)
 	}
 	query.subject.id    <- paste0(as.character(data.best$qseqid),"_Subject=",as.character(data.best$sseqid),"_",as.character(data.best$sstart),"_",as.character(data.best$send))
-	
-	#subject.id         <- gsub(".+_","",as.character(data.best$sseqid))
-	#subject.id         <- as.character(data.best$sseqid)
 	subject.id          <- gsub(" .+","",as.character(data.best$sseqid))
 	subject.start       <- data.best$sstart
 	subject.end         <- data.best$send
@@ -27,40 +24,26 @@ get.seqs.from.blastTable <- function(input.blastTable,input.seqs,output.path=NUL
 	if("DNAStringSet" %in% class(input.seqs)){
 		headers             <- gsub(" .+","",names(input.seqs))
 		names(input.seqs)   <- headers
-		#headers            <- names(input.seqs)
-		#headers            <- mgsub(c(" ",","),c("_","_"),headers)
-		#contig.names       <- gsub(" .+","",headers)
-		#contig.names       <- substring(headers,first=1,last=50)
-		#contig.names       <- mat.strsplit(headers)[,1]
 		scaff.matches.all   <- match(subject.id, headers)
 		fa                  <- input.seqs[scaff.matches.all]
-		#names(fa)           <- contig.names[scaff.matches.all]
-		#names(fa)          <- contig.names
 		delete.subject      <- F
 	} else {
 		if(file.exists(input.seqs)){
 			if(summary(file(input.seqs))$class != "gzfile"){
-				Rsamtools::indexFa(input.seqs)            ### Create an index of file 'foo.fasta'; this avoids having to actually copy or move the file to a new directory
+				### Create an index of file 'foo.fasta'; this avoids having to actually copy or move the file to a new directory
+				Rsamtools::indexFa(input.seqs)
 				fa <- Rsamtools::FaFile(input.seqs)
-				gr <- as(GenomeInfoDb::seqinfo(fa), "GRanges") ### Check that the seqinfo function isnt actually the one from biofiles package.
+				### Check that the seqinfo function isnt actually the one from biofiles package.
+				gr <- as(GenomeInfoDb::seqinfo(fa), "GRanges")
 				contig.names <- names(gr)
 				headers      <- gsub(" .+","",names(gr))
 			} else {
 				### Extract fasta headers (description lines) and then contig names (IDs) from the genome file
-#				fai                  <- Biostrings::fasta.index(input.seqs)
-				fa0                  <- Biostrings::readDNAStringSet(input.seqs)
-				headers              <- gsub(" .+","",names(fa0))
-				names(fa0)           <- headers
-				#headers             <- Biostrings::fasta.index(input.seqs)$desc
-#				headers              <- fai$desc
-				### Next few lines update headers so that the names follow the same rules for seq_ids that were required by makeblastdb
-#				headers      <- mgsub(c(" ",","),c("_","_"),headers)
-#				contig.names <- substring(headers,first=1,last=50)
-#				headers      <- gsub(" .+","",headers)
-				### Testing the next few lines.
+				fa0                <- Biostrings::readDNAStringSet(input.seqs)
+				headers            <- gsub(" .+","",names(fa0))
+				names(fa0)         <- headers
 				scaff.matches.all  <- match(subject.id, headers)
 				fa                 <- fa0[scaff.matches.all]
-				#names(fa)          <- contig.names[scaff.matches.all]
 				# The next line, which is commented out, would work if input.seqs is always an NCBI genome, and
 				# contig.names         <- mat.strsplit(headers,split="_")[,1]
 				### It takes about 30 seconds to load the entire genome into R on my laptop. This is the longest step.
@@ -70,24 +53,23 @@ get.seqs.from.blastTable <- function(input.blastTable,input.seqs,output.path=NUL
 			delete.subject <- F
 		} else {
 			subject.path <- tempfile()
-			options(timeout=1000) # sets time limit for downloading files to 1000 seconds
+			# Sets time limit for downloading files to 1000 seconds
+			options(timeout=1000)
 			utils::download.file(url=input.seqs, destfile=subject.path)
-			#fai                  <- Biostrings::fasta.index(subject.path)
-			
 			## Read input sequences into R
 			fa0                  <- Biostrings::readDNAStringSet(subject.path)
 			headers              <- gsub(" .+","",names(fa0))
 			names(fa0)           <- headers
 			#headers             <- fai$desc
-#			headers              <- mgsub(c(" ",","),c("_","_"),headers)
-#			contig.names         <- substring(headers,first=1,last=50)
-			#contig.names         <- gsub(" .+","",headers)
+			#headers             <- mgsub(c(" ",","),c("_","_"),headers)
+			#contig.names        <- substring(headers,first=1,last=50)
+			#contig.names        <- gsub(" .+","",headers)
 			scaff.matches.all    <- match(subject.id, headers)
 			# scaff.matches.all  <- pmatch(subject.id, contig.names)
 			# scaff.matches.all  <- grep(subject.id, contig.names)
-			#fa                   <- Biostrings::readDNAStringSet(fai[scaff.matches.all,])
-			#names(fa)            <- contig.names[scaff.matches.all]
-			#names(fa)            <- headers
+			#fa                  <- Biostrings::readDNAStringSet(fai[scaff.matches.all,])
+			#names(fa)           <- contig.names[scaff.matches.all]
+			#names(fa)           <- headers
 			#fa                  <- Biostrings::readDNAStringSet(filepath=subject.path)
 			fa                   <- fa0[scaff.matches.all]
 			#names(fa)           <- contig.names
@@ -191,8 +173,8 @@ get.UCEs.from.blastTable <- function(genome.filepath,input.blastTable,output.pat
 	subject.id          <- gsub(".+_","",as.character(data.best$sseqid))
 	subject.start       <- data.best$sstart
 	subject.end         <- data.best$send
-	
-	Rsamtools::indexFa(genome.filepath)                                           ### create an index of file 'foo.fasta'; this avoids having to actually copy or move the file to a new directory
+	### create an index of file 'foo.fasta'; this avoids having to actually copy or move the file to a new directory
+	Rsamtools::indexFa(genome.filepath)
 	fa <- Rsamtools::FaFile(genome.filepath)
 	gr <- as(GenomeInfoDb::seqinfo(fa), "GRanges")
 	
@@ -205,3 +187,8 @@ get.UCEs.from.blastTable <- function(genome.filepath,input.blastTable,output.pat
 	names(UCE.scaff)    <- query.subject.id
 	Biostrings::writeXStringSet(x = UCE.scaff, filepath=output.path, append=F, format="fasta")
 }
+
+
+
+
+
