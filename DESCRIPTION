@@ -13,8 +13,8 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-Imports: ape, biofiles, data.table, DECIPHER, dplyr, GenomeInfoDb,
+Imports: ape, biofiles, DECIPHER, dplyr, GenomeInfoDb,
         GenomicRanges, igraph, IRanges, parallel, phangorn, RCurl,
         Rsamtools, stringr, tibble, utils
-Depends: R (>= 3.6.0), Biostrings, BSgenome
+Depends: R (>= 3.6.0), Biostrings, BSgenome, data.table
 Suggests: phytools

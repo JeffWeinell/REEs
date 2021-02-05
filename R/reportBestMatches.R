@@ -7,13 +7,13 @@
 #' 
 #' @param input.table Path to the input hit table of matches, or, a data.table object.
 #' @param output.table.path Where to save the output table of best matches (default is NULL).
-#' @param remove.subseq.matches Whether or not to drop matches for which the subject sequence is a subsequence of another match. Default is TRUE.
+#' @param remove.subseq.matches Whether or not to drop matches for which the subject sequence is a subsequence of another match. Default is FALSE.
 #' @param min.bitscore Minimum bitscore required for the best match. Matches with a bitscore below this value are not included in the output table. This is useful for removing paralog matches. Default = 50.
 #' The reason for using a default min.bitscore of 50 is because values at or greater than this usually indicate that the sequences are homologous (doi: 10.1002/0471250953.bi0301s42).
 #' @param min.bitscore.difference The difference between the best and second best matches' bitscore must be greater than this value to keep matches for the query sequence. Default = 0. This is useful for removing loci with putatitive recent duplicates in the genome.
 #' @return A data.table object containing the best matche to each input query in the input blast table. If output.table.path argument is a path (character string), then the function also writes the output as a tab-separated file.
 #' @export reportBestMatches
-reportBestMatches <- function(input.table,output.table.path=NULL,remove.subseq.matches=T, min.bitscore=50,min.bitscore.difference=0){
+reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq.matches=F, min.bitscore=50, min.bitscore.difference=0){
 	if("data.frame" %in% class(input.table)){
 		all.matches <- data.table::as.data.table(input.table)
 	}
@@ -21,7 +21,6 @@ reportBestMatches <- function(input.table,output.table.path=NULL,remove.subseq.m
 		all.matches       <- data.table::fread(input=input.table,sep="\t")
 	}
 	colnames(all.matches) <- c("qseqid","sseqid","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore")
-	
 	#print("check 0")
 	### Filter matches with bitscore less than min.bitscore
 	if(any(all.matches$bitscore < min.bitscore)){
@@ -34,7 +33,8 @@ reportBestMatches <- function(input.table,output.table.path=NULL,remove.subseq.m
 #	all.matches.ordered  <- all.matches[with(all.matches, order(qseqid, bitscore, decreasing=T)),]
 
 	# New method to sort rows. Need to verify that this produced the same result as the old method. This should be slightly faster though.
-	matches.ordered  <- filtered.matches[with(filtered.matches, order(qseqid, bitscore, decreasing=T)),]
+	matches.ordered  <- filtered.matches[with(filtered.matches, order(filtered.matches$qseqid, filtered.matches$bitscore, decreasing=T)),]
+#	matches.ordered  <- filtered.matches[with(filtered.matches, order(qseqid, bitscore, decreasing=T)),]
 #	query.subject.sstart.send <- cbind(matches.ordered$qseqid, matches.ordered$sseqid, matches.ordered$sstart, matches.ordered$send)
 	#print("check 1")
 	# Remove rows (matches) if the match is a subsequence of another match.
