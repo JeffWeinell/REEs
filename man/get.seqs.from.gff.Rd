@@ -21,7 +21,7 @@ get.seqs.from.gff(
 \item{additional.ID}{Filename of a table that cross-references contig names to names in GFF file (default is NULL).}
 }
 \value{
-Sequences written to output.file in fasta format.
+DNAStringSet with sequences corresponding to unique ranges in input.gff; sequences are written to output.file in fasta format if output.path is not NULL.
 }
 \description{
 Identical to the function get.exome.from.gff, but used more generally.
