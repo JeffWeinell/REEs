@@ -16,7 +16,7 @@ The reasons for publishing these methods as an R package include (1) having a re
 
 <a name="Dependencies"></a>
 ### Software Dependencies:
-  - [R](https://www.r-project.org/) >= v3.6
+  - [R](https://www.r-project.org/) v3.6+
   - [BLAST](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)
   - [MAFFT](https://mafft.cbrc.jp/alignment/software/)
 
@@ -35,35 +35,21 @@ Installation involves the following steps, which are executed in the block of co
 # Define where packages should be installed.
 # If you want to install packages somewhere other than the default R library paths, replace .libPaths() on the next line with the path to where packages should be installed.
 packages.dir   <- .libPaths()
-# packages.dir <- "/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/test_install_v2"
-# temp.dir       <- tempdir()
+# packages.dir <- "/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv3.6"
+# temp.dir     <- tempdir()
 
 # Add packages.dir to the R library path for the duration of the session.
 .libPaths(packages.dir)
 
-# Install BiocManager
-install.packages(pkgs="BiocManager",lib=packages.dir,repos = "http://cran.us.r-project.org",dependencies=F)
-
-# Use BiocManager to install REEs dependencies. Packages in their dependency graphs are also installed.
-# Setting the version argument to "3.10" is important if you are using R versions 3.6–<4.0.
-# For R v4.0+, you can likely omit the the version argument, although including it shouldn't cause problems.
+# Install BiocManager and several other dependencies
+install.packages(pkgs=c("BiocManager", "remotes", "testthat", "withr", "curl", "knitr"),lib=packages.dir,repos = "http://cran.us.r-project.org")
 library(BiocManager)
-BiocManager::install(c("BSgenome","DECIPHER","phangorn","dplyr","stringr","data.table", "foreach","reutils","devtools"),lib=packages.dir,update=FALSE, version="3.10",dependencies=c("Depends", "Imports", "LinkingTo"),Ncpus=4)
 
-# Use install_github function from devtools package to install biofiles and REEs.
-# Need to check if these can also be installed with BiocManager
-library(devtools)
-devtools::install_github("gschofl/biofiles",build_vignettes=F,lib=packages.dir)
-devtools::install_github("JeffWeinell/REEs",upgrade=F,dependencies=c("Depends", "Imports", "LinkingTo"),auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
-
-######
-## Try this next, instead of the above. It could save two lines...
-packages.dir   <- "/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/test_install_v3"
-.libPaths(packages.dir)
-install.packages(c(BicManager,devtools),lib=packages.dir,repos = "http://cran.us.r-project.org")
-library(BiocManager)
-library(devtools)
-BiocManager::install(c("gschofl/biofiles"","JeffWeinell/REEs"),lib=packages.dir,update=FALSE, version="3.10",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+# Use BiocManager to install REEs and its other dependencies. Packages in their dependency graphs are also installed.
+# Set the version argument to "3.10" if using R v3.6; "3.12" for R v4.0; check https://bioconductor.org/about/release-announcements/ to determine which BioConductor version to use for later versions of R.
+BiocManager::install(c("BSgenome","DECIPHER","phangorn","dplyr","data.table", "foreach","reutils","gschofl/biofiles"),lib=packages.dir,update=FALSE, version="3.10",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4)
+# Install REEs. This can be added to the end of the previous line once the REEs repository is public.
+BiocManager::install("JeffWeinell/REEs",lib=packages.dir,update=FALSE, version="3.10",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
 
 ```
 
