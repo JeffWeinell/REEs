@@ -60,8 +60,9 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			rm(subject.obj.temp)
 		} else {
 			subject.path <- tempfile()
-			options(timeout=1000) # sets time limit for downloading files to 1000 seconds
-			utils::download.file(url=subject, destfile=subject.path)
+			# sets time limit for downloading files to 1000 seconds
+			options(timeout=1000)
+			conn <- utils::download.file(url=subject, destfile=subject.path)
 			subject.obj.temp        <- Biostrings::readDNAStringSet(subject.path)
 			names(subject.obj.temp) <- gsub(" .+","",names(subject.obj.temp))
 			Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path, append=F, format="fasta")
@@ -95,7 +96,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			query.path <- tempfile()
 			# Increases time limit for downloading files to 1000 seconds.
 			options(timeout=1000)
-			utils::download.file(url=query, destfile=query.path)
+			conn <- utils::download.file(url=query, destfile=query.path)
 			query.obj.temp        <- Biostrings::readDNAStringSet(query.path)
 			names(query.obj.temp) <- mgsub(c(" ",","),c("_","_"),names(query.obj.temp))
 			names(query.obj.temp) <- substring(names(query.obj.temp),first=1,last=50)

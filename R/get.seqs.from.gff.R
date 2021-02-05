@@ -50,7 +50,7 @@ get.seqs.from.gff <- function(input.seqs,input.gff,output.path = NULL,additional
 			subject.path <- tempfile()
 			# Sets time limit for downloading files to 1000 seconds
 			options(timeout=1000)
-			utils::download.file(url=input.seqs, destfile=subject.path)
+			conn <- utils::download.file(url=input.seqs, destfile=subject.path)
 			delete.subject <- T
 		}
 	}

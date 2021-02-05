@@ -1,0 +1,477 @@
+mean(width(ddrad.targets.seqs))
+mean(width(proposed.loci.trimmed))
+order(width(proposed.loci.trimmed))[1:10]
+order(width(proposed.loci.trimmed),decreasing=T)[1:10]
+proposed.loci.trimmed.ordered <- proposed.loci.trimmed[order(width(proposed.loci.trimmed),decreasing=T)]
+test <- unique(gsub(":.+","",names(proposed.loci.trimmed.ordered)))
+test[1:10] %in% gsub(":.+","",names(ddrad.targets))
+test[1:10] %in% gsub(":.+","",ddrad.targets)
+Thamnophis.sirtalis.ddRADlike.50hits <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url, query=Thermophis.ddradlike.seqs,table.out="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/ddRAD-like/Thamnophis.sirtalis.ddRADlike.unlimitedhits_v3.txt",eval=10)
+nrow(Thamnophis.sirtalis.ddRADlike.50hits)
+Thamnophis.sirtalis.ddRADlike.best.hits <- REEs::reportBestMatches(input.table=Thamnophis.sirtalis.ddRADlike.50hits, output.table.path="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/ddRAD-like/Thamnophis.sirtalis.ddRADlike.best.hits_v3.txt", remove.subseq.matches=F)
+setdiff(ddrad.targets,Thamnophis.sirtalis.ddRADlike.50hits$qseqid)
+setdiff(ddrad.targets,names(Thermophis.ddradlike.seqs))
+setdiff(ddrad.targets,Thamnophis.sirtalis.ddRADlike.best.hits$qseqid)
+sum(c(8,13,14,14,13,13,9,11,8,9,13,9,12,6,10,9,14,13,9,9,13,12,14,13,13,9,10,14,9,11,14,14,8,8,10,11,14,11,11,13,10,10,12,12,12,15,9,12,12,13,10,9,12,15,13,10,15,10,4,12,14,10,12,14,13,14,14,15,11,8,11,14,12,12,13,10,11,10,7,12,10,5,11,9,12,13,14,7,9,13,11,12,14,11,11,13,10,8,12,11,6,13,4,12,11,12,11,12,14,14,11,14,15,8,10,13,13,13,12,14,10,14,9,12,13,11,14,13,12,7,14,14,9,10,11,15,12,11,11,11,8,13,12,11,12,12,11,10,11,9,14,14,14,11,11,13,13,11,12,14,14,12,10,13,8,9,9,13,11,12,9,12,11,12,8,15,11,14,11,15,11,13,13,13,9,11,15,12,13,11,12,12,12,5,13,14,13,10,13,9,11,14,10,15,10,9,13,10,13,11,8,11,11,15,8,10,10,5,11,12,14,13,11,9,10,12,12,11,12,11,10,9,10,9,11,13,14,1,11,9,10,11,12,15,13,14,12,10,14,12,5,14,7,12,9,13,12,14,12,14,7,10,14,12,8,10,10,10,14,10,13,14,12,14,12,8,14,11,8,10,13,12,11,9,9,9,10,10,12,12,11,14,10,12,10,10,13,8,11,10,12,14,10,10,14,13,11,12,5,6,7,10,8,14,11,9,13,14,12,9,13,11,7,11,11,12,12,11))
+writeXStringSet(ddrad.targets.seqs,"/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/ddRAD-like/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed_targetted.fas")
+length(ddrad.targets.seqs)
+library(Biostrings)
+library(ape,warn.conflicts=F)
+sapply(X=c("stringr","data.table"),FUN=library,warn.conflicts=F)
+sapply(X=c("stringr","data.table"),FUN=library,warn.conflicts=F,character.only=T)
+lapply(X=c("seqinr","ips"),FUN=require,warn.conflicts=F,character.only=T)
+sapply(X=c("seqinr","ips"),FUN=require,warn.conflicts=F,character.only=T)
+lapply(X=c("seqinr","ips"),FUN=require,warn.conflicts=F,character.only=T)
+lapply(X=c("seqinr","ips"),FUN=library,warn.conflicts=F,character.only=T)
+?require
+install_REEs <- function(packages.directory=.libPaths(),load.after.installation=F,token=NULL){#
+	packages.dir   <- packages.directory#
+	if(missing(packages.directory)| is.null(packages.directory)){#
+		packages.dir <- .libPaths()#
+	} else {#
+		packages.dir <- packages.directory#
+	}#
+	# Not sure if its a good idea to set .libPaths within a function.#
+#	.libPaths(packages.dir)#
+	setwd(packages.dir)#
+	### Load packages that that automatically included with R (R-core packages) and that are also needed for REEs#
+	load.Rcore.dependencies   <- sapply(X=intersect(REEs.dependencies,Rcore.packages),FUN=library,character.only=T)#
+	### It may or may not be a good idea to attach all of the packages currently in your namespace that intersect with REEs.dependencies to working environment.#
+#	load.dependencies.in.Namespace <- sapply(X=intersect(REEs.dependencies,loadedNamespaces()),FUN=library,character.only=T)#
+	### Get vector of REEs dependencies not in R-core packages.#
+	REEs.dependencies.temp    <- setdiff(REEs.dependencies,Rcore.packages)#
+	### Names of REEs dependencies that have not already been installed.#
+	packages.to.install.temp  <- REEs.dependencies.temp[which(!(basename(REEs.dependencies.temp) %in% rownames(installed.packages(lib.loc=packages.dir))))]#
+	### Install REEs dependencies that havent been installed. The order of installation defined in packages.to.install.temp decreases the chance of install failures.#
+	if(length(packages.to.install.temp)!=0){#
+		### Packages that depend on the BH package (Boost libraries). These will be installed last if they arent already installed.#
+		wait.to.install       <- c("RSQLite","BiocParallel","Rsamtools","DECIPHER")#
+		### The packages to load/install first. Internal order of entries also important.#
+		packages.to.install   <-  setdiff(packages.to.install.temp,c("BH",wait.to.install))#
+		### If there are any packages in packages.to.install, install them to packages.dir.#
+		if(length(packages.to.install)!=0){#
+			sapply(X=packages.to.install,FUN=REEs.Installer::package.check, pkgs.lib=packages.dir,deps=FALSE)#
+		}#
+		### Check that all packages in packages.to.install were successfully installed.#
+		#which.failed <- packages.to.install[which(!(sapply(packages.to.install,basename) %in% c(rownames(installed.packages(lib.loc=packages.dir)),loadedNamespaces())))]#
+		which.failed <- packages.to.install[which(!(basename(packages.to.install) %in% rownames(installed.packages(lib.loc=packages.dir))))]#
+		if(length(which.failed)!=0){#
+			### If any packages in packages.to.install were not installed, generate an error message indicating which package installs failed and then stop the install_REEs function.#
+			stop("installation failed for packages",paste(which.failed))#
+		} else {#
+			### Load packages if they are not already in the loaded namespace.#
+			packages.to.load <- setdiff(basename(packages.to.install),loadedNamespaces())#
+			if(length(packages.to.load)>0){#
+				### Returns the names of packages that were loaded.#
+				colnames(sapply(X=packages.to.load,FUN=library,lib.loc=packages.dir,character.only=T))#
+			}#
+		}#
+		### If the BH package is not installed to packages.dir and is not in the loaded namespace, then install "BH" to a temporary directory (not packages.dir).#
+		### This package takes up a lot of space but it is only needed during installation for a few packages that need C++ compilation.#
+		if(!("BH" %in% rownames(installed.packages(lib.loc=packages.dir))) & (!("BH" %in% loadedNamespaces()))){#
+		#if(suppressWarnings(!require("BH", character.only = TRUE,lib.loc=packages.dir))){#
+			### Define temporary directory where BH package should be installed#
+			BH_tempdir <- tempdir()#
+			### Install BH to BH_tempdir#
+			BiocManager::install("BH",lib=BH_tempdir,dependencies=c("Depends", "Imports", "LinkingTo"))#
+			### Check BH installation was successful#
+			BH.check <- ("BH" %in% rownames(installed.packages(lib.loc=BH_tempdir)))#
+			### If BH installation failed, generate a warning message and stop the install_REEs function, otherwise load and attach BH package.#
+			if(!BH.check){#
+				stop("installation failed for package BH")#
+			} else {#
+				library(BH,lib.loc=BH_tempdir)#
+			}#
+		} else {#
+			### Load BH if it is installed in packages.dir but not yet loaded in any namespace, whereas dont install BH if it is in the loaded namespace even, if it isnt installed to packages.dir#
+			if(("BH" %in% rownames(installed.packages(lib.loc=packages.dir))) & (!("BH" %in% loadedNamespaces()))){#
+				library(BH,lib.loc=packages.dir)#
+			}#
+		}#
+		### Install packages that need BH during installation if they are not already installed.#
+		if(length(wait.to.install)!=0){#
+			sapply(X=wait.to.install,FUN=REEs.Installer::package.check, pkgs.lib=packages.dir,deps=FALSE)#
+		}#
+		### Check if any of the BH-dependent packages failed to install.#
+		which.failed2 <- wait.to.install[which(!(basename(wait.to.install) %in% rownames(installed.packages(lib.loc=packages.dir))))]#
+		### If any of the BH-dependent packages failed to install, generate a warning message and stop the install_REEs function.#
+		if(length(which.failed2)!=0){#
+			stop("installation failed for packages",paste(which.failed2))#
+		} else {#
+			### Load BH-dependent packages if they are not already in the loaded namespace.#
+			packages.to.load2 <- setdiff(basename(which.failed2),loadedNamespaces())#
+			if(length(packages.to.load2)>0){#
+				### Returns the names of BH-dependent packages that were just loaded.#
+				colnames(sapply(X=packages.to.load2,FUN=library,lib.loc=packages.dir,character.only=T))#
+			}#
+		}#
+	}#
+	#### At this point, all of the REEs dependencies should be installed and loaded into the namespace. Time to install REEs packages.#
+	# REEs.current is the data object that holds the url to the pre-build (.zip) REEs package#
+	# REEs.url is the data object that holds the url to the post-build (tar.gz) REEs package#
+	#####
+	# Define temporary directory where REEs tar.gz file should be download; this is not where the package will be installed.#
+	REEs_tempdir  <- tempdir()#
+	### Download the tar.gz to REEs_tempdir#
+	download.file(url=REEs.url,destfile=paste0(REEs_tempdir,"/REEs.tar.gz"))#
+	### Install REEs to packages.dir#
+	install.command <- paste("R CMD INSTALL -l",packages.dir,paste0("'",paste0(REEs_tempdir,"/REEs.tar.gz"),"'"))#
+	system(install.command)#
+	### Confirm that REEs was successfully installed. If not, generate a warning message and stop install_REEs function.#
+	if(!("REEs" %in% rownames(installed.packages(lib.loc=packages.dir)))){#
+		stop("REEs dependencies successfully installed and loaded, but REEs installation failed.")#
+	} else {#
+		### Load and attach REEs if load.after.installation=T, otherwise  #
+		if(load.after.installation){#
+			library("REEs",lib.loc=packages.dir,character.only = TRUE)#
+			return("DONE")#
+		} else {#
+			return("DONE")#
+		}#
+	}#
+}
+library(REEs)
+REEs::datasets(1)
+Podarcis.muralis.genome_url        <- REEs::datasets(1)[which(datasets(1)[,1]=="Podarcis muralis"),2]
+Podarcis.muralis.genome_url
+Aspidoscelis.marmoratus.genome_url <- REEs::datasets(1)[which(datasets(1)[,1]=="Aspidoscelis marmoratus"),2]#
+Lacerta.viridis.genome_url         <- REEs::datasets(1)[which(datasets(1)[,1]=="Lacerta viridis"),2]#
+Lacerta.bilineata.genome_url       <- REEs::datasets(1)[which(datasets(1)[,1]=="Lacerta bilineata"),2]#
+Lacerta.agilis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Lacerta agilis"),2]#
+Zootoca.vivipara.genome_url        <- REEs::datasets(1)[which(datasets(1)[,1]=="Zootoca vivipara"),2]
+Podarcis.muralis.genome_url       #
+Aspidoscelis.marmoratus.genome_url#
+Lacerta.viridis.genome_url        #
+Lacerta.bilineata.genome_url      #
+Lacerta.agilis.genome_url         #
+Zootoca.vivipara.genome_url
+REEs::datasets(1)[which(datasets(1)[,1]=="Podarcis muralis"),3]
+REEs::datasets(1)[which(datasets(1)[,1]=="Aspidoscelis marmoratus"),3]
+REEs::datasets(1)[which(datasets(1)[,1]=="Lacerta viridis"),3]
+REEs::datasets(1)[which(datasets(1)[,1]=="Lacerta bilineata"),3]
+REEs::datasets(1)[which(datasets(1)[,1]=="Lacerta agilis"),3]
+REEs::datasets(1)[which(datasets(1)[,1]=="Zootoca vivipara"),3]
+REEs::datasets(1)[which(datasets(1)[,1]=="Salvator merianae"),3]
+Podarcis.muralis_GFF.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.gff.gz"#
+Lacerta.agilis_GFF.url   <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.gff.gz"#
+Zootoca.vivipara_GFF.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/011/800/845/GCF_011800845.1_UG_Zviv_1/GCF_011800845.1_UG_Zviv_1_genomic.gff.gz"
+Podarcis.muralis_GFF  <- load.gff(input=Podarcis.muralis_GFF.url,local=F)
+Lacerta.agilis_GFF    <- load.gff(input=Lacerta.agilis_GFF.url,local=F)
+Podarcis.muralis_GFF[1:10,]
+Zootoca.vivipara_GFF  <- load.gff(input=Zootoca.vivipara_GFF.url,local=F)
+class(Zootoca.vivipara_GFF)
+Zootoca.vivipara_GFF
+length(unique(Zootoca.vivipara_GFF$seqid))
+length(unique(Podarcis.muralis_GFF$seqid))
+length(unique(Lacerta.agilis_GFF$seqid))
+length(grep("CDS",Lacerta.agilis_GFF$type))
+length(grep("gene",Podarcis.muralis_GFF$type))
+length(grep("gene",Lacerta.agilis_GFF$type))
+length(grep("gene",Zootoca.vivipara_GFF$type))
+length(grep("CDS",Podarcis.muralis_GFF$type))
+length(grep("CDS",Zootoca.vivipara_GFF$type))
+Lacerta.agilis_GFF_CDS_longer120bp <- filter.gff(input.gff=Lacerta.agilis_GFF,feature.type="CDS",min.length=120)
+nrow(Lacerta.agilis_GFF_CDS_longer120bp)
+nrow(Lacerta.agilis_GFF)
+write.table(x=Lacerta.agilis_GFF_CDS_longer120bp,file="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/Lacerta.agilis_GFF_CDS_longer120bp.txt",quote=F,sep="\t",row.names=F,col.names=T)
+Lacerta.agilis_exome   <- get.seqs.from.gff(input.seqs=Lacerta.agilis_genome.path,input.gff=Lacerta.agilis_GFF_CDS_longer120bp)
+Lacerta.agilis_exome   <- get.seqs.from.gff(input.seqs=Lacerta.agilis.genome_url,input.gff=Lacerta.agilis_GFF_CDS_longer120bp)
+Lacerta.agilis_GFF_CDS_longer120bp[1:10,]
+download.file(url=Lacerta.agilis.genome_url, destfile="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz")
+input.seqs="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz";input.gff=Lacerta.agilis_GFF_CDS_longer120bp
+output.path = NULL;additional.ID=NULL
+if("character" %in% class(input.gff)){#
+		filtered.gff1B   <- data.table::fread(input.gff)#
+	}#
+	if("data.frame" %in% class(input.gff)){#
+		filtered.gff1B   <- input.gff#
+	}
+refseq.names     <- unlist(filtered.gff1B[,1])#
+	if(!is.null(additional.ID)){#
+		### This is needed because the names in the gff file are not exactly the same as the ones in the genome file; they both link to a common Genbank Accession # though#
+		ScaffoldKey      <- data.table::fread(additional.ID)#
+		### Links the names in the gff file to the names of the CDS matches#
+		alt.scaff.names  <- ScaffoldKey$ScaffoldName[match(refseq.names,ScaffoldKey$RefSeq.ScaffoldAccession)]#
+		subject.id       <- alt.scaff.names#
+		subject.start    <- as.numeric(filtered.gff1B$start)#
+		subject.end      <- as.numeric(filtered.gff1B$end)#
+		new.names        <- paste0(subject.id,"_",refseq.names,":",subject.start,"-",subject.end)	#
+	} else {#
+		subject.id       <- refseq.names#
+		subject.start    <- as.numeric(filtered.gff1B$start)#
+		subject.end      <- as.numeric(filtered.gff1B$end)#
+		new.names        <- paste0(refseq.names,":",subject.start,"-",subject.end)	#
+	}
+length(refseq.names)
+refseq.names[1]
+"DNAStringSet" %in% class(input.seqs)
+file.exists(input.seqs)
+if("DNAStringSet" %in% class(input.seqs)){#
+		subject.path <- tempfile()#
+		# fa               <- input.seqs#
+		# headers          <- names(input.seqs)#
+		# contig.names     <- mat.strsplit(headers)[,1]#
+		# names(fa)        <- contig.names#
+		Biostrings::writeXStringSet(x = subject, filepath=subject.path, append=F, format="fasta")#
+		delete.subject <- T#
+	} else {#
+		if(file.exists(input.seqs)){#
+			subject.path   <- input.seqs#
+			delete.subject <- F#
+		} else {#
+			subject.path <- tempfile()#
+			# Sets time limit for downloading files to 1000 seconds#
+			options(timeout=1000)#
+			utils::download.file(url=input.seqs, destfile=subject.path)#
+			delete.subject <- T#
+		}#
+	}
+summary(file(input.seqs.path))$class != "gzfile"
+input.seqs.path <- subject.path
+summary(file(input.seqs.path))$class != "gzfile"
+headers        <- Biostrings::fasta.index(input.seqs.path)$desc
+length(headers)
+fa             <- Biostrings::readDNAStringSet(filepath=input.seqs.path)
+contig.names   <- mat.strsplit(headers)[,1]
+headers[1]
+mat.strsplit(headers)
+length(headers)
+headers
+contig.names   <- gsub(" .+","",headers)
+contig.names
+names(fa)      <- contig.names
+scaff.matches.all  <- match(subject.id, contig.names)
+start.all          <- apply(X=cbind(subject.start,subject.end),MARGIN=1,FUN=min)
+end.all            <- apply(X=cbind(subject.start,subject.end),MARGIN=1,FUN=max)
+subranges          <- IRanges::IRanges(start=start.all ,end=end.all,names=subject.id)
+gsubranges         <- GenomicRanges::GRanges(seqnames=subject.id,ranges=subranges)
+output.seqs        <- Biostrings::getSeq(fa, gsubranges)
+showMethods("getSeq")
+?getSeq
+output.seqs        <- fa[gsubranges)
+output.seqs        <- fa[gsubranges]
+?GenomicRanges
+library(Biostrings)
+output.seqs        <- Biostrings::getSeq(fa, gsubranges)
+library(BSgenome)
+output.seqs        <- Biostrings::getSeq(fa, gsubranges)
+required.packages("BSGenome")
+setwd("BSGenome","REEs")
+setdiff(required.packages("BSGenome"),required.packages("REEs"))
+getSeq
+package.load.order("BSGenome")
+test <- fa[[gsubranges]]
+test <- fa[gsubranges]
+test[1]
+length(test)
+length(output.seqs)
+output.seqs[1]
+required.packages("Biobase")
+required.packages("DelayedArray")
+required.packages("GenomicAlignments")
+required.packages("MatrixGenerics")
+install.packages("MatrixGenerics")
+library(BiocManager)
+BiocManager::install("MatrixGenerics")
+required.packages("matrixStats")
+BiocManager::install("rtracklayer")
+required.packages("rtracklayer")
+required.packages("SummarizedExperiment")
+library(REEs)
+library(devtools)
+setwd("Documents/REEs")
+devtools:document()
+devtools::document()
+devtools::build()
+devtools::install()
+library(REEs)
+dir.check.create
+library(DescTools)
+install.packages("DescTools")
+library(DescTools)
+SplitPath
+getwd("/")
+getwd()
+unlist(strsplit(getwd(),split="/"))
+path <- getwd()
+subpath <- path
+length(basename(subpath)
+)
+length(basename(subpath)))!=0
+length(basename(subpath))!=0
+subpath <- basename(subpath)
+subpath
+getwd()
+subpath
+path
+length(dirname(subpath))!=0
+subpath <- dirname(subpath)
+subpath
+subpath
+path
+path    <- getwd()#
+subpath <- path
+dirname(subpath)
+length(dirname(subpath))!=0
+path    <- getwd()#
+subpath <- dirname(path)#
+result  <- list(subpath)
+result
+subpath
+length(dirname(subpath))!=0
+subpath <- dirname(subpath)
+subpath
+result  <- list(subpath,result)
+result
+path    <- getwd()#
+subpath <- dirname(path)#
+result  <- subpath
+result
+while(length(dirname(subpath))!=0){#
+    subpath <- dirname(subpath)#
+    result  <- c(subpath,result)#
+}
+path    <- getwd()#
+subpath <- dirname(path)#
+result  <- subpath
+subpath <- dirname(subpath)#
+    result  <- c(subpath,result)
+length(subpath)
+subpath
+subpath <- dirname(subpath)#
+    result  <- c(subpath,result)
+length(subpath);subpath
+subpath <- dirname(subpath)#
+    result  <- c(subpath,result)
+length(subpath);subpath
+subpath <- dirname(subpath)#
+    result  <- c(subpath,result)
+subpath
+dirname(subpath)
+dirname(dirname(subpath))
+!(dirname(subpath) %in% c("/",""))
+path    <- getwd()#
+subpath <- dirname(path)#
+result  <- subpath#
+while(!(dirname(subpath) %in% c("/",""))){#
+    subpath <- dirname(subpath)#
+    result  <- c(subpath,result)#
+}
+result
+path
+path    <- getwd()#
+subpath <- path#
+result  <- subpath#
+while(!(dirname(subpath) %in% c("/",""))){#
+    subpath <- dirname(subpath)#
+    result  <- c(subpath,result)#
+}
+result
+file.exists(getwd())
+dir.exists(getwd())
+?file.exists()
+BuildPath.dir <- function(path){#
+    if(file.exists(path)==T & dir.exists(path)==F){#
+        stop("input path is to a file, but should be a directory")#
+    } else {#
+        subpath <- path#
+        result  <- subpath#
+        while(!(dirname(subpath) %in% c("/",""))){#
+            subpath <- dirname(subpath)#
+            result  <- c(subpath,result)#
+        }#
+    }#
+}
+BuildPath.dir <- function(path){#
+    if(file.exists(path)==T & dir.exists(path)==F){#
+        stop("input path is to a file, but should be a directory")#
+    } else {#
+        subpath <- path#
+        result  <- subpath#
+        while(!(dirname(subpath) %in% c("/",""))){#
+            subpath <- dirname(subpath)#
+            result  <- c(subpath,result)#
+        }#
+    }#
+    result#
+}
+BuildPath.dir(getwd())
+lapply(X=BuildPath.dir(getwd()),FUN=dir.exists)
+sapply(X=BuildPath.dir(getwd()),FUN=dir.exists)
+install.loc       <- paste0(find.package("REEs"),"/blast-mafft/blast")
+install.loc
+dir.check.create(install.loc)
+list.files("/Library/Frameworks/R.framework/Versions/4.0/Resources/library/REEs/blast-mafft/")
+list.files("/Library/Frameworks/R.framework/Versions/4.0/Resources/library/REEs")
+which(!sapply(X=BuildPath.dir(getwd()),FUN=dir.exists))
+dirs.exist <- sapply(X=BuildPath.dir(getwd()),FUN=dir.exists)
+dirs.exist
+any(!dirs.exist)
+getwd()
+devtools::document()
+rm(list = c("BuildPath.dir"))
+devtools::document()
+devtools::build()
+devtools::install()
+?BiocManager::install()
+?install_github()
+?BiocManager::install()
+?seq_len()
+?seqinfo(x)
+seqinfo
+working.dir <- "/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/REEs_example_output"
+input.seqs.paths <- paste0(working.dir,c("/Podarcis.muralis.tblastx.best.hits_seqs.fas", "/Lacerta.agilis.tblastx.best.hits_seqs.fas", "/Zootoca.vivipara.tblastx.best.hits_seqs.fas", "/Aspidoscelis.marmoratus.tblastx.best.hits_seqs.fas", "/Salvator.merianae.tblastx.best.hits_seqs.fas")
+)
+input.seqs.paths <- paste0(working.dir,c("/Podarcis.muralis.tblastx.best.hits_seqs.fas", "/Lacerta.agilis.tblastx.best.hits_seqs.fas", "/Zootoca.vivipara.tblastx.best.hits_seqs.fas", "/Aspidoscelis.marmoratus.tblastx.best.hits_seqs.fas", "/Salvator.merianae.tblastx.best.hits_seqs.fas"))
+input.seqs.paths
+getwd()
+devtools::document()
+devtools::document()
+devtools::build()
+devtools::install()
+detach("package:REEs",unload=T)
+library(REEs)
+working.dir                          <- "/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/REEs_example_output"#
+best.hits.Podarcis.muralis_test      <- data.table::fread("/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/REEs_example_output/Podarcis.muralis.best.hits_test.txt")#
+Podarcis.muralis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.fna.gz"
+Podarcis.muralis.best.hits.seqs_test <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Podarcis.muralis_test, input.seqs=Podarcis.muralis.genome_url, output.path=paste0(working.dir,"/Podarcis.muralis.tblastx.best.hits_seqs_test.fas"))
+Podarcis.muralis.best.hits.seqs_test
+Podarcis.muralis.best.hits.seqs_test
+working.dir
+Podarcis.muralis_GFF.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.gff.gz"#
+Lacerta.agilis_GFF.url   <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.gff.gz"#
+Zootoca.vivipara_GFF.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/011/800/845/GCF_011800845.1_UG_Zviv_1/GCF_011800845.1_UG_Zviv_1_genomic.gff.gz"#
+#
+### URLs to genomes#
+Podarcis.muralis.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.fna.gz"#
+Lacerta.agilis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz"#
+Zootoca.vivipara.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/011/800/845/GCF_011800845.1_UG_Zviv_1/GCF_011800845.1_UG_Zviv_1_genomic.fna.gz"#
+Aspidoscelis.marmoratus.genome_url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/014/337/955/GCA_014337955.1_AspMar1.0/GCA_014337955.1_AspMar1.0_genomic.fna.gz"#
+Salvator.merianae.genome_url       <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/586/115/GCA_003586115.2_HLtupMer6/GCA_003586115.2_HLtupMer6_genomic.fna.gz"
+Lacerta.agilis_GFF    <- load.gff(input=Lacerta.agilis_GFF.url,local=F)
+class(Lacerta.agilis_GFF)
+Lacerta.agilis_GFF_CDS_longer120bp <- filter.gff(input.gff=Lacerta.agilis_GFF,feature.type="CDS",min.length=120)
+Lacerta.agilis_GFF_CDS_longer120bp
+Lacerta.agilis_exome   <- get.seqs.from.gff(input.seqs=Lacerta.agilis.genome_url,input.gff=Lacerta.agilis_GFF_CDS_longer120bp)
+Lacerta.agilis_exome
+Podarcis.muralis.hits        <- REEs::blast(method="tblastx",subject=Podarcis.muralis.genome_url,query=Lacerta.agilis_exome[1:10])
+blast.install()
+Podarcis.muralis.hits        <- REEs::blast(method="tblastx",subject=Podarcis.muralis.genome_url,query=Lacerta.agilis_exome[1:10])
+Podarcis.muralis.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.fna.gz"#
+Lacerta.agilis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz"#
+Zootoca.vivipara.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/011/800/845/GCF_011800845.1_UG_Zviv_1/GCF_011800845.1_UG_Zviv_1_genomic.fna.gz"#
+Aspidoscelis.marmoratus.genome_url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/014/337/955/GCA_014337955.1_AspMar1.0/GCA_014337955.1_AspMar1.0_genomic.fna.gz"#
+Salvator.merianae.genome_url       <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/586/115/GCA_003586115.2_HLtupMer6/GCA_003586115.2_HLtupMer6_genomic.fna.gz"
+Podarcis.muralis.genome_path        <- paste0(genomes.dir,"/",basename(Podarcis.muralis.genome_url))#
+Lacerta.agilis.genome_path          <- paste0(genomes.dir,"/",basename(Lacerta.agilis.genome_url))#
+Zootoca.vivipara.genome_path        <- paste0(genomes.dir,"/",basename(Zootoca.vivipara.genome_url))#
+Aspidoscelis.marmoratus.genome_path <- paste0(genomes.dir,"/",basename(Aspidoscelis.marmoratus.genome_url))#
+Salvator.merianae.genome_path       <- paste0(genomes.dir,"/",basename(Salvator.merianae.genome_url))
+genomes.dir <- "/Users/alyssaleinweber/Documents/genomes/genomes_seqs/"
+Podarcis.muralis.genome_path        <- paste0(genomes.dir,"/",basename(Podarcis.muralis.genome_url))#
+Lacerta.agilis.genome_path          <- paste0(genomes.dir,"/",basename(Lacerta.agilis.genome_url))#
+Zootoca.vivipara.genome_path        <- paste0(genomes.dir,"/",basename(Zootoca.vivipara.genome_url))#
+Aspidoscelis.marmoratus.genome_path <- paste0(genomes.dir,"/",basename(Aspidoscelis.marmoratus.genome_url))#
+Salvator.merianae.genome_path       <- paste0(genomes.dir,"/",basename(Salvator.merianae.genome_url))
+options(timeout=1000)
+Podarcis.muralis.conn         <- utils::download.file(url=Podarcis.muralis.genome_url, destfile=Podarcis.muralis.genome_path)
