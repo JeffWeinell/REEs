@@ -168,7 +168,6 @@ We choose *L. agilis* to be the reference species because sequences are assemble
 
 Filter GFF table of the reference species. Extract and save sequences corresponding to regions in the filtered GFF.
 <!--- **Note:** I had to modify get.seqs.from.gff because ```contig.names  <- mat.strsplit(headers)[,1]``` will not work if sequence headers have different number of spaces present. I changed this line to ```contig.names  <- mat.strsplit(headers)[,1]```.--->
-**Note:** You will get a "closing unused connection" warning message when using the get.seqs.from.gff function, but it is not anything to worry about.
 ```
 ### Filter GFF to include only CDS features ≥ 120bp.
 Lacerta.agilis_GFF_CDS_longer120bp <- filter.gff(input.gff=Lacerta.agilis_GFF,feature.type="CDS",min.length=120)

@@ -7,7 +7,7 @@
 #' @param input.gff Either a data table object, or character string  or local path to the filtered gff containing the the loci of interest.
 #' @param output.path Path where exomes should be saved (default is NULL).
 #' @param additional.ID Filename of a table that cross-references contig names to names in GFF file (default is NULL).
-#' @return Sequences written to output.file in fasta format.
+#' @return DNAStringSet with sequences corresponding to unique ranges in input.gff; sequences are written to output.file in fasta format if output.path is not NULL.
 #' @export get.seqs.from.gff
 get.seqs.from.gff <- function(input.seqs,input.gff,output.path = NULL,additional.ID=NULL) {
 	if("character" %in% class(input.gff)){
@@ -85,6 +85,7 @@ get.seqs.from.gff <- function(input.seqs,input.gff,output.path = NULL,additional
 	gsubranges         <- GenomicRanges::GRanges(seqnames=subject.id,ranges=subranges)
 	output.seqs        <- Biostrings::getSeq(fa, gsubranges)
 	names(output.seqs) <- new.names
+	output.seqs        <- unique(output.seqs)
 	if(!is.null(output.path)){
 		Biostrings::writeXStringSet(x = output.seqs, filepath=output.path, append=F, format="fasta")
 	}
