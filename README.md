@@ -183,14 +183,16 @@ Lacerta.agilis_exome   <- get.seqs.from.gff(input.seqs=Lacerta.agilis.genome_url
 Biostrings::writeXStringSet(x=Lacerta.agilis_exome,filepath=paste0(working.dir,"/Lacerta.agilis_exome_longer120bp.fas"))
 ```
 
-TBLASTX the extracted sequences against each genome. In each case the output is a hit table of matches.
+TBLASTX the extracted sequences against each genome. In each case the output is a hit table of matches. The arguments max.matches.per.query sets the maximum number of contigs in the subject species that can contain a match per query sequence; other.args="-max_hsps 10" indicates to return at most 10 matches for each pair of query and subject contigs; eval sets the maximum Expectation Value to consider as a match.
+You may need to experiment with the values of these parameters. One strategy is to query a small number of sequences with relaxed settings for -max_hsps, max.matches.per.query, and eval (i.e., use high values for these parameters, e.g. eval=10, max.matches.per.query=50, other.args="-max_hsps 50", to allow many matches per query including low scoring matches). Then examine the output table to determine how stringent (low values) you can set these parameters while still obtaining the likely best match.
+For this example, I initially used -max_hsps unlimited, max.matches.per.query=50, and eval=1e-05, but these analyses never finished running and the output files had grown to > 5Gb. Tweaking the parameters to those shown below seemed appropriate, and bitscores were usually high for only the top one to a few matches.
 ```
 # Run TBLASTX. I recommend using a bash script and submitting each of these individually to run on a cluster. This will likely take days to run.
-Podarcis.muralis.hits        <- REEs::blast(method="tblastx",subject=Podarcis.muralis.genome_url,query=Lacerta.agilis_exome[1:2],table.out=paste0(working.dir,"/Podarcis.muralis.tblastx.exons.hits.txt"))
-Lacerta.agilis.hits          <- REEs::blast(method="tblastx",subject=Lacerta.agilis.genome_url,query=Lacerta.agilis_exome,table.out=paste0(working.dir,"/Lacerta.agilis.tblastx.exons.hits.txt"))
-Zootoca.vivipara.hits        <- REEs::blast(method="tblastx",subject=Zootoca.vivipara.genome_url,query=Lacerta.agilis_exome,table.out=paste0(working.dir,"/Zootoca.vivipara.tblastx.exons.hits.txt"))
-Aspidoscelis.marmoratus.hits <- REEs::blast(method="tblastx",subject=Aspidoscelis.marmoratus.genome_url,query=Lacerta.agilis_exome,table.out=paste0(working.dir,"/Aspidoscelis.marmoratus.tblastx.exons.hits.txt"))
-Salvator.merianae.hits       <- REEs::blast(method="tblastx",subject=Salvator.merianae.genome_url,query=Lacerta.agilis_exome,table.out=paste0(working.dir,"/Salvator.merianae.tblastx.exons.hits.txt"))
+Podarcis.muralis.hits        <- REEs::blast(method="tblastx",subject=Podarcis.muralis.genome_url,query=Lacerta.agilis_exome[1:2],table.out=paste0(working.dir,"/Podarcis.muralis.tblastx.exons.hits.txt"),max.matches.per.query=10,eval=1e-15,other.args="-max_hsps 10")
+Lacerta.agilis.hits          <- REEs::blast(method="tblastx",subject=Lacerta.agilis.genome_url,query=Lacerta.agilis_exome,table.out=paste0(working.dir,"/Lacerta.agilis.tblastx.exons.hits.txt"),max.matches.per.query=10,eval=1e-15,other.args="-max_hsps 10")
+Zootoca.vivipara.hits        <- REEs::blast(method="tblastx",subject=Zootoca.vivipara.genome_url,query=Lacerta.agilis_exome,table.out=paste0(working.dir,"/Zootoca.vivipara.tblastx.exons.hits.txt"),max.matches.per.query=10,eval=1e-15,other.args="-max_hsps 10")
+Aspidoscelis.marmoratus.hits <- REEs::blast(method="tblastx",subject=Aspidoscelis.marmoratus.genome_url,query=Lacerta.agilis_exome,table.out=paste0(working.dir,"/Aspidoscelis.marmoratus.tblastx.exons.hits.txt"),max.matches.per.query=10,eval=1e-15,other.args="-max_hsps 10")
+Salvator.merianae.hits       <- REEs::blast(method="tblastx",subject=Salvator.merianae.genome_url,query=Lacerta.agilis_exome,table.out=paste0(working.dir,"/Salvator.merianae.tblastx.exons.hits.txt"),max.matches.per.query=10,eval=1e-15,other.args="-max_hsps 10")
 ```
 
 Filter hit tables to remove poor matches (low bitscores) and loci that may have been recently duplicated (i.e., loci having similar bitscores for their best and second best matches, or having at least two matches with bitscores > 60).

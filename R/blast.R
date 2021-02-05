@@ -16,9 +16,9 @@
 #' @param table.out Where to save the output table. If NULL, the output is written to a temporary file that is read into R.
 #' @param eval Number to use for the expect value (e-value); default is 1e-5.
 #' @param output.format Integer indicating which format to use for the output table of matches (default 6).
-#' @param max.matches.per.query Integer indicating maximum number of matches to report in the output table.
+#' @param max.matches.per.query Integer indicating the maximum number of targets (subject contigs) containing a match per query sequence. This does not control the total number of matches per query, because multiple matches may occer on the same subject contig. Set other.args="-max_hsps N" (where N is an integer) to limit the number of matches per subject contig per query.
 #' @param num.threads Either an integer indicating how many threads to use, or "max" (default), in which case num.threads is set to the number of cores available.
-#' @param other.args A character string of the form "-argument1 value1 -argument2 value2" with additional arguments and values to pass to BLAST. See BLAST manual for definitions of available arguments. Default is NULL.
+#' @param other.args A character string of the form "-argument1 value1 -argument2 value2" with additional arguments and values to pass to BLAST. See BLAST manual for definitions of available arguments. Default is NULL. A useful setting is "-max_hsps 10" which means the maximum number of matches per target.
 #' @return Table of matches.
 #' @export blast
 blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-5,output.format=6,max.matches.per.query=50,num.threads="max",other.args=NULL){
