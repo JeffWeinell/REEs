@@ -241,11 +241,12 @@ Use ```pick.loci``` function to identify REEs to target.
 stats.table.all  <- data.table::fread(paste0(working.dir,"/statsTable_REEs.txt"),header=T)
 
 ### Filter the stats table to the optimal set of REEs
-stats.table.best <- REEs::pick.loci(statsTable.path=stats.table.all, primary.species="Lacerta agilis", output.path=paste0(working.dir,"/stats_data_FastestExonPerGene_best.tsv"), pident.keep=c(65,100), max.loci.per.gene=1, min.num.species="all", max.capture.coverage=1200500, fast.stat="pident", use.min.pident.subgroup=F)
+stats.table.best <- REEs::pick.loci(statsTable.path=stats.table.all, primary.species="Lacerta agilis", output.path=paste0(working.dir,"/stats_data_FastestExonPerGene_best.tsv"), pident.keep=c(65,100), max.loci.per.gene=1, min.num.species="all", max.capture.coverage=NULL, bait.tiling=0.5, bait.length=120, bait.number=20000, flanking.length="auto", fast.stat="pident", use.min.pident.subgroup=F)
 ```
 
 **Things to add**
- - A function or option in ```pick.loci``` to include flanking regions of REEs; length of flanking regions to include could either be explicitly defined or calculated automatically to correspond to probe length and tiling.
+ - Section at beginning of ```pick.loci``` function to check that input arguments have the right class and right combination of input values.
+ - Figure out what the plots generate by ```pick.loci``` were intended to show
 
 
 
