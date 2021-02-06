@@ -1,29 +1,3 @@
-mean(width(ddrad.targets.seqs))
-mean(width(proposed.loci.trimmed))
-order(width(proposed.loci.trimmed))[1:10]
-order(width(proposed.loci.trimmed),decreasing=T)[1:10]
-proposed.loci.trimmed.ordered <- proposed.loci.trimmed[order(width(proposed.loci.trimmed),decreasing=T)]
-test <- unique(gsub(":.+","",names(proposed.loci.trimmed.ordered)))
-test[1:10] %in% gsub(":.+","",names(ddrad.targets))
-test[1:10] %in% gsub(":.+","",ddrad.targets)
-Thamnophis.sirtalis.ddRADlike.50hits <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url, query=Thermophis.ddradlike.seqs,table.out="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/ddRAD-like/Thamnophis.sirtalis.ddRADlike.unlimitedhits_v3.txt",eval=10)
-nrow(Thamnophis.sirtalis.ddRADlike.50hits)
-Thamnophis.sirtalis.ddRADlike.best.hits <- REEs::reportBestMatches(input.table=Thamnophis.sirtalis.ddRADlike.50hits, output.table.path="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/ddRAD-like/Thamnophis.sirtalis.ddRADlike.best.hits_v3.txt", remove.subseq.matches=F)
-setdiff(ddrad.targets,Thamnophis.sirtalis.ddRADlike.50hits$qseqid)
-setdiff(ddrad.targets,names(Thermophis.ddradlike.seqs))
-setdiff(ddrad.targets,Thamnophis.sirtalis.ddRADlike.best.hits$qseqid)
-sum(c(8,13,14,14,13,13,9,11,8,9,13,9,12,6,10,9,14,13,9,9,13,12,14,13,13,9,10,14,9,11,14,14,8,8,10,11,14,11,11,13,10,10,12,12,12,15,9,12,12,13,10,9,12,15,13,10,15,10,4,12,14,10,12,14,13,14,14,15,11,8,11,14,12,12,13,10,11,10,7,12,10,5,11,9,12,13,14,7,9,13,11,12,14,11,11,13,10,8,12,11,6,13,4,12,11,12,11,12,14,14,11,14,15,8,10,13,13,13,12,14,10,14,9,12,13,11,14,13,12,7,14,14,9,10,11,15,12,11,11,11,8,13,12,11,12,12,11,10,11,9,14,14,14,11,11,13,13,11,12,14,14,12,10,13,8,9,9,13,11,12,9,12,11,12,8,15,11,14,11,15,11,13,13,13,9,11,15,12,13,11,12,12,12,5,13,14,13,10,13,9,11,14,10,15,10,9,13,10,13,11,8,11,11,15,8,10,10,5,11,12,14,13,11,9,10,12,12,11,12,11,10,9,10,9,11,13,14,1,11,9,10,11,12,15,13,14,12,10,14,12,5,14,7,12,9,13,12,14,12,14,7,10,14,12,8,10,10,10,14,10,13,14,12,14,12,8,14,11,8,10,13,12,11,9,9,9,10,10,12,12,11,14,10,12,10,10,13,8,11,10,12,14,10,10,14,13,11,12,5,6,7,10,8,14,11,9,13,14,12,9,13,11,7,11,11,12,12,11))
-writeXStringSet(ddrad.targets.seqs,"/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/ddRAD-like/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed_targetted.fas")
-length(ddrad.targets.seqs)
-library(Biostrings)
-library(ape,warn.conflicts=F)
-sapply(X=c("stringr","data.table"),FUN=library,warn.conflicts=F)
-sapply(X=c("stringr","data.table"),FUN=library,warn.conflicts=F,character.only=T)
-lapply(X=c("seqinr","ips"),FUN=require,warn.conflicts=F,character.only=T)
-sapply(X=c("seqinr","ips"),FUN=require,warn.conflicts=F,character.only=T)
-lapply(X=c("seqinr","ips"),FUN=require,warn.conflicts=F,character.only=T)
-lapply(X=c("seqinr","ips"),FUN=library,warn.conflicts=F,character.only=T)
-?require
 install_REEs <- function(packages.directory=.libPaths(),load.after.installation=F,token=NULL){#
 	packages.dir   <- packages.directory#
 	if(missing(packages.directory)| is.null(packages.directory)){#
@@ -278,200 +252,387 @@ BiocManager::install("rtracklayer")
 required.packages("rtracklayer")
 required.packages("SummarizedExperiment")
 library(REEs)
-library(devtools)
-setwd("Documents/REEs")
-devtools:document()
-devtools::document()
-devtools::build()
-devtools::install()
-library(REEs)
-dir.check.create
-library(DescTools)
-install.packages("DescTools")
-library(DescTools)
-SplitPath
-getwd("/")
-getwd()
-unlist(strsplit(getwd(),split="/"))
-path <- getwd()
-subpath <- path
-length(basename(subpath)
-)
-length(basename(subpath)))!=0
-length(basename(subpath))!=0
-subpath <- basename(subpath)
-subpath
-getwd()
-subpath
-path
-length(dirname(subpath))!=0
-subpath <- dirname(subpath)
-subpath
-subpath
-path
-path    <- getwd()#
-subpath <- path
-dirname(subpath)
-length(dirname(subpath))!=0
-path    <- getwd()#
-subpath <- dirname(path)#
-result  <- list(subpath)
-result
-subpath
-length(dirname(subpath))!=0
-subpath <- dirname(subpath)
-subpath
-result  <- list(subpath,result)
-result
-path    <- getwd()#
-subpath <- dirname(path)#
-result  <- subpath
-result
-while(length(dirname(subpath))!=0){#
-    subpath <- dirname(subpath)#
-    result  <- c(subpath,result)#
-}
-path    <- getwd()#
-subpath <- dirname(path)#
-result  <- subpath
-subpath <- dirname(subpath)#
-    result  <- c(subpath,result)
-length(subpath)
-subpath
-subpath <- dirname(subpath)#
-    result  <- c(subpath,result)
-length(subpath);subpath
-subpath <- dirname(subpath)#
-    result  <- c(subpath,result)
-length(subpath);subpath
-subpath <- dirname(subpath)#
-    result  <- c(subpath,result)
-subpath
-dirname(subpath)
-dirname(dirname(subpath))
-!(dirname(subpath) %in% c("/",""))
-path    <- getwd()#
-subpath <- dirname(path)#
-result  <- subpath#
-while(!(dirname(subpath) %in% c("/",""))){#
-    subpath <- dirname(subpath)#
-    result  <- c(subpath,result)#
-}
-result
-path
-path    <- getwd()#
-subpath <- path#
-result  <- subpath#
-while(!(dirname(subpath) %in% c("/",""))){#
-    subpath <- dirname(subpath)#
-    result  <- c(subpath,result)#
-}
-result
-file.exists(getwd())
-dir.exists(getwd())
-?file.exists()
-BuildPath.dir <- function(path){#
-    if(file.exists(path)==T & dir.exists(path)==F){#
-        stop("input path is to a file, but should be a directory")#
-    } else {#
-        subpath <- path#
-        result  <- subpath#
-        while(!(dirname(subpath) %in% c("/",""))){#
-            subpath <- dirname(subpath)#
-            result  <- c(subpath,result)#
-        }#
-    }#
-}
-BuildPath.dir <- function(path){#
-    if(file.exists(path)==T & dir.exists(path)==F){#
-        stop("input path is to a file, but should be a directory")#
-    } else {#
-        subpath <- path#
-        result  <- subpath#
-        while(!(dirname(subpath) %in% c("/",""))){#
-            subpath <- dirname(subpath)#
-            result  <- c(subpath,result)#
-        }#
-    }#
-    result#
-}
-BuildPath.dir(getwd())
-lapply(X=BuildPath.dir(getwd()),FUN=dir.exists)
-sapply(X=BuildPath.dir(getwd()),FUN=dir.exists)
-install.loc       <- paste0(find.package("REEs"),"/blast-mafft/blast")
-install.loc
-dir.check.create(install.loc)
-list.files("/Library/Frameworks/R.framework/Versions/4.0/Resources/library/REEs/blast-mafft/")
-list.files("/Library/Frameworks/R.framework/Versions/4.0/Resources/library/REEs")
-which(!sapply(X=BuildPath.dir(getwd()),FUN=dir.exists))
-dirs.exist <- sapply(X=BuildPath.dir(getwd()),FUN=dir.exists)
-dirs.exist
-any(!dirs.exist)
-getwd()
-devtools::document()
-rm(list = c("BuildPath.dir"))
-devtools::document()
-devtools::build()
-devtools::install()
-?BiocManager::install()
-?install_github()
-?BiocManager::install()
-?seq_len()
-?seqinfo(x)
-seqinfo
-working.dir <- "/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/REEs_example_output"
-input.seqs.paths <- paste0(working.dir,c("/Podarcis.muralis.tblastx.best.hits_seqs.fas", "/Lacerta.agilis.tblastx.best.hits_seqs.fas", "/Zootoca.vivipara.tblastx.best.hits_seqs.fas", "/Aspidoscelis.marmoratus.tblastx.best.hits_seqs.fas", "/Salvator.merianae.tblastx.best.hits_seqs.fas")
-)
-input.seqs.paths <- paste0(working.dir,c("/Podarcis.muralis.tblastx.best.hits_seqs.fas", "/Lacerta.agilis.tblastx.best.hits_seqs.fas", "/Zootoca.vivipara.tblastx.best.hits_seqs.fas", "/Aspidoscelis.marmoratus.tblastx.best.hits_seqs.fas", "/Salvator.merianae.tblastx.best.hits_seqs.fas"))
-input.seqs.paths
-getwd()
-devtools::document()
-devtools::document()
-devtools::build()
-devtools::install()
-detach("package:REEs",unload=T)
-library(REEs)
-working.dir                          <- "/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/REEs_example_output"#
-best.hits.Podarcis.muralis_test      <- data.table::fread("/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/REEs_example_output/Podarcis.muralis.best.hits_test.txt")#
-Podarcis.muralis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.fna.gz"
-Podarcis.muralis.best.hits.seqs_test <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Podarcis.muralis_test, input.seqs=Podarcis.muralis.genome_url, output.path=paste0(working.dir,"/Podarcis.muralis.tblastx.best.hits_seqs_test.fas"))
-Podarcis.muralis.best.hits.seqs_test
-Podarcis.muralis.best.hits.seqs_test
-working.dir
-Podarcis.muralis_GFF.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.gff.gz"#
-Lacerta.agilis_GFF.url   <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.gff.gz"#
-Zootoca.vivipara_GFF.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/011/800/845/GCF_011800845.1_UG_Zviv_1/GCF_011800845.1_UG_Zviv_1_genomic.gff.gz"#
+genomes.dir                  <- "/Users/alyssaleinweber/Documents/genomes/genomes_seqs/"#
+Podarcis.muralis.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.fna.gz"#
+Lacerta.agilis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz"#
+Zootoca.vivipara.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/011/800/845/GCF_011800845.1_UG_Zviv_1/GCF_011800845.1_UG_Zviv_1_genomic.fna.gz"#
+Aspidoscelis.marmoratus.genome_url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/014/337/955/GCA_014337955.1_AspMar1.0/GCA_014337955.1_AspMar1.0_genomic.fna.gz"#
+Salvator.merianae.genome_url       <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/586/115/GCA_003586115.2_HLtupMer6/GCA_003586115.2_HLtupMer6_genomic.fna.gz"#
 #
-### URLs to genomes#
-Podarcis.muralis.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.fna.gz"#
-Lacerta.agilis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz"#
-Zootoca.vivipara.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/011/800/845/GCF_011800845.1_UG_Zviv_1/GCF_011800845.1_UG_Zviv_1_genomic.fna.gz"#
-Aspidoscelis.marmoratus.genome_url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/014/337/955/GCA_014337955.1_AspMar1.0/GCA_014337955.1_AspMar1.0_genomic.fna.gz"#
-Salvator.merianae.genome_url       <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/586/115/GCA_003586115.2_HLtupMer6/GCA_003586115.2_HLtupMer6_genomic.fna.gz"
-Lacerta.agilis_GFF    <- load.gff(input=Lacerta.agilis_GFF.url,local=F)
-class(Lacerta.agilis_GFF)
-Lacerta.agilis_GFF_CDS_longer120bp <- filter.gff(input.gff=Lacerta.agilis_GFF,feature.type="CDS",min.length=120)
-Lacerta.agilis_GFF_CDS_longer120bp
-Lacerta.agilis_exome   <- get.seqs.from.gff(input.seqs=Lacerta.agilis.genome_url,input.gff=Lacerta.agilis_GFF_CDS_longer120bp)
+Podarcis.muralis.genome_path        <- paste0(genomes.dir,"/",basename(Podarcis.muralis.genome_url))#
+Lacerta.agilis.genome_path          <- paste0(genomes.dir,"/",basename(Lacerta.agilis.genome_url))#
+Zootoca.vivipara.genome_path        <- paste0(genomes.dir,"/",basename(Zootoca.vivipara.genome_url))#
+Aspidoscelis.marmoratus.genome_path <- paste0(genomes.dir,"/",basename(Aspidoscelis.marmoratus.genome_url))#
+Salvator.merianae.genome_path       <- paste0(genomes.dir,"/",basename(Salvator.merianae.genome_url))
+subject <- Podarcis.muralis.genome_path
+subject.path             <- subject#
+	subject.obj.temp         <- Biostrings::readDNAStringSet(subject.path)
+contigs.name             <- gsub(" .+","",names(subject.obj.temp))#
+	subject.path             <- tempfile()
+subject.obj.temp2        <- xscat(subject.obj.temp)
+subject.obj.temp2
+subject.obj.temp
+subject.obj.temp2        <- xscat(subject.obj.temp2)
+length(subject.obj.temp2)
+test <- list(subject.obj.temp2[1],subject.obj.temp2[2])
+test
+xscat(test)
+xscat(subject.obj.temp2[1],subject.obj.temp[2])
+26000*35
+library(REEs)
+Lacerta.agilis_exome         <- Biostrings::readDNAStringSet("/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/Lacerta.agilis_exome_longer120bp.fas")
 Lacerta.agilis_exome
-Podarcis.muralis.hits        <- REEs::blast(method="tblastx",subject=Podarcis.muralis.genome_url,query=Lacerta.agilis_exome[1:10])
-blast.install()
-Podarcis.muralis.hits        <- REEs::blast(method="tblastx",subject=Podarcis.muralis.genome_url,query=Lacerta.agilis_exome[1:10])
-Podarcis.muralis.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.fna.gz"#
-Lacerta.agilis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz"#
-Zootoca.vivipara.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/011/800/845/GCF_011800845.1_UG_Zviv_1/GCF_011800845.1_UG_Zviv_1_genomic.fna.gz"#
-Aspidoscelis.marmoratus.genome_url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/014/337/955/GCA_014337955.1_AspMar1.0/GCA_014337955.1_AspMar1.0_genomic.fna.gz"#
-Salvator.merianae.genome_url       <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/586/115/GCA_003586115.2_HLtupMer6/GCA_003586115.2_HLtupMer6_genomic.fna.gz"
-Podarcis.muralis.genome_path        <- paste0(genomes.dir,"/",basename(Podarcis.muralis.genome_url))#
-Lacerta.agilis.genome_path          <- paste0(genomes.dir,"/",basename(Lacerta.agilis.genome_url))#
-Zootoca.vivipara.genome_path        <- paste0(genomes.dir,"/",basename(Zootoca.vivipara.genome_url))#
-Aspidoscelis.marmoratus.genome_path <- paste0(genomes.dir,"/",basename(Aspidoscelis.marmoratus.genome_url))#
-Salvator.merianae.genome_path       <- paste0(genomes.dir,"/",basename(Salvator.merianae.genome_url))
-genomes.dir <- "/Users/alyssaleinweber/Documents/genomes/genomes_seqs/"
-Podarcis.muralis.genome_path        <- paste0(genomes.dir,"/",basename(Podarcis.muralis.genome_url))#
-Lacerta.agilis.genome_path          <- paste0(genomes.dir,"/",basename(Lacerta.agilis.genome_url))#
-Zootoca.vivipara.genome_path        <- paste0(genomes.dir,"/",basename(Zootoca.vivipara.genome_url))#
-Aspidoscelis.marmoratus.genome_path <- paste0(genomes.dir,"/",basename(Aspidoscelis.marmoratus.genome_url))#
-Salvator.merianae.genome_path       <- paste0(genomes.dir,"/",basename(Salvator.merianae.genome_url))
-options(timeout=1000)
-Podarcis.muralis.conn         <- utils::download.file(url=Podarcis.muralis.genome_url, destfile=Podarcis.muralis.genome_path)
+which(names(Lacerta.agilis_exome)=="NC_046313.1:115413136-115414742")
+length(which(table(names(Lacerta.agilis_exome))>1))
+length(which(table(names(Lacerta.agilis_exome))==1))
+length(table(names(Lacerta.agilis_exome)))
+test < distinct(Lacerta.agilis_exome)
+test <- distinct(Lacerta.agilis_exome)
+test <- unique(Lacerta.agilis_exome)
+length(test)
+test[1]
+test[2]
+test[3]
+setwd("Documents/REEs")
+library(devtools)
+devtools::document()
+Lacerta.agilis_exome
+Lacerta.agilis_exome <- unique(Lacerta.agilis_exome)
+Lacerta.agilis_exome
+grep("NC_048605.1",names(Lacerta.agilis_exome))
+grep("NC_048605.1:.+",names(Lacerta.agilis_exome))
+grep("NC_046312.1:7746728-7746896",names(Lacerta.agilis_exome))
+538/109589
+(538/109589)*100
+grep("NC_046312.1:9855207-9855495",names(Lacerta.agilis_exome))
+(712/109589)*100
+grep("NC_046312.1:11690653-11691030",names(Lacerta.agilis_exome))
+(853/109589)*100
+grep("NC_046312.1:37013053-37013227",names(Lacerta.agilis_exome))
+grep("NC_046313.1:102640361-102640555",names(Lacerta.agilis_exome))
+grep("NC_046313.1:115413136-115414742",names(Lacerta.agilis_exome))
+grep("NC_046313.1:113347295-113348108",names(Lacerta.agilis_exome))
+grep("NC_046313.1:102973441-102973842",names(Lacerta.agilis_exome))
+grep("NC_046313.1:81642763-81645522",names(Lacerta.agilis_exome))
+grep("NC_046313.1:79948318-79948521",names(Lacerta.agilis_exome))
+bt.tiling=0.5;bt.len=120
+n.baits=1
+(bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))
+n.baits=2
+120+60
+(bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))
+180+60
+n.baits=3
+(bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))
+auto.flanking.lengths <- function(locus.len,bt.tiling,bt.len){#
+	n.baits <- something... #
+	### Starting values for while loop#
+	n.baits = 0; bait.coverage.len = 0#
+	while(bait.coverage.len < locus.len){#
+		n.baits <- n.baits+1#
+		bait.coverage.len <- (bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))#
+	}#
+	bait.coverage.len#
+}
+auto.flanking.lengths(locus.len=5373,bt.tiling=0.5,bt.len=120)
+auto.flanking.lengths <- function(locus.len,bt.tiling,bt.len){#
+	### Starting values for while loop#
+	n.baits = 0; bait.coverage.len = 0#
+	while(bait.coverage.len < locus.len){#
+		n.baits <- n.baits+1#
+		bait.coverage.len <- (bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))#
+	}#
+	bait.coverage.len#
+}
+auto.flanking.lengths(locus.len=5373,bt.tiling=0.5,bt.len=120)
+test <- vector()
+c(test,1)
+c(c(test,1),1)
+bait.coverage.vector <- function(longest.locus.len,bt.tiling,bt.len){#
+	### Starting values for while loop#
+	n.baits = 0; bait.coverage.len = 0#
+	result <- vector()#
+	while(bait.coverage.len < locus.len){#
+		n.baits <- n.baits+1#
+		bait.coverage.len <- (bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))#
+		result <- c(result,bait.coverage.len)#
+	}#
+#
+	# total.flanking    <- (locus.len-bait.coverage.len)#
+	# upstream.len   <- floor(((bait.coverage.len-locus.len)/2))#
+	# downstream.len <- target.lengths-(locus.lengths+upstream.lengths)#
+}
+bait.coverage.vector <- function(longest.locus.len,bt.tiling,bt.len){#
+	### Starting values for while loop#
+	n.baits = 0; bait.coverage.len = 0#
+	result <- vector()#
+	while(bait.coverage.len < locus.len){#
+		n.baits <- n.baits+1#
+		bait.coverage.len <- (bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))#
+		result <- c(result,bait.coverage.len)#
+	}#
+	result#
+	# total.flanking    <- (locus.len-bait.coverage.len)#
+	# upstream.len   <- floor(((bait.coverage.len-locus.len)/2))#
+	# downstream.len <- target.lengths-(locus.lengths+upstream.lengths)#
+}
+longest.REE.coverage <- bait.coverage.vector(longest.locus.len=7501,bt.tiling=0.5,bt.len=120)
+longest.REE.coverage <- bait.coverage.vector(longest.locus.len=7501,bt.tiling=0.5,bt.len=120)ait.coverage.vector <- function(longest.locus.len,bt.tiling,bt.len){#
+	### Starting values for while loop#
+	locus.len <- longest.locus.len#
+	n.baits = 0; bait.coverage.len = 0#
+	result <- vector()#
+	while(bait.coverage.len < locus.len){#
+		n.baits <- n.baits+1#
+		bait.coverage.len <- (bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))#
+		result <- c(result,bait.coverage.len)#
+	}#
+	result#
+	# total.flanking    <- (locus.len-bait.coverage.len)#
+	# upstream.len   <- floor(((bait.coverage.len-locus.len)/2))#
+	# downstream.len <- target.lengths-(locus.lengths+upstream.lengths)#
+}
+ait.coverage.vector <- function(longest.locus.len,bt.tiling,bt.len){#
+	### Starting values for while loop#
+	locus.len <- longest.locus.len#
+	n.baits = 0; bait.coverage.len = 0#
+	result <- vector()#
+	while(bait.coverage.len < locus.len){#
+		n.baits <- n.baits+1#
+		bait.coverage.len <- (bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))#
+		result <- c(result,bait.coverage.len)#
+	}#
+	result#
+	# total.flanking    <- (locus.len-bait.coverage.len)#
+	# upstream.len   <- floor(((bait.coverage.len-locus.len)/2))#
+	# downstream.len <- target.lengths-(locus.lengths+upstream.lengths)#
+}
+longest.REE.coverage <- bait.coverage.vector(longest.locus.len=7501,bt.tiling=0.5,bt.len=120)
+bait.coverage.vector <- function(longest.locus.len,bt.tiling,bt.len){#
+	### Starting values for while loop#
+	locus.len <- longest.locus.len#
+	n.baits = 0; bait.coverage.len = 0#
+	result <- vector()#
+	while(bait.coverage.len < locus.len){#
+		n.baits <- n.baits+1#
+		bait.coverage.len <- (bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))#
+		result <- c(result,bait.coverage.len)#
+	}#
+	result#
+	# total.flanking    <- (locus.len-bait.coverage.len)#
+	# upstream.len   <- floor(((bait.coverage.len-locus.len)/2))#
+	# downstream.len <- target.lengths-(locus.lengths+upstream.lengths)#
+}
+longest.REE.coverage <- bait.coverage.vector(longest.locus.len=7501,bt.tiling=0.5,bt.len=120)
+length(longest.REE.coverage)
+longest.REE.coverage[1:10]
+rev(longest.REE.coverage[1:10)
+rev(longest.REE.coverage[1:10])
+max(longest.REE.coverage)
+growth.len <- ((1-bt.tiling)*bt.len))
+growth.len <- ((1-bt.tiling)*bt.len)
+growth.len
+locus.len
+locus.len=7501
+bt.len=120
+(locus.len-bt.len)/growth.len
+bait.coverage.length <- function(locus.len,bt.tiling,bt.len){#
+	# Number of additional bases covered after the addition of one more bait#
+	growth.len <- ((1-bt.tiling)*bt.len)#
+	# baits needed to cover locus#
+	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
+	# bait coverage length#
+	bait.coverage        <- num.baits*bt.len#
+	names(bait.coverage) <- num.baits#
+	bait.coverage#
+}
+bait.coverage.length(7501,0.5,120)
+#' Calculate Bait Coverage and Number of Baits#
+#' #
+#' Internal function used in pick.loci function.#
+#' #
+#' @param locus.len Inherited from values in pick.loci function. This is the length of the ith REE locus.#
+#' @param bt.tiling Inherited from bait.tiling argument of pick.loci function. This is the fraction of overlap between adjacent baits; value of 0.5 corresponds to 50% overlap between adjacent baits.#
+#' @param bt.len Inherited from bait.length argument of pick.loci function. This is the nucleotide length of baits.#
+#' @return Named numeric with length of region covered by the minimum number of adjacent baits needed to cover locus.len; names() is equal to the number of baits.#
+#' @export bait.coverage.length#
+bait.coverage.length <- function(locus.len,bt.tiling,bt.len){#
+	# Number of additional bases covered after the addition of one more bait#
+	growth.len <- ((1-bt.tiling)*bt.len)#
+	# baits needed to cover locus#
+	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
+	# bait coverage length#
+	bait.coverage        <- num.baits*bt.len#
+	names(bait.coverage) <- num.baits#
+	bait.coverage#
+}#
+#
+#' Calculate Flanking Lengths#
+#' #
+#' Internal function for the pick.loci function; implemented when flanking.length = "auto". Calculates lengths of flanking regions to target for a targetted REE, given the length of the REE, bait length, and bait tiling.#
+#' Function is applied to each REE being considered in pick.loci.#
+#' #
+#' @param locus.length Length of locus.#
+#' @param target.length Length of region that includes the locus and is covered by baits.#
+#' @return Numerical vector of length two with the number of bases to target immediately upstream and downstream of the locus.#
+#' @export auto.flanking.lengths#
+auto.flanking.lengths <- function(locus.length,target.length){#
+	#total.flanking    <- (locus.len-bait.coverage.len)#
+	upstream.len   <- floor((target.length-locus.length)/2)#
+	downstream.len <- target.length-(locus.length+upstream.len)#
+	result <- c(upstream.len,downstream.len)#
+	result#
+}
+#' Calculate Bait Coverage and Number of Baits#
+#' #
+#' Internal function used in pick.loci function.#
+#' #
+#' @param locus.len Inherited from values in pick.loci function. This is the length of the ith REE locus.#
+#' @param bt.tiling Inherited from bait.tiling argument of pick.loci function. This is the fraction of overlap between adjacent baits; value of 0.5 corresponds to 50% overlap between adjacent baits.#
+#' @param bt.len Inherited from bait.length argument of pick.loci function. This is the nucleotide length of baits.#
+#' @return Named numeric with length of region covered by the minimum number of adjacent baits needed to cover locus.len; names() is equal to the number of baits.#
+#' @export bait.coverage.length#
+bait.coverage.length <- function(locus.len,bt.tiling,bt.len){#
+	# Number of additional bases covered after the addition of one more bait#
+	growth.len <- ((1-bt.tiling)*bt.len)#
+	# baits needed to cover locus#
+	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
+	# bait coverage length#
+	bait.coverage        <- num.baits*bt.len#
+	names(bait.coverage) <- num.baits#
+	bait.coverage#
+}#
+#
+#' Calculate Flanking Lengths#
+#' #
+#' Internal function for the pick.loci function; implemented when flanking.length = "auto". Calculates lengths of flanking regions to target for a targetted REE, given the length of the REE, bait length, and bait tiling.#
+#' Function is applied to each REE being considered in pick.loci.#
+#' #
+#' @param locus.length Length of locus.#
+#' @param target.length Length of region that includes the locus and is covered by baits.#
+#' @return Numerical vector of length two with the number of bases to target immediately upstream and downstream of the locus.#
+#' @export auto.flanking.lengths#
+auto.flanking.lengths <- function(locus.length,target.length){#
+	#total.flanking    <- (locus.len-bait.coverage.len)#
+	upstream.len   <- floor((target.length-locus.length)/2)#
+	downstream.len <- target.length-(locus.length+upstream.len)#
+	result <- c(upstream.len,downstream.len)#
+	result#
+}
+auto.flanking.lengths(7501,target.length=bait.coverage.length(7501,0.5,120))
+auto.flanking.lengths(locus.length=7501,target.length=bait.coverage.length(7501,0.5,120))
+bait.coverage.length <- function(locus.len,bt.tiling,bt.len){#
+	# Number of additional bases covered after the addition of one more bait#
+	growth.len <- ((1-bt.tiling)*bt.len)#
+	# baits needed to cover locus#
+	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
+	# bait coverage length#
+	bait.coverage        <- num.baits*bt.len#
+	names(bait.coverage) <- num.baits#
+	bait.coverage#
+}
+bait.coverage.length(7501,0.5,120)
+bait.coverage.length <- function(locus.len,bt.len,bt.tiling){#
+	# Number of additional bases covered after the addition of one more bait#
+	growth.len <- ((1-bt.tiling)*bt.len)#
+	# baits needed to cover locus#
+	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
+	# bait coverage length#
+	bait.coverage        <- ((num.baits-1)*growth.len)+bt.len#
+	names(bait.coverage) <- num.baits#
+	bait.coverage#
+}
+bait.coverage.length(7501,120,0.5)
+auto.flanking.lengths(7501,bait.coverage.length(7501,120,0.5))
+auto.flanking.lengths <- function(locus.len,bt.len,bt.tiling){#
+	# Number of additional bases covered after the addition of one more bait#
+	growth.len <- ((1-bt.tiling)*bt.len)#
+	# baits needed to cover locus#
+	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
+	# bait coverage length#
+	bait.coverage        <- ((num.baits-1)*growth.len)+bt.len#
+	upstream.len   <- floor((bait.coverage -locus.len)/2)#
+	downstream.len <- bait.coverage-(locus.len+upstream.len)#
+	result <- c(upstream.len,downstream.len)#
+	result#
+}
+auto.flanking.lengths(7501,120,0.5)
+loci.lengths <- sample(x=c(120:7501),size=100,replace=T)
+loci.lengths
+bait.coverage.length(locus.len=loci.lengths,bt.len=120,bt.tiling=0.5)
+loci.bait.coverage.lengths         <- bait.coverage.length(locus.len=loci.lengths,bt.len=120,bt.tiling=0.5)#
+	loci.num.baits                     <- names(loci.bait.coverage.lengths)
+loci.num.baits
+loci.num.baits                     <- as.numeric(names(loci.bait.coverage.lengths))
+loci.num.baits
+bait.length=120
+bait.tiling=0.5
+loci.flanking.lengths <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)
+loci.flanking.lengths
+auto.flanking.lengths <- function(locus.len,bt.len,bt.tiling){#
+	# Number of additional bases covered after the addition of one more bait#
+	growth.len <- ((1-bt.tiling)*bt.len)#
+	# baits needed to cover locus#
+	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
+	# bait coverage length#
+	bait.coverage        <- ((num.baits-1)*growth.len)+bt.len#
+	upstream.len   <- floor((bait.coverage -locus.len)/2)#
+	downstream.len <- bait.coverage-(locus.len+upstream.len)#
+	result <- list(upstream.len,downstream.len)#
+	result#
+}
+loci.flanking.lengths <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)
+loci.flanking.lengths
+loci.upstream.flanking.lengths   <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)[[1]]#
+			loci.downstream.flanking.lengths <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)[[2]]
+loci.upstream.flanking.lengths
+loci.downstream.flanking.lengths
+auto.flanking.lengths <- function(locus.len,bt.len,bt.tiling){#
+	# Number of additional bases covered after the addition of one more bait#
+	growth.len <- ((1-bt.tiling)*bt.len)#
+	# baits needed to cover locus#
+	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
+	# bait coverage length#
+	bait.coverage        <- ((num.baits-1)*growth.len)+bt.len#
+	upstream.len   <- floor((bait.coverage -locus.len)/2)#
+	downstream.len <- bait.coverage-(locus.len+upstream.len)#
+	result <- list(upstream.len,downstream.len)#
+	names(result) <- c("upstream","downstream")#
+	result#
+}
+loci.flanking.lengths.list       <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+			loci.upstream.flanking.lengths   <- loci.flanking.lengths.list[[1]]#
+			loci.downstream.flanking.lengths <- loci.flanking.lengths.list[[2]]
+loci.flanking.lengths.list
+loci.upstream.flanking.lengths
+loci.downstream.flanking.lengths
+flanking.length=100
+loci.lengths.with.flanking <- loci.lengths+(2*flanking.length)
+loci.lengths.with.flanking
+loci.num.baits             <- as.numeric(names(loci.lengths.with.flanking))
+loci.num.baits
+loci.bait.coverage.lengths <- bait.coverage.length(locus.len=loci.lengths.with.flanking,bt.len=bait.length,bt.tiling=bait.tiling)
+loci.bait.coverage.lengths
+loci.num.baits             <- as.numeric(names(loci.lengths.with.flanking))
+locu.num.baits
+loci.num.baits
+loci.num.baits             <- as.numeric(names(loci.lengths.with.flanking))
+loloci.num.baits             <- as.numeric(names(loci.bait.coverage.lengths))
+loci.num.baits             <- as.numeric(names(loci.bait.coverage.lengths))
+loci.num.baits
+grep("NC_046313.1:66038313-66038747",names(Lacerta.agilis.exome))
+grep("NC_046313.1:66038313-66038747",names(Lacerta.agilis_exome))
+length(Lacerta.agilis_exome)
+15838/length(Lacerta.agilis_exome)
+setwd()
+getwd()
+library(devtools)
+devtools::document()
+rm(list = c("auto.flanking.lengths", "bait.coverage.length"))
+devtools::document()
+devtools::document()
+devtools::document()
+devtools::document()
+devtools::document()
+devtools::build()
+devtools::install()

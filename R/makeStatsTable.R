@@ -15,9 +15,9 @@
 #' @return Stats table (class data.table object), which is also saved to the value of output.path.
 #' @export makeStatsTable
 makeStatsTable <- function(input.seqs,species,input.gff,species.gff,output.path = NULL,alignments.out=NULL,subgroup=NULL,i.start=1,i.stop=NA){
-	species         <- c(species[species.gff],species[-species.gff])    ### reorders the list of species such that the primary.species is first in the list
-	species         <- gsub(" ","_",species)
-	
+	### Reorders the list of species such that the primary.species is first in the list
+	species  <- c(species[species.gff],species[-species.gff])
+	species  <- gsub(" ","_",species)
 	if(is.null(subgroup)){
 		subgroup <- species
 	}
@@ -27,9 +27,10 @@ makeStatsTable <- function(input.seqs,species,input.gff,species.gff,output.path 
 	} else {
 		delete <- F
 	}
-	is.subgroup     <- mgrep(query=subgroup,subject=species)                      ### A list of numbers indicating which of the species are also in the subgroup.
-	input.seqs      <- c(input.seqs[species.gff],input.seqs[-species.gff])        ### Puts the input.seqs in the same order as species.
-
+	### A list of numbers indicating which of the species are also in the subgroup.
+	is.subgroup     <- mgrep(query=subgroup,subject=species)
+	### Puts the input.seqs in the same order as species.
+	input.seqs      <- c(input.seqs[species.gff],input.seqs[-species.gff])
 	### Read in the sequences for each species as a DNAStringSet, and hold the set of DNAStringSets in a list
 	species.seqs <- lapply(X=input.seqs,FUN=function(x){Biostrings::readDNAStringSet(x)})
 
@@ -37,49 +38,26 @@ makeStatsTable <- function(input.seqs,species,input.gff,species.gff,output.path 
 		annotationTable  <- data.table::as.data.table(input.gff)
 	}
 	if("character" %in% class(input.gff)){
-		annotationTable  <- data.table::fread(input=input.gff)   ### reads in annotation table, which is associated with the primary exome
+		### Reads in annotation table, which is associated with the primary exome
+		annotationTable  <- data.table::fread(input=input.gff)
 	}
 	### Extracts the QUERY contig accession name and range from each sequence name of each species.
 	matches.list    <- lapply(X=species.seqs,FUN=function(x){ gsub("_Subject=.*","",names(x))})
-	
-	### This is the set of loci shared among all species.
-	#shared.loci     <- intersect.all(matches.list)
-
 	### This is the set of all loci found in at least one individual.
 	all.loci        <- unique(unlist(matches.list))
-
-	### List of numeric vectors, each vector containing numbers indicating which sequences are the shared sequences.
-	#matches.indices <- lapply(X=matches.list,FUN=function(y){match(x=shared.loci,table=y)})
-
 	### List of numeric vectors, each vector containing numbers indicating which sequences are those in all.sequences.
-	matches.indices.all <- lapply(X=matches.list,FUN=function(y){match(x=all.loci,table=y)})
-	
+	matches.indices.all         <- lapply(X=matches.list,FUN=function(y){match(x=all.loci,table=y)})
 	### Puts loci in the same order for each species. Doesnt filter based upon whether loci are shared.
 	species.seqs.all            <- mapply(FUN=function(X,Y){Z=Y[which(!is.na(Y))];X[Z]},X=species.seqs,Y=matches.indices.all,SIMPLIFY=F)
-
-	### Filters loci not shared among species, and puts shared loci in the same order for each species.
-	#species.seqs                <- mapply(FUN=function(X,Y){X[Y]},X=species.seqs,Y=matches.indices,SIMPLIFY=F)
-	
 	## Extracts the gene name from the last column of the gff table
 	annotationTable.identifier  <- paste0(unlist(annotationTable[,1]),"_",unlist(annotationTable[,"start"]),"_", unlist(annotationTable[,"end"]))
 	gene.names.temp             <- gsub(".*;gene=","gene=",unlist(annotationTable[,9]))
 	gene.names.temp2            <- gsub(";.*","",gene.names.temp)
 
-	### Create a vector holding gene names of shared loci.
-	#CDS.locus.identifier.shared <- mgsub(c(":","-"),c("_","_"),shared.loci)
-	#match.identifier.shared     <- match(CDS.locus.identifier.shared,annotationTable.identifier)
-	#gene.names                  <- gene.names.temp2[match.identifier.shared]
-
 	### Create a vector holding gene names of all loci in input.seqs
 	CDS.locus.identifier.all    <- mgsub(c(":","-"),c("_","_"),all.loci)
 	match.identifier.all        <- match(CDS.locus.identifier.all,annotationTable.identifier)
 	gene.names.all              <- gene.names.temp2[match.identifier.all]
-
-	### character string location of CDS within contig, with format "start_end"
-	### length of each sequence (in species associated with the gff table) for the shared sequences
-	#loci.ranges  <- mgsub(c(".*\\.1:","-"),c("","_"),shared.loci)
-	#loci.lengths <- (abs(as.numeric(gsub(".*_","",loci.ranges))-as.numeric(gsub("_.*","",loci.ranges)))+1)
-	
 
 	### character string location of CDS within contig, with format "start_end"
 	### length of each sequence (in species associated with the gff table) for the shared sequences
@@ -94,10 +72,12 @@ makeStatsTable <- function(input.seqs,species,input.gff,species.gff,output.path 
 	#}
 
 	if(is.na(i.start) | i.start > length(all.loci)){
-		i.start <- 1                  ### default i.start, ie which exons to start the loop at
+		### Default i.start, ie which exons to start the loop at
+		i.start <- 1
 	}
 	if(is.na(i.stop) | i.stop > length(all.loci)){
-		i.stop  <- length(all.loci)   ### default i.stop, ie which exons to stop the loop at
+		### Default i.stop, ie which exons to stop the loop at
+		i.stop  <- length(all.loci)
 	}
 
 	
@@ -113,7 +93,7 @@ makeStatsTable <- function(input.seqs,species,input.gff,species.gff,output.path 
 	for(i in 1:length(temp.seqs.all)){
 		names(temp.seqs.all[[i]]) <- names.temp.seqs.all[[i]]
 	}
-
+	
 	### Create a matrix to hold the alignment stats for shared loci
 	#tempMatrix           <- matrix(data=0, nrow=length(i.start:i.stop), ncol=12+length(species))
 	#colnames(tempMatrix) <- c(paste0(species[1],".locus"), "num.Species","CountCover","absolutePIS","percentPIS","mean.pident", paste0("pident.",species), "alignment.width","gene.name",paste0("locus.length.",species[1]),"mean.variable.sites","min.pident.all","min.pident.subgroup")
@@ -126,32 +106,30 @@ makeStatsTable <- function(input.seqs,species,input.gff,species.gff,output.path 
 	colnames(tempMatrix.all) <- c(paste0(species[1],".locus"), "num.Species","CountCover","absolutePIS","percentPIS","mean.pident", paste0("pident.",species), "gene.name",paste0("locus.length.",species[1]),"mean.variable.sites","min.pident.all","min.pident.subgroup","alignment.width")
 	tempMatrix.all[,1]             <- all.loci
 	tempMatrix.all[,"gene.name"]   <- gsub("gene=","",gene.names.all)
-	tempMatrix.all[,"num.Species"] <- sapply(temp.seqs.all,length) ### Will be the same for all species because intersect.all function was used.
-
+	tempMatrix.all[,"num.Species"] <- sapply(temp.seqs.all,length)
+	### Will be the same for all species because intersect.all function was used.
 	### This currently only considers tempMatrix and not tempMatrix.all
 	### Could test for tempMatrix.all by setting tempMatrix <-  tempMatrix.all; temp.seqs <- temp.seqs.all; loci.lengths <- loci.lengths.all; gene.names <- gene.names.all
 	tempMatrix <-  tempMatrix.all; temp.seqs <- temp.seqs.all; loci.lengths <- loci.lengths.all; gene.names <- gene.names.all
-
 	for(i in c(i.start:i.stop)) {
 		if (as.numeric(tempMatrix[i,"num.Species"])>1){
 			### aligns the ith locus of each species
-			alignment.temp           <- REEs::mafft(temp.seqs[[i]],param="--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6")
+			alignment.temp              <- REEs::mafft(temp.seqs[[i]],param="--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6")
 			### Number of sites in alignment
-			alignment.width          <- width(alignment.temp)[1]
+			alignment.width             <- width(alignment.temp)[1]
 			### pairwise matrix of absolute genetic distance
-			distances                <- 100*as.matrix(ape::dist.dna(ape::as.DNAbin(alignment.temp),model="raw",pairwise.deletion=T)) 
+			distances                   <- 100*as.matrix(ape::dist.dna(ape::as.DNAbin(alignment.temp),model="raw",pairwise.deletion=T)) 
 			### pairwise matrix of percent genetic identity
-			pident                   <- round(100-distances,digits=2)
-			mean.pident              <- round(mean(pident[1,-1]),digits=2)
+			pident                      <- round(100-distances,digits=2)
+			mean.pident                 <- round(mean(pident[1,-1]),digits=2)
 			### mean percent identity of the primary species to each of the other species.
-			tempMatrix[i,"mean.pident"]         <- mean.pident
+			tempMatrix[i,"mean.pident"] <- mean.pident
 			### percent identity of the primary species to each species in the alignment (including itself, with should be 100% idendical).
 			tempMatrix[i,(7:(length(species)+6))[species %in% names(alignment.temp)]] <- pident[1,]
 			if(any(!species %in% names(alignment.temp))){
 				tempMatrix[i,(7:(length(species)+6))[!species %in% names(alignment.temp)]] <- NA
 			}
 		}
-
 		if (as.numeric(tempMatrix[i,"num.Species"]) > 3){
 			# Counts the number of sites of ith locus with at least 4 individuals with non-missing data
 			count.cover <- width(filter.alignment(alignment=alignment.temp,treat.ambiguous.as.missing=T,min.allele.freqs.dna=c(4,0,0,0)))[1]
@@ -179,20 +157,17 @@ makeStatsTable <- function(input.seqs,species,input.gff,species.gff,output.path 
 		mean.var.sites      <- round(((100-as.numeric(mean.pident))/100)*as.numeric(loci.lengths[i]),digits=2)
 		 ### Minimum pident of any species to the primary species for ith locus (excluding species without data)
 		min.pident.all      <- round(min(as.numeric(tempMatrix[i,(7:(length(species)+6))[species %in% names(alignment.temp)]])),digits=2)
-		
 		### Minimum pident of any species in the subgroup to the primary species for ith locus.
 		if(all(subgroup %in% species)){
 			min.pident.subgroup <- min.pident.all
 		} else {
 			min.pident.subgroup <- min(as.numeric(tempMatrix[(is.subgroup+6)]))
 		}
-
 		tempMatrix[i,paste0("locus.length.",species[1])] <- loci.lengths[i]
 		tempMatrix[i,"mean.variable.sites"] <- mean.var.sites
 		tempMatrix[i,"min.pident.all"]      <- min.pident.all
 		tempMatrix[i,"min.pident.subgroup"] <- min.pident.subgroup
 		alignment.out <- Biostrings::DNAStringSet(alignment.temp)
-
 		if(!is.null(alignments.out)){
 			Biostrings::writeXStringSet(x=alignment.out,filepath=paste0(alignments.out,"/locus",i,"_aligned.fas"))
 		}
@@ -450,38 +425,30 @@ align.shared.loci <- function(input.seqs,indv,reference.indv=1,seqname.str.delim
 alignment.stats <- function(align.dir,outfile,seqs.format="phylip"){
 	ext         <- c("phy","fa"); names(ext) <- c("phylip","fasta")
 	ext.temp    <- as.character(ext[seqs.format])
-	#files       <- list.files(path=align.dir, pattern="*.phy",full.names=T)  ### list of the names of alignment files
-	#short.names <- list.files(path=align.dir, pattern="*.phy")         ###list of the names of alignment files
-	
-	files       <- list.files(path=align.dir, pattern=paste("*.",ext.temp,sep=""),full.names=T)  ### list of the names of alignment files
-	short.names <- list.files(path=align.dir, pattern=paste("*.",ext.temp,sep=""))         ###list of the names of alignment files
-
+	### List of the names of alignment files
+	files       <- list.files(path=align.dir, pattern=paste("*.",ext.temp,sep=""),full.names=T)
+	### List of the names of alignment files
+	short.names <- list.files(path=align.dir, pattern=paste("*.",ext.temp,sep=""))
 	stats.table <- matrix(data="0",nrow=length(files),ncol=10)
 	colnames(stats.table) <- c("locus","n_individuals","n_characters","percent_gaps","fraction_sites_pars_inform","mean_pDistance","all_some_overlap","stat7","stat8","stat9","stat10")[1:ncol(stats.table)]
-	
 	for(i in 1:length(files)){
 		
 		multipleAlignment.temp <- readDNAMultipleAlignment(file = files[i], format = seqs.format)
-		DNAbin.temp    <- Biostrings::as.DNAbin(multipleAlignment.temp)   ### DNAbin version of the alignment
+		### DNAbin version of the alignment
+		DNAbin.temp    <- Biostrings::as.DNAbin(multipleAlignment.temp)
 		alignment.temp <- Biostrings::unmasked(multipleAlignment.temp)
 		
 		distances        <- ape::dist.dna(DNAbin.temp,model="raw",pairwise.deletion=T)
 		mean.distance    <- round(mean(distances[which(distances!="NaN")]),digits=3)
 		all.some.overlap <- all(distances!="NaN")
 		name.temp        <- gsub(pattern=".phy","",x=short.names[i])
-
 		stats.table[i,1] = name.temp
 		stats.table[i,2] = as.numeric(length(alignment.temp))
 		stats.table[i,3] = as.numeric(width(alignment.temp)[1])
-#		stats.table[i,4] = as.numeric(round(percent.gaps(alignment.temp),digits=5))
-		stats.table[i,5] = pis.new(alignment.temp,abs=F) ### percent of sites that are informative
+		### Percent of sites that are informative
+		stats.table[i,5] = pis.new(alignment.temp,abs=F)
 		stats.table[i,6] = mean.distance
 		stats.table[i,7] = all.some.overlap
-		
-		# stats.table[i,6] = round(mean(dist.dna(DNAbin.temp,model="raw",pairwise.deletion=T)),digits=3)   ### mean pairwise distance among individuals
-		# stats.table[i,6]= ((1-as.numeric(round(percent.gaps(alignment.temp),digits=5)))*as.numeric(width(alignment.temp)[1])*as.numeric(length(alignment.temp)))
-		# stats.table[i,8]=
-		# stats.table[i,9]=
 		
 		if(i==1){
 			write(x=colnames(stats.table),ncolumns=ncol(stats.table),file=outfile,append=T)
