@@ -5,12 +5,14 @@
 #'
 #' @param x Object of class XStringSet (e.g., DNAStringSet) that contains the sequences to be aligned.
 #' @param param Character string containing the mafft command line parameters.
-#' @param mafft.path Either NULL (default) or a character string specifying the path to the mafft executable. If NULL, the mafft executable must be on your system PATH. This is very likely to be the case because by default mafft installs to usr/local/bin.
+#' @param mafft.path Either "auto" (default), NULL, or a character string with full path to the mafft executable.
+#' If "auto", then the mafft executable must be located somewhere within the blast-mafft/mafft/ directory of the REEs package library (i.e., the default install location if mafft was installed with mafft.install() function).
+#' If NULL, the mafft executable must be on your system PATH.
 #' A possible exception is when mafft is used on a community cluster. In this case, specify the path to the mafft executable instead of using "auto".
 #' @param return.as Of the following: "XStringSet" (default) or "MultipleAlignment"
 #' @return Either an object of class XStringSet (if return.as= "XStringSet") or DNAMultipleAlignment (or RNA MultipleAlignment or AAMultipleAlignment) if return.as = MultipleAlignment (see BioStrings).
 #' @export mafft
-mafft <- function(x, param="--auto",mafft.path=NULL,return.as="XStringSet") {
+mafft <- function(x, param="--auto",mafft.path="auto",return.as="XStringSet") {
     #######################################################################
     # BiostringsTools - Interfaces to several sequence alignment and
     # classification tools
@@ -32,10 +34,25 @@ mafft <- function(x, param="--auto",mafft.path=NULL,return.as="XStringSet") {
     ########################################################################
 
     #### Prepare the path to the executables. Jeff Weinell added this to avoid using the .findExecutable function.
-    if(is.null(mafft.path)){
-        blast.exe.path <- "mafft"
+    if(mafft.path=="auto"){
+        ### Path to "/blast-mafft/mafft" directory in REEs library
+        REEs.mafft.dir <- paste0(find.package("REEs"),"/blast-mafft/mafft")
+        ### Path to directory containing the mafft executable
+        mafft.dir.path <- list.dirs(REEs.mafft.dir)[grep("bin$",list.dirs(REEs.mafft.dir))]
+        ### Path to the MAFFT executable
+        mafft.exe.path <- paste0(mafft.dir.path,"/mafft")
     } else {
-        blast.exe.path <- mafft.path
+        if(is.null(mafft.path)){
+            mafft.exe.path <- "mafft"
+        } else {
+            mafft.exe.path <- mafft.path
+        }
+    }
+    
+    #### Verify that mafft.exe.path is executable. Stop and warn if not.
+    test.mafft.exe       <- check.if.executable(exe.path=mafft.exe.path)
+    if(test.mafft.exe!=0){
+        stop(paste0("'",mafft.exe.path," is not executable. Aborting. Run mafft.install() with argument defaults to install MAFFT to REEs package.'"))
     }
     ### Define temporary directory to work in.
     wd        <- tempdir()
@@ -58,7 +75,7 @@ mafft <- function(x, param="--auto",mafft.path=NULL,return.as="XStringSet") {
     ### Write the unaligned sequence data to a temporary file.
     Biostrings::writeXStringSet(x, infile, append=FALSE, format="fasta")
     ### Run MAFFT
-    system(paste(blast.exe.path,param,"--clustalout",infile,">",outfile))
+    system(paste(mafft.exe.path,param,"--clustalout",infile,">",outfile))
     ### Read the output of mafft
     if(is(x, "RNAStringSet")){
        result <- Biostrings::readRNAMultipleAlignment(outfile, format="clustal")
