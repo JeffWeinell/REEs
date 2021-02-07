@@ -2,20 +2,40 @@
 #' 
 #' Extracts the sequences defined in an input table (a blast table with NCBI format 6) from an input genome. The input genome should be the same genome used as the subject in the blast table.
 #' The quality/completeness of the output sequence dataset depends on the quality/completeness of the blast search.
-#' The functions get.exome.from.blastTable and get.UCEs.from.blastTable are the same as this one, but applied to a specific type of sequences in the blast table. This function could supercede those functions.
+#' This function supercedes the functions get.exome.from.blastTable and get.UCEs.from.blastTable.
 #' 
-#' @param input.blastTable Path to the blast table containing best matches to query sequences found in the input genome (subject in blast search). This input table is the output of the reportBestMatches function. 
-#' @param input.seqs Path to the input genome.
-#' @param output.path Directory where to save the extracted sequences.
-#' @return Extracted sequences written to a file.
+#' @param input.blastTable Either a character string with the local filepath to a BLAST table (BLAST output format 6), or such a table held as a data table, data frame, or character matrix object.
+#' @param input.seqs Either a character string with the filepath or URL path to the input sequences (which can be .gz compressed), or, a DNAStringSet object holding the sequences.
+#' @param output.path Character string with path (including filename) to where extracted sequences should be saved.
+#' @return A DNAStringSet object with the extracted sequences. Sequences are also optionally written to output.path.
 #' @export get.seqs.from.blastTable
 get.seqs.from.blastTable <- function(input.blastTable,input.seqs,output.path=NULL){
-	if("data.frame" %in% class(input.blastTable)){
-		data.best   <- data.table::as.data.table(input.blastTable)
+	#if("data.frame" %in% class(input.blastTable)){
+	#	data.best   <- data.table::as.data.table(input.blastTable)
+	#}
+	#if("character" %in% class(input.blastTable)){
+	#	data.best   <- data.table::fread(file=input.blastTable,sep=",",header=T)
+	#}
+	## Coerce input.blastTable to a data frame object if it is a data.table or character matrix object
+	if(is(input.blastTable,"data.table") | is(input.blastTable,"matrix")){
+		data.best <- as.data.frame(input.blastTable)
 	}
-	if("character" %in% class(input.blastTable)){
-		data.best   <- data.table::fread(file=input.blastTable,sep=",",header=T)
+	## If input.blastTable is a character string with the filepath, read the file as a data.table and then coerce it to data frame.
+	if(is(input.blastTable,"character")){
+		data.best <- as.data.frame(data.table::fread(input=input.blastTable,sep="\t"))
 	}
+	## Now set filenames and 
+	colnames(data.best) <- c("qseqid","sseqid","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore")
+	##### Set column modes
+	# Set which columns should be mode numeric
+	numeric.columns <- c(3:12)
+	# Set mode to numeric for those columns that should be numeric
+	data.best[, numeric.columns] <- sapply(data.best[, numeric.columns], as.numeric)
+	# Set which columns should be mode character
+	character.columns <- c(1:2)
+	# Set mode to "character" for the columns indexed in the character.columns vector
+	data.best[, character.columns] <- sapply(data.best[, character.columns], as.character)
+	
 	query.subject.id    <- paste0(as.character(data.best$qseqid),"_Subject=",as.character(data.best$sseqid),"_",as.character(data.best$sstart),"_",as.character(data.best$send))
 	subject.id          <- gsub(" .+","",as.character(data.best$sseqid))
 	subject.start       <- data.best$sstart
@@ -156,7 +176,8 @@ get.seqs.from.blastTable <- function(input.blastTable,input.seqs,output.path=NUL
 #' Crotalus.mitchellii.best.hits.seqs <- get.seqs.from.blastTable(input.blastTable=best.hits.Crotalus.mitchellii,input.seqs="/Users/alyssaleinweber/Documents/genomes/genomes_seqs/GCA_000737285.1_CrotMitch1.0_genomic.fna.gz",output.path="/Users/alyssaleinweber/Documents/REES_test_output/Crotalus.mitchellii_TwoExons.testQuery.tblastx.best.hits_seqs.fas")
 #' Ophiophagus.hannah.best.hits.seqs  <- get.seqs.from.blastTable(input.blastTable=best.hits.Ophiophagus.hannah,input.seqs="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/516/915/GCA_000516915.1_OphHan1.0/GCA_000516915.1_OphHan1.0_genomic.fna.gz",output.path="/Users/alyssaleinweber/Documents/REES_test_output/Ophiophagus.hannah_TwoExons.testQuery.tblastx.best.hits_seqs.fas")
 #' Pantherophis.best.hits.seqs        <- get.seqs.from.blastTable(input.blastTable=best.hits.Pantherophis.guttatus,input.seqs=Pantherophis.guttatus.genome_url,output.path="/Users/alyssaleinweber/Documents/REES_test_output/Pantherophis.guttatus_TwoExons.testQuery.tblastx.best.hits_seqs.fas")
-
+#'
+#' param table.headers Logical indicating if the first line of input.blastTable is the column names. Argument ignored if input.blastTable is a data table, data frame, or character matrix.
 
 #' @title Get UCEs From BLAST Table
 #' 

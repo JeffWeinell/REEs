@@ -28,6 +28,10 @@ makeStatsTable <- function(input.seqs,species,input.gff,species.gff,output.path 
 	} else {
 		delete <- F
 	}
+	### If alignments.out is not NULL, check if it exists and if not, create it.
+	if(!is.null(alignments.out)){
+		dir.check.create(alignments.out)
+	}
 	### A list of numbers indicating which of the species are also in the subgroup.
 	is.subgroup     <- mgrep(query=subgroup,subject=species)
 	if(is(input.seqs[[1]],"character")){

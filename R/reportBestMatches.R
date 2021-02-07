@@ -5,26 +5,34 @@
 # ' (1) Drop matches if bitscore of top hit is not much better than other matches.
 #'  (2) Drop query sequences if the best match has a bitscore below some threshold.
 #' 
-#' @param input.table Path to the input hit table of matches, or, a data.table object.
-#' @param output.table.path Where to save the output table of best matches (default is NULL).
-#' @param remove.subseq.matches Whether or not to drop matches for which the subject sequence is a subsequence of another match. Default is FALSE.
-#' @param min.bitscore Minimum bitscore required for the best match. Matches with a bitscore below this value are not included in the output table. This is useful for removing paralog matches. Default = 50.
+#' @param input.table Character string with path BLAST hit table, or, a BLAST hit table held as an object of class data.table, data.frame, or matrix.
+#' @param output.table.path Character to string with path where output table should be saved; default is NULL.
+#' @param remove.subseq.matches Logical with whether or not to drop matches for which the subject sequence is a subsequence of another match. Default is FALSE.
+#' @param min.bitscore Number indicating the minimum bitscore required to keep the best match. Matches with a bitscore below this value are not included in the output table. This is useful for removing paralog matches. Default = 50.
 #' The reason for using a default min.bitscore of 50 is because values at or greater than this usually indicate that the sequences are homologous (doi: 10.1002/0471250953.bi0301s42).
-#' @param min.bitscore.difference The difference between the best and second best matches' bitscore must be greater than this value to keep matches for the query sequence. Default = 0. This is useful for removing loci with putatitive recent duplicates in the genome.
+#' @param min.bitscore.difference Number indicating the minimum difference required between bitscores of the best and second best matches; must be greater than this value to keep matches for the query sequence. Default = 0. This is useful for removing loci with putatitive recent duplicates in the genome.
 #' @return A data.table object containing the best matche to each input query in the input blast table. If output.table.path argument is a path (character string), then the function also writes the output as a tab-separated file.
 #' @export reportBestMatches
 reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq.matches=T, min.bitscore=50, min.bitscore.difference=0){
-	if("data.frame" %in% class(input.table)){
-		all.matches <- data.table::as.data.table(input.table)
+	## Coerce input.table to a data frame object if it is a data.table or matrix object
+	if(is(input.table,"data.table") | is(input.table,"matrix")){
+		all.matches <- as.data.frame(input.table)
 	}
-	### Alternatively, could use data.frame class instead of data.table
-#	if("data.table" %in% class(input.table)){
-#		all.matches <- as.data.frame(input.table)
-#	}
-	if("character" %in% class(input.table)){
-		all.matches       <- data.table::fread(input=input.table,sep="\t")
+	## If input.table is a character string with the filepath, read the file in as a data.table and then coerce it to data frame.
+	if(is(input.table,"character")){
+		all.matches       <- as.data.frame(data.table::fread(input=input.table,sep="\t"))
 	}
+	# Set column names
 	colnames(all.matches) <- c("qseqid","sseqid","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore")
+	##### Set column modes
+	# Set which columns should be mode numeric
+	numeric.columns <- c(3:12)
+	# Set mode to numeric for those columns that should be numeric
+	all.matches[, numeric.columns] <- sapply(all.matches[, numeric.columns], as.numeric)
+	# Set which columns should be mode character
+	character.columns <- c(1:2)
+	# Set mode to "character" for the columns indexed in the character.columns vector
+	all.matches[, character.columns] <- sapply(all.matches[, character.columns], as.character)
 	### Filter matches with bitscore less than min.bitscore
 	if(any(all.matches$bitscore < min.bitscore)){
 		filtered.matches <- all.matches[-which(all.matches$bitscore < min.bitscore),]
@@ -77,7 +85,9 @@ reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq
 	if(!is.null(output.table.path)){
 		write.table(best.data,file=output.table.path,sep="\t",row.names=F,col.names=T,quote=F)
 	}
-	best.data
+	# Coerce the result (the best hits table) to a data.table object because it is safe to print.
+	result <- data.table::as.data.table(best.data)
+	result
 }
 #' @examples
 #' ### Load GFF table from NCBI repository.

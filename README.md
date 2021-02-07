@@ -224,20 +224,13 @@ Salvator.merianae.best.hits.seqs         <- REEs::get.seqs.from.blastTable(input
 
 ```
 
-Align homologous sequences and make a table to summarize data in each alignment (one row per aligned locus).
+Align homologous sequences and make a table to summarize data in each alignment (one row per aligned locus), and save each alignment to a folder called alignments.
 ```
 ### Character vector with paths to "best hits" sequences file of each species.
 input.seqs.paths <- paste0(working.dir,c("/Podarcis.muralis.tblastx.best.hits_seqs.fas", "/Lacerta.agilis.tblastx.best.hits_seqs.fas", "/Zootoca.vivipara.tblastx.best.hits_seqs.fas", "/Aspidoscelis.marmoratus.tblastx.best.hits_seqs.fas", "/Salvator.merianae.tblastx.best.hits_seqs.fas"))
 
-### Specify directory where alignments should be saved.
-alignments.dir <- paste0(working.dir,"/alignments")
-# Create empty alignments.dir if it doesn't already exist.
-if(!dir.exists(alignments.dir)){
-  dir.create(alignments.dir)
-}
-
 ### Align sequences and summarize alignments in a table.
-stats.table.all  <- makeStatsTable(input.seqs=input.seqs.paths, input.gff=Lacerta.agilis_GFF_CDS_longer120bp, output.path=paste0(working.dir,"/statsTable_REEs.txt"), species= c("Podarcis muralis", "Lacerta agilis", "Zootoca vivipara", "Aspidoscelis marmoratus", "Salvator merianae"),alignments.out=alignments.dir, species.gff=2)
+stats.table.all  <- makeStatsTable(input.seqs=input.seqs.paths, input.gff=Lacerta.agilis_GFF_CDS_longer120bp, output.path=paste0(working.dir,"/statsTable_REEs.txt"), species= c("Podarcis muralis", "Lacerta agilis", "Zootoca vivipara", "Aspidoscelis marmoratus", "Salvator merianae"),alignments.out=paste0(working.dir,"/alignments"), species.gff=2)
 ```
 
 Use ```pick.loci``` function to identify REEs to target.
