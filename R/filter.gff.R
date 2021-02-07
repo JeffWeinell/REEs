@@ -11,20 +11,38 @@
 #' @return Writes the filtered annotation table to the path indicated by the output.gff argument. Additionally returns a data.table object. 
 #' @export filter.gff
 filter.gff <- function(input.gff,output.gff=NULL,feature.type,min.length=0) {
-	if(is.character(input.gff)){
-		#unfiltered.gff   <- data.table::fread(input.gff)
-		unfiltered.gff    <- ape::read.gff(input.gff)
-	}
-	if("data.frame" %in% class(input.gff)){
-		unfiltered.gff   <- input.gff
-	}
+#	if(is.character(input.gff)){
+#		#unfiltered.gff   <- data.table::fread(input.gff)
+#		unfiltered.gff    <- ape::read.gff(input.gff)
+#	}
+#	if("data.frame" %in% class(input.gff)){
+#		unfiltered.gff   <- input.gff
+#	}
+	# Set x to be input.gff because load.gff has an argument also called input.gff
+	x <- input.gff
+	# Load the GFF as a data.table object and then coerce to a data.frame
+	unfiltered.gff   <- as.data.frame(load.gff(x))
+	##### Set column modes
+	# Identify which columns are named "start" or "end", because there are the columnd that should be mode "numeric"
+	numeric.columns <- which(colnames(unfiltered.gff) %in% c("start","end"))
+	# Set mode to numeric for those columns that should be numeric
+	unfiltered.gff[, numeric.columns] <- sapply(unfiltered.gff[, numeric.columns], as.numeric)
+	# Get column indices for all of the columns other than the columns with names "start" and "end".
+	character.columns <- which(!(colnames(unfiltered.gff) %in% c("start","end")))
+	# Set mode to "character" for the columns indexed in the character.columns vector
+	unfiltered.gff[, character.columns] <- sapply(unfiltered.gff[, character.columns], as.character)
+	# Filter rows by feature.type argument. Column three holds the feature type and is usually named "type"
 	filtered.gff1A   <- unfiltered.gff[which(unfiltered.gff[,3]==feature.type),]
-	widths1A         <- abs(as.numeric(filtered.gff1A$start)-as.numeric(filtered.gff1A$end))
+	# Calculate feature lengths
+	widths1A         <- ((abs(filtered.gff1A$start-filtered.gff1A$end))+1)
+	# Filter rows by feature lengths and the min.length argument
 	filtered.gff1B   <- filtered.gff1A[which(widths1A>=min.length),]
 	if(!is.null(output.gff)){
 		utils::write.table(x=filtered.gff1B,file=output.gff,sep="\t",row.names=F)
 	}
-	filtered.gff1B
+	# Coerce to data table object because it can be printed safely.
+	result <- data.table::as.data.table(filtered.gff1B)
+	result
 }
 #' @examples
 #' ### Load GFF table from NCBI repository.
