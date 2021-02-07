@@ -16,11 +16,13 @@ makeStatsTable(
   alignments.out = NULL,
   subgroup = NULL,
   i.start = 1,
-  i.stop = NA
+  i.stop = NA,
+ 
+    mafft.params = "--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6"
 )
 }
 \arguments{
-\item{input.seqs}{Paths to input sequences. I usually use this for input exomes.}
+\item{input.seqs}{Either a list of DNAStringSet objects with each species sequences, or a vector of character strings with paths to input sequences in fasta format.}
 
 \item{species}{Vector of character strings containing names of species associated with each input.seqs.}
 
@@ -37,6 +39,8 @@ makeStatsTable(
 \item{i.start}{First locus to start at. Default is 1.}
 
 \item{i.stop}{Last locus to include. Default is NA, meaning to include all loci from i.start.}
+
+\item{mafft.params}{Character string of mafft parameter settings. Default is "--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6". I don't suggest changing these.}
 }
 \value{
 Stats table (class data.table object), which is also saved to the value of output.path.

@@ -4,14 +4,16 @@
 \alias{mafft}
 \title{MAFFT Multiple sequence alignment}
 \usage{
-mafft(x, param = "--auto", mafft.path = NULL, return.as = "XStringSet")
+mafft(x, param = "--auto", mafft.path = "auto", return.as = "XStringSet")
 }
 \arguments{
 \item{x}{Object of class XStringSet (e.g., DNAStringSet) that contains the sequences to be aligned.}
 
 \item{param}{Character string containing the mafft command line parameters.}
 
-\item{mafft.path}{Either NULL (default) or a character string specifying the path to the mafft executable. If NULL, the mafft executable must be on your system PATH. This is very likely to be the case because by default mafft installs to usr/local/bin.
+\item{mafft.path}{Either "auto" (default), NULL, or a character string with full path to the mafft executable.
+If "auto", then the mafft executable must be located somewhere within the blast-mafft/mafft/ directory of the REEs package library (i.e., the default install location if mafft was installed with mafft.install() function).
+If NULL, the mafft executable must be on your system PATH.
 A possible exception is when mafft is used on a community cluster. In this case, specify the path to the mafft executable instead of using "auto".}
 
 \item{return.as}{Of the following: "XStringSet" (default) or "MultipleAlignment"}

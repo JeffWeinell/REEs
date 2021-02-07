@@ -245,6 +245,7 @@ pick.loci <- function(statsTable, primary.species, output.path=NULL, species.sub
 			loci.bait.coverage.lengths       <- bait.coverage.length(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)
 			loci.num.baits                   <- as.numeric(names(loci.bait.coverage.lengths))
 			loci.lengths.with.flanking       <- loci.lengths
+			### Add num.baits columns
 			stats.table4$num.baits           <- loci.num.baits
 		} else {
 			if(flanking.length=="auto"){
@@ -253,12 +254,23 @@ pick.loci <- function(statsTable, primary.species, output.path=NULL, species.sub
 				loci.flanking.lengths.list       <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)
 				loci.upstream.flanking.lengths   <- loci.flanking.lengths.list[[1]]
 				loci.downstream.flanking.lengths <- loci.flanking.lengths.list[[2]]
+				# For "auto", this should be the same as loci.bait.coverage.lengths
 				loci.lengths.with.flanking       <- loci.lengths+loci.upstream.flanking.lengths+loci.downstream.flanking.lengths
+				### Add num.baits, upstream.flanking.length, downstream.flanking.length, loci.lengths.with.flanking, and bait.coverage.length columns
+				stats.table4$num.baits                   <- loci.num.baits
+				stats.table4$upstream.flanking.length    <- loci.upstream.flanking.lengths
+				stats.table4$downstream.flanking.length  <- loci.downstream.flanking.lengths
+				stats.table4$loci.lengths.with.buffer    <- loci.lengths.with.flanking
+				stats.table4$bait.coverage.lengths       <- loci.bait.coverage.lengths
 			} else {
 				if(is.numeric(flanking.length) & length(flanking.length)==1){
 					loci.lengths.with.flanking <- loci.lengths+(2*flanking.length)
 					loci.bait.coverage.lengths <- bait.coverage.length(locus.len=loci.lengths.with.flanking,bt.len=bait.length,bt.tiling=bait.tiling)
 					loci.num.baits             <- as.numeric(names(loci.bait.coverage.lengths))
+					### Add loci.lengths.with.flanking, num.baits, and bait.coverage.length columns
+					stats.table4$loci.lengths.with.buffer  <- loci.lengths+(2*flanking.length)
+					stats.table4$num.baits                 <- loci.num.baits
+					stats.table4$bait.coverage.lengths     <- loci.bait.coverage.lengths
 				} else {
 					stop("flanking.length must be numeric and length 1, or 'auto', or NULL")
 				}
