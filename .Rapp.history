@@ -1,638 +1,1931 @@
-install_REEs <- function(packages.directory=.libPaths(),load.after.installation=F,token=NULL){#
-	packages.dir   <- packages.directory#
-	if(missing(packages.directory)| is.null(packages.directory)){#
-		packages.dir <- .libPaths()#
-	} else {#
-		packages.dir <- packages.directory#
-	}#
-	# Not sure if its a good idea to set .libPaths within a function.#
-#	.libPaths(packages.dir)#
-	setwd(packages.dir)#
-	### Load packages that that automatically included with R (R-core packages) and that are also needed for REEs#
-	load.Rcore.dependencies   <- sapply(X=intersect(REEs.dependencies,Rcore.packages),FUN=library,character.only=T)#
-	### It may or may not be a good idea to attach all of the packages currently in your namespace that intersect with REEs.dependencies to working environment.#
-#	load.dependencies.in.Namespace <- sapply(X=intersect(REEs.dependencies,loadedNamespaces()),FUN=library,character.only=T)#
-	### Get vector of REEs dependencies not in R-core packages.#
-	REEs.dependencies.temp    <- setdiff(REEs.dependencies,Rcore.packages)#
-	### Names of REEs dependencies that have not already been installed.#
-	packages.to.install.temp  <- REEs.dependencies.temp[which(!(basename(REEs.dependencies.temp) %in% rownames(installed.packages(lib.loc=packages.dir))))]#
-	### Install REEs dependencies that havent been installed. The order of installation defined in packages.to.install.temp decreases the chance of install failures.#
-	if(length(packages.to.install.temp)!=0){#
-		### Packages that depend on the BH package (Boost libraries). These will be installed last if they arent already installed.#
-		wait.to.install       <- c("RSQLite","BiocParallel","Rsamtools","DECIPHER")#
-		### The packages to load/install first. Internal order of entries also important.#
-		packages.to.install   <-  setdiff(packages.to.install.temp,c("BH",wait.to.install))#
-		### If there are any packages in packages.to.install, install them to packages.dir.#
-		if(length(packages.to.install)!=0){#
-			sapply(X=packages.to.install,FUN=REEs.Installer::package.check, pkgs.lib=packages.dir,deps=FALSE)#
-		}#
-		### Check that all packages in packages.to.install were successfully installed.#
-		#which.failed <- packages.to.install[which(!(sapply(packages.to.install,basename) %in% c(rownames(installed.packages(lib.loc=packages.dir)),loadedNamespaces())))]#
-		which.failed <- packages.to.install[which(!(basename(packages.to.install) %in% rownames(installed.packages(lib.loc=packages.dir))))]#
-		if(length(which.failed)!=0){#
-			### If any packages in packages.to.install were not installed, generate an error message indicating which package installs failed and then stop the install_REEs function.#
-			stop("installation failed for packages",paste(which.failed))#
-		} else {#
-			### Load packages if they are not already in the loaded namespace.#
-			packages.to.load <- setdiff(basename(packages.to.install),loadedNamespaces())#
-			if(length(packages.to.load)>0){#
-				### Returns the names of packages that were loaded.#
-				colnames(sapply(X=packages.to.load,FUN=library,lib.loc=packages.dir,character.only=T))#
-			}#
-		}#
-		### If the BH package is not installed to packages.dir and is not in the loaded namespace, then install "BH" to a temporary directory (not packages.dir).#
-		### This package takes up a lot of space but it is only needed during installation for a few packages that need C++ compilation.#
-		if(!("BH" %in% rownames(installed.packages(lib.loc=packages.dir))) & (!("BH" %in% loadedNamespaces()))){#
-		#if(suppressWarnings(!require("BH", character.only = TRUE,lib.loc=packages.dir))){#
-			### Define temporary directory where BH package should be installed#
-			BH_tempdir <- tempdir()#
-			### Install BH to BH_tempdir#
-			BiocManager::install("BH",lib=BH_tempdir,dependencies=c("Depends", "Imports", "LinkingTo"))#
-			### Check BH installation was successful#
-			BH.check <- ("BH" %in% rownames(installed.packages(lib.loc=BH_tempdir)))#
-			### If BH installation failed, generate a warning message and stop the install_REEs function, otherwise load and attach BH package.#
-			if(!BH.check){#
-				stop("installation failed for package BH")#
-			} else {#
-				library(BH,lib.loc=BH_tempdir)#
-			}#
-		} else {#
-			### Load BH if it is installed in packages.dir but not yet loaded in any namespace, whereas dont install BH if it is in the loaded namespace even, if it isnt installed to packages.dir#
-			if(("BH" %in% rownames(installed.packages(lib.loc=packages.dir))) & (!("BH" %in% loadedNamespaces()))){#
-				library(BH,lib.loc=packages.dir)#
-			}#
-		}#
-		### Install packages that need BH during installation if they are not already installed.#
-		if(length(wait.to.install)!=0){#
-			sapply(X=wait.to.install,FUN=REEs.Installer::package.check, pkgs.lib=packages.dir,deps=FALSE)#
-		}#
-		### Check if any of the BH-dependent packages failed to install.#
-		which.failed2 <- wait.to.install[which(!(basename(wait.to.install) %in% rownames(installed.packages(lib.loc=packages.dir))))]#
-		### If any of the BH-dependent packages failed to install, generate a warning message and stop the install_REEs function.#
-		if(length(which.failed2)!=0){#
-			stop("installation failed for packages",paste(which.failed2))#
-		} else {#
-			### Load BH-dependent packages if they are not already in the loaded namespace.#
-			packages.to.load2 <- setdiff(basename(which.failed2),loadedNamespaces())#
-			if(length(packages.to.load2)>0){#
-				### Returns the names of BH-dependent packages that were just loaded.#
-				colnames(sapply(X=packages.to.load2,FUN=library,lib.loc=packages.dir,character.only=T))#
-			}#
-		}#
-	}#
-	#### At this point, all of the REEs dependencies should be installed and loaded into the namespace. Time to install REEs packages.#
-	# REEs.current is the data object that holds the url to the pre-build (.zip) REEs package#
-	# REEs.url is the data object that holds the url to the post-build (tar.gz) REEs package#
-	#####
-	# Define temporary directory where REEs tar.gz file should be download; this is not where the package will be installed.#
-	REEs_tempdir  <- tempdir()#
-	### Download the tar.gz to REEs_tempdir#
-	download.file(url=REEs.url,destfile=paste0(REEs_tempdir,"/REEs.tar.gz"))#
-	### Install REEs to packages.dir#
-	install.command <- paste("R CMD INSTALL -l",packages.dir,paste0("'",paste0(REEs_tempdir,"/REEs.tar.gz"),"'"))#
-	system(install.command)#
-	### Confirm that REEs was successfully installed. If not, generate a warning message and stop install_REEs function.#
-	if(!("REEs" %in% rownames(installed.packages(lib.loc=packages.dir)))){#
-		stop("REEs dependencies successfully installed and loaded, but REEs installation failed.")#
-	} else {#
-		### Load and attach REEs if load.after.installation=T, otherwise  #
-		if(load.after.installation){#
-			library("REEs",lib.loc=packages.dir,character.only = TRUE)#
-			return("DONE")#
-		} else {#
-			return("DONE")#
-		}#
-	}#
-}
-library(REEs)
-REEs::datasets(1)
-Podarcis.muralis.genome_url        <- REEs::datasets(1)[which(datasets(1)[,1]=="Podarcis muralis"),2]
-Podarcis.muralis.genome_url
-Aspidoscelis.marmoratus.genome_url <- REEs::datasets(1)[which(datasets(1)[,1]=="Aspidoscelis marmoratus"),2]#
-Lacerta.viridis.genome_url         <- REEs::datasets(1)[which(datasets(1)[,1]=="Lacerta viridis"),2]#
-Lacerta.bilineata.genome_url       <- REEs::datasets(1)[which(datasets(1)[,1]=="Lacerta bilineata"),2]#
-Lacerta.agilis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Lacerta agilis"),2]#
-Zootoca.vivipara.genome_url        <- REEs::datasets(1)[which(datasets(1)[,1]=="Zootoca vivipara"),2]
-Podarcis.muralis.genome_url       #
-Aspidoscelis.marmoratus.genome_url#
-Lacerta.viridis.genome_url        #
-Lacerta.bilineata.genome_url      #
-Lacerta.agilis.genome_url         #
-Zootoca.vivipara.genome_url
-REEs::datasets(1)[which(datasets(1)[,1]=="Podarcis muralis"),3]
-REEs::datasets(1)[which(datasets(1)[,1]=="Aspidoscelis marmoratus"),3]
-REEs::datasets(1)[which(datasets(1)[,1]=="Lacerta viridis"),3]
-REEs::datasets(1)[which(datasets(1)[,1]=="Lacerta bilineata"),3]
-REEs::datasets(1)[which(datasets(1)[,1]=="Lacerta agilis"),3]
-REEs::datasets(1)[which(datasets(1)[,1]=="Zootoca vivipara"),3]
-REEs::datasets(1)[which(datasets(1)[,1]=="Salvator merianae"),3]
-Podarcis.muralis_GFF.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.gff.gz"#
-Lacerta.agilis_GFF.url   <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.gff.gz"#
-Zootoca.vivipara_GFF.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/011/800/845/GCF_011800845.1_UG_Zviv_1/GCF_011800845.1_UG_Zviv_1_genomic.gff.gz"
-Podarcis.muralis_GFF  <- load.gff(input=Podarcis.muralis_GFF.url,local=F)
-Lacerta.agilis_GFF    <- load.gff(input=Lacerta.agilis_GFF.url,local=F)
-Podarcis.muralis_GFF[1:10,]
-Zootoca.vivipara_GFF  <- load.gff(input=Zootoca.vivipara_GFF.url,local=F)
-class(Zootoca.vivipara_GFF)
-Zootoca.vivipara_GFF
-length(unique(Zootoca.vivipara_GFF$seqid))
-length(unique(Podarcis.muralis_GFF$seqid))
-length(unique(Lacerta.agilis_GFF$seqid))
-length(grep("CDS",Lacerta.agilis_GFF$type))
-length(grep("gene",Podarcis.muralis_GFF$type))
-length(grep("gene",Lacerta.agilis_GFF$type))
-length(grep("gene",Zootoca.vivipara_GFF$type))
-length(grep("CDS",Podarcis.muralis_GFF$type))
-length(grep("CDS",Zootoca.vivipara_GFF$type))
-Lacerta.agilis_GFF_CDS_longer120bp <- filter.gff(input.gff=Lacerta.agilis_GFF,feature.type="CDS",min.length=120)
-nrow(Lacerta.agilis_GFF_CDS_longer120bp)
-nrow(Lacerta.agilis_GFF)
-write.table(x=Lacerta.agilis_GFF_CDS_longer120bp,file="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/Lacerta.agilis_GFF_CDS_longer120bp.txt",quote=F,sep="\t",row.names=F,col.names=T)
-Lacerta.agilis_exome   <- get.seqs.from.gff(input.seqs=Lacerta.agilis_genome.path,input.gff=Lacerta.agilis_GFF_CDS_longer120bp)
-Lacerta.agilis_exome   <- get.seqs.from.gff(input.seqs=Lacerta.agilis.genome_url,input.gff=Lacerta.agilis_GFF_CDS_longer120bp)
-Lacerta.agilis_GFF_CDS_longer120bp[1:10,]
-download.file(url=Lacerta.agilis.genome_url, destfile="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz")
-input.seqs="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz";input.gff=Lacerta.agilis_GFF_CDS_longer120bp
-output.path = NULL;additional.ID=NULL
-if("character" %in% class(input.gff)){#
-		filtered.gff1B   <- data.table::fread(input.gff)#
-	}#
-	if("data.frame" %in% class(input.gff)){#
-		filtered.gff1B   <- input.gff#
+class(statsTable)
+class(statsTable0)
+is(statsTable,"matrix") | is(statsTable,"data.frame")
+if(is(statsTable,"matrix") | is(statsTable,"data.frame")){#
+		stats.table0 <- data.table::data.table(statsTable)#
 	}
-refseq.names     <- unlist(filtered.gff1B[,1])#
-	if(!is.null(additional.ID)){#
-		### This is needed because the names in the gff file are not exactly the same as the ones in the genome file; they both link to a common Genbank Accession # though#
-		ScaffoldKey      <- data.table::fread(additional.ID)#
-		### Links the names in the gff file to the names of the CDS matches#
-		alt.scaff.names  <- ScaffoldKey$ScaffoldName[match(refseq.names,ScaffoldKey$RefSeq.ScaffoldAccession)]#
-		subject.id       <- alt.scaff.names#
-		subject.start    <- as.numeric(filtered.gff1B$start)#
-		subject.end      <- as.numeric(filtered.gff1B$end)#
-		new.names        <- paste0(subject.id,"_",refseq.names,":",subject.start,"-",subject.end)	#
-	} else {#
-		subject.id       <- refseq.names#
-		subject.start    <- as.numeric(filtered.gff1B$start)#
-		subject.end      <- as.numeric(filtered.gff1B$end)#
-		new.names        <- paste0(refseq.names,":",subject.start,"-",subject.end)	#
+stats.table0
+min.num.species=="all"
+min.num.species <- length(grep("^pident.",colnames(stats.table0)))
+min.num.species
+to.keep0 <- which(as.numeric(stats.table0$num.Species) >= min.num.species)
+to.keep0
+if(fast.stat == "pident"){#
+		#mean.pident.fast             <- stats.data.FastestExonPerGene$mean.pident                                              ###| Orders exon stats table by increasing mean percent identity to T. sirtalis#
+#		stats.data.exome.ordered      <- stats.data.exome[with(stats.data.exome, order(gene.name, mean.pident, decreasing=F)),] ### Sorts loci by gene name, and then by increasing percent identity to the primary species.#
+		stats.table1      <- stats.table0[with(stats.table0, order(gene.name, mean.pident, decreasing=F)),] ### Sorts loci by gene name, and then by increasing percent identity to the primary species.#
 	}
-length(refseq.names)
-refseq.names[1]
-"DNAStringSet" %in% class(input.seqs)
-file.exists(input.seqs)
-if("DNAStringSet" %in% class(input.seqs)){#
-		subject.path <- tempfile()#
-		# fa               <- input.seqs#
-		# headers          <- names(input.seqs)#
-		# contig.names     <- mat.strsplit(headers)[,1]#
-		# names(fa)        <- contig.names#
-		Biostrings::writeXStringSet(x = subject, filepath=subject.path, append=F, format="fasta")#
-		delete.subject <- T#
+stats.table1
+if(fast.stat == "percentPIS"){#
+		#mean.percentPIS               <- stats.data.FastestExonPerGene$percentPIS                              ###| Orders exon stats table by increasing percent of sites parsimonious#
+#		stats.data.exome.ordered      <- stats.data.exome[with(stats.data.exome, order(gene.name, percentPIS, decreasing=T)),] ### Sorts loci by gene name, and then by decreasing percent of sites parsimony informative.#
+		stats.table1      <- stats.table0[with(stats.table0, order(gene.name, percentPIS, decreasing=T)),] ### Sorts loci by gene name, and then by decreasing percent of sites parsimony informative.#
+	}#
+	if(nrow(stats.table1)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}
+!all((c("min.pident.all","min.pident.subgroup") %in% colnames(stats.table1)))
+use.min.pident.subgroup==T
+min.pident.filter <- stats.table1$min.pident.all
+to.keep1       <- which(min.pident.filter >= pident.keep[1] & min.pident.filter < pident.keep[2])
+length(to.keep1)
+pident.keep[1]
+pident.keep[2]
+min.pident.filter[1]
+to.keep1       <- which(as.numeric(min.pident.filter) >= pident.keep[1] & as.numeric(min.pident.filter) < pident.keep[2])
+to.keep1
+stats.table2   <- stats.table1[to.keep1,]
+if(nrow(stats.table2)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}
+is.null(max.loci.per.gene)
+to.keep2     <- nmatch(unique(stats.table2$gene.name),stats.table2$gene.name,n=max.loci.per.gene)
+length(to.keep2)
+to.keep2     <- nmatch(unique(stats.table2$gene.name),stats.table2$gene.name,n=max.loci.per.gene)#
+			stats.table3 <- stats.table2[to.keep2,]
+if(nrow(stats.table3)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}
+fast.stat == "pident"
+stats.table4  <- stats.table3[with(stats.table3,order(mean.pident,decreasing=F)),]
+nrow(stats.table4)
+length(which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))))==0
+loci.lengths.column                <- which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species)))
+loci.lengths.column
+loci.lengths <- unlist(stats.table4[,loci.lengths.column,with=F])
+length(loci.length)
+length(loci.lengths)
+roll.sum.loci.lengths   <- rollSum(loci.lengths)
+roll.sum.loci.lengths   <- rollSum(as.numeric(loci.lengths))
+loci.lengths <- as.numeric(unlist(stats.table4[,loci.lengths.column,with=F]))#
+	# Rolling Sum of loci lengths#
+	roll.sum.loci.lengths   <- rollSum(loci.lengths)
+flanking.length=="auto" | is.null(flanking.length)
+flanking.length=="auto"
+flanking.length
+flanking.length=="auto" | is.null(flanking.length)
+is.null(flanking.length)
+is.null(flanking.length)
+flanking.length=="auto"
+loci.bait.coverage.lengths         <- bait.coverage.length(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+		loci.num.baits                     <- as.numeric(names(loci.bait.coverage.lengths))#
+		loci.lengths.with.flanking       <- loci.lengths
+loci.lengths.with.flanking[1]
+!is.null(bait.number)
+is.null(max.capture.coverage)
+roll.sum.num.baits <- rollSum(loci.num.baits)#
+		stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number),]
+loci.num.baits[1]
+is.null(bait.number) & !is.null(max.capture.coverage)
+if(!is.null(bait.number) & is.null(max.capture.coverage)){#
+		roll.sum.num.baits <- rollSum(loci.num.baits)#
+		stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number),]#
 	} else {#
-		if(file.exists(input.seqs)){#
-			subject.path   <- input.seqs#
-			delete.subject <- F#
+		### If max.capture.coverage is non-NULL and bait.number is NULL, then remove rows with rolling sum of loci lengths  > max.capture.coverage#
+		if(is.null(bait.number) & !is.null(max.capture.coverage)){#
+			stats.table5 <- stats.table4[which(roll.sum.loci.lengths <= max.capture.coverage),]#
 		} else {#
-			subject.path <- tempfile()#
-			# Sets time limit for downloading files to 1000 seconds#
-			options(timeout=1000)#
-			utils::download.file(url=input.seqs, destfile=subject.path)#
-			delete.subject <- T#
+		### If bait.number and max.capture.coverage are both non-NULL then remove rows with either rollingSum(loci.num.baits) > bait.number or rolling sum of loci lengths  > max.capture.coverage#
+			if(!is.null(bait.number) & !is.null(max.capture.coverage)){#
+				roll.sum.num.baits <- rollSum(loci.num.baits)#
+				stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number) & which(roll.sum.loci.lengths <= max.capture.coverage),]#
+			}#
 		}#
 	}
-summary(file(input.seqs.path))$class != "gzfile"
-input.seqs.path <- subject.path
-summary(file(input.seqs.path))$class != "gzfile"
-headers        <- Biostrings::fasta.index(input.seqs.path)$desc
-length(headers)
-fa             <- Biostrings::readDNAStringSet(filepath=input.seqs.path)
-contig.names   <- mat.strsplit(headers)[,1]
-headers[1]
-mat.strsplit(headers)
-length(headers)
-headers
-contig.names   <- gsub(" .+","",headers)
-contig.names
-names(fa)      <- contig.names
-scaff.matches.all  <- match(subject.id, contig.names)
-start.all          <- apply(X=cbind(subject.start,subject.end),MARGIN=1,FUN=min)
-end.all            <- apply(X=cbind(subject.start,subject.end),MARGIN=1,FUN=max)
-subranges          <- IRanges::IRanges(start=start.all ,end=end.all,names=subject.id)
-gsubranges         <- GenomicRanges::GRanges(seqnames=subject.id,ranges=subranges)
-output.seqs        <- Biostrings::getSeq(fa, gsubranges)
-showMethods("getSeq")
-?getSeq
-output.seqs        <- fa[gsubranges)
-output.seqs        <- fa[gsubranges]
-?GenomicRanges
-library(Biostrings)
-output.seqs        <- Biostrings::getSeq(fa, gsubranges)
-library(BSgenome)
-output.seqs        <- Biostrings::getSeq(fa, gsubranges)
-required.packages("BSGenome")
-setwd("BSGenome","REEs")
-setdiff(required.packages("BSGenome"),required.packages("REEs"))
-getSeq
-package.load.order("BSGenome")
-test <- fa[[gsubranges]]
-test <- fa[gsubranges]
-test[1]
-length(test)
-length(output.seqs)
-output.seqs[1]
-required.packages("Biobase")
-required.packages("DelayedArray")
-required.packages("GenomicAlignments")
-required.packages("MatrixGenerics")
-install.packages("MatrixGenerics")
-library(BiocManager)
-BiocManager::install("MatrixGenerics")
-required.packages("matrixStats")
-BiocManager::install("rtracklayer")
-required.packages("rtracklayer")
-required.packages("SummarizedExperiment")
-library(REEs)
-genomes.dir                  <- "/Users/alyssaleinweber/Documents/genomes/genomes_seqs/"#
-Podarcis.muralis.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.fna.gz"#
-Lacerta.agilis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz"#
-Zootoca.vivipara.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/011/800/845/GCF_011800845.1_UG_Zviv_1/GCF_011800845.1_UG_Zviv_1_genomic.fna.gz"#
-Aspidoscelis.marmoratus.genome_url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/014/337/955/GCA_014337955.1_AspMar1.0/GCA_014337955.1_AspMar1.0_genomic.fna.gz"#
-Salvator.merianae.genome_url       <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/586/115/GCA_003586115.2_HLtupMer6/GCA_003586115.2_HLtupMer6_genomic.fna.gz"#
-#
-Podarcis.muralis.genome_path        <- paste0(genomes.dir,"/",basename(Podarcis.muralis.genome_url))#
-Lacerta.agilis.genome_path          <- paste0(genomes.dir,"/",basename(Lacerta.agilis.genome_url))#
-Zootoca.vivipara.genome_path        <- paste0(genomes.dir,"/",basename(Zootoca.vivipara.genome_url))#
-Aspidoscelis.marmoratus.genome_path <- paste0(genomes.dir,"/",basename(Aspidoscelis.marmoratus.genome_url))#
-Salvator.merianae.genome_path       <- paste0(genomes.dir,"/",basename(Salvator.merianae.genome_url))
-subject <- Podarcis.muralis.genome_path
-subject.path             <- subject#
-	subject.obj.temp         <- Biostrings::readDNAStringSet(subject.path)
-contigs.name             <- gsub(" .+","",names(subject.obj.temp))#
-	subject.path             <- tempfile()
-subject.obj.temp2        <- xscat(subject.obj.temp)
-subject.obj.temp2
-subject.obj.temp
-subject.obj.temp2        <- xscat(subject.obj.temp2)
-length(subject.obj.temp2)
-test <- list(subject.obj.temp2[1],subject.obj.temp2[2])
-test
-xscat(test)
-xscat(subject.obj.temp2[1],subject.obj.temp[2])
-26000*35
-library(REEs)
-Lacerta.agilis_exome         <- Biostrings::readDNAStringSet("/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/Lacerta.agilis_exome_longer120bp.fas")
-Lacerta.agilis_exome
-which(names(Lacerta.agilis_exome)=="NC_046313.1:115413136-115414742")
-length(which(table(names(Lacerta.agilis_exome))>1))
-length(which(table(names(Lacerta.agilis_exome))==1))
-length(table(names(Lacerta.agilis_exome)))
-test < distinct(Lacerta.agilis_exome)
-test <- distinct(Lacerta.agilis_exome)
-test <- unique(Lacerta.agilis_exome)
-length(test)
-test[1]
-test[2]
-test[3]
-setwd("Documents/REEs")
-library(devtools)
-devtools::document()
-Lacerta.agilis_exome
-Lacerta.agilis_exome <- unique(Lacerta.agilis_exome)
-Lacerta.agilis_exome
-grep("NC_048605.1",names(Lacerta.agilis_exome))
-grep("NC_048605.1:.+",names(Lacerta.agilis_exome))
-grep("NC_046312.1:7746728-7746896",names(Lacerta.agilis_exome))
-538/109589
-(538/109589)*100
-grep("NC_046312.1:9855207-9855495",names(Lacerta.agilis_exome))
-(712/109589)*100
-grep("NC_046312.1:11690653-11691030",names(Lacerta.agilis_exome))
-(853/109589)*100
-grep("NC_046312.1:37013053-37013227",names(Lacerta.agilis_exome))
-grep("NC_046313.1:102640361-102640555",names(Lacerta.agilis_exome))
-grep("NC_046313.1:115413136-115414742",names(Lacerta.agilis_exome))
-grep("NC_046313.1:113347295-113348108",names(Lacerta.agilis_exome))
-grep("NC_046313.1:102973441-102973842",names(Lacerta.agilis_exome))
-grep("NC_046313.1:81642763-81645522",names(Lacerta.agilis_exome))
-grep("NC_046313.1:79948318-79948521",names(Lacerta.agilis_exome))
-bt.tiling=0.5;bt.len=120
-n.baits=1
-(bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))
-n.baits=2
-120+60
-(bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))
-180+60
-n.baits=3
-(bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))
-auto.flanking.lengths <- function(locus.len,bt.tiling,bt.len){#
-	n.baits <- something... #
-	### Starting values for while loop#
-	n.baits = 0; bait.coverage.len = 0#
-	while(bait.coverage.len < locus.len){#
-		n.baits <- n.baits+1#
-		bait.coverage.len <- (bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))#
+!is.null(output.path)
+result        <- list(stats.table0,stats.table1,stats.table3,stats.table4,stats.table5)
+result.return <- result[[5]]
+nrow(result.return)
+result.return
+pick.loci <- function(statsTable, primary.species, output.path=NULL, species.subgroup=NULL, pident.keep=c(65,100),max.loci.per.gene=NULL, min.num.species="all",max.capture.coverage=NULL, bait.tiling=NULL, bait.length=NULL, bait.number=NULL, flanking.length=NULL, plot.results=FALSE,use.min.pident.subgroup=FALSE,fast.stat="pident"){#
+	#stats.data.exome         <- data.table::fread(input=statsTable,sep="\t",header=T)                     ### Reads in the full stats table generated by makeStatsTable function#
+	#stats.data.exome          <- data.table::fread(input=statsTable,header=T)                             ### Reads in the full stats table generated by makeStatsTable function#
+	if(is(statsTable,"matrix") | is(statsTable,"data.frame")){#
+		stats.table0 <- data.table::data.table(statsTable)#
 	}#
-	bait.coverage.len#
-}
-auto.flanking.lengths(locus.len=5373,bt.tiling=0.5,bt.len=120)
-auto.flanking.lengths <- function(locus.len,bt.tiling,bt.len){#
-	### Starting values for while loop#
-	n.baits = 0; bait.coverage.len = 0#
-	while(bait.coverage.len < locus.len){#
-		n.baits <- n.baits+1#
-		bait.coverage.len <- (bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))#
+	if(is(statsTable,"character")){#
+		### Read in the data table produced by the function makeStatsTable#
+		stats.table0               <- data.table::fread(input=statsTable,header=T)#
+		# Update the gene.name column so that character string "gene=" is not included before the gene name. Eventually you wont need this next line.#
+		stats.table0$gene.name     <- gsub("gene=","",stats.table0$gene.name)#
 	}#
-	bait.coverage.len#
-}
-auto.flanking.lengths(locus.len=5373,bt.tiling=0.5,bt.len=120)
-test <- vector()
-c(test,1)
-c(c(test,1),1)
-bait.coverage.vector <- function(longest.locus.len,bt.tiling,bt.len){#
-	### Starting values for while loop#
-	n.baits = 0; bait.coverage.len = 0#
-	result <- vector()#
-	while(bait.coverage.len < locus.len){#
-		n.baits <- n.baits+1#
-		bait.coverage.len <- (bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))#
-		result <- c(result,bait.coverage.len)#
+	#################
+	### Filter rows loci if too few species sampled.#
+	# Set min.num.species to the total number of species if default value of "all" was used.#
+	if(min.num.species=="all"){#
+		#min.num.species <- (ncol(stats.table0)-12)#
+		min.num.species <- length(grep("^pident.",colnames(stats.table0)))#
+	}#
+	to.keep0 <- which(as.numeric(stats.table0$num.Species) >= min.num.species)#
+	if(length(to.keep0)>0){#
+		stats.table0          <- stats.table0[to.keep0,]#
+	} else {#
+		stop("No loci with num.Species >= min.num.species")#
 	}#
 #
-	# total.flanking    <- (locus.len-bait.coverage.len)#
-	# upstream.len   <- floor(((bait.coverage.len-locus.len)/2))#
-	# downstream.len <- target.lengths-(locus.lengths+upstream.lengths)#
-}
-bait.coverage.vector <- function(longest.locus.len,bt.tiling,bt.len){#
-	### Starting values for while loop#
-	n.baits = 0; bait.coverage.len = 0#
-	result <- vector()#
-	while(bait.coverage.len < locus.len){#
-		n.baits <- n.baits+1#
-		bait.coverage.len <- (bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))#
-		result <- c(result,bait.coverage.len)#
+	#################
+	### Order the data table by decreasing speed of evolution (as measured by the value of the fast.stat parameter).#
+	# Set min.num.species to the total number of species if default value of "all" was used.#
+	if(fast.stat == "pident"){#
+		#mean.pident.fast             <- stats.data.FastestExonPerGene$mean.pident                                              ###| Orders exon stats table by increasing mean percent identity to T. sirtalis#
+#		stats.data.exome.ordered      <- stats.data.exome[with(stats.data.exome, order(gene.name, mean.pident, decreasing=F)),] ### Sorts loci by gene name, and then by increasing percent identity to the primary species.#
+		stats.table1      <- stats.table0[with(stats.table0, order(gene.name, mean.pident, decreasing=F)),] ### Sorts loci by gene name, and then by increasing percent identity to the primary species.#
 	}#
-	result#
-	# total.flanking    <- (locus.len-bait.coverage.len)#
-	# upstream.len   <- floor(((bait.coverage.len-locus.len)/2))#
-	# downstream.len <- target.lengths-(locus.lengths+upstream.lengths)#
-}
-longest.REE.coverage <- bait.coverage.vector(longest.locus.len=7501,bt.tiling=0.5,bt.len=120)
-longest.REE.coverage <- bait.coverage.vector(longest.locus.len=7501,bt.tiling=0.5,bt.len=120)ait.coverage.vector <- function(longest.locus.len,bt.tiling,bt.len){#
-	### Starting values for while loop#
-	locus.len <- longest.locus.len#
-	n.baits = 0; bait.coverage.len = 0#
-	result <- vector()#
-	while(bait.coverage.len < locus.len){#
-		n.baits <- n.baits+1#
-		bait.coverage.len <- (bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))#
-		result <- c(result,bait.coverage.len)#
+	if(fast.stat == "percentPIS"){#
+		#mean.percentPIS               <- stats.data.FastestExonPerGene$percentPIS                              ###| Orders exon stats table by increasing percent of sites parsimonious#
+#		stats.data.exome.ordered      <- stats.data.exome[with(stats.data.exome, order(gene.name, percentPIS, decreasing=T)),] ### Sorts loci by gene name, and then by decreasing percent of sites parsimony informative.#
+		stats.table1      <- stats.table0[with(stats.table0, order(gene.name, percentPIS, decreasing=T)),] ### Sorts loci by gene name, and then by decreasing percent of sites parsimony informative.#
 	}#
-	result#
-	# total.flanking    <- (locus.len-bait.coverage.len)#
-	# upstream.len   <- floor(((bait.coverage.len-locus.len)/2))#
-	# downstream.len <- target.lengths-(locus.lengths+upstream.lengths)#
-}
-ait.coverage.vector <- function(longest.locus.len,bt.tiling,bt.len){#
-	### Starting values for while loop#
-	locus.len <- longest.locus.len#
-	n.baits = 0; bait.coverage.len = 0#
-	result <- vector()#
-	while(bait.coverage.len < locus.len){#
-		n.baits <- n.baits+1#
-		bait.coverage.len <- (bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))#
-		result <- c(result,bait.coverage.len)#
+	if(nrow(stats.table1)==0){#
+		stop("No REEs identified because all loci filtered.")#
 	}#
-	result#
-	# total.flanking    <- (locus.len-bait.coverage.len)#
-	# upstream.len   <- floor(((bait.coverage.len-locus.len)/2))#
-	# downstream.len <- target.lengths-(locus.lengths+upstream.lengths)#
-}
-longest.REE.coverage <- bait.coverage.vector(longest.locus.len=7501,bt.tiling=0.5,bt.len=120)
-bait.coverage.vector <- function(longest.locus.len,bt.tiling,bt.len){#
-	### Starting values for while loop#
-	locus.len <- longest.locus.len#
-	n.baits = 0; bait.coverage.len = 0#
-	result <- vector()#
-	while(bait.coverage.len < locus.len){#
-		n.baits <- n.baits+1#
-		bait.coverage.len <- (bt.len+((n.baits-1)*((1-bt.tiling)*bt.len)))#
-		result <- c(result,bait.coverage.len)#
-	}#
-	result#
-	# total.flanking    <- (locus.len-bait.coverage.len)#
-	# upstream.len   <- floor(((bait.coverage.len-locus.len)/2))#
-	# downstream.len <- target.lengths-(locus.lengths+upstream.lengths)#
-}
-longest.REE.coverage <- bait.coverage.vector(longest.locus.len=7501,bt.tiling=0.5,bt.len=120)
-length(longest.REE.coverage)
-longest.REE.coverage[1:10]
-rev(longest.REE.coverage[1:10)
-rev(longest.REE.coverage[1:10])
-max(longest.REE.coverage)
-growth.len <- ((1-bt.tiling)*bt.len))
-growth.len <- ((1-bt.tiling)*bt.len)
-growth.len
-locus.len
-locus.len=7501
-bt.len=120
-(locus.len-bt.len)/growth.len
-bait.coverage.length <- function(locus.len,bt.tiling,bt.len){#
-	# Number of additional bases covered after the addition of one more bait#
-	growth.len <- ((1-bt.tiling)*bt.len)#
-	# baits needed to cover locus#
-	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
-	# bait coverage length#
-	bait.coverage        <- num.baits*bt.len#
-	names(bait.coverage) <- num.baits#
-	bait.coverage#
-}
-bait.coverage.length(7501,0.5,120)
-#' Calculate Bait Coverage and Number of Baits#
-#' #
-#' Internal function used in pick.loci function.#
-#' #
-#' @param locus.len Inherited from values in pick.loci function. This is the length of the ith REE locus.#
-#' @param bt.tiling Inherited from bait.tiling argument of pick.loci function. This is the fraction of overlap between adjacent baits; value of 0.5 corresponds to 50% overlap between adjacent baits.#
-#' @param bt.len Inherited from bait.length argument of pick.loci function. This is the nucleotide length of baits.#
-#' @return Named numeric with length of region covered by the minimum number of adjacent baits needed to cover locus.len; names() is equal to the number of baits.#
-#' @export bait.coverage.length#
-bait.coverage.length <- function(locus.len,bt.tiling,bt.len){#
-	# Number of additional bases covered after the addition of one more bait#
-	growth.len <- ((1-bt.tiling)*bt.len)#
-	# baits needed to cover locus#
-	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
-	# bait coverage length#
-	bait.coverage        <- num.baits*bt.len#
-	names(bait.coverage) <- num.baits#
-	bait.coverage#
-}#
 #
-#' Calculate Flanking Lengths#
-#' #
-#' Internal function for the pick.loci function; implemented when flanking.length = "auto". Calculates lengths of flanking regions to target for a targetted REE, given the length of the REE, bait length, and bait tiling.#
-#' Function is applied to each REE being considered in pick.loci.#
-#' #
-#' @param locus.length Length of locus.#
-#' @param target.length Length of region that includes the locus and is covered by baits.#
-#' @return Numerical vector of length two with the number of bases to target immediately upstream and downstream of the locus.#
-#' @export auto.flanking.lengths#
-auto.flanking.lengths <- function(locus.length,target.length){#
-	#total.flanking    <- (locus.len-bait.coverage.len)#
-	upstream.len   <- floor((target.length-locus.length)/2)#
-	downstream.len <- target.length-(locus.length+upstream.len)#
-	result <- c(upstream.len,downstream.len)#
-	result#
-}
-#' Calculate Bait Coverage and Number of Baits#
-#' #
-#' Internal function used in pick.loci function.#
-#' #
-#' @param locus.len Inherited from values in pick.loci function. This is the length of the ith REE locus.#
-#' @param bt.tiling Inherited from bait.tiling argument of pick.loci function. This is the fraction of overlap between adjacent baits; value of 0.5 corresponds to 50% overlap between adjacent baits.#
-#' @param bt.len Inherited from bait.length argument of pick.loci function. This is the nucleotide length of baits.#
-#' @return Named numeric with length of region covered by the minimum number of adjacent baits needed to cover locus.len; names() is equal to the number of baits.#
-#' @export bait.coverage.length#
-bait.coverage.length <- function(locus.len,bt.tiling,bt.len){#
-	# Number of additional bases covered after the addition of one more bait#
-	growth.len <- ((1-bt.tiling)*bt.len)#
-	# baits needed to cover locus#
-	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
-	# bait coverage length#
-	bait.coverage        <- num.baits*bt.len#
-	names(bait.coverage) <- num.baits#
-	bait.coverage#
-}#
+	### Adding the min.pident.all and min.pident.subgroup columns if they dont already exist. Input stats tables generated with the latest version of makeStatsTable should already have these columns.#
+	if(!all((c("min.pident.all","min.pident.subgroup") %in% colnames(stats.table1)))){#
+		### Make a data frame copy of the data table, because it's easier to subset a data frame by columns compared to a data table.#
+		stats.df1      <- as.data.frame(stats.table1)#
+		### Adding the min.pident.all column if it doesnt already exist#
+		if(!("min.pident.all" %in% colnames(stats.table1))){#
+			### Specifies which columns to evaluate min.pident across. Need to make sure than NA values are treated correctly.#
+			# all.pident.columns      <- grep("pident.",colnames(stats.data.exome))[which(grep("pident.",colnames(stats.data.exome)) < grep("gene.name",colnames(stats.data.exome)))][-1]#
+			# min.pident.all          <- round(apply(X=stats.data.exome.ordered[,..all.pident.columns],MARGIN=1,FUN=min),digits=2) #| [NOTE: Must have the ".." before the object "all.pident.columns" to specify that it is an integer index.] This line Calculates minimum percent identity (among all species to primary species)#
+			# Must have the ".." before the object "all.pident.columns" to specify that it is an integer index.] This line Calculates minimum percent identity (among all species to primary species)#
+			#pident.df      <- as.data.frame(stats.df1[,as.numeric(grep("pident.",colnames(stats.table0))[which(grep("pident.",colnames(stats.table0)) < grep("gene.name",colnames(stats.table0)))][-1])])#
+			min.pident.all <- round(apply(X=stats.df1[,as.numeric(grep("pident.",colnames(stats.table0))[which(grep("pident.",colnames(stats.table0)) < grep("gene.name",colnames(stats.table0)))][-1])],MARGIN=1,FUN=min),digits=2)#
+			# Adds the minimum percent identity (all species) stat as a column if it doesnt already exist#
+			stats.table1   <- cbind(stats.table1,min.pident.all)#
+		}#
+		### Adding the min.pident.subgroup column if it doesnt already exist AND if species.subgroup is not set to NULL#
+		# Dealing with the subgroup#
+		if(!("min.pident.subgroup" %in% colnames(stats.table1)) & !is.null(species.subgroup)){#
+				if(is.integer(species.subgroup)){#
+					#subgroup.pident.columns  <- species.subgroup#
+					# Calculates minimum percent identity (among subgroup species to primary species)#
+					min.pident.subgroup      <- round(apply(X=stats.table1[,..species.subgroup],MARGIN=1,FUN=min),digits=2)#
+				}#
+				if(is.character(species.subgroup)){#
+					expected.colnames       <- paste0("pident.",mgsub(c("\\."," "),c("_","_"),species.subgroup))#
+					#subgroup.pident.columns <- match(expected.colnames,colnames(stats.table0))#
+					# Calculates minimum percent identity (among subgroup species to primary species)#
+					min.pident.subgroup      <- round(apply(X=stats.df1[,match(expected.colnames,colnames(stats.table0))],MARGIN=1,FUN=min),digits=2)#
+				}#
+				# Adds the minimum percent identity (subgroup species) stat as a column if it doesnt already exist#
+				stats.table1 <- cbind(stats.table1,min.pident.subgroup)#
+		}#
+	}#
+	### Sets which min.pident value to use when filtering rows that are too distantly related.#
+	if(use.min.pident.subgroup==T){#
+		min.pident.filter <- stats.table1$min.pident.subgroup#
+	} else {#
+		min.pident.filter <- stats.table1$min.pident.all#
+	}#
 #
-#' Calculate Flanking Lengths#
-#' #
-#' Internal function for the pick.loci function; implemented when flanking.length = "auto". Calculates lengths of flanking regions to target for a targetted REE, given the length of the REE, bait length, and bait tiling.#
-#' Function is applied to each REE being considered in pick.loci.#
-#' #
-#' @param locus.length Length of locus.#
-#' @param target.length Length of region that includes the locus and is covered by baits.#
-#' @return Numerical vector of length two with the number of bases to target immediately upstream and downstream of the locus.#
-#' @export auto.flanking.lengths#
-auto.flanking.lengths <- function(locus.length,target.length){#
-	#total.flanking    <- (locus.len-bait.coverage.len)#
-	upstream.len   <- floor((target.length-locus.length)/2)#
-	downstream.len <- target.length-(locus.length+upstream.len)#
-	result <- c(upstream.len,downstream.len)#
-	result#
-}
-auto.flanking.lengths(7501,target.length=bait.coverage.length(7501,0.5,120))
-auto.flanking.lengths(locus.length=7501,target.length=bait.coverage.length(7501,0.5,120))
-bait.coverage.length <- function(locus.len,bt.tiling,bt.len){#
-	# Number of additional bases covered after the addition of one more bait#
-	growth.len <- ((1-bt.tiling)*bt.len)#
-	# baits needed to cover locus#
-	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
-	# bait coverage length#
-	bait.coverage        <- num.baits*bt.len#
-	names(bait.coverage) <- num.baits#
-	bait.coverage#
-}
-bait.coverage.length(7501,0.5,120)
-bait.coverage.length <- function(locus.len,bt.len,bt.tiling){#
-	# Number of additional bases covered after the addition of one more bait#
-	growth.len <- ((1-bt.tiling)*bt.len)#
-	# baits needed to cover locus#
-	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
-	# bait coverage length#
-	bait.coverage        <- ((num.baits-1)*growth.len)+bt.len#
-	names(bait.coverage) <- num.baits#
-	bait.coverage#
-}
-bait.coverage.length(7501,120,0.5)
-auto.flanking.lengths(7501,bait.coverage.length(7501,120,0.5))
-auto.flanking.lengths <- function(locus.len,bt.len,bt.tiling){#
-	# Number of additional bases covered after the addition of one more bait#
-	growth.len <- ((1-bt.tiling)*bt.len)#
-	# baits needed to cover locus#
-	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
-	# bait coverage length#
-	bait.coverage        <- ((num.baits-1)*growth.len)+bt.len#
-	upstream.len   <- floor((bait.coverage -locus.len)/2)#
-	downstream.len <- bait.coverage-(locus.len+upstream.len)#
-	result <- c(upstream.len,downstream.len)#
-	result#
-}
-auto.flanking.lengths(7501,120,0.5)
-loci.lengths <- sample(x=c(120:7501),size=100,replace=T)
-loci.lengths
-bait.coverage.length(locus.len=loci.lengths,bt.len=120,bt.tiling=0.5)
-loci.bait.coverage.lengths         <- bait.coverage.length(locus.len=loci.lengths,bt.len=120,bt.tiling=0.5)#
-	loci.num.baits                     <- names(loci.bait.coverage.lengths)
-loci.num.baits
-loci.num.baits                     <- as.numeric(names(loci.bait.coverage.lengths))
-loci.num.baits
-bait.length=120
-bait.tiling=0.5
-loci.flanking.lengths <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)
-loci.flanking.lengths
-auto.flanking.lengths <- function(locus.len,bt.len,bt.tiling){#
-	# Number of additional bases covered after the addition of one more bait#
-	growth.len <- ((1-bt.tiling)*bt.len)#
-	# baits needed to cover locus#
-	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
-	# bait coverage length#
-	bait.coverage        <- ((num.baits-1)*growth.len)+bt.len#
-	upstream.len   <- floor((bait.coverage -locus.len)/2)#
-	downstream.len <- bait.coverage-(locus.len+upstream.len)#
-	result <- list(upstream.len,downstream.len)#
-	result#
-}
-loci.flanking.lengths <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)
-loci.flanking.lengths
-loci.upstream.flanking.lengths   <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)[[1]]#
-			loci.downstream.flanking.lengths <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)[[2]]
-loci.upstream.flanking.lengths
-loci.downstream.flanking.lengths
-auto.flanking.lengths <- function(locus.len,bt.len,bt.tiling){#
-	# Number of additional bases covered after the addition of one more bait#
-	growth.len <- ((1-bt.tiling)*bt.len)#
-	# baits needed to cover locus#
-	num.baits  <- ceiling(((locus.len-bt.len)/growth.len)+1)#
-	# bait coverage length#
-	bait.coverage        <- ((num.baits-1)*growth.len)+bt.len#
-	upstream.len   <- floor((bait.coverage -locus.len)/2)#
-	downstream.len <- bait.coverage-(locus.len+upstream.len)#
-	result <- list(upstream.len,downstream.len)#
-	names(result) <- c("upstream","downstream")#
-	result#
-}
-loci.flanking.lengths.list       <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+	##############
+	#### Filter loci if minimum percent identity to primary.species is < pident.keep[1] or >= pident.keep[2] (usually 65% and 100%, respectively)#
+	to.keep1       <- which(as.numeric(min.pident.filter) >= pident.keep[1] & as.numeric(min.pident.filter) < pident.keep[2])#
+	stats.table2   <- stats.table1[to.keep1,]#
+	if(nrow(stats.table2)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+#
+	#############
+	#### Filter loci except for the n fastest-evolving loci per gene (where n = value of max.loci.per.gene parameter; if NULL, no loci are filtered; For SnakeCap I used max.loci.per.gene = 1).#
+	if(is.null(max.loci.per.gene)){#
+		stats.table3 <- stats.table2#
+	} else {#
+		#if(max.loci.per.gene==1){#
+#			to.keep2     <- match(unique(stats.table2$gene.name),stats.table2$gene.name)#
+#			stats.table3 <- stats.table2[to.keep2,]#
+			to.keep2     <- nmatch(unique(stats.table2$gene.name),stats.table2$gene.name,n=max.loci.per.gene)#
+			stats.table3 <- stats.table2[to.keep2,]#
+		#} else {#
+		#	for(i in 1:max.loci.per.gene){#
+		#		if(i==1){#
+		#			to.keep2.temp        <- match(unique(stats.table2$gene.name),stats.table2$gene.name)#
+		#			stats.table3.temp    <- stats.table2[to.keep2.temp,]#
+		#			remainder.table.temp <- stats.table2[-to.keep2.temp,]#
+		#		} else {#
+		#			to.keep2.temp        <- match(unique(remainder.table.temp$gene.name),remainder.table.temp$gene.name)#
+		#			stats.table3.temp    <- cbind(stats.table3.temp,remainder.table.temp[to.keep2.temp,])#
+		#			remainder.table.temp <- remainder.table.temp[-to.keep2.temp,]#
+		#		}#
+		#	}#
+		#}#
+	}#
+	# Creates a table containing only the n fastest-evolving CDS per gene#
+	# stats.data.FastestExonPerGene <- stats.table2[to.keep2,]#
+	if(nrow(stats.table3)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+	#############
+	#if(write.stats.tables == T){#
+	#	if(!file.exists(paste0(output.dir,"stats_data_FastestExonPerGene.txt"))){#
+	#			write.table(stats.data.FastestExonPerGene,file=paste0(output.dir,"stats_data_FastestExonPerGene.txt"),sep="\t",col.names=T,row.names=F,append=F)#
+	#	} else {#
+	#		stop(paste0("The output file ",output.dir,"stats_data_FastestExonPerGene.txt"," already exists."))#
+	#	}#
+	#}#
+	# Orders rows of stats table by increasing mean percent identity to the primary species#
+	if(fast.stat == "pident"){#
+		#mean.pident.fast                      <- stats.data.FastestExonPerGene$mean.pident#
+		#stats.data.FastestExonPerGene.ordered <- stats.data.FastestExonPerGene[with(stats.data.FastestExonPerGene,order(mean.pident,decreasing=F)),]#
+		stats.table4  <- stats.table3[with(stats.table3,order(mean.pident,decreasing=F)),]#
+	}#
+	# Orders rows of stats table by decreasing percent of sites parsimony informative#
+	if(fast.stat == "percentPIS"){#
+		#mean.percentPIS                       <- stats.data.FastestExonPerGene$percentPIS#
+		#stats.data.FastestExonPerGene.ordered <- stats.data.FastestExonPerGene[with(stats.data.FastestExonPerGene,order(mean.percentPIS,decreasing=T)),]#
+		stats.table4 <- stats.table3[with(stats.table3,order(mean.percentPIS,decreasing=T)),]#
+	}#
+	###### Creates a column holding exon lengths for the primary species, if such a column doesnt already exist.#
+	if(length(which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))))==0){#
+		loci.ranges  <- gsub(".*\\.1_","",stats.table4[,1])#
+		loci.lengths <- (abs(as.numeric(gsub(".*_","",loci.ranges))-as.numeric(gsub("_.*","",loci.ranges)))+1)#
+		stats.table4 <- cbind(stats.table4,loci.lengths)#
+		colnames(stats.table4)[which(colnames(stats.table4)=="loci.lengths")] <- paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))#
+	}#
+	###### Calculate the rolling sum of the loci lengths column.#
+	# Determine which column holds the loci lengths#
+	loci.lengths.column                <- which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species)))#
+	# Loci lengths#
+	loci.lengths <- as.numeric(unlist(stats.table4[,loci.lengths.column,with=F]))#
+	# Rolling Sum of loci lengths#
+	roll.sum.loci.lengths   <- rollSum(loci.lengths)#
+	if(is.null(flanking.length)){#
+		loci.bait.coverage.lengths         <- bait.coverage.length(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+		loci.num.baits                     <- as.numeric(names(loci.bait.coverage.lengths))#
+		loci.lengths.with.flanking       <- loci.lengths#
+	} else {#
+		if(flanking.length=="auto"){#
+			loci.bait.coverage.lengths         <- bait.coverage.length(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+			loci.num.baits                     <- as.numeric(names(loci.bait.coverage.lengths))#
+			loci.flanking.lengths.list       <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
 			loci.upstream.flanking.lengths   <- loci.flanking.lengths.list[[1]]#
-			loci.downstream.flanking.lengths <- loci.flanking.lengths.list[[2]]
-loci.flanking.lengths.list
+			loci.downstream.flanking.lengths <- loci.flanking.lengths.list[[2]]#
+			loci.lengths.with.flanking       <- loci.lengths+loci.upstream.flanking.lengths+loci.downstream.flanking.lengths#
+		} else {#
+			if(is.numeric(flanking.length) & length(flanking.length)==1){#
+				loci.lengths.with.flanking <- loci.lengths+(2*flanking.length)#
+				loci.bait.coverage.lengths <- bait.coverage.length(locus.len=loci.lengths.with.flanking,bt.len=bait.length,bt.tiling=bait.tiling)#
+				loci.num.baits             <- as.numeric(names(loci.bait.coverage.lengths))#
+			} else {#
+				stop("flanking.length must be numeric and length 1, or 'auto', or NULL")#
+			}#
+		}#
+	}#
+	### If bait.number is non-NULL and max.capture.coverage is NULL, then remove rows with rollingSum(loci.num.baits) > bait.number#
+	if(!is.null(bait.number) & is.null(max.capture.coverage)){#
+		roll.sum.num.baits <- rollSum(loci.num.baits)#
+		stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number),]#
+	} else {#
+		### If max.capture.coverage is non-NULL and bait.number is NULL, then remove rows with rolling sum of loci lengths  > max.capture.coverage#
+		if(is.null(bait.number) & !is.null(max.capture.coverage)){#
+			stats.table5 <- stats.table4[which(roll.sum.loci.lengths <= max.capture.coverage),]#
+		} else {#
+		### If bait.number and max.capture.coverage are both non-NULL then remove rows with either rollingSum(loci.num.baits) > bait.number or rolling sum of loci lengths  > max.capture.coverage#
+			if(!is.null(bait.number) & !is.null(max.capture.coverage)){#
+				roll.sum.num.baits <- rollSum(loci.num.baits)#
+				stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number) & which(roll.sum.loci.lengths <= max.capture.coverage),]#
+			}#
+		}#
+	}#
+	if(!is.null(output.path)){#
+		#if(!file.exists(paste0(output.dir,"stats_data_FastestExonPerGene.txt"))){#
+		#		write.table(stats.table2,file=paste0(output.dir,"stats_data_FastestExonPerGene.txt"),sep="\t",col.names=T,row.names=F,append=F)#
+		#} else {#
+		#	stop(paste0("The output file ",output.dir,"stats_data_FastestExonPerGene.txt"," already exists."))#
+		#}#
+		#if(!file.exists(paste0(output.dir,"stats_data_FastestExonPerGene_best.txt"))){#
+		#	write.table(stats.table5,file=paste0(output.dir,"stats_data_FastestExonPerGene_best.txt"),sep="\t",col.names=T,row.names=F,append=F)#
+		#} else {#
+		#	stop(paste0("The output file ",output.dir,"stats_data_FastestExonPerGene_best.txt"," already exists."))#
+		#}#
+		if(!file.exists(output.path)){#
+			write.table(stats.table5,file=output.path,sep="\t",col.names=T,row.names=F,append=F)#
+		} else {#
+			stop(paste0("The output file ",output.path," already exists."))#
+		}#
+	}#
+	#mean.pident.dens               <- density(stats.data.exome$mean.pident)                    ###| Density data to be plotted later#
+	#mean.pident.dens.keep1         <- density(stats.data.exome.ordered$mean.pident)            ###| After filtering to keep only loci within the range of pident.keep#
+	#mean.pident.dens.keep2         <- density(stats.data.FastestExonPerGene$mean.pident)       ###| After filtering to keep only fastest exon per gene#
+	#mean.pident.dens.best          <- density(stats.data.FastestExonPerGene.best$mean.pident)  ###| After filtering to keep only the fastest exons with concatenated length < max.capture.coverage#
+	if (plot.results==T){#
+		mean.pident.hist               <- hist(stats.table0$mean.pident,breaks=round(max(stats.table0$mean.pident)-min(stats.table0$mean.pident)),plot=F)                                                        ###| Histogram data to be plotted later#
+		mean.pident.hist.keep1         <- hist(stats.table1$mean.pident,breaks=round(max(stats.table1$mean.pident)-min(stats.table1$mean.pident)),plot=F)                                ###| After filtering to keep only loci within the range of pident.keep#
+		mean.pident.hist.keep2         <- hist(stats.table3$mean.pident,breaks=round(max(stats.table3$mean.pident)-min(stats.table3$mean.pident)),plot=F)                 ###| After filtering to keep only fastest exon per gene#
+		mean.pident.hist.best          <- hist(stats.table5$mean.pident,breaks=round(max(stats.table5$mean.pident)-min(stats.table5$mean.pident)),plot=F)  ###| After filtering to keep only the fastest exons with concatenated length < max.capture.coverage#
+		par(mfrow=c(4,1), mar=c(1,1,1,1),oma=c(4,4,0,0))  ### 4 rows and 1 column of plots#
+		cexSize   <- 1              # text size#
+		x.lab2   <- "% identical"   # xlabel 2#
+		y.lab2   <- "# loci"        # y label 2#
+		x.lab    <- NULL            #| x label, y label, and plot title#
+		y.lab    <- NULL            #|#
+		main.lab <- NULL            #|#
+		x.lim.min <- mround(x=min(stats.table0$mean.pident),base=5,direction="down")  ### Determines the mininum x-axis value#
+		plot(mean.pident.hist, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")  ### Histogram#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels=c("Exon Set 1 (all annotated exons)"),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table0$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		plot(mean.pident.hist.keep1, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels= c("Exon Set 2: subset of Exon Set 1 in which:"),cex=1,col=1,adj=c(0,NA))#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2.5)+par("usr")[3]),labels= paste("100% > minimum similarity to ",gsub("_"," ",primary.species)," ≥ ",pident.keep[1],"%",sep=""),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table1$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		plot(mean.pident.hist.keep2, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels=c("Exon Set 3: fastest exon/gene of Exon Set 2"),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table3$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		plot(mean.pident.hist.best, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels= c("Exon Set 4: fastest exons of Exon Set 3 in which:"),cex=1,col=1,adj=c(0,NA))#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2.5)+par("usr")[3]),labels= paste("sum(exon lengths) < ",max.capture.coverage,"nt",sep=""),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table5$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		mtext(paste("% of sites identical to ", gsub("_"," ",primary.species)),c(SOUTH=1),line=2, cex=1, outer=TRUE)#
+		mtext(c("number of exons"),c(WEST=2),line=1.5, cex=1, outer=TRUE)#
+	}#
+	result        <- list(stats.table0,stats.table1,stats.table3,stats.table4,stats.table5)#
+	# Notes:#
+	# result[[1]] = Table 1 = Table of unique CDS regions above min length. Row order is the same as in the input table.#
+	# result[[2]] = Table 2 = Subset of Table 1 with pident above cuttoff (if fast.stat = "pident") or percentPIS below cutoff (if fast.stat = "percentPIS"). Rows are sorted by gene name and then by value of fast.stat#
+	# result[[3]] = Table 3 = Subset of Table 2 with only fastest n exons per gene.#
+	# result[[4]] = Table 4 = Same loci as Table 3, but rows are sorted by value of fast.stat.#
+	# result[[5]] = Table 5 = Subset of Table 4 with rolling sum of loci lengths is less than the value of max.capture.coverage#
+#
+	result.return <- result[[5]]#
+	result.return#
+}
+pick.loci(statsTable=fake.matrix,primary.species="sp1")
+length(which(as.numeric(fake.matrix[,"min.pident.all"])>=65)
+)
+length(which(as.numeric(fake.matrix[,"min.pident.all"]))>=65)
+length(which(as.numeric(fake.matrix[,"min.pident.all"])>=65))
+length(which(as.numeric(fake.matrix[,"min.pident.all"])<=100))
+fake.matrix[1:20,]
+fake.matrix[1:20,c("pident.sp3","pident.sp3","pident.sp4")]
+fake.matrix[,"min.pident.all"]       <- round(apply(X=fake.matrix[,c("pident.sp2","pident.sp3","pident.sp4")],MARGIN=1,FUN=function(x){min(as.numeric(x))}),digits=2)#
+fake.matrix[,"min.pident.subgroup"]  <- fake.matrix[,"min.pident.all"]
+pick.loci(statsTable=fake.matrix,primary.species="sp1")
+fake.matrix[1:20,c("pident.sp2","pident.sp3","pident.sp4")]
+nspecies = 4#
+nloci = 10000#
+species               <- paste0("sp",c(1:nspecies))#
+column.names          <- c(paste0(species[1],".locus"),"num.Species","CountCover","absolutePIS","percentPIS","mean.pident",paste0("pident.",species),"gene.name",paste0("locus.length.",species[1]),"mean.variable.sites","min.pident.all","min.pident.subgroup","alignment.width")#
+fake.matrix           <- matrix(nrow=nloci,ncol=length(column.names))#
+colnames(fake.matrix) <- column.names#
+fake.matrix[,2] <- "4"#
+fake.matrix[,1] <- paste0("Locus",c(1:nloci))#
+fake.matrix[,"locus.length.sp1"] <- sample(c(120:10000),size=nloci,replace=T)#
+fake.matrix[,"gene.name"]   <- paste0("Gene",c(1:nloci))#
+fake.matrix[,"CountCover"]  <- fake.matrix[,"locus.length.sp1"]#
+fake.matrix[,"percentPIS"]  <- sample(c(0:20),size=nloci,replace=T)#
+fake.matrix[,"absolutePIS"] <- floor((as.numeric(fake.matrix[,"percentPIS"])/100)*as.numeric(fake.matrix[,"locus.length.sp1"]))#
+fake.matrix[,"pident.sp1"]  <- 100#
+fake.matrix[,"pident.sp2"]  <- sample(c(60:100),size=nloci,replace=T)#
+fake.matrix[,"pident.sp3"]  <- sample(c(80:100),size=nloci,replace=T)#
+fake.matrix[,"pident.sp4"]  <- sample(c(90:100),size=nloci,replace=T)#
+fake.matrix[,"mean.pident"] <- round(apply(X=fake.matrix[,c("pident.sp2","pident.sp3","pident.sp4")],MARGIN=1,FUN=function(x){mean(as.numeric(x))}),digits=2)#
+fake.matrix[,"mean.variable.sites"]  <- as.numeric(fake.matrix[,"absolutePIS"])*1.5#
+fake.matrix[,"min.pident.all"]       <- round(apply(X=fake.matrix[,c("pident.sp2","pident.sp3","pident.sp4")],MARGIN=1,FUN=function(x){min(as.numeric(x))}),digits=2)#
+fake.matrix[,"min.pident.subgroup"]  <- fake.matrix[,"min.pident.all"]#
+fake.matrix[,"alignment.width"]      <- fake.matrix[,"locus.length.sp1"]
+pick.loci(statsTable=fake.matrix,primary.species="sp1")
+mode(fake.matrix)
+mode(fake.matrix[,c(2)])=="numeric"
+mode(fake.matrix[,c(2)])="numeric"
+fake.matrix[1:10,]
+statsTable=fake.matrix; primary.species="sp1"; output.path=NULL; species.subgroup=NULL; pident.keep=c(65,100);max.loci.per.gene=NULL; min.num.species="all";max.capture.coverage=NULL; bait.tiling=NULL; bait.length=NULL; bait.number=NULL; flanking.length=NULL; plot.results=FALSE;use.min.pident.subgroup=FALSE;fast.stat="pident"
+if(is(statsTable,"matrix") | is(statsTable,"data.frame")){#
+		stats.table0 <- data.table::data.table(statsTable)#
+	}#
+	if(is(statsTable,"character")){#
+		### Read in the data table produced by the function makeStatsTable#
+		stats.table0               <- data.table::fread(input=statsTable,header=T)#
+		# Update the gene.name column so that character string "gene=" is not included before the gene name. Eventually you wont need this next line.#
+		stats.table0$gene.name     <- gsub("gene=","",stats.table0$gene.name)#
+	}
+stats.table0
+mode(stats.table0[,1])
+mode(stats.table0[,2])
+mode(stats.table0[,2])="numeric"
+if(is(statsTable,"matrix") | is(statsTable,"data.table")){#
+#		stats.table0 <- data.table::data.table(statsTable)#
+		stats.table0  <- as.data.frame(statsTable)#
+	}#
+	if(is(statsTable,"character")){#
+		### Read in the data table produced by the function makeStatsTable#
+#		stats.table0               <- data.table::fread(input=statsTable,header=T)#
+		stats.table0               <- as.data.frame(data.table::fread(input=statsTable,header=T))#
+		# Update the gene.name column so that character string "gene=" is not included before the gene name. Eventually you wont need this next line.#
+		stats.table0$gene.name     <- gsub("gene=","",stats.table0$gene.name)#
+	}
+stats.table0[1:10,]
+mode(stats.table0[,2])
+mode(stats.table0[,1])
+mode(stats.table0[,2])="numeric"
+mode(stats.table0[,c("num.Species", "CountCover", "absolutePIS", "percentPIS", "mean.pident")])="numeric"
+mode(stats.table0[1:10,c("num.Species", "CountCover", "absolutePIS", "percentPIS", "mean.pident")])
+stats.table0[1:10,c("num.Species", "CountCover", "absolutePIS", "percentPIS", "mean.pident")]
+mode(stats.table0[,"num.Species"])="numeric"
+mode(stats.table0[,c("num.Species","CountCover")])="numeric"
+mode(stats.table0[,"CountCover"])="numeric"
+mode(stats.table0[,c(2:3)])="numeric"
+mode(stats.table0[,2:3])="numeric"
+mode(stats.table0[,3])="numeric"
+sapply(stats.table0, mode)
+class(stats.table0)
+test <- stats.table0$num.Species
+test[1:10]
+which(colnames(stats.table0)=="gene.name")
+numeric.columns           <- setdiff(1:ncol(stats.table0),c(1,which.is.gene.name.column))
+1:ncol(stats.table0)
+c(1,which.is.gene.name.column)
+which.is.gene.name.column <- which(colnames(stats.table0)=="gene.name")#
+	### Columns that should be numeric mode#
+	numeric.columns           <- setdiff(1:ncol(stats.table0),c(1,which.is.gene.name.column))
+numeric.columns
+stats.table0[, numeric.columns] <- sapply(stats.table0[, numeric.columns], as.numeric)
+stats.table0[1:10,]
+mode(stats.table0[,1])
+mode(stats.table0[,11])
+which.is.gene.name.column <- which(colnames(stats.table0)=="gene.name")
+pick.loci <- function(statsTable, primary.species, output.path=NULL, species.subgroup=NULL, pident.keep=c(65,100),max.loci.per.gene=NULL, min.num.species="all",max.capture.coverage=NULL, bait.tiling=NULL, bait.length=NULL, bait.number=NULL, flanking.length=NULL, plot.results=FALSE,use.min.pident.subgroup=FALSE,fast.stat="pident"){#
+	#stats.data.exome         <- data.table::fread(input=statsTable,sep="\t",header=T)                     ### Reads in the full stats table generated by makeStatsTable function#
+	#stats.data.exome          <- data.table::fread(input=statsTable,header=T)                             ### Reads in the full stats table generated by makeStatsTable function#
+	if(is(statsTable,"matrix") | is(statsTable,"data.table")){#
+#		stats.table0 <- data.table::data.table(statsTable)#
+		stats.table0  <- as.data.frame(statsTable)#
+	}#
+	if(is(statsTable,"character")){#
+		### Read in the data table produced by the function makeStatsTable#
+#		stats.table0               <- data.table::fread(input=statsTable,header=T)#
+		stats.table0               <- as.data.frame(data.table::fread(input=statsTable,header=T))#
+		# Update the gene.name column so that character string "gene=" is not included before the gene name. Eventually you wont need this next line.#
+		stats.table0[,"gene.name"]     <- gsub("gene=","",stats.table0[,"gene.name"])#
+	}#
+	### Set column modes. All columns should be numeric except the first column and the "gene.name", which should be "character" mode.#
+	# Find which column is the gene.name column#
+	which.is.gene.name.column <- which(colnames(stats.table0)=="gene.name")#
+	# Columns that should be numeric mode#
+	numeric.columns           <- setdiff(1:ncol(stats.table0),c(1,which.is.gene.name.column))#
+	# Set the mode to numeric for those columns that should be numeric#
+	stats.table0[, numeric.columns] <- sapply(stats.table0[, numeric.columns], as.numeric)#
+#
+	#################
+	### Filter rows loci if too few species sampled.#
+	# Set min.num.species to the total number of species if default value of "all" was used.#
+	if(min.num.species=="all"){#
+		#min.num.species <- (ncol(stats.table0)-12)#
+		min.num.species <- length(grep("^pident.",colnames(stats.table0)))#
+	}#
+	to.keep0 <- which(as.numeric(stats.table0$num.Species) >= min.num.species)#
+	if(length(to.keep0)>0){#
+		stats.table0          <- stats.table0[to.keep0,]#
+	} else {#
+		stop("No loci with num.Species >= min.num.species")#
+	}#
+#
+	#################
+	### Order the data table by decreasing speed of evolution (as measured by the value of the fast.stat parameter).#
+	# Set min.num.species to the total number of species if default value of "all" was used.#
+	if(fast.stat == "pident"){#
+		#mean.pident.fast             <- stats.data.FastestExonPerGene$mean.pident                                              ###| Orders exon stats table by increasing mean percent identity to T. sirtalis#
+#		stats.data.exome.ordered      <- stats.data.exome[with(stats.data.exome, order(gene.name, mean.pident, decreasing=F)),] ### Sorts loci by gene name, and then by increasing percent identity to the primary species.#
+		stats.table1      <- stats.table0[with(stats.table0, order(gene.name, mean.pident, decreasing=F)),] ### Sorts loci by gene name, and then by increasing percent identity to the primary species.#
+	}#
+	if(fast.stat == "percentPIS"){#
+		#mean.percentPIS               <- stats.data.FastestExonPerGene$percentPIS                              ###| Orders exon stats table by increasing percent of sites parsimonious#
+#		stats.data.exome.ordered      <- stats.data.exome[with(stats.data.exome, order(gene.name, percentPIS, decreasing=T)),] ### Sorts loci by gene name, and then by decreasing percent of sites parsimony informative.#
+		stats.table1      <- stats.table0[with(stats.table0, order(gene.name, percentPIS, decreasing=T)),] ### Sorts loci by gene name, and then by decreasing percent of sites parsimony informative.#
+	}#
+	if(nrow(stats.table1)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+#
+	### Adding the min.pident.all and min.pident.subgroup columns if they dont already exist. Input stats tables generated with the latest version of makeStatsTable should already have these columns.#
+	if(!all((c("min.pident.all","min.pident.subgroup") %in% colnames(stats.table1)))){#
+		### Make a data frame copy of the data table, because it's easier to subset a data frame by columns compared to a data table.#
+		stats.df1      <- as.data.frame(stats.table1)#
+		### Adding the min.pident.all column if it doesnt already exist#
+		if(!("min.pident.all" %in% colnames(stats.table1))){#
+			### Specifies which columns to evaluate min.pident across. Need to make sure than NA values are treated correctly.#
+			# all.pident.columns      <- grep("pident.",colnames(stats.data.exome))[which(grep("pident.",colnames(stats.data.exome)) < grep("gene.name",colnames(stats.data.exome)))][-1]#
+			# min.pident.all          <- round(apply(X=stats.data.exome.ordered[,..all.pident.columns],MARGIN=1,FUN=min),digits=2) #| [NOTE: Must have the ".." before the object "all.pident.columns" to specify that it is an integer index.] This line Calculates minimum percent identity (among all species to primary species)#
+			# Must have the ".." before the object "all.pident.columns" to specify that it is an integer index.] This line Calculates minimum percent identity (among all species to primary species)#
+			#pident.df      <- as.data.frame(stats.df1[,as.numeric(grep("pident.",colnames(stats.table0))[which(grep("pident.",colnames(stats.table0)) < grep("gene.name",colnames(stats.table0)))][-1])])#
+			min.pident.all <- round(apply(X=stats.df1[,as.numeric(grep("pident.",colnames(stats.table0))[which(grep("pident.",colnames(stats.table0)) < grep("gene.name",colnames(stats.table0)))][-1])],MARGIN=1,FUN=min),digits=2)#
+			# Adds the minimum percent identity (all species) stat as a column if it doesnt already exist#
+			stats.table1   <- cbind(stats.table1,min.pident.all)#
+		}#
+		### Adding the min.pident.subgroup column if it doesnt already exist AND if species.subgroup is not set to NULL#
+		# Dealing with the subgroup#
+		if(!("min.pident.subgroup" %in% colnames(stats.table1)) & !is.null(species.subgroup)){#
+				if(is.integer(species.subgroup)){#
+					#subgroup.pident.columns  <- species.subgroup#
+					# Calculates minimum percent identity (among subgroup species to primary species)#
+					min.pident.subgroup      <- round(apply(X=stats.table1[,..species.subgroup],MARGIN=1,FUN=min),digits=2)#
+				}#
+				if(is.character(species.subgroup)){#
+					expected.colnames       <- paste0("pident.",mgsub(c("\\."," "),c("_","_"),species.subgroup))#
+					#subgroup.pident.columns <- match(expected.colnames,colnames(stats.table0))#
+					# Calculates minimum percent identity (among subgroup species to primary species)#
+					min.pident.subgroup      <- round(apply(X=stats.df1[,match(expected.colnames,colnames(stats.table0))],MARGIN=1,FUN=min),digits=2)#
+				}#
+				# Adds the minimum percent identity (subgroup species) stat as a column if it doesnt already exist#
+				stats.table1 <- cbind(stats.table1,min.pident.subgroup)#
+		}#
+	}#
+	### Sets which min.pident value to use when filtering rows that are too distantly related.#
+	if(use.min.pident.subgroup==T){#
+		min.pident.filter <- stats.table1$min.pident.subgroup#
+	} else {#
+		min.pident.filter <- stats.table1$min.pident.all#
+	}#
+#
+	##############
+	#### Filter loci if minimum percent identity to primary.species is < pident.keep[1] or >= pident.keep[2] (usually 65% and 100%, respectively)#
+	to.keep1       <- which(as.numeric(min.pident.filter) >= pident.keep[1] & as.numeric(min.pident.filter) < pident.keep[2])#
+	stats.table2   <- stats.table1[to.keep1,]#
+	if(nrow(stats.table2)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+#
+	#############
+	#### Filter loci except for the n fastest-evolving loci per gene (where n = value of max.loci.per.gene parameter; if NULL, no loci are filtered; For SnakeCap I used max.loci.per.gene = 1).#
+	if(is.null(max.loci.per.gene)){#
+		stats.table3 <- stats.table2#
+	} else {#
+		#if(max.loci.per.gene==1){#
+#			to.keep2     <- match(unique(stats.table2$gene.name),stats.table2$gene.name)#
+#			stats.table3 <- stats.table2[to.keep2,]#
+			to.keep2     <- nmatch(unique(stats.table2$gene.name),stats.table2$gene.name,n=max.loci.per.gene)#
+			stats.table3 <- stats.table2[to.keep2,]#
+		#} else {#
+		#	for(i in 1:max.loci.per.gene){#
+		#		if(i==1){#
+		#			to.keep2.temp        <- match(unique(stats.table2$gene.name),stats.table2$gene.name)#
+		#			stats.table3.temp    <- stats.table2[to.keep2.temp,]#
+		#			remainder.table.temp <- stats.table2[-to.keep2.temp,]#
+		#		} else {#
+		#			to.keep2.temp        <- match(unique(remainder.table.temp$gene.name),remainder.table.temp$gene.name)#
+		#			stats.table3.temp    <- cbind(stats.table3.temp,remainder.table.temp[to.keep2.temp,])#
+		#			remainder.table.temp <- remainder.table.temp[-to.keep2.temp,]#
+		#		}#
+		#	}#
+		#}#
+	}#
+	# Creates a table containing only the n fastest-evolving CDS per gene#
+	# stats.data.FastestExonPerGene <- stats.table2[to.keep2,]#
+	if(nrow(stats.table3)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+	#############
+	#if(write.stats.tables == T){#
+	#	if(!file.exists(paste0(output.dir,"stats_data_FastestExonPerGene.txt"))){#
+	#			write.table(stats.data.FastestExonPerGene,file=paste0(output.dir,"stats_data_FastestExonPerGene.txt"),sep="\t",col.names=T,row.names=F,append=F)#
+	#	} else {#
+	#		stop(paste0("The output file ",output.dir,"stats_data_FastestExonPerGene.txt"," already exists."))#
+	#	}#
+	#}#
+	# Orders rows of stats table by increasing mean percent identity to the primary species#
+	if(fast.stat == "pident"){#
+		#mean.pident.fast                      <- stats.data.FastestExonPerGene$mean.pident#
+		#stats.data.FastestExonPerGene.ordered <- stats.data.FastestExonPerGene[with(stats.data.FastestExonPerGene,order(mean.pident,decreasing=F)),]#
+		stats.table4  <- stats.table3[with(stats.table3,order(mean.pident,decreasing=F)),]#
+	}#
+	# Orders rows of stats table by decreasing percent of sites parsimony informative#
+	if(fast.stat == "percentPIS"){#
+		#mean.percentPIS                       <- stats.data.FastestExonPerGene$percentPIS#
+		#stats.data.FastestExonPerGene.ordered <- stats.data.FastestExonPerGene[with(stats.data.FastestExonPerGene,order(mean.percentPIS,decreasing=T)),]#
+		stats.table4 <- stats.table3[with(stats.table3,order(mean.percentPIS,decreasing=T)),]#
+	}#
+	###### Creates a column holding exon lengths for the primary species, if such a column doesnt already exist.#
+	if(length(which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))))==0){#
+		loci.ranges  <- gsub(".*\\.1_","",stats.table4[,1])#
+		loci.lengths <- (abs(as.numeric(gsub(".*_","",loci.ranges))-as.numeric(gsub("_.*","",loci.ranges)))+1)#
+		stats.table4 <- cbind(stats.table4,loci.lengths)#
+		colnames(stats.table4)[which(colnames(stats.table4)=="loci.lengths")] <- paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))#
+	}#
+	###### Calculate the rolling sum of the loci lengths column.#
+	# Determine which column holds the loci lengths#
+	loci.lengths.column                <- which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species)))#
+	# Loci lengths#
+	loci.lengths <- as.numeric(unlist(stats.table4[,loci.lengths.column,with=F]))#
+	# Rolling Sum of loci lengths#
+	roll.sum.loci.lengths   <- rollSum(loci.lengths)#
+	if(is.null(flanking.length)){#
+		loci.bait.coverage.lengths         <- bait.coverage.length(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+		loci.num.baits                     <- as.numeric(names(loci.bait.coverage.lengths))#
+		loci.lengths.with.flanking       <- loci.lengths#
+	} else {#
+		if(flanking.length=="auto"){#
+			loci.bait.coverage.lengths         <- bait.coverage.length(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+			loci.num.baits                     <- as.numeric(names(loci.bait.coverage.lengths))#
+			loci.flanking.lengths.list       <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+			loci.upstream.flanking.lengths   <- loci.flanking.lengths.list[[1]]#
+			loci.downstream.flanking.lengths <- loci.flanking.lengths.list[[2]]#
+			loci.lengths.with.flanking       <- loci.lengths+loci.upstream.flanking.lengths+loci.downstream.flanking.lengths#
+		} else {#
+			if(is.numeric(flanking.length) & length(flanking.length)==1){#
+				loci.lengths.with.flanking <- loci.lengths+(2*flanking.length)#
+				loci.bait.coverage.lengths <- bait.coverage.length(locus.len=loci.lengths.with.flanking,bt.len=bait.length,bt.tiling=bait.tiling)#
+				loci.num.baits             <- as.numeric(names(loci.bait.coverage.lengths))#
+			} else {#
+				stop("flanking.length must be numeric and length 1, or 'auto', or NULL")#
+			}#
+		}#
+	}#
+	### If bait.number is non-NULL and max.capture.coverage is NULL, then remove rows with rollingSum(loci.num.baits) > bait.number#
+	if(!is.null(bait.number) & is.null(max.capture.coverage)){#
+		roll.sum.num.baits <- rollSum(loci.num.baits)#
+		stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number),]#
+	} else {#
+		### If max.capture.coverage is non-NULL and bait.number is NULL, then remove rows with rolling sum of loci lengths  > max.capture.coverage#
+		if(is.null(bait.number) & !is.null(max.capture.coverage)){#
+			stats.table5 <- stats.table4[which(roll.sum.loci.lengths <= max.capture.coverage),]#
+		} else {#
+		### If bait.number and max.capture.coverage are both non-NULL then remove rows with either rollingSum(loci.num.baits) > bait.number or rolling sum of loci lengths  > max.capture.coverage#
+			if(!is.null(bait.number) & !is.null(max.capture.coverage)){#
+				roll.sum.num.baits <- rollSum(loci.num.baits)#
+				stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number) & which(roll.sum.loci.lengths <= max.capture.coverage),]#
+			}#
+		}#
+	}#
+	if(!is.null(output.path)){#
+		#if(!file.exists(paste0(output.dir,"stats_data_FastestExonPerGene.txt"))){#
+		#		write.table(stats.table2,file=paste0(output.dir,"stats_data_FastestExonPerGene.txt"),sep="\t",col.names=T,row.names=F,append=F)#
+		#} else {#
+		#	stop(paste0("The output file ",output.dir,"stats_data_FastestExonPerGene.txt"," already exists."))#
+		#}#
+		#if(!file.exists(paste0(output.dir,"stats_data_FastestExonPerGene_best.txt"))){#
+		#	write.table(stats.table5,file=paste0(output.dir,"stats_data_FastestExonPerGene_best.txt"),sep="\t",col.names=T,row.names=F,append=F)#
+		#} else {#
+		#	stop(paste0("The output file ",output.dir,"stats_data_FastestExonPerGene_best.txt"," already exists."))#
+		#}#
+		if(!file.exists(output.path)){#
+			write.table(stats.table5,file=output.path,sep="\t",col.names=T,row.names=F,append=F)#
+		} else {#
+			stop(paste0("The output file ",output.path," already exists."))#
+		}#
+	}#
+	#mean.pident.dens               <- density(stats.data.exome$mean.pident)                    ###| Density data to be plotted later#
+	#mean.pident.dens.keep1         <- density(stats.data.exome.ordered$mean.pident)            ###| After filtering to keep only loci within the range of pident.keep#
+	#mean.pident.dens.keep2         <- density(stats.data.FastestExonPerGene$mean.pident)       ###| After filtering to keep only fastest exon per gene#
+	#mean.pident.dens.best          <- density(stats.data.FastestExonPerGene.best$mean.pident)  ###| After filtering to keep only the fastest exons with concatenated length < max.capture.coverage#
+	if (plot.results==T){#
+		mean.pident.hist               <- hist(stats.table0$mean.pident,breaks=round(max(stats.table0$mean.pident)-min(stats.table0$mean.pident)),plot=F)                                                        ###| Histogram data to be plotted later#
+		mean.pident.hist.keep1         <- hist(stats.table1$mean.pident,breaks=round(max(stats.table1$mean.pident)-min(stats.table1$mean.pident)),plot=F)                                ###| After filtering to keep only loci within the range of pident.keep#
+		mean.pident.hist.keep2         <- hist(stats.table3$mean.pident,breaks=round(max(stats.table3$mean.pident)-min(stats.table3$mean.pident)),plot=F)                 ###| After filtering to keep only fastest exon per gene#
+		mean.pident.hist.best          <- hist(stats.table5$mean.pident,breaks=round(max(stats.table5$mean.pident)-min(stats.table5$mean.pident)),plot=F)  ###| After filtering to keep only the fastest exons with concatenated length < max.capture.coverage#
+		par(mfrow=c(4,1), mar=c(1,1,1,1),oma=c(4,4,0,0))  ### 4 rows and 1 column of plots#
+		cexSize   <- 1              # text size#
+		x.lab2   <- "% identical"   # xlabel 2#
+		y.lab2   <- "# loci"        # y label 2#
+		x.lab    <- NULL            #| x label, y label, and plot title#
+		y.lab    <- NULL            #|#
+		main.lab <- NULL            #|#
+		x.lim.min <- mround(x=min(stats.table0$mean.pident),base=5,direction="down")  ### Determines the mininum x-axis value#
+		plot(mean.pident.hist, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")  ### Histogram#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels=c("Exon Set 1 (all annotated exons)"),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table0$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		plot(mean.pident.hist.keep1, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels= c("Exon Set 2: subset of Exon Set 1 in which:"),cex=1,col=1,adj=c(0,NA))#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2.5)+par("usr")[3]),labels= paste("100% > minimum similarity to ",gsub("_"," ",primary.species)," ≥ ",pident.keep[1],"%",sep=""),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table1$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		plot(mean.pident.hist.keep2, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels=c("Exon Set 3: fastest exon/gene of Exon Set 2"),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table3$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		plot(mean.pident.hist.best, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels= c("Exon Set 4: fastest exons of Exon Set 3 in which:"),cex=1,col=1,adj=c(0,NA))#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2.5)+par("usr")[3]),labels= paste("sum(exon lengths) < ",max.capture.coverage,"nt",sep=""),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table5$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		mtext(paste("% of sites identical to ", gsub("_"," ",primary.species)),c(SOUTH=1),line=2, cex=1, outer=TRUE)#
+		mtext(c("number of exons"),c(WEST=2),line=1.5, cex=1, outer=TRUE)#
+	}#
+	result        <- list(stats.table0,stats.table1,stats.table3,stats.table4,stats.table5)#
+	# Notes:#
+	# result[[1]] = Table 1 = Table of unique CDS regions above min length. Row order is the same as in the input table.#
+	# result[[2]] = Table 2 = Subset of Table 1 with pident above cuttoff (if fast.stat = "pident") or percentPIS below cutoff (if fast.stat = "percentPIS"). Rows are sorted by gene name and then by value of fast.stat#
+	# result[[3]] = Table 3 = Subset of Table 2 with only fastest n exons per gene.#
+	# result[[4]] = Table 4 = Same loci as Table 3, but rows are sorted by value of fast.stat.#
+	# result[[5]] = Table 5 = Subset of Table 4 with rolling sum of loci lengths is less than the value of max.capture.coverage#
+#
+	result.return <- result[[5]]#
+	result.return#
+}
+pick.loci(statsTable=fake.matrix,primary.species="sp1")
+statsTable=fake.matrix; primary.species="sp1"; output.path=NULL; species.subgroup=NULL; pident.keep=c(65,100);max.loci.per.gene=NULL; min.num.species="all";max.capture.coverage=NULL; bait.tiling=NULL; bait.length=NULL; bait.number=NULL; flanking.length=NULL; plot.results=FALSE;use.min.pident.subgroup=FALSE;fast.stat="pident"
+if(is(statsTable,"matrix") | is(statsTable,"data.table")){#
+#		stats.table0 <- data.table::data.table(statsTable)#
+		stats.table0  <- as.data.frame(statsTable)#
+	}#
+	if(is(statsTable,"character")){#
+		### Read in the data table produced by the function makeStatsTable#
+#		stats.table0               <- data.table::fread(input=statsTable,header=T)#
+		stats.table0               <- as.data.frame(data.table::fread(input=statsTable,header=T))#
+		# Update the gene.name column so that character string "gene=" is not included before the gene name. Eventually you wont need this next line.#
+		stats.table0[,"gene.name"]     <- gsub("gene=","",stats.table0[,"gene.name"])#
+	}
+### Set column modes. All columns should be numeric except the first column and the "gene.name", which should be "character" mode.#
+	# Find which column is the gene.name column#
+	which.is.gene.name.column <- which(colnames(stats.table0)=="gene.name")#
+	# Columns that should be numeric mode#
+	numeric.columns           <- setdiff(1:ncol(stats.table0),c(1,which.is.gene.name.column))#
+	# Set the mode to numeric for those columns that should be numeric#
+	stats.table0[, numeric.columns] <- sapply(stats.table0[, numeric.columns], as.numeric)
+min.num.species <- length(grep("^pident.",colnames(stats.table0)))
+min.num.species
+if(min.num.species=="all"){#
+		#min.num.species <- (ncol(stats.table0)-12)#
+		min.num.species <- length(grep("^pident.",colnames(stats.table0)))#
+	}
+min.num.species=="all"
+min.num.species
+to.keep0 <- which(as.numeric(stats.table0$num.Species) >= min.num.species)
+length(to.keep0)
+if(length(to.keep0)>0){#
+		stats.table0          <- stats.table0[to.keep0,]#
+	} else {#
+		stop("No loci with num.Species >= min.num.species")#
+	}
+fast.stat == "pident"
+stats.table1      <- stats.table0[with(stats.table0, order(stats.table0$gene.name, stats.table0$mean.pident, decreasing=F)),]
+stats.table1[1:10,]
+if(nrow(stats.table1)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}
+!all((c("min.pident.all","min.pident.subgroup") %in% colnames(stats.table1)))
+use.min.pident.subgroup==T
+min.pident.filter <- stats.table1$min.pident.all
+min.pident.filter[1:10]
+is.numeric(min.pident.filter)
+to.keep1       <- which(as.numeric(min.pident.filter) >= pident.keep[1] & as.numeric(min.pident.filter) < pident.keep[2])
+length(to.keep1)
+to.keep1       <- which(as.numeric(min.pident.filter) >= pident.keep[1] & as.numeric(min.pident.filter) < pident.keep[2])#
+	stats.table2   <- stats.table1[to.keep1,]
+if(nrow(stats.table2)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}
+is.null(max.loci.per.gene)
+stats.table3 <- stats.table2
+if(nrow(stats.table3)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}
+if(fast.stat == "pident"){#
+		#mean.pident.fast                      <- stats.data.FastestExonPerGene$mean.pident#
+		#stats.data.FastestExonPerGene.ordered <- stats.data.FastestExonPerGene[with(stats.data.FastestExonPerGene,order(mean.pident,decreasing=F)),]#
+		stats.table4  <- stats.table3[with(stats.table3,order(mean.pident,decreasing=F)),]#
+	}
+if(fast.stat == "pident"){#
+		#mean.pident.fast                      <- stats.data.FastestExonPerGene$mean.pident#
+		#stats.data.FastestExonPerGene.ordered <- stats.data.FastestExonPerGene[with(stats.data.FastestExonPerGene,order(mean.pident,decreasing=F)),]#
+		stats.table4  <- stats.table3[with(stats.table3,order(stats.table3$mean.pident,decreasing=F)),]#
+	}#
+	# Orders rows of stats table by decreasing percent of sites parsimony informative#
+	if(fast.stat == "percentPIS"){#
+		#mean.percentPIS                       <- stats.data.FastestExonPerGene$percentPIS#
+		#stats.data.FastestExonPerGene.ordered <- stats.data.FastestExonPerGene[with(stats.data.FastestExonPerGene,order(mean.percentPIS,decreasing=T)),]#
+		stats.table4 <- stats.table3[with(stats.table3,order(stats.table3$mean.percentPIS,decreasing=T)),]#
+	}
+nrow(stats.table4)
+length(which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))))==0
+loci.lengths.column                <- which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species)))
+loci.lengths.column
+loci.lengths <- stats.table4[,"loci.lengths.column"]
+loci.lengths <- stats.table4[,loci.lengths.column]
+class(loci.lengths)
+loci.lengths[1:10,]
+loci.lengths[1:10]
+roll.sum.loci.lengths   <- rollSum(loci.lengths)
+roll.sum.loci.lengths[1:10]
+is.null(flanking.length)
+bait.length
+bait.tiling
+is.null(bait.length)
+!is.null(bait.length) & !is.null(bait.tiling)
+!is.null(bait.number) & is.null(max.capture.coverage)
+is.null(bait.length) | is.null(bait.tiling)
+if(!is.null(bait.number) & is.null(max.capture.coverage)){#
+		if(is.null(bait.length) | is.null(bait.tiling)){#
+			stop("If bait.number is not NULL, then bait.length and bait.tiling must also not be NULL")#
+		} else {#
+			roll.sum.num.baits <- rollSum(loci.num.baits)#
+			stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number),]#
+		}#
+	} else {#
+		### If max.capture.coverage is non-NULL and bait.number is NULL, then remove rows with rolling sum of loci lengths  > max.capture.coverage#
+		if(is.null(bait.number) & !is.null(max.capture.coverage)){#
+			stats.table5 <- stats.table4[which(roll.sum.loci.lengths <= max.capture.coverage),]#
+		} else {#
+		### If bait.number and max.capture.coverage are both non-NULL then remove rows with either rollingSum(loci.num.baits) > bait.number or rolling sum of loci lengths  > max.capture.coverage#
+			if(!is.null(bait.number) & !is.null(max.capture.coverage)){#
+				if(is.null(bait.length) | is.null(bait.tiling)){#
+					stop("If bait.number is not NULL, then bait.length and bait.tiling must also not be NULL")#
+				} else {#
+					roll.sum.num.baits <- rollSum(loci.num.baits)#
+					stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number) & which(roll.sum.loci.lengths <= max.capture.coverage),]#
+				}#
+			}#
+		}#
+	}
+nrow(stats.table5)
+nrow(stats.table4)
+### If bait.number is non-NULL and max.capture.coverage is NULL, then remove rows with rollingSum(loci.num.baits) > bait.number#
+	if(!is.null(bait.number) & is.null(max.capture.coverage)){#
+		if(is.null(bait.length) | is.null(bait.tiling)){#
+			stop("If bait.number is not NULL, then bait.length and bait.tiling must also not be NULL")#
+		} else {#
+			roll.sum.num.baits <- rollSum(loci.num.baits)#
+			stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number),]#
+		}#
+	}#
+	### If max.capture.coverage is non-NULL and bait.number is NULL, then remove rows with rolling sum of loci lengths  > max.capture.coverage#
+	if(is.null(bait.number) & !is.null(max.capture.coverage)){#
+		stats.table5 <- stats.table4[which(roll.sum.loci.lengths <= max.capture.coverage),]#
+	}#
+	### If bait.number and max.capture.coverage are both non-NULL then remove rows with either rollingSum(loci.num.baits) > bait.number or rolling sum of loci lengths  > max.capture.coverage#
+	if(!is.null(bait.number) & !is.null(max.capture.coverage)){#
+		if(is.null(bait.length) | is.null(bait.tiling)){#
+			stop("If bait.number is not NULL, then bait.length and bait.tiling must also not be NULL")#
+		} else {#
+			roll.sum.num.baits <- rollSum(loci.num.baits)#
+			stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number) & which(roll.sum.loci.lengths <= max.capture.coverage),]#
+		}#
+	}#
+	### If bait.number and max.capture.coverage are both NULL, then stats.table5 is equal to stats.table4#
+	if(is.null(bait.number) & is.null(max.capture.coverage)){#
+		stats.table5 <- stats.table4#
+	}
+nrow(stats.table5)
+!is.null(output.path)
+result        <- list(stats.table0,stats.table1,stats.table3,stats.table4,stats.table5)
+result.return <- result[[5]]
+nrow(result.return)
+pick.loci <- function(statsTable, primary.species, output.path=NULL, species.subgroup=NULL, pident.keep=c(65,100),max.loci.per.gene=NULL, min.num.species="all",max.capture.coverage=NULL, bait.tiling=NULL, bait.length=NULL, bait.number=NULL, flanking.length=NULL, plot.results=FALSE,use.min.pident.subgroup=FALSE,fast.stat="pident"){#
+	#stats.data.exome         <- data.table::fread(input=statsTable,sep="\t",header=T)                     ### Reads in the full stats table generated by makeStatsTable function#
+	#stats.data.exome          <- data.table::fread(input=statsTable,header=T)                             ### Reads in the full stats table generated by makeStatsTable function#
+	if(is(statsTable,"matrix") | is(statsTable,"data.table")){#
+#		stats.table0 <- data.table::data.table(statsTable)#
+		stats.table0  <- as.data.frame(statsTable)#
+	}#
+	if(is(statsTable,"character")){#
+		### Read in the data table produced by the function makeStatsTable#
+#		stats.table0               <- data.table::fread(input=statsTable,header=T)#
+		stats.table0               <- as.data.frame(data.table::fread(input=statsTable,header=T))#
+		# Update the gene.name column so that character string "gene=" is not included before the gene name. Eventually you wont need this next line.#
+		stats.table0[,"gene.name"]     <- gsub("gene=","",stats.table0[,"gene.name"])#
+	}#
+	### Set column modes. All columns should be numeric except the first column and the "gene.name", which should be "character" mode.#
+	# Find which column is the gene.name column#
+	which.is.gene.name.column <- which(colnames(stats.table0)=="gene.name")#
+	# Columns that should be numeric mode#
+	numeric.columns           <- setdiff(1:ncol(stats.table0),c(1,which.is.gene.name.column))#
+	# Set the mode to numeric for those columns that should be numeric#
+	stats.table0[, numeric.columns] <- sapply(stats.table0[, numeric.columns], as.numeric)#
+#
+	#################
+	### Filter rows loci if too few species sampled.#
+	# Set min.num.species to the total number of species if default value of "all" was used.#
+	if(min.num.species=="all"){#
+		#min.num.species <- (ncol(stats.table0)-12)#
+		min.num.species <- length(grep("^pident.",colnames(stats.table0)))#
+	}#
+	to.keep0 <- which(as.numeric(stats.table0$num.Species) >= min.num.species)#
+	if(length(to.keep0)>0){#
+		stats.table0          <- stats.table0[to.keep0,]#
+	} else {#
+		stop("No loci with num.Species >= min.num.species")#
+	}#
+#
+	#################
+	### Order the data table by decreasing speed of evolution (as measured by the value of the fast.stat parameter).#
+	# Set min.num.species to the total number of species if default value of "all" was used.#
+	if(fast.stat == "pident"){#
+		#mean.pident.fast             <- stats.data.FastestExonPerGene$mean.pident                                              ###| Orders exon stats table by increasing mean percent identity to T. sirtalis#
+#		stats.data.exome.ordered      <- stats.data.exome[with(stats.data.exome, order(gene.name, mean.pident, decreasing=F)),] ### Sorts loci by gene name, and then by increasing percent identity to the primary species.#
+		### Sort loci by gene name and then by increasing percent identity to the primary species.#
+		stats.table1      <- stats.table0[with(stats.table0, order(stats.table0$gene.name, stats.table0$mean.pident, decreasing=F)),]#
+	}#
+	if(fast.stat == "percentPIS"){#
+		#mean.percentPIS               <- stats.data.FastestExonPerGene$percentPIS                              ###| Orders exon stats table by increasing percent of sites parsimonious#
+#		stats.data.exome.ordered      <- stats.data.exome[with(stats.data.exome, order(gene.name, percentPIS, decreasing=T)),] ### Sorts loci by gene name, and then by decreasing percent of sites parsimony informative.#
+		stats.table1      <- stats.table0[with(stats.table0, order(gene.name, percentPIS, decreasing=T)),] ### Sorts loci by gene name, and then by decreasing percent of sites parsimony informative.#
+	}#
+	if(nrow(stats.table1)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+#
+	### Adding the min.pident.all and min.pident.subgroup columns if they dont already exist. Input stats tables generated with the latest version of makeStatsTable should already have these columns.#
+	if(!all((c("min.pident.all","min.pident.subgroup") %in% colnames(stats.table1)))){#
+		### Make a data frame copy of the data table, because it's easier to subset a data frame by columns compared to a data table.#
+		stats.df1      <- as.data.frame(stats.table1)#
+		### Adding the min.pident.all column if it doesnt already exist#
+		if(!("min.pident.all" %in% colnames(stats.table1))){#
+			### Specifies which columns to evaluate min.pident across. Need to make sure than NA values are treated correctly.#
+			# all.pident.columns      <- grep("pident.",colnames(stats.data.exome))[which(grep("pident.",colnames(stats.data.exome)) < grep("gene.name",colnames(stats.data.exome)))][-1]#
+			# min.pident.all          <- round(apply(X=stats.data.exome.ordered[,..all.pident.columns],MARGIN=1,FUN=min),digits=2) #| [NOTE: Must have the ".." before the object "all.pident.columns" to specify that it is an integer index.] This line Calculates minimum percent identity (among all species to primary species)#
+			# Must have the ".." before the object "all.pident.columns" to specify that it is an integer index.] This line Calculates minimum percent identity (among all species to primary species)#
+			#pident.df      <- as.data.frame(stats.df1[,as.numeric(grep("pident.",colnames(stats.table0))[which(grep("pident.",colnames(stats.table0)) < grep("gene.name",colnames(stats.table0)))][-1])])#
+			min.pident.all <- round(apply(X=stats.df1[,as.numeric(grep("pident.",colnames(stats.table0))[which(grep("pident.",colnames(stats.table0)) < grep("gene.name",colnames(stats.table0)))][-1])],MARGIN=1,FUN=min),digits=2)#
+			# Adds the minimum percent identity (all species) stat as a column if it doesnt already exist#
+			stats.table1   <- cbind(stats.table1,min.pident.all)#
+		}#
+		### Adding the min.pident.subgroup column if it doesnt already exist AND if species.subgroup is not set to NULL#
+		# Dealing with the subgroup#
+		if(!("min.pident.subgroup" %in% colnames(stats.table1)) & !is.null(species.subgroup)){#
+				if(is.integer(species.subgroup)){#
+					#subgroup.pident.columns  <- species.subgroup#
+					# Calculates minimum percent identity (among subgroup species to primary species)#
+					min.pident.subgroup      <- round(apply(X=stats.table1[,..species.subgroup],MARGIN=1,FUN=min),digits=2)#
+				}#
+				if(is.character(species.subgroup)){#
+					expected.colnames       <- paste0("pident.",mgsub(c("\\."," "),c("_","_"),species.subgroup))#
+					#subgroup.pident.columns <- match(expected.colnames,colnames(stats.table0))#
+					# Calculates minimum percent identity (among subgroup species to primary species)#
+					min.pident.subgroup      <- round(apply(X=stats.df1[,match(expected.colnames,colnames(stats.table0))],MARGIN=1,FUN=min),digits=2)#
+				}#
+				# Adds the minimum percent identity (subgroup species) stat as a column if it doesnt already exist#
+				stats.table1 <- cbind(stats.table1,min.pident.subgroup)#
+		}#
+	}#
+	### Sets which min.pident value to use when filtering rows that are too distantly related.#
+	if(use.min.pident.subgroup==T){#
+		min.pident.filter <- stats.table1$min.pident.subgroup#
+	} else {#
+		min.pident.filter <- stats.table1$min.pident.all#
+	}#
+#
+	##############
+	#### Filter loci if minimum percent identity to primary.species is < pident.keep[1] or >= pident.keep[2] (usually 65% and 100%, respectively)#
+	to.keep1       <- which(as.numeric(min.pident.filter) >= pident.keep[1] & as.numeric(min.pident.filter) < pident.keep[2])#
+	stats.table2   <- stats.table1[to.keep1,]#
+	if(nrow(stats.table2)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+#
+	#############
+	#### Filter loci except for the n fastest-evolving loci per gene (where n = value of max.loci.per.gene parameter; if NULL, no loci are filtered; For SnakeCap I used max.loci.per.gene = 1).#
+	if(is.null(max.loci.per.gene)){#
+		stats.table3 <- stats.table2#
+	} else {#
+		# Creates a table containing only the n fastest-evolving CDS per gene#
+		#if(max.loci.per.gene==1){#
+#			to.keep2     <- match(unique(stats.table2$gene.name),stats.table2$gene.name)#
+#			stats.table3 <- stats.table2[to.keep2,]#
+			to.keep2     <- nmatch(unique(stats.table2$gene.name),stats.table2$gene.name,n=max.loci.per.gene)#
+			stats.table3 <- stats.table2[to.keep2,]#
+		#} else {#
+		#	for(i in 1:max.loci.per.gene){#
+		#		if(i==1){#
+		#			to.keep2.temp        <- match(unique(stats.table2$gene.name),stats.table2$gene.name)#
+		#			stats.table3.temp    <- stats.table2[to.keep2.temp,]#
+		#			remainder.table.temp <- stats.table2[-to.keep2.temp,]#
+		#		} else {#
+		#			to.keep2.temp        <- match(unique(remainder.table.temp$gene.name),remainder.table.temp$gene.name)#
+		#			stats.table3.temp    <- cbind(stats.table3.temp,remainder.table.temp[to.keep2.temp,])#
+		#			remainder.table.temp <- remainder.table.temp[-to.keep2.temp,]#
+		#		}#
+		#	}#
+		#}#
+	}#
+	# stats.data.FastestExonPerGene <- stats.table2[to.keep2,]#
+	if(nrow(stats.table3)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+	#############
+	#if(write.stats.tables == T){#
+	#	if(!file.exists(paste0(output.dir,"stats_data_FastestExonPerGene.txt"))){#
+	#			write.table(stats.data.FastestExonPerGene,file=paste0(output.dir,"stats_data_FastestExonPerGene.txt"),sep="\t",col.names=T,row.names=F,append=F)#
+	#	} else {#
+	#		stop(paste0("The output file ",output.dir,"stats_data_FastestExonPerGene.txt"," already exists."))#
+	#	}#
+	#}#
+	# Orders rows of stats table by increasing mean percent identity to the primary species#
+	if(fast.stat == "pident"){#
+		#mean.pident.fast                      <- stats.data.FastestExonPerGene$mean.pident#
+		#stats.data.FastestExonPerGene.ordered <- stats.data.FastestExonPerGene[with(stats.data.FastestExonPerGene,order(mean.pident,decreasing=F)),]#
+		stats.table4  <- stats.table3[with(stats.table3,order(stats.table3$mean.pident,decreasing=F)),]#
+	}#
+	# Orders rows of stats table by decreasing percent of sites parsimony informative#
+	if(fast.stat == "percentPIS"){#
+		#mean.percentPIS                       <- stats.data.FastestExonPerGene$percentPIS#
+		#stats.data.FastestExonPerGene.ordered <- stats.data.FastestExonPerGene[with(stats.data.FastestExonPerGene,order(mean.percentPIS,decreasing=T)),]#
+		stats.table4 <- stats.table3[with(stats.table3,order(stats.table3$mean.percentPIS,decreasing=T)),]#
+	}#
+	###### Creates a column holding loci lengths for the primary species, if such a column doesnt already exist. This is calculated from the names used in the first column, and therefore this won't work if the first column does not include start and end positions.#
+	if(length(which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))))==0){#
+		loci.ranges  <- gsub(".*\\.1_","",stats.table4[,1])#
+		loci.lengths <- (abs(as.numeric(gsub(".*_","",loci.ranges))-as.numeric(gsub("_.*","",loci.ranges)))+1)#
+		stats.table4 <- cbind(stats.table4,loci.lengths)#
+		# Renaming the "loci.lengths" column to the form "locus.length.PrimarySpeciesName"#
+		colnames(stats.table4)[which(colnames(stats.table4)=="loci.lengths")] <- paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))#
+	}#
+	###### Calculate the rolling sum of the loci lengths column.#
+	# Determine which column holds the loci lengths#
+	loci.lengths.column                <- which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species)))#
+	# as.numeric(unlist(stats.table4[,loci.lengths.column,with=F]))#
+	# loci.lengths <- as.numeric(unlist(stats.table4[,loci.lengths.column,with=F]))#
+	# Loci lengths#
+	loci.lengths <- stats.table4[,loci.lengths.column]#
+	# Rolling Sum of loci lengths#
+	roll.sum.loci.lengths   <- rollSum(loci.lengths)#
+	if(!is.null(bait.length) & !is.null(bait.tiling)){#
+		if(is.null(flanking.length)){#
+			loci.bait.coverage.lengths       <- bait.coverage.length(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+			loci.num.baits                   <- as.numeric(names(loci.bait.coverage.lengths))#
+			loci.lengths.with.flanking       <- loci.lengths#
+		} else {#
+			if(flanking.length=="auto"){#
+				loci.bait.coverage.lengths         <- bait.coverage.length(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+				loci.num.baits                     <- as.numeric(names(loci.bait.coverage.lengths))#
+				loci.flanking.lengths.list       <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+				loci.upstream.flanking.lengths   <- loci.flanking.lengths.list[[1]]#
+				loci.downstream.flanking.lengths <- loci.flanking.lengths.list[[2]]#
+				loci.lengths.with.flanking       <- loci.lengths+loci.upstream.flanking.lengths+loci.downstream.flanking.lengths#
+			} else {#
+				if(is.numeric(flanking.length) & length(flanking.length)==1){#
+					loci.lengths.with.flanking <- loci.lengths+(2*flanking.length)#
+					loci.bait.coverage.lengths <- bait.coverage.length(locus.len=loci.lengths.with.flanking,bt.len=bait.length,bt.tiling=bait.tiling)#
+					loci.num.baits             <- as.numeric(names(loci.bait.coverage.lengths))#
+				} else {#
+					stop("flanking.length must be numeric and length 1, or 'auto', or NULL")#
+				}#
+			}#
+		}#
+	}#
+	### If bait.number is non-NULL and max.capture.coverage is NULL, then remove rows with rollingSum(loci.num.baits) > bait.number#
+	if(!is.null(bait.number) & is.null(max.capture.coverage)){#
+		if(is.null(bait.length) | is.null(bait.tiling)){#
+			stop("If bait.number is not NULL, then bait.length and bait.tiling must also not be NULL")#
+		} else {#
+			roll.sum.num.baits <- rollSum(loci.num.baits)#
+			stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number),]#
+		}#
+	}#
+	### If max.capture.coverage is non-NULL and bait.number is NULL, then remove rows with rolling sum of loci lengths  > max.capture.coverage#
+	if(is.null(bait.number) & !is.null(max.capture.coverage)){#
+		stats.table5 <- stats.table4[which(roll.sum.loci.lengths <= max.capture.coverage),]#
+	}#
+	### If bait.number and max.capture.coverage are both non-NULL then remove rows with either rollingSum(loci.num.baits) > bait.number or rolling sum of loci lengths  > max.capture.coverage#
+	if(!is.null(bait.number) & !is.null(max.capture.coverage)){#
+		if(is.null(bait.length) | is.null(bait.tiling)){#
+			stop("If bait.number is not NULL, then bait.length and bait.tiling must also not be NULL")#
+		} else {#
+			roll.sum.num.baits <- rollSum(loci.num.baits)#
+			stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number) & which(roll.sum.loci.lengths <= max.capture.coverage),]#
+		}#
+	}#
+	### If bait.number and max.capture.coverage are both NULL, then stats.table5 is equal to stats.table4#
+	if(is.null(bait.number) & is.null(max.capture.coverage)){#
+		stats.table5 <- stats.table4#
+	}#
+	if(!is.null(output.path)){#
+		#if(!file.exists(paste0(output.dir,"stats_data_FastestExonPerGene.txt"))){#
+		#		write.table(stats.table2,file=paste0(output.dir,"stats_data_FastestExonPerGene.txt"),sep="\t",col.names=T,row.names=F,append=F)#
+		#} else {#
+		#	stop(paste0("The output file ",output.dir,"stats_data_FastestExonPerGene.txt"," already exists."))#
+		#}#
+		#if(!file.exists(paste0(output.dir,"stats_data_FastestExonPerGene_best.txt"))){#
+		#	write.table(stats.table5,file=paste0(output.dir,"stats_data_FastestExonPerGene_best.txt"),sep="\t",col.names=T,row.names=F,append=F)#
+		#} else {#
+		#	stop(paste0("The output file ",output.dir,"stats_data_FastestExonPerGene_best.txt"," already exists."))#
+		#}#
+		if(!file.exists(output.path)){#
+			write.table(stats.table5,file=output.path,sep="\t",col.names=T,row.names=F,append=F)#
+		} else {#
+			stop(paste0("The output file ",output.path," already exists."))#
+		}#
+	}#
+	#mean.pident.dens               <- density(stats.data.exome$mean.pident)                    ###| Density data to be plotted later#
+	#mean.pident.dens.keep1         <- density(stats.data.exome.ordered$mean.pident)            ###| After filtering to keep only loci within the range of pident.keep#
+	#mean.pident.dens.keep2         <- density(stats.data.FastestExonPerGene$mean.pident)       ###| After filtering to keep only fastest exon per gene#
+	#mean.pident.dens.best          <- density(stats.data.FastestExonPerGene.best$mean.pident)  ###| After filtering to keep only the fastest exons with concatenated length < max.capture.coverage#
+	if (plot.results==T){#
+		mean.pident.hist               <- hist(stats.table0$mean.pident,breaks=round(max(stats.table0$mean.pident)-min(stats.table0$mean.pident)),plot=F)                                                        ###| Histogram data to be plotted later#
+		mean.pident.hist.keep1         <- hist(stats.table1$mean.pident,breaks=round(max(stats.table1$mean.pident)-min(stats.table1$mean.pident)),plot=F)                                ###| After filtering to keep only loci within the range of pident.keep#
+		mean.pident.hist.keep2         <- hist(stats.table3$mean.pident,breaks=round(max(stats.table3$mean.pident)-min(stats.table3$mean.pident)),plot=F)                 ###| After filtering to keep only fastest exon per gene#
+		mean.pident.hist.best          <- hist(stats.table5$mean.pident,breaks=round(max(stats.table5$mean.pident)-min(stats.table5$mean.pident)),plot=F)  ###| After filtering to keep only the fastest exons with concatenated length < max.capture.coverage#
+		par(mfrow=c(4,1), mar=c(1,1,1,1),oma=c(4,4,0,0))  ### 4 rows and 1 column of plots#
+		cexSize   <- 1              # text size#
+		x.lab2   <- "% identical"   # xlabel 2#
+		y.lab2   <- "# loci"        # y label 2#
+		x.lab    <- NULL            #| x label, y label, and plot title#
+		y.lab    <- NULL            #|#
+		main.lab <- NULL            #|#
+		x.lim.min <- mround(x=min(stats.table0$mean.pident),base=5,direction="down")  ### Determines the mininum x-axis value#
+		plot(mean.pident.hist, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")  ### Histogram#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels=c("Exon Set 1 (all annotated exons)"),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table0$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		plot(mean.pident.hist.keep1, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels= c("Exon Set 2: subset of Exon Set 1 in which:"),cex=1,col=1,adj=c(0,NA))#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2.5)+par("usr")[3]),labels= paste("100% > minimum similarity to ",gsub("_"," ",primary.species)," ≥ ",pident.keep[1],"%",sep=""),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table1$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		plot(mean.pident.hist.keep2, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels=c("Exon Set 3: fastest exon/gene of Exon Set 2"),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table3$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		plot(mean.pident.hist.best, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels= c("Exon Set 4: fastest exons of Exon Set 3 in which:"),cex=1,col=1,adj=c(0,NA))#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2.5)+par("usr")[3]),labels= paste("sum(exon lengths) < ",max.capture.coverage,"nt",sep=""),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table5$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		mtext(paste("% of sites identical to ", gsub("_"," ",primary.species)),c(SOUTH=1),line=2, cex=1, outer=TRUE)#
+		mtext(c("number of exons"),c(WEST=2),line=1.5, cex=1, outer=TRUE)#
+	}#
+	result        <- list(stats.table0,stats.table1,stats.table3,stats.table4,stats.table5)#
+	# Notes:#
+	# result[[1]] = Table 1 = Table of unique CDS regions above min length. Row order is the same as in the input table.#
+	# result[[2]] = Table 2 = Subset of Table 1 with pident above cuttoff (if fast.stat = "pident") or percentPIS below cutoff (if fast.stat = "percentPIS"). Rows are sorted by gene name and then by value of fast.stat#
+	# result[[3]] = Table 3 = Subset of Table 2 with only fastest n exons per gene.#
+	# result[[4]] = Table 4 = Same loci as Table 3, but rows are sorted by value of fast.stat.#
+	# result[[5]] = Table 5 = Subset of Table 4 with rolling sum of loci lengths is less than the value of max.capture.coverage#
+#
+	result.return <- result[[5]]#
+	result.return#
+}
+pick.loci(statsTable=fake.matrix,primary.species="sp1")
+test <- pick.loci(statsTable=fake.matrix,primary.species="sp1")
+test
+if(nrow(stats.table5)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}
+result <- lapply(result,FUN=data.table::data.table)
+result[[1]]
+result[[2]]
+result[[3]]
+result[[4]]
+result[[5]]
+result.return <- result[[5]]#
+	result.return
+pick.loci <- function(statsTable, primary.species, output.path=NULL, species.subgroup=NULL, pident.keep=c(65,100),max.loci.per.gene=NULL, min.num.species="all",max.capture.coverage=NULL, bait.tiling=NULL, bait.length=NULL, bait.number=NULL, flanking.length=NULL, plot.results=FALSE,use.min.pident.subgroup=FALSE,fast.stat="pident"){#
+	#stats.data.exome         <- data.table::fread(input=statsTable,sep="\t",header=T)                     ### Reads in the full stats table generated by makeStatsTable function#
+	#stats.data.exome          <- data.table::fread(input=statsTable,header=T)                             ### Reads in the full stats table generated by makeStatsTable function#
+	if(is(statsTable,"matrix") | is(statsTable,"data.table")){#
+#		stats.table0 <- data.table::data.table(statsTable)#
+		stats.table0  <- as.data.frame(statsTable)#
+	}#
+	if(is(statsTable,"character")){#
+		### Read in the data table produced by the function makeStatsTable#
+#		stats.table0               <- data.table::fread(input=statsTable,header=T)#
+		stats.table0               <- as.data.frame(data.table::fread(input=statsTable,header=T))#
+		# Update the gene.name column so that character string "gene=" is not included before the gene name. Eventually you wont need this next line.#
+		stats.table0[,"gene.name"]     <- gsub("gene=","",stats.table0[,"gene.name"])#
+	}#
+	### Set column modes. All columns should be numeric except the first column and the "gene.name", which should be "character" mode.#
+	# Find which column is the gene.name column#
+	which.is.gene.name.column <- which(colnames(stats.table0)=="gene.name")#
+	# Columns that should be numeric mode#
+	numeric.columns           <- setdiff(1:ncol(stats.table0),c(1,which.is.gene.name.column))#
+	# Set the mode to numeric for those columns that should be numeric#
+	stats.table0[, numeric.columns] <- sapply(stats.table0[, numeric.columns], as.numeric)#
+#
+	#################
+	### Filter rows loci if too few species sampled.#
+	# Set min.num.species to the total number of species if default value of "all" was used.#
+	if(min.num.species=="all"){#
+		#min.num.species <- (ncol(stats.table0)-12)#
+		min.num.species <- length(grep("^pident.",colnames(stats.table0)))#
+	}#
+	to.keep0 <- which(as.numeric(stats.table0$num.Species) >= min.num.species)#
+	if(length(to.keep0)>0){#
+		stats.table0          <- stats.table0[to.keep0,]#
+	} else {#
+		stop("No loci with num.Species >= min.num.species")#
+	}#
+#
+	#################
+	### Order the data table by decreasing speed of evolution (as measured by the value of the fast.stat parameter).#
+	# Set min.num.species to the total number of species if default value of "all" was used.#
+	if(fast.stat == "pident"){#
+		#mean.pident.fast             <- stats.data.FastestExonPerGene$mean.pident                                              ###| Orders exon stats table by increasing mean percent identity to T. sirtalis#
+#		stats.data.exome.ordered      <- stats.data.exome[with(stats.data.exome, order(gene.name, mean.pident, decreasing=F)),] ### Sorts loci by gene name, and then by increasing percent identity to the primary species.#
+		### Sort loci by gene name and then by increasing percent identity to the primary species.#
+		stats.table1      <- stats.table0[with(stats.table0, order(stats.table0$gene.name, stats.table0$mean.pident, decreasing=F)),]#
+	}#
+	if(fast.stat == "percentPIS"){#
+		#mean.percentPIS               <- stats.data.FastestExonPerGene$percentPIS                              ###| Orders exon stats table by increasing percent of sites parsimonious#
+#		stats.data.exome.ordered      <- stats.data.exome[with(stats.data.exome, order(gene.name, percentPIS, decreasing=T)),] ### Sorts loci by gene name, and then by decreasing percent of sites parsimony informative.#
+		stats.table1      <- stats.table0[with(stats.table0, order(gene.name, percentPIS, decreasing=T)),] ### Sorts loci by gene name, and then by decreasing percent of sites parsimony informative.#
+	}#
+	if(nrow(stats.table1)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+#
+	### Adding the min.pident.all and min.pident.subgroup columns if they dont already exist. Input stats tables generated with the latest version of makeStatsTable should already have these columns.#
+	if(!all((c("min.pident.all","min.pident.subgroup") %in% colnames(stats.table1)))){#
+		### Make a data frame copy of the data table, because it's easier to subset a data frame by columns compared to a data table.#
+		stats.df1      <- as.data.frame(stats.table1)#
+		### Adding the min.pident.all column if it doesnt already exist#
+		if(!("min.pident.all" %in% colnames(stats.table1))){#
+			### Specifies which columns to evaluate min.pident across. Need to make sure than NA values are treated correctly.#
+			# all.pident.columns      <- grep("pident.",colnames(stats.data.exome))[which(grep("pident.",colnames(stats.data.exome)) < grep("gene.name",colnames(stats.data.exome)))][-1]#
+			# min.pident.all          <- round(apply(X=stats.data.exome.ordered[,..all.pident.columns],MARGIN=1,FUN=min),digits=2) #| [NOTE: Must have the ".." before the object "all.pident.columns" to specify that it is an integer index.] This line Calculates minimum percent identity (among all species to primary species)#
+			# Must have the ".." before the object "all.pident.columns" to specify that it is an integer index.] This line Calculates minimum percent identity (among all species to primary species)#
+			#pident.df      <- as.data.frame(stats.df1[,as.numeric(grep("pident.",colnames(stats.table0))[which(grep("pident.",colnames(stats.table0)) < grep("gene.name",colnames(stats.table0)))][-1])])#
+			min.pident.all <- round(apply(X=stats.df1[,as.numeric(grep("pident.",colnames(stats.table0))[which(grep("pident.",colnames(stats.table0)) < grep("gene.name",colnames(stats.table0)))][-1])],MARGIN=1,FUN=min),digits=2)#
+			# Adds the minimum percent identity (all species) stat as a column if it doesnt already exist#
+			stats.table1   <- cbind(stats.table1,min.pident.all)#
+		}#
+		### Adding the min.pident.subgroup column if it doesnt already exist AND if species.subgroup is not set to NULL#
+		# Dealing with the subgroup#
+		if(!("min.pident.subgroup" %in% colnames(stats.table1)) & !is.null(species.subgroup)){#
+				if(is.integer(species.subgroup)){#
+					#subgroup.pident.columns  <- species.subgroup#
+					# Calculates minimum percent identity (among subgroup species to primary species)#
+					min.pident.subgroup      <- round(apply(X=stats.table1[,..species.subgroup],MARGIN=1,FUN=min),digits=2)#
+				}#
+				if(is.character(species.subgroup)){#
+					expected.colnames       <- paste0("pident.",mgsub(c("\\."," "),c("_","_"),species.subgroup))#
+					#subgroup.pident.columns <- match(expected.colnames,colnames(stats.table0))#
+					# Calculates minimum percent identity (among subgroup species to primary species)#
+					min.pident.subgroup      <- round(apply(X=stats.df1[,match(expected.colnames,colnames(stats.table0))],MARGIN=1,FUN=min),digits=2)#
+				}#
+				# Adds the minimum percent identity (subgroup species) stat as a column if it doesnt already exist#
+				stats.table1 <- cbind(stats.table1,min.pident.subgroup)#
+		}#
+	}#
+	### Sets which min.pident value to use when filtering rows that are too distantly related.#
+	if(use.min.pident.subgroup==T){#
+		min.pident.filter <- stats.table1$min.pident.subgroup#
+	} else {#
+		min.pident.filter <- stats.table1$min.pident.all#
+	}#
+#
+	##############
+	#### Filter loci if minimum percent identity to primary.species is < pident.keep[1] or >= pident.keep[2] (usually 65% and 100%, respectively)#
+	to.keep1       <- which(as.numeric(min.pident.filter) >= pident.keep[1] & as.numeric(min.pident.filter) < pident.keep[2])#
+	stats.table2   <- stats.table1[to.keep1,]#
+	if(nrow(stats.table2)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+#
+	#############
+	#### Filter loci except for the n fastest-evolving loci per gene (where n = value of max.loci.per.gene parameter; if NULL, no loci are filtered; For SnakeCap I used max.loci.per.gene = 1).#
+	if(is.null(max.loci.per.gene)){#
+		stats.table3 <- stats.table2#
+	} else {#
+		# Creates a table containing only the n fastest-evolving CDS per gene#
+		#if(max.loci.per.gene==1){#
+#			to.keep2     <- match(unique(stats.table2$gene.name),stats.table2$gene.name)#
+#			stats.table3 <- stats.table2[to.keep2,]#
+			to.keep2     <- nmatch(unique(stats.table2$gene.name),stats.table2$gene.name,n=max.loci.per.gene)#
+			stats.table3 <- stats.table2[to.keep2,]#
+		#} else {#
+		#	for(i in 1:max.loci.per.gene){#
+		#		if(i==1){#
+		#			to.keep2.temp        <- match(unique(stats.table2$gene.name),stats.table2$gene.name)#
+		#			stats.table3.temp    <- stats.table2[to.keep2.temp,]#
+		#			remainder.table.temp <- stats.table2[-to.keep2.temp,]#
+		#		} else {#
+		#			to.keep2.temp        <- match(unique(remainder.table.temp$gene.name),remainder.table.temp$gene.name)#
+		#			stats.table3.temp    <- cbind(stats.table3.temp,remainder.table.temp[to.keep2.temp,])#
+		#			remainder.table.temp <- remainder.table.temp[-to.keep2.temp,]#
+		#		}#
+		#	}#
+		#}#
+	}#
+	# stats.data.FastestExonPerGene <- stats.table2[to.keep2,]#
+	if(nrow(stats.table3)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+	#############
+	#if(write.stats.tables == T){#
+	#	if(!file.exists(paste0(output.dir,"stats_data_FastestExonPerGene.txt"))){#
+	#			write.table(stats.data.FastestExonPerGene,file=paste0(output.dir,"stats_data_FastestExonPerGene.txt"),sep="\t",col.names=T,row.names=F,append=F)#
+	#	} else {#
+	#		stop(paste0("The output file ",output.dir,"stats_data_FastestExonPerGene.txt"," already exists."))#
+	#	}#
+	#}#
+	# Orders rows of stats table by increasing mean percent identity to the primary species#
+	if(fast.stat == "pident"){#
+		#mean.pident.fast                      <- stats.data.FastestExonPerGene$mean.pident#
+		#stats.data.FastestExonPerGene.ordered <- stats.data.FastestExonPerGene[with(stats.data.FastestExonPerGene,order(mean.pident,decreasing=F)),]#
+		stats.table4  <- stats.table3[with(stats.table3,order(stats.table3$mean.pident,decreasing=F)),]#
+	}#
+	# Orders rows of stats table by decreasing percent of sites parsimony informative#
+	if(fast.stat == "percentPIS"){#
+		#mean.percentPIS                       <- stats.data.FastestExonPerGene$percentPIS#
+		#stats.data.FastestExonPerGene.ordered <- stats.data.FastestExonPerGene[with(stats.data.FastestExonPerGene,order(mean.percentPIS,decreasing=T)),]#
+		stats.table4 <- stats.table3[with(stats.table3,order(stats.table3$mean.percentPIS,decreasing=T)),]#
+	}#
+	###### Creates a column holding loci lengths for the primary species, if such a column doesnt already exist. This is calculated from the names used in the first column, and therefore this won't work if the first column does not include start and end positions.#
+	if(length(which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))))==0){#
+		loci.ranges  <- gsub(".*\\.1_","",stats.table4[,1])#
+		loci.lengths <- (abs(as.numeric(gsub(".*_","",loci.ranges))-as.numeric(gsub("_.*","",loci.ranges)))+1)#
+		stats.table4 <- cbind(stats.table4,loci.lengths)#
+		# Renaming the "loci.lengths" column to the form "locus.length.PrimarySpeciesName"#
+		colnames(stats.table4)[which(colnames(stats.table4)=="loci.lengths")] <- paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))#
+	}#
+	###### Calculate the rolling sum of the loci lengths column.#
+	# Determine which column holds the loci lengths#
+	loci.lengths.column                <- which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species)))#
+	# as.numeric(unlist(stats.table4[,loci.lengths.column,with=F]))#
+	# loci.lengths <- as.numeric(unlist(stats.table4[,loci.lengths.column,with=F]))#
+	# Loci lengths#
+	loci.lengths <- stats.table4[,loci.lengths.column]#
+	# Rolling Sum of loci lengths#
+	roll.sum.loci.lengths   <- rollSum(loci.lengths)#
+	if(!is.null(bait.length) & !is.null(bait.tiling)){#
+		if(is.null(flanking.length)){#
+			loci.bait.coverage.lengths       <- bait.coverage.length(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+			loci.num.baits                   <- as.numeric(names(loci.bait.coverage.lengths))#
+			loci.lengths.with.flanking       <- loci.lengths#
+		} else {#
+			if(flanking.length=="auto"){#
+				loci.bait.coverage.lengths         <- bait.coverage.length(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+				loci.num.baits                     <- as.numeric(names(loci.bait.coverage.lengths))#
+				loci.flanking.lengths.list       <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+				loci.upstream.flanking.lengths   <- loci.flanking.lengths.list[[1]]#
+				loci.downstream.flanking.lengths <- loci.flanking.lengths.list[[2]]#
+				loci.lengths.with.flanking       <- loci.lengths+loci.upstream.flanking.lengths+loci.downstream.flanking.lengths#
+			} else {#
+				if(is.numeric(flanking.length) & length(flanking.length)==1){#
+					loci.lengths.with.flanking <- loci.lengths+(2*flanking.length)#
+					loci.bait.coverage.lengths <- bait.coverage.length(locus.len=loci.lengths.with.flanking,bt.len=bait.length,bt.tiling=bait.tiling)#
+					loci.num.baits             <- as.numeric(names(loci.bait.coverage.lengths))#
+				} else {#
+					stop("flanking.length must be numeric and length 1, or 'auto', or NULL")#
+				}#
+			}#
+		}#
+	}#
+	### If bait.number is non-NULL and max.capture.coverage is NULL, then remove rows with rollingSum(loci.num.baits) > bait.number#
+	if(!is.null(bait.number) & is.null(max.capture.coverage)){#
+		if(is.null(bait.length) | is.null(bait.tiling)){#
+			stop("If bait.number is not NULL, then bait.length and bait.tiling must also not be NULL")#
+		} else {#
+			roll.sum.num.baits <- rollSum(loci.num.baits)#
+			stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number),]#
+		}#
+	}#
+	### If max.capture.coverage is non-NULL and bait.number is NULL, then remove rows with rolling sum of loci lengths  > max.capture.coverage#
+	if(is.null(bait.number) & !is.null(max.capture.coverage)){#
+		stats.table5 <- stats.table4[which(roll.sum.loci.lengths <= max.capture.coverage),]#
+	}#
+	### If bait.number and max.capture.coverage are both non-NULL then remove rows with either rollingSum(loci.num.baits) > bait.number or rolling sum of loci lengths  > max.capture.coverage#
+	if(!is.null(bait.number) & !is.null(max.capture.coverage)){#
+		if(is.null(bait.length) | is.null(bait.tiling)){#
+			stop("If bait.number is not NULL, then bait.length and bait.tiling must also not be NULL")#
+		} else {#
+			roll.sum.num.baits <- rollSum(loci.num.baits)#
+			stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number) & which(roll.sum.loci.lengths <= max.capture.coverage),]#
+		}#
+	}#
+	### If bait.number and max.capture.coverage are both NULL, then stats.table5 is equal to stats.table4#
+	if(is.null(bait.number) & is.null(max.capture.coverage)){#
+		stats.table5 <- stats.table4#
+	}#
+	if(nrow(stats.table5)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+	if(!is.null(output.path)){#
+		#if(!file.exists(paste0(output.dir,"stats_data_FastestExonPerGene.txt"))){#
+		#		write.table(stats.table2,file=paste0(output.dir,"stats_data_FastestExonPerGene.txt"),sep="\t",col.names=T,row.names=F,append=F)#
+		#} else {#
+		#	stop(paste0("The output file ",output.dir,"stats_data_FastestExonPerGene.txt"," already exists."))#
+		#}#
+		#if(!file.exists(paste0(output.dir,"stats_data_FastestExonPerGene_best.txt"))){#
+		#	write.table(stats.table5,file=paste0(output.dir,"stats_data_FastestExonPerGene_best.txt"),sep="\t",col.names=T,row.names=F,append=F)#
+		#} else {#
+		#	stop(paste0("The output file ",output.dir,"stats_data_FastestExonPerGene_best.txt"," already exists."))#
+		#}#
+		if(!file.exists(output.path)){#
+			write.table(stats.table5,file=output.path,sep="\t",col.names=T,row.names=F,append=F)#
+		} else {#
+			stop(paste0("The output file ",output.path," already exists."))#
+		}#
+	}#
+	#mean.pident.dens               <- density(stats.data.exome$mean.pident)                    ###| Density data to be plotted later#
+	#mean.pident.dens.keep1         <- density(stats.data.exome.ordered$mean.pident)            ###| After filtering to keep only loci within the range of pident.keep#
+	#mean.pident.dens.keep2         <- density(stats.data.FastestExonPerGene$mean.pident)       ###| After filtering to keep only fastest exon per gene#
+	#mean.pident.dens.best          <- density(stats.data.FastestExonPerGene.best$mean.pident)  ###| After filtering to keep only the fastest exons with concatenated length < max.capture.coverage#
+	if (plot.results==T){#
+		mean.pident.hist               <- hist(stats.table0$mean.pident,breaks=round(max(stats.table0$mean.pident)-min(stats.table0$mean.pident)),plot=F)                                                        ###| Histogram data to be plotted later#
+		mean.pident.hist.keep1         <- hist(stats.table1$mean.pident,breaks=round(max(stats.table1$mean.pident)-min(stats.table1$mean.pident)),plot=F)                                ###| After filtering to keep only loci within the range of pident.keep#
+		mean.pident.hist.keep2         <- hist(stats.table3$mean.pident,breaks=round(max(stats.table3$mean.pident)-min(stats.table3$mean.pident)),plot=F)                 ###| After filtering to keep only fastest exon per gene#
+		mean.pident.hist.best          <- hist(stats.table5$mean.pident,breaks=round(max(stats.table5$mean.pident)-min(stats.table5$mean.pident)),plot=F)  ###| After filtering to keep only the fastest exons with concatenated length < max.capture.coverage#
+		par(mfrow=c(4,1), mar=c(1,1,1,1),oma=c(4,4,0,0))  ### 4 rows and 1 column of plots#
+		cexSize   <- 1              # text size#
+		x.lab2   <- "% identical"   # xlabel 2#
+		y.lab2   <- "# loci"        # y label 2#
+		x.lab    <- NULL            #| x label, y label, and plot title#
+		y.lab    <- NULL            #|#
+		main.lab <- NULL            #|#
+		x.lim.min <- mround(x=min(stats.table0$mean.pident),base=5,direction="down")  ### Determines the mininum x-axis value#
+		plot(mean.pident.hist, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")  ### Histogram#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels=c("Exon Set 1 (all annotated exons)"),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table0$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		plot(mean.pident.hist.keep1, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels= c("Exon Set 2: subset of Exon Set 1 in which:"),cex=1,col=1,adj=c(0,NA))#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2.5)+par("usr")[3]),labels= paste("100% > minimum similarity to ",gsub("_"," ",primary.species)," ≥ ",pident.keep[1],"%",sep=""),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table1$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		plot(mean.pident.hist.keep2, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels=c("Exon Set 3: fastest exon/gene of Exon Set 2"),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table3$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		plot(mean.pident.hist.best, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels= c("Exon Set 4: fastest exons of Exon Set 3 in which:"),cex=1,col=1,adj=c(0,NA))#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2.5)+par("usr")[3]),labels= paste("sum(exon lengths) < ",max.capture.coverage,"nt",sep=""),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table5$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		mtext(paste("% of sites identical to ", gsub("_"," ",primary.species)),c(SOUTH=1),line=2, cex=1, outer=TRUE)#
+		mtext(c("number of exons"),c(WEST=2),line=1.5, cex=1, outer=TRUE)#
+	}#
+	### Hold each of the stats tables in a list#
+	result        <- list(stats.table0,stats.table1,stats.table3,stats.table4,stats.table5)#
+	### Convert each of the stats tables to class data.table#
+	result <- lapply(result,FUN=data.table::data.table)#
+	# Notes:#
+	# result[[1]] = Table 1 = Table of unique CDS regions above min length. Row order is the same as in the input table.#
+	# result[[2]] = Table 2 = Subset of Table 1 with pident above cuttoff (if fast.stat = "pident") or percentPIS below cutoff (if fast.stat = "percentPIS"). Rows are sorted by gene name and then by value of fast.stat#
+	# result[[3]] = Table 3 = Subset of Table 2 with only fastest n exons per gene.#
+	# result[[4]] = Table 4 = Same loci as Table 3, but rows are sorted by value of fast.stat.#
+	# result[[5]] = Table 5 = Subset of Table 4 with rolling sum of loci lengths is less than the value of max.capture.coverage#
+	### Only return the last stats table upon exit.#
+	result.return <- result[[5]]#
+	result.return#
+}
+pick.loci(statsTable=fake.matrix,primary.species="sp1")
+pick.loci(statsTable=fake.matrix,primary.species="sp1",bait.length=120,bait.tiling=0.5,bait.number=20000)
+pick.loci(statsTable=fake.matrix,primary.species="sp1",bait.length=120,bait.tiling=0.5,bait.number=20000,max.loci.per.gene=1)
+pick.loci(statsTable=fake.matrix,primary.species="sp1",bait.length=120,bait.tiling=0.5,bait.number=30000,max.loci.per.gene=1)
+pick.loci(statsTable=fake.matrix,primary.species="sp1",bait.length=120,bait.tiling=0.9,bait.number=30000,max.loci.per.gene=1)
+pick.loci <- function(statsTable, primary.species, output.path=NULL, species.subgroup=NULL, pident.keep=c(65,100),max.loci.per.gene=NULL, min.num.species="all",max.capture.coverage=NULL, bait.tiling=NULL, bait.length=NULL, bait.number=NULL, flanking.length=NULL, plot.results=FALSE,use.min.pident.subgroup=FALSE,fast.stat="pident"){#
+	#stats.data.exome         <- data.table::fread(input=statsTable,sep="\t",header=T)                     ### Reads in the full stats table generated by makeStatsTable function#
+	#stats.data.exome          <- data.table::fread(input=statsTable,header=T)                             ### Reads in the full stats table generated by makeStatsTable function#
+	if(is(statsTable,"matrix") | is(statsTable,"data.table")){#
+#		stats.table0 <- data.table::data.table(statsTable)#
+		stats.table0  <- as.data.frame(statsTable)#
+	}#
+	if(is(statsTable,"character")){#
+		### Read in the data table produced by the function makeStatsTable#
+#		stats.table0               <- data.table::fread(input=statsTable,header=T)#
+		stats.table0               <- as.data.frame(data.table::fread(input=statsTable,header=T))#
+		# Update the gene.name column so that character string "gene=" is not included before the gene name. Eventually you wont need this next line.#
+		stats.table0[,"gene.name"]     <- gsub("gene=","",stats.table0[,"gene.name"])#
+	}#
+	### Set column modes. All columns should be numeric except the first column and the "gene.name", which should be "character" mode.#
+	# Find which column is the gene.name column#
+	which.is.gene.name.column <- which(colnames(stats.table0)=="gene.name")#
+	# Columns that should be numeric mode#
+	numeric.columns           <- setdiff(1:ncol(stats.table0),c(1,which.is.gene.name.column))#
+	# Set the mode to numeric for those columns that should be numeric#
+	stats.table0[, numeric.columns] <- sapply(stats.table0[, numeric.columns], as.numeric)#
+#
+	#################
+	### Filter rows loci if too few species sampled.#
+	# Set min.num.species to the total number of species if default value of "all" was used.#
+	if(min.num.species=="all"){#
+		#min.num.species <- (ncol(stats.table0)-12)#
+		min.num.species <- length(grep("^pident.",colnames(stats.table0)))#
+	}#
+	to.keep0 <- which(as.numeric(stats.table0$num.Species) >= min.num.species)#
+	if(length(to.keep0)>0){#
+		stats.table0          <- stats.table0[to.keep0,]#
+	} else {#
+		stop("No loci with num.Species >= min.num.species")#
+	}#
+#
+	#################
+	### Order the data table by decreasing speed of evolution (as measured by the value of the fast.stat parameter).#
+	# Set min.num.species to the total number of species if default value of "all" was used.#
+	if(fast.stat == "pident"){#
+		#mean.pident.fast             <- stats.data.FastestExonPerGene$mean.pident                                              ###| Orders exon stats table by increasing mean percent identity to T. sirtalis#
+#		stats.data.exome.ordered      <- stats.data.exome[with(stats.data.exome, order(gene.name, mean.pident, decreasing=F)),] ### Sorts loci by gene name, and then by increasing percent identity to the primary species.#
+		### Sort loci by gene name and then by increasing percent identity to the primary species.#
+		stats.table1      <- stats.table0[with(stats.table0, order(stats.table0$gene.name, stats.table0$mean.pident, decreasing=F)),]#
+	}#
+	if(fast.stat == "percentPIS"){#
+		#mean.percentPIS               <- stats.data.FastestExonPerGene$percentPIS                              ###| Orders exon stats table by increasing percent of sites parsimonious#
+#		stats.data.exome.ordered      <- stats.data.exome[with(stats.data.exome, order(gene.name, percentPIS, decreasing=T)),] ### Sorts loci by gene name, and then by decreasing percent of sites parsimony informative.#
+		stats.table1      <- stats.table0[with(stats.table0, order(gene.name, percentPIS, decreasing=T)),] ### Sorts loci by gene name, and then by decreasing percent of sites parsimony informative.#
+	}#
+	if(nrow(stats.table1)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+	### Adding the min.pident.all and min.pident.subgroup columns if they dont already exist. Input stats tables generated with the latest version of makeStatsTable should already have these columns.#
+	if(!all((c("min.pident.all","min.pident.subgroup") %in% colnames(stats.table1)))){#
+		### Make a data frame copy of the data table, because it's easier to subset a data frame by columns compared to a data table.#
+		stats.df1      <- as.data.frame(stats.table1)#
+		### Adding the min.pident.all column if it doesnt already exist#
+		if(!("min.pident.all" %in% colnames(stats.table1))){#
+			### Specifies which columns to evaluate min.pident across. Need to make sure than NA values are treated correctly.#
+			# all.pident.columns      <- grep("pident.",colnames(stats.data.exome))[which(grep("pident.",colnames(stats.data.exome)) < grep("gene.name",colnames(stats.data.exome)))][-1]#
+			# min.pident.all          <- round(apply(X=stats.data.exome.ordered[,..all.pident.columns],MARGIN=1,FUN=min),digits=2) #| [NOTE: Must have the ".." before the object "all.pident.columns" to specify that it is an integer index.] This line Calculates minimum percent identity (among all species to primary species)#
+			# Must have the ".." before the object "all.pident.columns" to specify that it is an integer index.] This line Calculates minimum percent identity (among all species to primary species)#
+			#pident.df      <- as.data.frame(stats.df1[,as.numeric(grep("pident.",colnames(stats.table0))[which(grep("pident.",colnames(stats.table0)) < grep("gene.name",colnames(stats.table0)))][-1])])#
+			min.pident.all <- round(apply(X=stats.df1[,as.numeric(grep("pident.",colnames(stats.table0))[which(grep("pident.",colnames(stats.table0)) < grep("gene.name",colnames(stats.table0)))][-1])],MARGIN=1,FUN=min),digits=2)#
+			# Adds the minimum percent identity (all species) stat as a column if it doesnt already exist#
+			stats.table1   <- cbind(stats.table1,min.pident.all)#
+		}#
+		### Adding the min.pident.subgroup column if it doesnt already exist AND if species.subgroup is not set to NULL#
+		# Dealing with the subgroup#
+		if(!("min.pident.subgroup" %in% colnames(stats.table1)) & !is.null(species.subgroup)){#
+				if(is.integer(species.subgroup)){#
+					#subgroup.pident.columns  <- species.subgroup#
+					# Calculates minimum percent identity (among subgroup species to primary species)#
+					min.pident.subgroup      <- round(apply(X=stats.table1[,..species.subgroup],MARGIN=1,FUN=min),digits=2)#
+				}#
+				if(is.character(species.subgroup)){#
+					expected.colnames       <- paste0("pident.",mgsub(c("\\."," "),c("_","_"),species.subgroup))#
+					#subgroup.pident.columns <- match(expected.colnames,colnames(stats.table0))#
+					# Calculates minimum percent identity (among subgroup species to primary species)#
+					min.pident.subgroup      <- round(apply(X=stats.df1[,match(expected.colnames,colnames(stats.table0))],MARGIN=1,FUN=min),digits=2)#
+				}#
+				# Adds the minimum percent identity (subgroup species) stat as a column if it doesnt already exist#
+				stats.table1 <- cbind(stats.table1,min.pident.subgroup)#
+		}#
+	}#
+	### Sets which min.pident value to use when filtering rows that are too distantly related.#
+	if(use.min.pident.subgroup==T){#
+		min.pident.filter <- stats.table1$min.pident.subgroup#
+	} else {#
+		min.pident.filter <- stats.table1$min.pident.all#
+	}#
+#
+	##############
+	#### Filter loci if minimum percent identity to primary.species is < pident.keep[1] or >= pident.keep[2] (usually 65% and 100%, respectively)#
+	to.keep1       <- which(as.numeric(min.pident.filter) >= pident.keep[1] & as.numeric(min.pident.filter) < pident.keep[2])#
+	stats.table2   <- stats.table1[to.keep1,]#
+	if(nrow(stats.table2)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+#
+	#############
+	#### Filter loci except for the n fastest-evolving loci per gene (where n = value of max.loci.per.gene parameter; if NULL, no loci are filtered; For SnakeCap I used max.loci.per.gene = 1).#
+	if(is.null(max.loci.per.gene)){#
+		stats.table3 <- stats.table2#
+	} else {#
+		# Creates a table containing only the n fastest-evolving CDS per gene#
+		#if(max.loci.per.gene==1){#
+#			to.keep2     <- match(unique(stats.table2$gene.name),stats.table2$gene.name)#
+#			stats.table3 <- stats.table2[to.keep2,]#
+			to.keep2     <- nmatch(unique(stats.table2$gene.name),stats.table2$gene.name,n=max.loci.per.gene)#
+			stats.table3 <- stats.table2[to.keep2,]#
+		#} else {#
+		#	for(i in 1:max.loci.per.gene){#
+		#		if(i==1){#
+		#			to.keep2.temp        <- match(unique(stats.table2$gene.name),stats.table2$gene.name)#
+		#			stats.table3.temp    <- stats.table2[to.keep2.temp,]#
+		#			remainder.table.temp <- stats.table2[-to.keep2.temp,]#
+		#		} else {#
+		#			to.keep2.temp        <- match(unique(remainder.table.temp$gene.name),remainder.table.temp$gene.name)#
+		#			stats.table3.temp    <- cbind(stats.table3.temp,remainder.table.temp[to.keep2.temp,])#
+		#			remainder.table.temp <- remainder.table.temp[-to.keep2.temp,]#
+		#		}#
+		#	}#
+		#}#
+	}#
+	# stats.data.FastestExonPerGene <- stats.table2[to.keep2,]#
+	if(nrow(stats.table3)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+	#############
+	#if(write.stats.tables == T){#
+	#	if(!file.exists(paste0(output.dir,"stats_data_FastestExonPerGene.txt"))){#
+	#			write.table(stats.data.FastestExonPerGene,file=paste0(output.dir,"stats_data_FastestExonPerGene.txt"),sep="\t",col.names=T,row.names=F,append=F)#
+	#	} else {#
+	#		stop(paste0("The output file ",output.dir,"stats_data_FastestExonPerGene.txt"," already exists."))#
+	#	}#
+	#}#
+	# Orders rows of stats table by increasing mean percent identity to the primary species#
+	if(fast.stat == "pident"){#
+		#mean.pident.fast                      <- stats.data.FastestExonPerGene$mean.pident#
+		#stats.data.FastestExonPerGene.ordered <- stats.data.FastestExonPerGene[with(stats.data.FastestExonPerGene,order(mean.pident,decreasing=F)),]#
+		stats.table4  <- stats.table3[with(stats.table3,order(stats.table3$mean.pident,decreasing=F)),]#
+	}#
+	# Orders rows of stats table by decreasing percent of sites parsimony informative#
+	if(fast.stat == "percentPIS"){#
+		#mean.percentPIS                       <- stats.data.FastestExonPerGene$percentPIS#
+		#stats.data.FastestExonPerGene.ordered <- stats.data.FastestExonPerGene[with(stats.data.FastestExonPerGene,order(mean.percentPIS,decreasing=T)),]#
+		stats.table4 <- stats.table3[with(stats.table3,order(stats.table3$mean.percentPIS,decreasing=T)),]#
+	}#
+	###### Creates a column holding loci lengths for the primary species, if such a column doesnt already exist. This is calculated from the names used in the first column, and therefore this won't work if the first column does not include start and end positions.#
+	if(length(which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))))==0){#
+		loci.ranges  <- gsub(".*\\.1_","",stats.table4[,1])#
+		loci.lengths <- (abs(as.numeric(gsub(".*_","",loci.ranges))-as.numeric(gsub("_.*","",loci.ranges)))+1)#
+		stats.table4 <- cbind(stats.table4,loci.lengths)#
+		# Renaming the "loci.lengths" column to the form "locus.length.PrimarySpeciesName"#
+		colnames(stats.table4)[which(colnames(stats.table4)=="loci.lengths")] <- paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))#
+	}#
+	###### Calculate the rolling sum of the loci lengths column.#
+	# Determine which column holds the loci lengths#
+	loci.lengths.column                <- which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species)))#
+	# as.numeric(unlist(stats.table4[,loci.lengths.column,with=F]))#
+	# loci.lengths <- as.numeric(unlist(stats.table4[,loci.lengths.column,with=F]))#
+	# Loci lengths#
+	loci.lengths <- stats.table4[,loci.lengths.column]#
+	# Rolling Sum of loci lengths#
+	roll.sum.loci.lengths   <- rollSum(loci.lengths)#
+	### Calculate lengths of flanking regions if bait.length, bait.tiling, and flanking.length are all non null#
+	if(!is.null(bait.length) & !is.null(bait.tiling)){#
+		if(is.null(flanking.length)){#
+			loci.bait.coverage.lengths       <- bait.coverage.length(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+			loci.num.baits                   <- as.numeric(names(loci.bait.coverage.lengths))#
+			loci.lengths.with.flanking       <- loci.lengths#
+			### Add num.baits columns#
+			stats.table4$num.baits           <- loci.num.baits#
+		} else {#
+			if(flanking.length=="auto"){#
+				loci.bait.coverage.lengths       <- bait.coverage.length(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+				loci.num.baits                   <- as.numeric(names(loci.bait.coverage.lengths))#
+				loci.flanking.lengths.list       <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+				loci.upstream.flanking.lengths   <- loci.flanking.lengths.list[[1]]#
+				loci.downstream.flanking.lengths <- loci.flanking.lengths.list[[2]]#
+				# For "auto", this should be the same as loci.bait.coverage.lengths#
+				loci.lengths.with.flanking       <- loci.lengths+loci.upstream.flanking.lengths+loci.downstream.flanking.lengths#
+				### Add num.baits, upstream.flanking.length, downstream.flanking.length, loci.lengths.with.flanking, and bait.coverage.length columns#
+				stats.table4$num.baits                   <- loci.num.baits#
+				stats.table4$upstream.flanking.length    <- loci.upstream.flanking.lengths#
+				stats.table4$downstream.flanking.length  <- loci.downstream.flanking.lengths#
+				stats.table4$loci.lengths.with.buffer    <- loci.lengths.with.flanking#
+				stats.table4$bait.coverage.lengths       <- loci.bait.coverage.lengths#
+			} else {#
+				if(is.numeric(flanking.length) & length(flanking.length)==1){#
+					loci.lengths.with.flanking <- loci.lengths+(2*flanking.length)#
+					loci.bait.coverage.lengths <- bait.coverage.length(locus.len=loci.lengths.with.flanking,bt.len=bait.length,bt.tiling=bait.tiling)#
+					loci.num.baits             <- as.numeric(names(loci.bait.coverage.lengths))#
+					### Add loci.lengths.with.flanking, num.baits, and bait.coverage.length columns#
+					stats.table4$loci.lengths.with.buffer  <- loci.lengths+(2*flanking.length)#
+					stats.table4$num.baits                 <- loci.num.baits#
+					stats.table4$bait.coverage.lengths     <- loci.bait.coverage.lengths#
+				} else {#
+					stop("flanking.length must be numeric and length 1, or 'auto', or NULL")#
+				}#
+			}#
+		}#
+	}#
+	### If bait.number is non-NULL and max.capture.coverage is NULL, then remove rows with rollingSum(loci.num.baits) > bait.number#
+	if(!is.null(bait.number) & is.null(max.capture.coverage)){#
+		if(is.null(bait.length) | is.null(bait.tiling)){#
+			stop("If bait.number is not NULL, then bait.length and bait.tiling must also not be NULL")#
+		} else {#
+			roll.sum.num.baits <- rollSum(loci.num.baits)#
+			stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number),]#
+		}#
+	}#
+	### If max.capture.coverage is non-NULL and bait.number is NULL, then remove rows with rolling sum of loci lengths  > max.capture.coverage#
+	if(is.null(bait.number) & !is.null(max.capture.coverage)){#
+		stats.table5 <- stats.table4[which(roll.sum.loci.lengths <= max.capture.coverage),]#
+	}#
+	### If bait.number and max.capture.coverage are both non-NULL then remove rows with either rollingSum(loci.num.baits) > bait.number or rolling sum of loci lengths  > max.capture.coverage#
+	if(!is.null(bait.number) & !is.null(max.capture.coverage)){#
+		if(is.null(bait.length) | is.null(bait.tiling)){#
+			stop("If bait.number is not NULL, then bait.length and bait.tiling must also not be NULL")#
+		} else {#
+			roll.sum.num.baits <- rollSum(loci.num.baits)#
+			stats.table5 <- stats.table4[which(roll.sum.num.baits <= bait.number) & which(roll.sum.loci.lengths <= max.capture.coverage),]#
+		}#
+	}#
+	### If bait.number and max.capture.coverage are both NULL, then stats.table5 is equal to stats.table4#
+	if(is.null(bait.number) & is.null(max.capture.coverage)){#
+		stats.table5 <- stats.table4#
+	}#
+	if(nrow(stats.table5)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}#
+	if(!is.null(output.path)){#
+		#if(!file.exists(paste0(output.dir,"stats_data_FastestExonPerGene.txt"))){#
+		#		write.table(stats.table2,file=paste0(output.dir,"stats_data_FastestExonPerGene.txt"),sep="\t",col.names=T,row.names=F,append=F)#
+		#} else {#
+		#	stop(paste0("The output file ",output.dir,"stats_data_FastestExonPerGene.txt"," already exists."))#
+		#}#
+		#if(!file.exists(paste0(output.dir,"stats_data_FastestExonPerGene_best.txt"))){#
+		#	write.table(stats.table5,file=paste0(output.dir,"stats_data_FastestExonPerGene_best.txt"),sep="\t",col.names=T,row.names=F,append=F)#
+		#} else {#
+		#	stop(paste0("The output file ",output.dir,"stats_data_FastestExonPerGene_best.txt"," already exists."))#
+		#}#
+		if(!file.exists(output.path)){#
+			write.table(stats.table5,file=output.path,sep="\t",col.names=T,row.names=F,append=F)#
+		} else {#
+			stop(paste0("The output file ",output.path," already exists."))#
+		}#
+	}#
+	#mean.pident.dens               <- density(stats.data.exome$mean.pident)                    ###| Density data to be plotted later#
+	#mean.pident.dens.keep1         <- density(stats.data.exome.ordered$mean.pident)            ###| After filtering to keep only loci within the range of pident.keep#
+	#mean.pident.dens.keep2         <- density(stats.data.FastestExonPerGene$mean.pident)       ###| After filtering to keep only fastest exon per gene#
+	#mean.pident.dens.best          <- density(stats.data.FastestExonPerGene.best$mean.pident)  ###| After filtering to keep only the fastest exons with concatenated length < max.capture.coverage#
+	if (plot.results==T){#
+		mean.pident.hist               <- hist(stats.table0$mean.pident,breaks=round(max(stats.table0$mean.pident)-min(stats.table0$mean.pident)),plot=F)                                                        ###| Histogram data to be plotted later#
+		mean.pident.hist.keep1         <- hist(stats.table1$mean.pident,breaks=round(max(stats.table1$mean.pident)-min(stats.table1$mean.pident)),plot=F)                                ###| After filtering to keep only loci within the range of pident.keep#
+		mean.pident.hist.keep2         <- hist(stats.table3$mean.pident,breaks=round(max(stats.table3$mean.pident)-min(stats.table3$mean.pident)),plot=F)                 ###| After filtering to keep only fastest exon per gene#
+		mean.pident.hist.best          <- hist(stats.table5$mean.pident,breaks=round(max(stats.table5$mean.pident)-min(stats.table5$mean.pident)),plot=F)  ###| After filtering to keep only the fastest exons with concatenated length < max.capture.coverage#
+		par(mfrow=c(4,1), mar=c(1,1,1,1),oma=c(4,4,0,0))  ### 4 rows and 1 column of plots#
+		cexSize   <- 1              # text size#
+		x.lab2   <- "% identical"   # xlabel 2#
+		y.lab2   <- "# loci"        # y label 2#
+		x.lab    <- NULL            #| x label, y label, and plot title#
+		y.lab    <- NULL            #|#
+		main.lab <- NULL            #|#
+		x.lim.min <- mround(x=min(stats.table0$mean.pident),base=5,direction="down")  ### Determines the mininum x-axis value#
+		plot(mean.pident.hist, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")  ### Histogram#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels=c("Exon Set 1 (all annotated exons)"),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table0$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		plot(mean.pident.hist.keep1, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels= c("Exon Set 2: subset of Exon Set 1 in which:"),cex=1,col=1,adj=c(0,NA))#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2.5)+par("usr")[3]),labels= paste("100% > minimum similarity to ",gsub("_"," ",primary.species)," ≥ ",pident.keep[1],"%",sep=""),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table1$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		plot(mean.pident.hist.keep2, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels=c("Exon Set 3: fastest exon/gene of Exon Set 2"),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table3$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		plot(mean.pident.hist.best, xlim=c(x.lim.min,100), xlab=NULL, ylab=y.lab2, main = main.lab,cex.main=cexSize,col="grey")#
+		Axis(side=2)#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2)+par("usr")[3]),labels= c("Exon Set 4: fastest exons of Exon Set 3 in which:"),cex=1,col=1,adj=c(0,NA))#
+		text(x=c(((par("usr")[2]-par("usr")[1])/10)+par("usr")[1]),y= c(((par("usr")[4]-par("usr")[3])/2.5)+par("usr")[3]),labels= paste("sum(exon lengths) < ",max.capture.coverage,"nt",sep=""),cex=1,col=1,adj=c(0,NA))#
+		lines(x=rep(mean(stats.table5$mean.pident),2),y=c(0,par("usr")[4]),col="green")#
+		mtext(paste("% of sites identical to ", gsub("_"," ",primary.species)),c(SOUTH=1),line=2, cex=1, outer=TRUE)#
+		mtext(c("number of exons"),c(WEST=2),line=1.5, cex=1, outer=TRUE)#
+	}#
+	### Hold each of the stats tables in a list#
+	result        <- list(stats.table0,stats.table1,stats.table3,stats.table4,stats.table5)#
+	### Convert each of the stats tables to class data.table#
+	result <- lapply(result,FUN=data.table::data.table)#
+	# Notes:#
+	# result[[1]] = Table 1 = Table of unique CDS regions above min length. Row order is the same as in the input table.#
+	# result[[2]] = Table 2 = Subset of Table 1 with pident above cuttoff (if fast.stat = "pident") or percentPIS below cutoff (if fast.stat = "percentPIS"). Rows are sorted by gene name and then by value of fast.stat#
+	# result[[3]] = Table 3 = Subset of Table 2 with only fastest n exons per gene.#
+	# result[[4]] = Table 4 = Same loci as Table 3, but rows are sorted by value of fast.stat.#
+	# result[[5]] = Table 5 = Subset of Table 4 with rolling sum of loci lengths is less than the value of max.capture.coverage#
+	### Only return the last stats table upon exit.#
+	result.return <- result[[5]]#
+	result.return#
+}
+pick.loci(statsTable=fake.matrix,primary.species="sp1",bait.length=120,bait.tiling=0.9,bait.number=30000,max.loci.per.gene=1)
+result <- pick.loci(statsTable=fake.matrix,primary.species="sp1",bait.length=120,bait.tiling=0.9,bait.number=30000,max.loci.per.gene=1,flanking.length=100)
+result
+result <- pick.loci(statsTable=fake.matrix,primary.species="sp1",bait.length=120,bait.tiling=0.9,bait.number=30000,max.loci.per.gene=1,flanking.length=500)
+result
+result <- pick.loci(statsTable=fake.matrix,primary.species="sp1",bait.length=120,bait.tiling=0.9,bait.number=30000,max.loci.per.gene=1,flanking.length=1000)
+result
+result <- pick.loci(statsTable=fake.matrix,primary.species="sp1",bait.length=120,bait.tiling=0.9,bait.number=30000,max.loci.per.gene=1,flanking.length="auto")
+result
+auto.flanking.lengths(locus.len=8263,bt.len=120,bt.tiling=0.5)
+auto.flanking.lengths(locus.len=c(8263,7244),bt.len=120,bt.tiling=0.5)
+loci.upstream.flanking.lengths   <- loci.flanking.lengths.list[[1]]
+loci.flanking.lengths.list       <- auto.flanking.lengths(locus.len=c(8263,7244),bt.len=120,bt.tiling=0.5)
+loci.upstream.flanking.lengths   <- loci.flanking.lengths.list[[1]]
+loci.downstream.flanking.lengths   <- loci.flanking.lengths.list[[2]]
 loci.upstream.flanking.lengths
 loci.downstream.flanking.lengths
-flanking.length=100
-loci.lengths.with.flanking <- loci.lengths+(2*flanking.length)
+loci.lengths.with.flanking       <- loci.lengths+loci.upstream.flanking.lengths+loci.downstream.flanking.lengths
+loci.lengths=c(8263,7244)
+loci.lengths.with.flanking       <- loci.lengths+loci.upstream.flanking.lengths+loci.downstream.flanking.lengths
 loci.lengths.with.flanking
-loci.num.baits             <- as.numeric(names(loci.lengths.with.flanking))
-loci.num.baits
-loci.bait.coverage.lengths <- bait.coverage.length(locus.len=loci.lengths.with.flanking,bt.len=bait.length,bt.tiling=bait.tiling)
-loci.bait.coverage.lengths
-loci.num.baits             <- as.numeric(names(loci.lengths.with.flanking))
-locu.num.baits
-loci.num.baits
-loci.num.baits             <- as.numeric(names(loci.lengths.with.flanking))
-loloci.num.baits             <- as.numeric(names(loci.bait.coverage.lengths))
-loci.num.baits             <- as.numeric(names(loci.bait.coverage.lengths))
-loci.num.baits
-grep("NC_046313.1:66038313-66038747",names(Lacerta.agilis.exome))
-grep("NC_046313.1:66038313-66038747",names(Lacerta.agilis_exome))
-length(Lacerta.agilis_exome)
-15838/length(Lacerta.agilis_exome)
-setwd()
+statsTable=fake.matrix; primary.species="sp1"; output.path=NULL; species.subgroup=NULL; pident.keep=c(65,100);max.loci.per.gene=1; min.num.species="all";max.capture.coverage=NULL; bait.tiling=0.9; bait.length=120; bait.number=30000; flanking.length="auto"; plot.results=FALSE;use.min.pident.subgroup=FALSE;fast.stat="pident"
+if(is(statsTable,"matrix") | is(statsTable,"data.table")){#
+#		stats.table0 <- data.table::data.table(statsTable)#
+		stats.table0  <- as.data.frame(statsTable)#
+	}#
+	if(is(statsTable,"character")){#
+		### Read in the data table produced by the function makeStatsTable#
+#		stats.table0               <- data.table::fread(input=statsTable,header=T)#
+		stats.table0               <- as.data.frame(data.table::fread(input=statsTable,header=T))#
+		# Update the gene.name column so that character string "gene=" is not included before the gene name. Eventually you wont need this next line.#
+		stats.table0[,"gene.name"]     <- gsub("gene=","",stats.table0[,"gene.name"])#
+	}#
+	### Set column modes. All columns should be numeric except the first column and the "gene.name", which should be "character" mode.#
+	# Find which column is the gene.name column#
+	which.is.gene.name.column <- which(colnames(stats.table0)=="gene.name")#
+	# Columns that should be numeric mode#
+	numeric.columns           <- setdiff(1:ncol(stats.table0),c(1,which.is.gene.name.column))#
+	# Set the mode to numeric for those columns that should be numeric#
+	stats.table0[, numeric.columns] <- sapply(stats.table0[, numeric.columns], as.numeric)#
+#
+	#################
+	### Filter rows loci if too few species sampled.#
+	# Set min.num.species to the total number of species if default value of "all" was used.#
+	if(min.num.species=="all"){#
+		#min.num.species <- (ncol(stats.table0)-12)#
+		min.num.species <- length(grep("^pident.",colnames(stats.table0)))#
+	}#
+	to.keep0 <- which(as.numeric(stats.table0$num.Species) >= min.num.species)#
+	if(length(to.keep0)>0){#
+		stats.table0          <- stats.table0[to.keep0,]#
+	} else {#
+		stop("No loci with num.Species >= min.num.species")#
+	}#
+#
+	#################
+	### Order the data table by decreasing speed of evolution (as measured by the value of the fast.stat parameter).#
+	# Set min.num.species to the total number of species if default value of "all" was used.#
+	if(fast.stat == "pident"){#
+		#mean.pident.fast             <- stats.data.FastestExonPerGene$mean.pident                                              ###| Orders exon stats table by increasing mean percent identity to T. sirtalis#
+#		stats.data.exome.ordered      <- stats.data.exome[with(stats.data.exome, order(gene.name, mean.pident, decreasing=F)),] ### Sorts loci by gene name, and then by increasing percent identity to the primary species.#
+		### Sort loci by gene name and then by increasing percent identity to the primary species.#
+		stats.table1      <- stats.table0[with(stats.table0, order(stats.table0$gene.name, stats.table0$mean.pident, decreasing=F)),]#
+	}#
+	if(fast.stat == "percentPIS"){#
+		#mean.percentPIS               <- stats.data.FastestExonPerGene$percentPIS                              ###| Orders exon stats table by increasing percent of sites parsimonious#
+#		stats.data.exome.ordered      <- stats.data.exome[with(stats.data.exome, order(gene.name, percentPIS, decreasing=T)),] ### Sorts loci by gene name, and then by decreasing percent of sites parsimony informative.#
+		stats.table1      <- stats.table0[with(stats.table0, order(gene.name, percentPIS, decreasing=T)),] ### Sorts loci by gene name, and then by decreasing percent of sites parsimony informative.#
+	}#
+	if(nrow(stats.table1)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}
+!all((c("min.pident.all","min.pident.subgroup") %in% colnames(stats.table1)))
+if(use.min.pident.subgroup==T){#
+		min.pident.filter <- stats.table1$min.pident.subgroup#
+	} else {#
+		min.pident.filter <- stats.table1$min.pident.all#
+	}
+to.keep1       <- which(as.numeric(min.pident.filter) >= pident.keep[1] & as.numeric(min.pident.filter) < pident.keep[2])#
+	stats.table2   <- stats.table1[to.keep1,]#
+	if(nrow(stats.table2)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}
+if(is.null(max.loci.per.gene)){#
+		stats.table3 <- stats.table2#
+	} else {#
+		# Creates a table containing only the n fastest-evolving CDS per gene#
+		#if(max.loci.per.gene==1){#
+#			to.keep2     <- match(unique(stats.table2$gene.name),stats.table2$gene.name)#
+#			stats.table3 <- stats.table2[to.keep2,]#
+			to.keep2     <- nmatch(unique(stats.table2$gene.name),stats.table2$gene.name,n=max.loci.per.gene)#
+			stats.table3 <- stats.table2[to.keep2,]#
+		#} else {#
+		#	for(i in 1:max.loci.per.gene){#
+		#		if(i==1){#
+		#			to.keep2.temp        <- match(unique(stats.table2$gene.name),stats.table2$gene.name)#
+		#			stats.table3.temp    <- stats.table2[to.keep2.temp,]#
+		#			remainder.table.temp <- stats.table2[-to.keep2.temp,]#
+		#		} else {#
+		#			to.keep2.temp        <- match(unique(remainder.table.temp$gene.name),remainder.table.temp$gene.name)#
+		#			stats.table3.temp    <- cbind(stats.table3.temp,remainder.table.temp[to.keep2.temp,])#
+		#			remainder.table.temp <- remainder.table.temp[-to.keep2.temp,]#
+		#		}#
+		#	}#
+		#}#
+	}#
+	# stats.data.FastestExonPerGene <- stats.table2[to.keep2,]#
+	if(nrow(stats.table3)==0){#
+		stop("No REEs identified because all loci filtered.")#
+	}
+if(fast.stat == "pident"){#
+		#mean.pident.fast                      <- stats.data.FastestExonPerGene$mean.pident#
+		#stats.data.FastestExonPerGene.ordered <- stats.data.FastestExonPerGene[with(stats.data.FastestExonPerGene,order(mean.pident,decreasing=F)),]#
+		stats.table4  <- stats.table3[with(stats.table3,order(stats.table3$mean.pident,decreasing=F)),]#
+	}#
+	# Orders rows of stats table by decreasing percent of sites parsimony informative#
+	if(fast.stat == "percentPIS"){#
+		#mean.percentPIS                       <- stats.data.FastestExonPerGene$percentPIS#
+		#stats.data.FastestExonPerGene.ordered <- stats.data.FastestExonPerGene[with(stats.data.FastestExonPerGene,order(mean.percentPIS,decreasing=T)),]#
+		stats.table4 <- stats.table3[with(stats.table3,order(stats.table3$mean.percentPIS,decreasing=T)),]#
+	}
+if(length(which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))))==0){#
+		loci.ranges  <- gsub(".*\\.1_","",stats.table4[,1])#
+		loci.lengths <- (abs(as.numeric(gsub(".*_","",loci.ranges))-as.numeric(gsub("_.*","",loci.ranges)))+1)#
+		stats.table4 <- cbind(stats.table4,loci.lengths)#
+		# Renaming the "loci.lengths" column to the form "locus.length.PrimarySpeciesName"#
+		colnames(stats.table4)[which(colnames(stats.table4)=="loci.lengths")] <- paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))#
+	}
+loci.lengths.column                <- which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species)))#
+	# as.numeric(unlist(stats.table4[,loci.lengths.column,with=F]))#
+	# loci.lengths <- as.numeric(unlist(stats.table4[,loci.lengths.column,with=F]))#
+	# Loci lengths#
+	loci.lengths <- stats.table4[,loci.lengths.column]#
+	# Rolling Sum of loci lengths#
+	roll.sum.loci.lengths   <- rollSum(loci.lengths)#
+	### Calculate lengths of flanking regions if bait.length, bait.tiling, and flanking.length are all non null
+!is.null(bait.length) & !is.null(bait.tiling)
+is.null(flanking.length)
+flanking.length=="auto"
+loci.bait.coverage.lengths       <- bait.coverage.length(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+				loci.num.baits                   <- as.numeric(names(loci.bait.coverage.lengths))#
+				loci.flanking.lengths.list       <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)#
+				loci.upstream.flanking.lengths   <- loci.flanking.lengths.list[[1]]#
+				loci.downstream.flanking.lengths <- loci.flanking.lengths.list[[2]]
+loci.upstream.flanking.lengths[1]
+loci.lengths[1]
+loci.flanking.lengths.list       <- auto.flanking.lengths(locus.len=loci.lengths,bt.len=bait.length,bt.tiling=bait.tiling)
+loci.flanking.lengths.list
+class(loci.lengths)
+class(bait.length)
+class(bait.tiling)
+loci.lengths[1:10]
+bait.length[1:10]
+bait.tiling[1]
+auto.flanking.lengths(locus.len=c(8263, 7244),bt.len=120,bt.tiling=0.9)
+auto.flanking.lengths(locus.len=c(8263, 7244),bt.len=120,bt.tiling=0.5)
+result <- pick.loci(statsTable=fake.matrix,primary.species="sp1",bait.length=120,bait.tiling=0.5,bait.number=30000,max.loci.per.gene=1,flanking.length="auto")
+result
+result
 getwd()
+setwd("Documents/REEs")
+library("Devtools")
 library(devtools)
 devtools::document()
-rm(list = c("auto.flanking.lengths", "bait.coverage.length"))
-devtools::document()
-devtools::document()
-devtools::document()
-devtools::document()
+rm(list = c("mafft", "pick.loci"))
 devtools::document()
 devtools::build()
 devtools::install()

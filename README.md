@@ -33,23 +33,26 @@ Installation involves the following steps, which are executed in the block of co
 
 ```
 # Define where packages should be installed.
-# If you want to install packages somewhere other than the default R library paths, replace .libPaths() on the next line with the path to where packages should be installed.
-packages.dir   <- .libPaths()
-# packages.dir <- "/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv3.6"
-# packages.dir <- "/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv4.0"
+# If you want to install or load packages from somewhere other than the default R library path, then set .libPaths() to the directory to use. This must be set each time you start R.
+
+### Probably dont need to use the next few lines. Just set .libPaths().
+# packages.dir   <- .libPaths()
 
 # Add packages.dir to the R library path for the duration of the session.
-.libPaths(packages.dir)
+.libPaths("/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv3.6")
+#.libPaths("/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv4.0")
 
 # Install BiocManager and several other dependencies
-install.packages(pkgs="BiocManager",lib=packages.dir,repos = "http://cran.us.r-project.org")
+# install.packages(pkgs="BiocManager",lib=packages.dir,repos = "http://cran.us.r-project.org")
+#### Test that setting libPaths() works such that lib argument is not needed for install functions, and lib.loc argument not needed for when loading installed packages.
+install.packages(pkgs="BiocManager",repos = "http://cran.us.r-project.org")
 library(BiocManager)
 
 # Use BiocManager to install REEs and its other dependencies. Packages in their dependency graphs are also installed.
 # Set the version argument to "3.10" if using R v3.6; "3.12" for R v4.0; check https://bioconductor.org/about/release-announcements/ to determine which BioConductor version to use for later versions of R.
-BiocManager::install(c("BSgenome","DECIPHER","phangorn","dplyr","data.table", "foreach","reutils","curl","knitr","devtools","gschofl/biofiles"),lib=packages.dir,update=FALSE, version="3.12",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4)
+BiocManager::install(c("BSgenome","DECIPHER","phangorn","dplyr","data.table", "foreach","reutils","curl","knitr","devtools","gschofl/biofiles"),update=FALSE, version="3.12",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4)
 # Install REEs. This can be added to the end of the previous line once the REEs repository is public.
-BiocManager::install("JeffWeinell/REEs",lib=packages.dir,update=FALSE, version="3.12",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+BiocManager::install("JeffWeinell/REEs",update=FALSE, version="3.12",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
 ```
 
 <a name="InstallingBLAST"></a>
@@ -58,6 +61,8 @@ BiocManager::install("JeffWeinell/REEs",lib=packages.dir,update=FALSE, version="
 You can follow the instructions [here](https://www.ncbi.nlm.nih.gov/books/NBK279671/), or use the REEs ```blast.install``` function to install BLAST to the REEs package directory. The ```blast.install``` method is convenient because you wont need to explicitely specify the path to the directory holding BLAST executables when using the REEs ```blast``` function. However, you will need to run ```blast.install``` after each time you upgrade or reinstall REEs.
 
 ```
+# Reminder: if you closed/reoponed R, remember to set .libPaths() when using a non-default R library location.
+
 # Load REEs
 library(REEs)
 
