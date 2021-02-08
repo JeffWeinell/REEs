@@ -86,8 +86,10 @@ pick.loci <- function(statsTable, primary.species, output.path=NULL, species.sub
 	### Set column modes. All columns should be numeric except the first column and the "gene.name", which should be "character" mode.
 	# Find which column is the gene.name column
 	which.is.gene.name.column <- which(colnames(stats.table0)=="gene.name")
+	# Columns that should be character mode
+	character.columns <- c(1,which.is.gene.name.column)
 	# Columns that should be numeric mode
-	numeric.columns           <- setdiff(1:ncol(stats.table0),c(1,which.is.gene.name.column))
+	numeric.columns           <- setdiff(1:ncol(stats.table0),character.columns)
 	# Set the mode to numeric for those columns that should be numeric
 	stats.table0[, numeric.columns] <- sapply(stats.table0[, numeric.columns], as.numeric)
 
