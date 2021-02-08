@@ -42,7 +42,7 @@ makeStatsTable <- function(input.seqs,species.names,reference.species,input.gff,
 		### Read in the sequences for each species as a DNAStringSet, and hold the set of DNAStringSets in a list
 		# Important not to name each DNAStringSet in the list
 		species.seqs <- lapply(X=input.seqs,FUN=function(x){Biostrings::readDNAStringSet(x)})
-	} else { 
+	} else {
 		if(is(input.seqs[[1]],"DNAStringSet")){
 			##### Important not to name each DNAStringSet in the list
 			### Puts the input.seqs in the same order as species.
