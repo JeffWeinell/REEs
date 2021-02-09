@@ -6,24 +6,24 @@
 
 Extracts the sequences defined in an input table (a blast table with NCBI format 6) from an input genome. The input genome should be the same genome used as the subject in the blast table.
 The quality/completeness of the output sequence dataset depends on the quality/completeness of the blast search.
-The functions get.exome.from.blastTable and get.UCEs.from.blastTable are the same as this one, but applied to a specific type of sequences in the blast table. This function could supercede those functions.}
+This function supercedes the functions get.exome.from.blastTable and get.UCEs.from.blastTable.}
 \usage{
 get.seqs.from.blastTable(input.blastTable, input.seqs, output.path = NULL)
 }
 \arguments{
-\item{input.blastTable}{Path to the blast table containing best matches to query sequences found in the input genome (subject in blast search). This input table is the output of the reportBestMatches function.}
+\item{input.blastTable}{Either a character string with the local filepath to a BLAST table (BLAST output format 6), or such a table held as a data table, data frame, or character matrix object.}
 
-\item{input.seqs}{Path to the input genome.}
+\item{input.seqs}{Either a character string with the filepath or URL path to the input sequences (which can be .gz compressed), or, a DNAStringSet object holding the sequences.}
 
-\item{output.path}{Directory where to save the extracted sequences.}
+\item{output.path}{Character string with path (including filename) to where extracted sequences should be saved.}
 }
 \value{
-Extracted sequences written to a file.
+A DNAStringSet object with the extracted sequences. Sequences are also optionally written to output.path.
 }
 \description{
 Get Sequences From BLAST Table
 
 Extracts the sequences defined in an input table (a blast table with NCBI format 6) from an input genome. The input genome should be the same genome used as the subject in the blast table.
 The quality/completeness of the output sequence dataset depends on the quality/completeness of the blast search.
-The functions get.exome.from.blastTable and get.UCEs.from.blastTable are the same as this one, but applied to a specific type of sequences in the blast table. This function could supercede those functions.
+This function supercedes the functions get.exome.from.blastTable and get.UCEs.from.blastTable.
 }

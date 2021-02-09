@@ -84,4 +84,6 @@ Crotalus.horridus.best.hits.seqs   <- get.seqs.from.blastTable(input.blastTable=
 Crotalus.mitchellii.best.hits.seqs <- get.seqs.from.blastTable(input.blastTable=best.hits.Crotalus.mitchellii,input.seqs="/Users/alyssaleinweber/Documents/genomes/genomes_seqs/GCA_000737285.1_CrotMitch1.0_genomic.fna.gz",output.path="/Users/alyssaleinweber/Documents/REES_test_output/Crotalus.mitchellii_TwoExons.testQuery.tblastx.best.hits_seqs.fas")
 Ophiophagus.hannah.best.hits.seqs  <- get.seqs.from.blastTable(input.blastTable=best.hits.Ophiophagus.hannah,input.seqs="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/516/915/GCA_000516915.1_OphHan1.0/GCA_000516915.1_OphHan1.0_genomic.fna.gz",output.path="/Users/alyssaleinweber/Documents/REES_test_output/Ophiophagus.hannah_TwoExons.testQuery.tblastx.best.hits_seqs.fas")
 Pantherophis.best.hits.seqs        <- get.seqs.from.blastTable(input.blastTable=best.hits.Pantherophis.guttatus,input.seqs=Pantherophis.guttatus.genome_url,output.path="/Users/alyssaleinweber/Documents/REES_test_output/Pantherophis.guttatus_TwoExons.testQuery.tblastx.best.hits_seqs.fas")
+
+param table.headers Logical indicating if the first line of input.blastTable is the column names. Argument ignored if input.blastTable is a data table, data frame, or character matrix.
 }

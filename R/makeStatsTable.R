@@ -60,17 +60,14 @@ makeStatsTable <- function(input.seqs,species.names,reference.species,input.gff,
 	all.loci        <- unique(unlist(matches.list))
 	### List of numeric vectors, each vector containing numbers indicating which sequences are those in all.sequences
 	matches.indices.all         <- lapply(X=matches.list,FUN=function(y){match(x=all.loci,table=y)})
-	### Puts loci in the same order for each species. Doesnt filter based upon whether loci are shared.
+	### Puts loci in the same order for each species. Doesnt filter based upon whether loci are shared. It's possible that species.seqs are already in the same order.
 	species.seqs.all            <- mapply(FUN=function(X,Y){Z=Y[which(!is.na(Y))];X[Z]},X=species.seqs,Y=matches.indices.all,SIMPLIFY=F)
 	### Create a vector holding contig names of all loci in input.seqs.
-	CDS.locus.identifier.all    <- mgsub(c(":","-"),c("_","_"),all.loci)
+	CDS.locus.identifier.all    <- mgsub(c(":","-","CDS_","_Gene=.+"),c("_","_","",""),all.loci)
 	### character string location of CDS within contig, with format "start_end"
-	loci.ranges.all  <- mgsub(c(".*\\.1:","-"),c("","_"),all.loci)
-## Use this instead of the previous line for SnakeCap Loci: ## loci.ranges.all  <- mgsub(c(".*\\.1.","-","_Gene=.+"),c("","_",""),all.loci)
+	loci.ranges.all  <- mgsub(c(".*\\.1.",".*\\.1:","-","_Gene=.+"),c("","","_",""),all.loci)
 	### length of each sequence (in species associated with the gff table) for the shared sequences
-	loci.lengths.all <- (abs(as.numeric(gsub(".*_","",loci.ranges.all))-as.numeric(gsub("_.*","",loci.ranges.all)))+1)
-
-
+	loci.lengths <- (abs(as.numeric(gsub(".*_","",loci.ranges.all))-as.numeric(gsub("_.*","",loci.ranges.all)))+1)
 
 	### Check if input.gff is NULL and if so set gene names to NA. Otherwise, read the GFF and extract gene names.
 	if(is.null(input.gff)){
@@ -82,7 +79,7 @@ makeStatsTable <- function(input.seqs,species.names,reference.species,input.gff,
 		if(is(input.gff,"character")){
 			### Reads in filtered GFF table, which is associated with the primary exome
 #			annotationTable  <- data.table::fread(input=input.gff)
-			annotationTable  <- as.data.frame(load.gff(x))
+			annotationTable  <- as.data.frame(load.gff(input.gff))
 		}
 		##### Set column modes
 		# Set which columns should be mode numeric
@@ -96,12 +93,17 @@ makeStatsTable <- function(input.seqs,species.names,reference.species,input.gff,
 		## Vector of identifiers that should match those in CDS.locus.identifier.all
 		annotationTable.identifier  <- paste0(unlist(annotationTable[,1]),"_",unlist(annotationTable[,"start"]),"_", unlist(annotationTable[,"end"]))
 		## Extract gene name from the last column of the gff table
-		gene.names.temp             <- mgsub(c(".*;gene=",";.*"),c("",""),unlist(annotationTable[,9]))
+#		gene.names.temp             <- mgsub(c(".*;gene=",";.*"),c("",""),unlist(annotationTable[,9]))
 #		gene.names.temp2            <- gsub(";.*","",gene.names.temp)
 #		match.identifier.all        <- match(CDS.locus.identifier.all,annotationTable.identifier)
 		### Potential alternative to the previous line, because the match function only uses first feature annotated for each CDS.
 		match.identifier.all        <- lapply(X=paste0("^",CDS.locus.identifier.all,"$"),FUN=grep, annotationTable.identifier)
-		gene.names.all              <- unlist(lapply(X=match.identifier.all,FUN=function(x){ paste0("gene=",paste0(unique(gene.names.temp[x]),collapse=","))}))
+#		gene.names.all              <- unlist(lapply(X=match.identifier.all,FUN=function(x){paste0("gene=",paste0(unique(gene.names.temp[x]),collapse=","))}))
+		# range.annotations.all is a list of lists of character vectors, each of which contains the annotations (column 9) for one feature of a genomic region in CDS.locus.identifier.all
+		range.annotations.all       <- lapply(X=match.identifier.all,FUN=function(x){strsplit(annotationTable[x,"attributes"],split=";")})
+		# range.annotations.all.compressed is a list of character vectors, each of which contains all annotations (column 9) for all features with of a genomic region in CDS.locus.identifier.all
+		range.annotations.all.compressed <- lapply(range.annotations.all,FUN=unlist)
+		gene.names.all <- unlist(lapply(X=range.annotations.all.compressed,FUN=function(x){paste0("gene=",paste(unique(gsub("^gene=","",x[grep("^gene=",x)])),collapse=","))}))
 	}
 
 	if(is.na(i.start) | i.start > length(all.loci)){
@@ -114,52 +116,51 @@ makeStatsTable <- function(input.seqs,species.names,reference.species,input.gff,
 	}
 	# List of unaligned DNAStringSet objects. Loci do not need to be shared.
 	index.matrix.all            <- do.call(rbind, matches.indices.all)
-	# The function defining 'temp.seqs.all' object will only work if names(species.seqs.all) is NULL, so the next line sets names to NULL if they arent already NULL
+	# The function defining 'temp.seqs' object will only work if names(species.seqs.all) is NULL, so the next line sets names to NULL if they arent already NULL
 	if(!is.null(names(species.seqs.all))){
 		names(species.seqs.all) <- NULL
 	}
 	# This will take a few minutes to run
-	temp.seqs.all               <- lapply(c(1:ncol(index.matrix.all)),function(input){do.call(c,mapply(FUN=function(A,B){C=B[which(!is.na(B))];A[C]},A=species.seqs.all,B=lapply(X=index.matrix.all[,input],FUN=function(x){x})))})
+	temp.seqs               <- lapply(c(1:ncol(index.matrix.all)),function(input){do.call(c,mapply(FUN=function(A,B){C=B[which(!is.na(B))];A[C]},A=species.seqs.all,B=lapply(X=index.matrix.all[,input],FUN=function(x){x})))})
 	# Matrix or list of species names to use for each sequence in each alignment.
-	names.temp.seqs.all         <- apply(X=index.matrix.all,MARGIN=2,FUN=function(input){species[!is.na(input)]})
+	names.temp.seqs         <- apply(X=index.matrix.all,MARGIN=2,FUN=function(input){species[!is.na(input)]})
 	# Now setting the species name to each sequence in each DNAStringSet
-	if(is(names.temp.seqs.all,"list")){
-		for(i in 1:length(temp.seqs.all)){
-			names(temp.seqs.all[[i]]) <- names.temp.seqs.all[[i]]
+	if(is(names.temp.seqs,"list")){
+		for(i in 1:length(temp.seqs)){
+			names(temp.seqs[[i]]) <- names.temp.seqs[[i]]
 		}
 	}
-	if(is(names.temp.seqs.all,"matrix")){
-		for(i in 1:length(temp.seqs.all)){
-			names(temp.seqs.all[[i]]) <- names.temp.seqs.all[,i]
+	if(is(names.temp.seqs,"matrix")){
+		for(i in 1:length(temp.seqs)){
+			names(temp.seqs[[i]]) <- names.temp.seqs[,i]
 		}
 	}
 	### Create a matrix to hold alignment stats for all loci
-	tempMatrix.all           <- matrix(data=0, nrow=length(1:length(all.loci)), ncol=12+length(species))
-	colnames(tempMatrix.all) <- c(paste0(species[1],".locus"), "num.Species","CountCover","absolutePIS","percentPIS","mean.pident", paste0("pident.",species), "gene.name",paste0("locus.length.",species[1]),"mean.variable.sites","min.pident.all","min.pident.subgroup","alignment.width")
+	tempMatrix           <- matrix(data=0, nrow=length(1:length(all.loci)), ncol=12+length(species))
+	colnames(tempMatrix) <- c(paste0(species[1],".locus"), "num.Species","CountCover","absolutePIS","percentPIS","mean.pident", paste0("pident.",species), "gene.name",paste0("locus.length.",species[1]),"mean.variable.sites","min.pident.all","min.pident.subgroup","alignment.width")
 	
-	# Coerce tempMatrix.all to a data frame?
-	# tempMatrix.all <- as.data.frame(tempMatrix.all)
+	# Coerce tempMatrix to a data frame?
+	# tempMatrix <- as.data.frame(tempMatrix)
 	### Set column modes. All columns should be numeric except the first column and the "gene.name", which should be "character" mode.
 	# Find which column is the gene.name column
-	which.is.gene.name.column <- which(colnames(tempMatrix.all)=="gene.name")
+	which.is.gene.name.column <- which(colnames(tempMatrix)=="gene.name")
 	# Columns that should be character mode
 	character.columns <- c(1,which.is.gene.name.column)
+	# Set the mode to numeric for those columns that should be character
+	tempMatrix[, character.columns] <- sapply(tempMatrix[, character.columns], as.character)
 	# Columns that should be numeric mode
-	numeric.columns   <- setdiff(1:ncol(tempMatrix.all),character.columns)
+	numeric.columns   <- setdiff(1:ncol(tempMatrix),character.columns)
 	# Set the mode to numeric for those columns that should be numeric
-	tempMatrix.all[, numeric.columns] <- sapply(tempMatrix.all[, numeric.columns], as.numeric)
-
-	tempMatrix.all[,1]             <- all.loci
-	tempMatrix.all[,"gene.name"]   <- gsub("gene=","",gene.names.all)
-	tempMatrix.all[,"num.Species"] <- sapply(temp.seqs.all,length)
+	tempMatrix[, numeric.columns] <- sapply(tempMatrix[, numeric.columns], as.numeric)
+	### Set column 1 to 
+	tempMatrix[,1]             <- all.loci
+	tempMatrix[,"gene.name"]   <- gsub("gene=","",gene.names.all)
+	tempMatrix[,"num.Species"] <- sapply(temp.seqs,length)
 	### Will be the same for all species because intersect.all function was used.
-	### This currently only considers tempMatrix and not tempMatrix.all
-	tempMatrix   <- tempMatrix.all
-	temp.seqs    <- temp.seqs.all
-	loci.lengths <- loci.lengths.all
+	### This currently only considers tempMatrix and not tempMatrix
 	for(i in c(i.start:i.stop)) {
 		### Make an alignment for ith locus if more than one sequence in ith DNAStringSet
-		if (as.numeric(tempMatrix[i,"num.Species"])>1){
+		if (tempMatrix[i,"num.Species"]>1){
 			### aligns the ith locus of each species
 #			alignment.temp              <- REEs::mafft(temp.seqs[[i]],param="--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6")
 			alignment.temp              <- REEs::mafft(temp.seqs[[i]],param=mafft.params)
@@ -167,7 +168,8 @@ makeStatsTable <- function(input.seqs,species.names,reference.species,input.gff,
 			alignment.width             <- width(alignment.temp)[1]
 			### pairwise matrix of absolute genetic distance
 			distances                   <- 100*as.matrix(ape::dist.dna(ape::as.DNAbin(alignment.temp),model="raw",pairwise.deletion=T))
-			### Alternative method for calculating genetic distances. Doesnt seem any faster than the ape method.
+			### Dont use Biostrings::stringDist method for calculating genetic distances because it doesnt allow for pairwise deletions. If it did then the "hamming" method would be the same as ape's "raw" method.
+			# Biostrings::stringDist pairwise applies Biostrings::neditStartingAt.
 			# distances <- (100*(Biostrings::stringDist(alignment.temp)/alignment.width))
 			### pairwise matrix of percent genetic identity
 			pident                      <- round(100-distances,digits=2)
@@ -180,7 +182,7 @@ makeStatsTable <- function(input.seqs,species.names,reference.species,input.gff,
 				tempMatrix[i,(7:(length(species)+6))[!species %in% names(alignment.temp)]] <- NA
 			}
 		}
-		if (as.numeric(tempMatrix[i,"num.Species"]) > 3){
+		if (tempMatrix[i,"num.Species"] > 3){
 			# Counts the number of sites of ith locus with at least 4 individuals with non-missing data
 			count.cover <- width(filter.alignment(alignment=alignment.temp,treat.ambiguous.as.missing=T,min.allele.freqs.dna=c(4,0,0,0)))[1]
 		} else {
@@ -202,7 +204,7 @@ makeStatsTable <- function(input.seqs,species.names,reference.species,input.gff,
 		tempMatrix[i,"alignment.width"] <- alignment.width
 		### Calculates the mean number of variable sites; this value isnt used later
 		mean.var.sites      <- round(((100-as.numeric(mean.pident))/100)*as.numeric(loci.lengths[i]),digits=2)
-		 ### Minimum pident of any species to the primary species for ith locus (excluding species without data)
+		### Minimum pident of any species to the primary species for ith locus (excluding species without data)
 		min.pident.all      <- round(min(as.numeric(tempMatrix[i,(7:(length(species)+6))[species %in% names(alignment.temp)]])),digits=2)
 		### Minimum pident of any species in the subgroup to the primary species for ith locus.
 		if(all(subgroup %in% species)){
@@ -224,7 +226,8 @@ makeStatsTable <- function(input.seqs,species.names,reference.species,input.gff,
 	if(delete){
 		file.remove(output.path)
 	}
-	tempMatrix
+	result <- data.table::as.data.table(tempMatrix)
+	result
 }
 #' @examples
 #' 
@@ -302,21 +305,6 @@ makeStatsTable <- function(input.seqs,species.names,reference.species,input.gff,
 #' ### Align homologous sequences and make a stats table to summarizing variation in each alignment (one row per aligned locus).
 #' input.seqs.paths <- .... ### paths to the "best.hits.seqs" files
 #' stats.table      <- makeStatsTable(input.seqs=input.seqs.paths,species=species.temp,input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp,output.path=table.out,alignments.out=alignments.dir,reference.species=10)
-
-
-##' @title Organize Sequences By Locus
-##' 
-##' Internal function used in makeStatsTable function.
-##' This function converts a list of DNAStringSets that each hold sequences for a different individual to list of DNAStringSets that each hold orthologous sequences from different individuals.
-##' 
-##' @param species.seqs 
-##' @param index.matrix A numeric mode matrix with as many rows as species' DNAStringSets in species.seqs, and as many columns as the union set of loci among all species. Values indicate which sequence of the species' DNAStringSet is the sequence for the locus of that column. NA values indicate that missing data for the species at that locus.
-##' @return A list of of DNAStringSets. The ith DNAStringSet holds sequences for the ith locus (ith column of the index.matrix).
-##' @export organize.seqs.by.locus
-#organize.seqs.by.locus <- function(species.seqs,index.matrix){
-#	num.loci <- 1:ncol(index.matrix)
-#	lapply(X=1:num.loci,FUN=function(i){do.call(c,mapply(FUN=function(A,B){C=B[which(!is.na(B))]; A[C]}, A=species.seqs, B=as.list(index.matrix[,i])))})
-#}
 
 #' @title Align and Concatenate REEs
 #' 

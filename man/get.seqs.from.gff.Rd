@@ -12,16 +12,16 @@ get.seqs.from.gff(
 )
 }
 \arguments{
-\item{input.seqs}{Character string indicating the local or URL path to input sequences.}
+\item{input.seqs}{Character string with either the local path or URL to fasta formatted sequences. File can be .gz compressed.}
 
-\item{input.gff}{Either a data table object, or character string  or local path to the filtered gff containing the the loci of interest.}
+\item{input.gff}{One of the following: An object of class data table, data.frame, or character matrix, with columns identical to those used in Generic Feature Format (GFF) tables; or, a character string with local file path to either a GFF file or table with columns identical to those used in GFF files; or, a character string with URL path to a GFF file.}
 
-\item{output.path}{Path where exomes should be saved (default is NULL).}
+\item{output.path}{Character string with path where sequences should be saved (default is NULL).}
 
-\item{additional.ID}{Filename of a table that cross-references contig names to names in GFF file (default is NULL).}
+\item{additional.ID}{One of the following: NULL (the default, and usually what you want to use); or, a character string with local filepath to a two-column table with contig names in GFF and sequence file, respectively. Usually, contig names are already the same in GFF and sequence files, but this argument can be useful if you renamed contigs in either the GFF or sequence file.}
 }
 \value{
-DNAStringSet with sequences corresponding to unique ranges in input.gff; sequences are written to output.file in fasta format if output.path is not NULL.
+DNAStringSet object with sequences corresponding to unique ranges in input.gff; sequences are written to output.file in fasta format if output.path is a character string.
 }
 \description{
 Identical to the function get.exome.from.gff, but used more generally.

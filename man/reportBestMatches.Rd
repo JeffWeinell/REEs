@@ -13,16 +13,16 @@ reportBestMatches(
 )
 }
 \arguments{
-\item{input.table}{Path to the input hit table of matches, or, a data.table object.}
+\item{input.table}{Character string with path BLAST hit table, or, a BLAST hit table held as an object of class data.table, data.frame, or matrix.}
 
-\item{output.table.path}{Where to save the output table of best matches (default is NULL).}
+\item{output.table.path}{Character to string with path where output table should be saved; default is NULL.}
 
-\item{remove.subseq.matches}{Whether or not to drop matches for which the subject sequence is a subsequence of another match. Default is FALSE.}
+\item{remove.subseq.matches}{Logical with whether or not to drop matches for which the subject sequence is a subsequence of another match. Default is FALSE.}
 
-\item{min.bitscore}{Minimum bitscore required for the best match. Matches with a bitscore below this value are not included in the output table. This is useful for removing paralog matches. Default = 50.
+\item{min.bitscore}{Number indicating the minimum bitscore required to keep the best match. Matches with a bitscore below this value are not included in the output table. This is useful for removing paralog matches. Default = 50.
 The reason for using a default min.bitscore of 50 is because values at or greater than this usually indicate that the sequences are homologous (doi: 10.1002/0471250953.bi0301s42).}
 
-\item{min.bitscore.difference}{The difference between the best and second best matches' bitscore must be greater than this value to keep matches for the query sequence. Default = 0. This is useful for removing loci with putatitive recent duplicates in the genome.}
+\item{min.bitscore.difference}{Number indicating the minimum difference required between bitscores of the best and second best matches; must be greater than this value to keep matches for the query sequence. Default = 0. This is useful for removing loci with putatitive recent duplicates in the genome.}
 }
 \value{
 A data.table object containing the best matche to each input query in the input blast table. If output.table.path argument is a path (character string), then the function also writes the output as a tab-separated file.

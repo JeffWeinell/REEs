@@ -124,5 +124,5 @@ Viperus.berus.best.hits.seqs                <- get.seqs.from.blastTable(input.bl
 
 ### Align homologous sequences and make a stats table to summarizing variation in each alignment (one row per aligned locus).
 input.seqs.paths <- .... ### paths to the "best.hits.seqs" files
-stats.table      <- makeStatsTable(input.seqs=input.seqs.paths,species=species.temp,input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp,output.path=table.out,alignments.out=alignments.dir,species.gff=10)
+stats.table      <- makeStatsTable(input.seqs=input.seqs.paths,species=species.temp,input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp,output.path=table.out,alignments.out=alignments.dir,reference.species=10)
 }

@@ -4,12 +4,10 @@
 \alias{load.gff}
 \title{Read a General Feature Format (GFF) file}
 \usage{
-load.gff(input, local = TRUE)
+load.gff(input.gff)
 }
 \arguments{
-\item{input}{A character string giving the path to the GFF file. If input is a URL then local must be FALSE.}
-
-\item{local}{Whether or not input is a path to a local file (default is TRUE). If set to FALSE, then the function treats input as URL.}
+\item{input.gff}{One of the following: An object of class data table, data.frame, or character matrix, with columns identical to those used in Generic Feature Format (GFF) tables; or, a character string with local file path to either a GFF file or table with columns identical to those used in GFF files; or, a character string with URL path to a GFF file.}
 }
 \value{
 A data table object containing the GFF feature rows. Incomplete feature rows are dropped.
