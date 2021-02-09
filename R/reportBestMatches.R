@@ -13,7 +13,7 @@
 #' @param min.bitscore.difference Number indicating the minimum difference required between bitscores of the best and second best matches; must be greater than this value to keep matches for the query sequence. Default = 0. This is useful for removing loci with putatitive recent duplicates in the genome.
 #' @return A data.table object containing the best matche to each input query in the input blast table. If output.table.path argument is a path (character string), then the function also writes the output as a tab-separated file.
 #' @export reportBestMatches
-reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq.matches=T, min.bitscore=50, min.bitscore.difference=0){
+reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq.matches=F, min.bitscore=50, min.bitscore.difference=0){
 	## Coerce input.table to a data frame object if it is a data.table or matrix object
 	if(is(input.table,"data.table") | is(input.table,"matrix")){
 		all.matches <- as.data.frame(input.table)
@@ -40,10 +40,23 @@ reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq
 		filtered.matches <- all.matches
 	}
 	# Sort rows, first by decreasing qseqid and then by decreasing bitscore
-	matches.ordered  <- filtered.matches[with(filtered.matches, order(filtered.matches$qseqid, filtered.matches$bitscore, decreasing=T)),]
+	matches.ordered    <- filtered.matches[with(filtered.matches, order(filtered.matches[,"qseqid"], filtered.matches[,"bitscore"], decreasing=T)),]
 	# Remove rows (matches) if the match is a subsequence of another match.
 	if(remove.subseq.matches){
-		matches.list        <- split(matches.ordered,by=c("qseqid","sseqid"))
+		### argument "split" reguires that qseqid and sseqid columns are mode factor, not mode character.
+		# Set mode of qseqid and sseqid columns to factor
+		# matches.ordered[, c("qseqid","sseqid")] <- sapply(matches.ordered[, c("qseqid","sseqid")], as.factor)
+		# The next line will take a few minutes to complete. It creates a list of data frames. Each data frame includes the rows of matches.ordered for a particular qseqid-sseqid pair.
+#		matches.list        <- split(matches.ordered,f=list(matches.ordered$qseqid, matches.ordered$sseqid))
+		### Create two column data.frame containing unique pairs from matches.ordered$qseqid and matches.ordered$sseqid
+		query.subject.pairs <- dplyr::distinct(matches.ordered[,c("qseqid","sseqid")])
+		# The next line will take a few minutes to complete. It creates a list of data frames. Each data frame includes the rows of matches.ordered for a particular qseqid-sseqid pair.
+#		matches.list        <- lapply(X=1:nrow(query.subject.pairs),FUN=function(i){ matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]})
+		matches.list <- list(); length(matches.list) <- nrow(query.subject.pairs)
+		for(i in 1:nrow(query.subject.pairs)){
+			matches.list[[i]] <- matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]
+		}
+		# May be a good idea to do the next two lines on matches.ordered, rather than on matches.list
 		min.list            <- lapply(matches.list,FUN=function(x){apply(X=x[,c("sstart","send")],MARGIN=1,FUN=min)})
 		max.list            <- lapply(matches.list,FUN=function(x){apply(X=x[,c("sstart","send")],MARGIN=1,FUN=max)})
 		### Create an IRangesList object that is essentially a list of IRanges objects.
@@ -53,7 +66,7 @@ reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq
 		### A list of numerical vectors. Each vector contains the rows to drop for the corresponding entry of matches.list
 		remove.rows.list    <- lapply(drop.hits,FUN=function(x){unique(as.matrix(x)[,1])})
 		### function1 drops the rows in B from a table A as long as B is not empty.
-		function1 <- function(A,B){if(length(B)>0){A[-B,]} else{A}}
+		function1           <- function(A,B){if(length(B)>0){A[-B,]} else{A}}
 		### Next line finally performs the filter step
 		filtered.matches.ordered.temp  <- t(as.list(mapply(FUN=function1,A=matches.list,B=remove.rows.list)))
 		### Next set of lines (until colnames) is getting organizing the data into the correct format
@@ -61,12 +74,23 @@ reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq
 		for(i in 1:ncol(filtered.matches.ordered.temp)){
 			filtered.matches.ordered.temp2[[i]] <- unlist(filtered.matches.ordered.temp[,i])
 		}
-		filtered.matches.ordered           <- data.table::as.data.table(do.call(cbind,filtered.matches.ordered.temp2))
+		#filtered.matches.ordered           <- data.table::as.data.table(do.call(cbind,filtered.matches.ordered.temp2))
+		filtered.matches.ordered           <- as.data.frame(do.call(cbind,filtered.matches.ordered.temp2))
 		colnames(filtered.matches.ordered) <- colnames(matches.ordered)
+		##### Set column modes
+		# Set which columns should be mode numeric
+		numeric.columns <- c(3:12)
+		# Set mode to numeric for those columns that should be numeric
+		filtered.matches.ordered[, numeric.columns] <- sapply(filtered.matches.ordered[, numeric.columns], as.numeric)
+		# Set which columns should be mode character
+		character.columns <- c(1:2)
+		# Set mode to "character" for the columns indexed in the character.columns vector
+		filtered.matches.ordered[, character.columns] <- sapply(filtered.matches.ordered[, character.columns], as.character)
 	} else {
 		filtered.matches.ordered <- matches.ordered
 	}
 	### Report the best and second best matches.
+#	best.matches          <- as.numeric(match(unique(filtered.matches.ordered$qseqid), filtered.matches.ordered$qseqid))
 	best.matches          <- as.numeric(match(unique(filtered.matches.ordered$qseqid), filtered.matches.ordered$qseqid))
 	best.data             <- filtered.matches.ordered[best.matches,]
 	if(min.bitscore.difference!=0){

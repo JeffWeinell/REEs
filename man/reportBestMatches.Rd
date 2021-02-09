@@ -7,7 +7,7 @@
 reportBestMatches(
   input.table,
   output.table.path = NULL,
-  remove.subseq.matches = T,
+  remove.subseq.matches = F,
   min.bitscore = 50,
   min.bitscore.difference = 0
 )
