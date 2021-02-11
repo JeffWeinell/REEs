@@ -18,11 +18,12 @@
 #' @param output.format Integer indicating which format to use for the output table of matches (default 6).
 #' @param max.targets.per.query Integer indicating the maximum number of targets (subject contigs) containing a match per query sequence. This sets the BLAST's max_target_seqs argument. Importantly, this argument does not control the total number of matches per query, because multiple matches may occer on the same subject contig.
 #' @param max.matches.per.target Integer indicating the maximum number of matches per target (subject contig) per query. This sets BLAST's max_hsps argument. To determine the maximum total number of matches per query, multiply max.targets.per.query by max.matches.per.target.
+#' @param parallel.groups  Number of groups to split the query sequences into for running in parallel. This is experimental.
 #' @param num.threads Either an integer indicating how many threads to use, or "max" (default), in which case num.threads is set to the number of cores available.
 #' @param other.args A character string of the form "-argument1 value1 -argument2 value2" with additional arguments and values to pass to BLAST. See BLAST manual for definitions of available arguments. Default is NULL.
 #' @return Table of matches.
 #' @export blast
-blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-5,output.format=6,max.targets.per.query=10,max.matches.per.target=10,num.threads="max",other.args=NULL){
+blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-5,output.format=6,max.targets.per.query=10,max.matches.per.target=10,parallel.groups=NULL,num.threads="max",other.args=NULL){
 	#### Prepare the path to the executables
 	if(blast.path=="auto"){
 		REEs.blast.dir   <- paste0(find.package("REEs"),"/blast-mafft/blast")
@@ -73,21 +74,55 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 	}
 	#### Make a temporary fasta file holding the query sequences if the value of the query argument is a DNAStringSet or URL string.
 	if("DNAStringSet" %in% class(query)){
-		query.path <- tempfile()
+		query.path   <- tempfile()
 		names(query) <- mgsub(c(" ",","),c("_","_"),names(query))
 		names(query) <- substring(names(query),first=1,last=50)
-		Biostrings::writeXStringSet(x = query, filepath=query.path, append=F, format="fasta")
-		delete.query <- T
+		if(is.null(parallel.groups)){
+			Biostrings::writeXStringSet(x = query, filepath=query.path, append=F, format="fasta")
+			delete.query <- T
+		} else {
+			temp.file <- list()
+			length(temp.file) <- parallel.groups
+			out.files.temp    <- temp.file
+			for(i in 1:parallel.groups){
+				temp.file[[i]]      <- tempfile()
+				out.files.temp[[i]] <- tempfile()
+			}
+			temp.file      <- unlist(temp.file)
+			out.files.temp <- unlist(out.files.temp)
+			groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))
+			query.groups   <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})
+			for(i in 1:parallel.groups){
+				Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")
+			}
+		}
 	} else {
 		if(file.exists(query)){
-			query.path   <- query
+			query.path     <- query
 			query.obj.temp <- Biostrings::readDNAStringSet(query.path)
 			if(any(nchar(unlist(names(query.obj.temp)))>50) | any(!is.na(stringr::str_locate(unlist(names(query.obj.temp))," ")))){
 				query.path <- tempfile()
 				names(query.obj.temp) <- mgsub(c(" ",","),c("_","_"),names(query.obj.temp))
 				names(query.obj.temp) <- substring(names(query.obj.temp),first=1,last=50)
-				Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path, append=F, format="fasta")
-				delete.query <- T
+				if(is.null(parallel.groups)){
+					Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path, append=F, format="fasta")
+					delete.query <- T
+				} else {
+					temp.file <- list()
+					length(temp.file) <- parallel.groups
+					out.files.temp <- temp.file
+					for(i in 1:parallel.groups){
+						temp.file[[i]]      <- tempfile()
+						out.files.temp[[i]] <- tempfile()
+					}
+					temp.file      <- unlist(temp.file)
+					out.files.temp <- unlist(out.files.temp)
+					groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))
+					query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})
+					for(i in 1:parallel.groups){
+						Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")
+					}
+				}
 				rm(query.obj.temp)
 			} else{
 				rm(query.obj.temp)
@@ -101,8 +136,25 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			query.obj.temp        <- Biostrings::readDNAStringSet(query.path)
 			names(query.obj.temp) <- mgsub(c(" ",","),c("_","_"),names(query.obj.temp))
 			names(query.obj.temp) <- substring(names(query.obj.temp),first=1,last=50)
-			Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path, append=F, format="fasta")
-			delete.query <- T
+			if(is.null(parallel.groups)){
+				Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path, append=F, format="fasta")
+				delete.query <- T
+			} else {
+				temp.file <- list()
+				length(temp.file) <- parallel.groups
+				out.files.temp <- temp.file
+				for(i in 1:parallel.groups){
+					temp.file[[i]]      <- tempfile()
+					out.files.temp[[i]] <- tempfile()
+				}
+				temp.file      <- unlist(temp.file)
+				out.files.temp <- unlist(out.files.temp)
+				groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))
+				query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})
+				for(i in 1:parallel.groups){
+					Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")
+				}
+			}
 			rm(query)
 		}
 	}
@@ -127,10 +179,22 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 		num.threads <- parallel::detectCores()
 	}
 	### Run blast!!
-	command <- paste(blast.exe.path,"-db",subject.path,"-query",query.path,"-out",output.path,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
-	system(command,wait=T)
-	# Need to find a way to check if the analysis is complete before doing things from here onward.
-	result <- data.table::fread(output.path)
+	if(is.null(parallel.groups)){
+		command <- paste(blast.exe.path,"-db",subject.path,"-query",query.path,"-out",output.path,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
+		system(command,wait=T)
+		# Need to find a way to check if the analysis is complete before doing things from here onward.
+		result <- data.table::fread(output.path)
+	} else {
+		command.all <- list(); length(command.all) <- parallel.groups
+		for(i in 1:parallel.groups){
+			command.all[[i]] <- paste(blast.exe.path,"-db",subject.path,"-query",temp.file[[i]],"-out",out.files.temp[[i]],"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
+		}
+		### Run all commands in command.all, which are separated by " & " to allow for parallelization.
+		command <- gsub(" & $","",paste0(paste0(unlist(command.all)," & "),collapse=""))
+		system(command, wait=T)
+		### Read each of the output hit tables and then merge them into one.
+		result <- do.call(rbind,lapply(out.files.temp,FUN=data.table::fread))
+	}
 	if(output.format==6){
 		colnames(result) <- c("qseqid","sseqid","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore")
 	}
