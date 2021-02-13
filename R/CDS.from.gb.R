@@ -22,8 +22,6 @@
 #'    A vector of short names for the 10 elements of the output: "CDS StringSet","Target AA StringSet","Full AA StringSet","duplicate target names","targets not in Genbank flatfile","targets without CDS annotation","targets with short CDS annotation","multiple translation frames","no matching translation frames","result names".
 #'  @export 
 CDS.from.gb            <- function(gb.object,targetTable.object,output.filename=NA,report.noCDS=TRUE){
-	
-	translate               <- Biostrings::translate ### needed to because multiple libraries have a translate function
 	gbData                  <- gb.object
 	loci.gb                 <- gsub("\\.\\.","-",names(gbData))  ### GenBank accession ID plus start and end region
 	targetTable             <- targetTable.object
@@ -91,7 +89,7 @@ CDS.from.gb            <- function(gb.object,targetTable.object,output.filename=
 			cds.RC.f3         <- XVector::subseq(x=reverseComplement(CDS.temp),start=3)
 			cds.frames        <- Biostrings::DNAStringSet(c(cds.f1,cds.f2,cds.f3,cds.RC.f1,cds.RC.f2,cds.RC.f3))
 			
-			aa.frames         <- suppressWarnings(translate(cds.frames,no.init.codon=T,if.fuzzy.codon="solve"))
+			aa.frames         <- suppressWarnings(Biostrings::translate(cds.frames,no.init.codon=T,if.fuzzy.codon="solve"))
 			aa.frames         <- Biostrings::AAStringSet(gsub(pattern="\\*","X",aa.frames))
 			### Removes potential stop codon from search
 			aa.frames         <- XVector::subseq(aa.frames,start=1,end=(width(aa.frames)-1))

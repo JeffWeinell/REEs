@@ -149,9 +149,9 @@ Lacerta.viridis.genome_url         <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/
 Load GFF tables. Count number of scaffolds and number of CDS and genes annotated. Choose which species will be the reference species.
 ```
 ### Load GFF
-Podarcis.muralis_GFF  <- load.gff(input=Podarcis.muralis_GFF.url,local=F)
-Lacerta.agilis_GFF    <- load.gff(input=Lacerta.agilis_GFF.url,local=F)
-Zootoca.vivipara_GFF  <- load.gff(input=Zootoca.vivipara_GFF.url,local=F)
+Podarcis.muralis_GFF  <- load.gff(Podarcis.muralis_GFF.url)
+Lacerta.agilis_GFF    <- load.gff(Lacerta.agilis_GFF.url)
+Zootoca.vivipara_GFF  <- load.gff(Zootoca.vivipara_GFF.url)
 
 ### Number of scaffolds
 length(unique(Podarcis.muralis_GFF$seqid))  # Result = 2,161
