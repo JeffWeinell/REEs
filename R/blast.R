@@ -24,6 +24,26 @@
 #' @return Table of matches.
 #' @export blast
 blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-5,output.format=6,max.targets.per.query=10,max.matches.per.target=10,parallel.groups=NULL,num.threads="max",other.args=NULL){
+	
+	#### Path to output table(s)
+	if(is.null(table.out)){
+		output.path  <- tempfile()
+		delete.table <- T
+		if(!is.null(parallel.groups)){
+			out.files.temp    <- list()
+			length(out.files.temp) <- parallel.groups
+			for(i in 1:parallel.groups){
+				out.files.temp[[i]] <- tempfile()
+			}
+			out.files.temp <- unlist(out.files.temp)
+		}
+	} else {
+		output.path  <- table.out
+		delete.table <- F
+		if(!is.null(parallel.groups)){
+			out.files.temp  <- paste0(tools::file_path_sans_ext(table.out),"_",c(1:parallel.groups),".tsv")
+		}
+	}
 	#### Prepare the path to the executables
 	if(blast.path=="auto"){
 		REEs.blast.dir   <- paste0(find.package("REEs"),"/blast-mafft/blast")
@@ -83,13 +103,13 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 		} else {
 			temp.file <- list()
 			length(temp.file) <- parallel.groups
-			out.files.temp    <- temp.file
+			#out.files.temp    <- temp.file
 			for(i in 1:parallel.groups){
 				temp.file[[i]]      <- tempfile()
-				out.files.temp[[i]] <- tempfile()
+			#	out.files.temp[[i]] <- tempfile()
 			}
 			temp.file      <- unlist(temp.file)
-			out.files.temp <- unlist(out.files.temp)
+			#out.files.temp <- unlist(out.files.temp)
 			groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))
 			query.groups   <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})
 			for(i in 1:parallel.groups){
@@ -110,13 +130,13 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 				} else {
 					temp.file <- list()
 					length(temp.file) <- parallel.groups
-					out.files.temp <- temp.file
+					#out.files.temp <- temp.file
 					for(i in 1:parallel.groups){
 						temp.file[[i]]      <- tempfile()
-						out.files.temp[[i]] <- tempfile()
+						#out.files.temp[[i]] <- tempfile()
 					}
 					temp.file      <- unlist(temp.file)
-					out.files.temp <- unlist(out.files.temp)
+					#out.files.temp <- unlist(out.files.temp)
 					groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))
 					query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})
 					for(i in 1:parallel.groups){
@@ -142,13 +162,13 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			} else {
 				temp.file <- list()
 				length(temp.file) <- parallel.groups
-				out.files.temp <- temp.file
+				#out.files.temp <- temp.file
 				for(i in 1:parallel.groups){
 					temp.file[[i]]      <- tempfile()
-					out.files.temp[[i]] <- tempfile()
+					#out.files.temp[[i]] <- tempfile()
 				}
 				temp.file      <- unlist(temp.file)
-				out.files.temp <- unlist(out.files.temp)
+				#out.files.temp <- unlist(out.files.temp)
 				groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))
 				query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})
 				for(i in 1:parallel.groups){
@@ -157,14 +177,6 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			}
 			rm(query)
 		}
-	}
-	#### Create a path to hold a temporary output table
-	if(is.null(table.out)){
-		output.path  <- tempfile()
-		delete.table <- T
-	} else {
-		output.path  <- table.out
-		delete.table <- F
 	}
 	#### Vector of file extensions that should be present if a local database has been created to query against.
 	DB.extensions        <- c(".nog",".nsq",".nhr",".nin")
@@ -202,16 +214,16 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 		all.matches <- write.table(x=result,file=table.out,sep="\t",quote=F,col.names=T,row.names=F)
 	}
 	### Delete the temporary files
-	if(delete.subject){
-		file.remove(subject.path)
-		file.remove(expected.db.files)
-	}
-	if(delete.query){
-		file.remove(query.path)
-	}
-	if(delete.table){
-		file.remove(output.path)
-	}
+	#if(delete.subject){
+	#	file.remove(subject.path)
+	#	file.remove(expected.db.files)
+	#}
+	#if(delete.query){
+	#	file.remove(query.path)
+	#}
+	#if(delete.table){
+	#	file.remove(output.path)
+	#}
 	result
 }
 #' @examples
