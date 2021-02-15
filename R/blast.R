@@ -222,7 +222,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 #		}
 		command.all <- paste(blast.exe.path,"-db",subject.path,"-query",temp.file,"-out",out.files.temp,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
 		for(i in 1:parallel.groups){
-			system(command.all[i],wait=F)
+			system(command.all[i],wait=F,timeout=172800)
 			start.time.command.i <- Sys.time()
 			print(paste(i,Sys.time()))
 			### While the ith output file is missing or is empty (zero bytes), and less than 5 minutes has elapsed since beginning to blast the ith group, wait 10 more seconds.
