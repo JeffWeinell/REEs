@@ -20,10 +20,11 @@
 #' @param max.matches.per.target Integer indicating the maximum number of matches per target (subject contig) per query. This sets BLAST's max_hsps argument. To determine the maximum total number of matches per query, multiply max.targets.per.query by max.matches.per.target.
 #' @param parallel.groups  Number of groups to split the query sequences into for running in parallel. This is experimental.
 #' @param num.threads Either an integer indicating how many threads to use, or "max" (default), in which case num.threads is set to the number of cores available.
+#' @param max.runtime Maximum number of minutes to run blast before quitting. Default is 2,880 (48 hours). You may need to increase this.
 #' @param other.args A character string of the form "-argument1 value1 -argument2 value2" with additional arguments and values to pass to BLAST. See BLAST manual for definitions of available arguments. Default is NULL.
 #' @return Table of matches.
 #' @export blast
-blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-5,output.format=6,max.targets.per.query=10,max.matches.per.target=10,parallel.groups=NULL,num.threads="max",other.args=NULL){
+blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-5,output.format=6,max.targets.per.query=10,max.matches.per.target=10,parallel.groups=NULL,num.threads="max",max.runtime=2880,other.args=NULL){
 	#### Path to output table(s)
 	if(is.null(table.out)){
 		output.path  <- tempfile()
@@ -222,7 +223,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 #		}
 		command.all <- paste(blast.exe.path,"-db",subject.path,"-query",temp.file,"-out",out.files.temp,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
 		for(i in 1:parallel.groups){
-			system(command.all[i],wait=F,timeout=172800)
+			system(command.all[i],wait=F,timeout=(as.numeric(max.runtime)*60))
 			start.time.command.i <- Sys.time()
 			print(paste(i,Sys.time()))
 			### While the ith output file is missing or is empty (zero bytes), and less than 5 minutes has elapsed since beginning to blast the ith group, wait 10 more seconds.
@@ -255,8 +256,8 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 		# Wait 1800 seconds (30 minutes), take a time stamp, and then enter the while loop if any file sizes have changed.
 		system("sleep 1800",wait=T)
 		start.time.i <- Sys.time()
-		### Every 1800 seconds, check if any file sizes have changed. If so, wait 1800 more seconds, unless the total time spent in the loop exceeds 48hrs (2,880 minutes). If none of the file sizes change, exit the loop because the analysis is assumed to be done.
-		while(all(file.size(out.files.temp)!= file.sizes.temp) & (as.numeric(difftime(Sys.time(),start.time.i,units="mins")) < 2880)){
+		### Every 1800 seconds, check if any file sizes have changed. If so, wait 1800 more seconds, unless the total time spent in the loop exceeds the numbr of minutes indicated by the max.runtime argument. If none of the file sizes change, exit the loop because the analysis is assumed to be done.
+		while(all(file.size(out.files.temp)!= file.sizes.temp) & (as.numeric(difftime(Sys.time(),start.time.i,units="mins")) < as.numeric(max.runtime))){
 			file.sizes.temp <- file.size(out.files.temp)
 			system("sleep 1800",wait=T)
 			print(paste("file.sizes:",file.sizes.temp,"elapsed time:",round(as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")),digits=3),"min"))
