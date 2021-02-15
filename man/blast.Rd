@@ -20,6 +20,7 @@ blast(
   max.matches.per.target = 10,
   parallel.groups = NULL,
   num.threads = "max",
+  max.runtime = 2880,
   other.args = NULL
 )
 }
@@ -50,6 +51,8 @@ If DNAStringSet or URL character string, a local copy will be saved as a tempora
 \item{parallel.groups}{Number of groups to split the query sequences into for running in parallel. This is experimental.}
 
 \item{num.threads}{Either an integer indicating how many threads to use, or "max" (default), in which case num.threads is set to the number of cores available.}
+
+\item{max.runtime}{Maximum number of minutes to run blast before quitting. Default is 2,880 (48 hours). You may need to increase this.}
 
 \item{other.args}{A character string of the form "-argument1 value1 -argument2 value2" with additional arguments and values to pass to BLAST. See BLAST manual for definitions of available arguments. Default is NULL.}
 }
