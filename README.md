@@ -185,9 +185,11 @@ You may need to experiment with the values of these parameters. One strategy is 
 For this example, I initially used -max_hsps unlimited, max.matches.per.query=50, and eval=1e-05, but these analyses never finished running and the output files had grown to > 5Gb. Tweaking the parameters to those shown below seemed appropriate, and bitscores were usually high for only the top one to a few matches.
 It is a good idea to consult the [BLAST Help Manual](https://www.ncbi.nlm.nih.gov/books/NBK279690/) for a variety of strategies for searching with BLAST. [This table](https://www.ncbi.nlm.nih.gov/books/NBK279684/) of arguments is also useful.
 
+**Important**: I strongly suggest that you don't run this locally, unless you have a A LOT of RAM.
+
 <!---Running with eval=1e-18,max.matches.per.query=7,other.args="-best_hit_overhang 0.1 -best_hit_score_edge 0.1" did not work to keep only the best match per contig pair.--->
 ```
-# Run TBLASTX. I recommend using a bash script and submitting each of these individually to run on a cluster. This will likely take days to run.
+# Run TBLASTX. I strongly recommend using a bash script and submitting each of these individually to run on a high performance computing cluster. This will likely take days to run.
 Podarcis.muralis.hits        <- REEs::blast(method="tblastx",subject=Podarcis.muralis.genome_url,query=Lacerta.agilis_exome[1:2],table.out=paste0(working.dir,"/Podarcis.muralis.tblastx.exons.hits.txt"),max.targets.per.query=10,max.matches.per.target=10,eval=1e-15)
 Lacerta.agilis.hits          <- REEs::blast(method="tblastx",subject=Lacerta.agilis.genome_url,query=Lacerta.agilis_exome,table.out=paste0(working.dir,"/Lacerta.agilis.tblastx.exons.hits.txt"),max.targets.per.query=10,max.matches.per.target=10,eval=1e-15)
 Zootoca.vivipara.hits        <- REEs::blast(method="tblastx",subject=Zootoca.vivipara.genome_url,query=Lacerta.agilis_exome,table.out=paste0(working.dir,"/Zootoca.vivipara.tblastx.exons.hits.txt"),max.targets.per.query=10,max.matches.per.target=10,eval=1e-15)
