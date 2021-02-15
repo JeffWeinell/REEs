@@ -27,8 +27,8 @@ Load R and then run the block of code below. Uncomment and modify the .libPaths(
 ```
 # Define where packages should be installed.
 # If you want to install or load packages from somewhere other than the default R library path, set .libPaths() to the directory to use. This must be set each time you start R.
-.libPaths("/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv3.6")
-#.libPaths("/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv4.0")
+# .libPaths("/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv3.6")
+.libPaths("/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv4.0")
 
 # Install BiocManager package
 install.packages(pkgs="BiocManager",repos = "http://cran.us.r-project.org")
@@ -98,25 +98,23 @@ Functions in REEs Pipeline. To see usage details for each function type ```?REEs
 
 In this example we will identify REEs for the diverse lizard clade [Laterata](https://en.wikipedia.org/wiki/Lacertoidea) (aka Lacertoidea, which includes the Amphisbaenia, Gymnophthalmidae, Lacertidae, and Teiidae). Genomes are available on NCBI for five species of Lacertidae (we will use three of these) and two species of Teiidae. GFF tables are available for three species of Lacertidae: *Lacerta agilis*, *Podarcis muralis*, *Zootoca vivipara*; before we decide which of these three species will be the reference species we will query their GFF tables to get an idea about the quality of the genome and annotation completeness.
 
-Load REEs, define working directory and define the URLs to genomes and GFF tables.
+Load REEs, define working directory, and define the paths/URLs to genomes and GFF tables.
 ```
-### Define R package directory, tempfile directory, and set R library paths variable each time you restart R.
-packages.dir <- .libPaths() # Change this if you installed packages somewhere else.
-temp.dir     <- tempdir()   # This is probably redundant but doesn't hurt.
-.libPaths(c(packages.dir,temp.dir))
+## Set R library paths variable if REEs was installed to a non-default location.
+.libPaths("/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv4.0")
 
 ### Load REEs package
 library(REEs)
 
-### Set path to working directory where files will be saved.
+### Define path to working directory where files will be saved.
 working.dir <- "/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/REEs_example_output"
 
-### URL to GFF of reference species
+### URLs to GFF of reference species. You could use local paths instead.
 Podarcis.muralis_GFF.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.gff.gz"
 Lacerta.agilis_GFF.url   <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.gff.gz"
 Zootoca.vivipara_GFF.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/011/800/845/GCF_011800845.1_UG_Zviv_1/GCF_011800845.1_UG_Zviv_1_genomic.gff.gz"
 
-### URLs to genomes
+### URLs to genomes. You could use local paths instead.
 Podarcis.muralis.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.fna.gz"
 Lacerta.agilis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz"
 Zootoca.vivipara.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/011/800/845/GCF_011800845.1_UG_Zviv_1/GCF_011800845.1_UG_Zviv_1_genomic.fna.gz"
@@ -155,7 +153,7 @@ length(grep("CDS",Lacerta.agilis_GFF$type))     # Result = 504,650
 length(grep("CDS",Zootoca.vivipara_GFF$type))   # Result = 577,940
 
 ```
-We choose *L. agilis* to be the reference species because sequences are assembled onto fewer scaffolds, likely corresponding to chromosomes. However, *Podarcis muralis* would also be a good choice because it has the most annotate genes and CDS, and sequences are assembled onto relatively few scaffolds. You can work through this pipeline a second time using *P. muralis* as the reference species to compare the REEs selected to those selected using *L. agilis*.
+Choose *L. agilis* as the reference species because sequences are assembled onto fewer scaffolds (which in this case correspond to chromosomes). *Podarcis muralis* would also be a good choice because it has the most annotate genes and CDS, and sequences are assembled onto relatively few scaffolds. You can work through this pipeline a second time using *P. muralis* as the reference species to compare the REEs selected to those selected using *L. agilis*.
 
 Filter GFF table of the reference species. Extract and save sequences corresponding to regions in the filtered GFF.
 <!--- **Note:** I had to modify get.seqs.from.gff because ```contig.names  <- mat.strsplit(headers)[,1]``` will not work if sequence headers have different number of spaces present. I changed this line to ```contig.names  <- mat.strsplit(headers)[,1]```.--->
