@@ -24,7 +24,6 @@
 #' @return Table of matches.
 #' @export blast
 blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-5,output.format=6,max.targets.per.query=10,max.matches.per.target=10,parallel.groups=NULL,num.threads="max",other.args=NULL){
-	
 	#### Path to output table(s)
 	if(is.null(table.out)){
 		output.path  <- tempfile()

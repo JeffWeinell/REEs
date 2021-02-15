@@ -1,352 +1,3 @@
-IRanges::IRanges(start=base.to.mutate.i)
-seq.to.mutate <- sample(1:length(input.seqs),size=n.deletions,replace=T)#
-	# numerical vector indicating where each deletion will begin#
-	base.to.mutate <- sapply(X=width(input.seqs[seq.to.mutate]),FUN=function(x){sample(c(1:x),size=1)})#
-	# numerical vector indicating the length of each deletion#
-	length.deletions <- sample(c(min(length.lim):max(length.lim)),size=n.deletions,replace=T)#
-	### Character matrix with three rows and n.deletions columns; each column contains the three nucleotide bases that are different from the current one.#
-	### change.to.mat  <- mapply(FUN=function(A,B){setdiff(c("A","C","G","T"),subseq(input.seqs[A],start=B,width=1))},A=seq.to.mutate,B=base.to.mutate)#
-	### Characer vector indicating th#
-	# change.to.vect <- sapply(X=1:ncol(change.to.mat),FUN=function(x){sample(change.to.mat[,x],size=1)})#
-	### Add length.lim[2] "-" sites to the 3' end of each sequence in input.seqs, so proposed deletion sites are not outside the range of sites possible. The added sites will be removed later.#
-	buffer.region <- Biostrings::DNAStringSet(x=rep(paste0(rep("-",length.lim[2]),collapse=""),length(input.seqs)))#
-	input.seqs2   <- Biostrings::xscat(input.seqs,buffer.region)
-input.seqs2
-for(i in 1:n.deletions){#
-		seq.to.mutate.i              <- seq.to.mutate[i]#
-		base.to.mutate.i             <- base.to.mutate[i]#
-		length.deletions.i           <- length.deletions[i]#
-		input.seqs2[seq.to.mutate.i] <- Biostrings::replaceAt(input.seqs2[seq.to.mutate.i],at=IRanges::IRanges(start=base.to.mutate.i),value=paste(rep("-",length.deletions.i),collapse=""))#
-	}
-input.seqs2
-seq.to.mutate <- sample(1:length(input.seqs),size=n.deletions,replace=T)#
-	# numerical vector indicating where each deletion will begin#
-	base.to.mutate <- sapply(X=width(input.seqs[seq.to.mutate]),FUN=function(x){sample(c(1:x),size=1)})#
-	# numerical vector indicating the length of each deletion#
-	length.deletions <- sample(c(min(length.lim):max(length.lim)),size=n.deletions,replace=T)#
-	### Character matrix with three rows and n.deletions columns; each column contains the three nucleotide bases that are different from the current one.#
-	### change.to.mat  <- mapply(FUN=function(A,B){setdiff(c("A","C","G","T"),subseq(input.seqs[A],start=B,width=1))},A=seq.to.mutate,B=base.to.mutate)#
-	### Characer vector indicating th#
-	# change.to.vect <- sapply(X=1:ncol(change.to.mat),FUN=function(x){sample(change.to.mat[,x],size=1)})#
-	### Add length.lim[2] "-" sites to the 3' end of each sequence in input.seqs, so proposed deletion sites are not outside the range of sites possible. The added sites will be removed later.#
-	buffer.region <- Biostrings::DNAStringSet(x=rep(paste0(rep("-",length.lim[2]),collapse=""),length(input.seqs)))#
-	input.seqs2   <- Biostrings::xscat(input.seqs,buffer.region)
-input.seqs2
-for(i in 1:n.deletions){#
-		seq.to.mutate.i              <- seq.to.mutate[i]#
-		base.to.mutate.i             <- base.to.mutate[i]#
-		length.deletions.i           <- length.deletions[i]#
-		input.seqs2[seq.to.mutate.i] <- Biostrings::replaceAt(input.seqs2[seq.to.mutate.i],at=IRanges::IRanges(start=base.to.mutate.i,width=length.deletions.i),value=paste(rep("-",length.deletions.i),collapse=""))#
-	}
-input.seqs2
-result <- Biostrings::subseq(input.seqs2,start=1,end=width(input.seqs))
-result
-format=""
-format==""
-seq.to.mutate <- sample(1:length(input.seqs),size=n.deletions,replace=T)#
-	# numerical vector indicating where each deletion will begin#
-	base.to.mutate <- sapply(X=width(input.seqs[seq.to.mutate]),FUN=function(x){sample(c(1:x),size=1)})#
-	# numerical vector indicating the length of each deletion#
-	length.deletions <- sample(c(min(length.lim):max(length.lim)),size=n.deletions,replace=T)#
-	### Character matrix with three rows and n.deletions columns; each column contains the three nucleotide bases that are different from the current one.#
-	### change.to.mat  <- mapply(FUN=function(A,B){setdiff(c("A","C","G","T"),subseq(input.seqs[A],start=B,width=1))},A=seq.to.mutate,B=base.to.mutate)#
-	### Characer vector indicating th#
-	# change.to.vect <- sapply(X=1:ncol(change.to.mat),FUN=function(x){sample(change.to.mat[,x],size=1)})#
-	### Add length.lim[2] "-" sites to the 3' end of each sequence in input.seqs, so proposed deletion sites are not outside the range of sites possible. The added sites will be removed later.#
-	buffer.region <- Biostrings::DNAStringSet(x=rep(paste0(rep("-",length.lim[2]),collapse=""),length(input.seqs)))#
-	input.seqs2   <- Biostrings::xscat(input.seqs,buffer.region)
-input.seqs2[seq.to.mutate.i] <- Biostrings::replaceAt(input.seqs2[seq.to.mutate.i],at=IRanges::IRanges(start=base.to.mutate.i,width=length.deletions.i),value="")
-input.seqs2
-for(i in 1:n.deletions){#
-		seq.to.mutate.i              <- seq.to.mutate[i]#
-		base.to.mutate.i             <- base.to.mutate[i]#
-		length.deletions.i           <- length.deletions[i]#
-		input.seqs2[seq.to.mutate.i] <- Biostrings::replaceAt(input.seqs2[seq.to.mutate.i],at=IRanges::IRanges(start=base.to.mutate.i,width=length.deletions.i),value=paste(rep("-",length.deletions.i),collapse=""))#
-	}
-input.seqs2
-format=""
-result <- DECIPHER::RemoveGaps(input.seqs2)
-result
-result <- DECIPHER::RemoveGaps(input.seqs2)
-random.insertions <- function(input.seqs,n.insertions,length.lim=1){#
-	# numerical vector with length n.insertions; ith entry indicates which sequence will get the ith deletion#
-	seq.to.mutate    <- sample(1:length(input.seqs),size=n.insertions,replace=T)#
-	# numerical vector indicating the length of each deletion#
-	length.insertions <- sample(c(min(length.lim):max(length.lim)),size=n.insertions,replace=T)#
-	for(i in 1:n.insertions){#
-		seq.to.mutate.i             <- seq.to.mutate[i]#
-		# Where ith insertion will occur#
-		base.to.mutate.i            <- sample(c(1:width(input.seqs[seq.to.mutate.i])),size=1)#
-		length.insertions.i         <- length.insertions[i]#
-		# Sequence that should be inserted#
-		insertion.seq.i             <- paste(sample(c("A","C","G","T"),size=length.insertions.i,replace=T),collapse="")#
-		input.seqs[seq.to.mutate.i] <- Biostrings::replaceAt(input.seqs[seq.to.mutate.i],at=base.to.mutate.i,value=insertion.seq.i)#
-	}#
-	result <- input.seqs#
-	result#
-}
-random.insertions(input.seqs=Lacerta.agilis_exome[1:5],n.insertions=5)
-Lacerta.agilis_exome[1:5]
-sum(width(Lacerta.agilis_exome[1:5]))
-sum(width(random.insertions(input.seqs=Lacerta.agilis_exome[1:5],n.insertions=5)))
-reverse("ACGT")
-random.inversions <- function(input.seqs,n.inversions,length.lim){#
-	# numerical vector with length n.inversions; ith entry indicates which sequence will get the ith deletion#
-	seq.to.mutate    <- sample(1:length(input.seqs),size=n.inversions,replace=T)#
-	# numerical vector indicating the length of each deletion#
-	length.inversions <- sample(c(min(length.lim):max(length.lim)),size=n.inversions,replace=T)#
-	for(i in 1:n.inversions){#
-		seq.to.mutate.i             <- seq.to.mutate[i]#
-		# Where ith inversions will occur#
-		base.to.mutate.i            <- sample(c(1:width(input.seqs[seq.to.mutate.i])),size=1)#
-		length.inversions.i         <- length.inversions[i]#
-		# Sequence that should be inserted#
-		inversions.seq.i            <- reverse(Biostrings::subseq(input.seqs[seq.to.mutate.i],start=base.to.mutate.i,width=length.inversions.i))#
-		input.seqs[seq.to.mutate.i] <- Biostrings::replaceAt(input.seqs[seq.to.mutate.i],at=IRanges::IRanges(start=base.to.mutate.i,width=length.inversions.i),value=inversions.seq.i)#
-	}#
-	result <- input.seqs#
-	result#
-}
-random.inversions(input.seqs=Lacerta.agilis_exome[1:5],n.inversions=5,length.lim=c(5,5))
-random.transpositions <- function(input.seqs,n.transpositions=1,length.lim){#
-	# numerical vector with length n.transpositions; ith entry indicates which sequence will get the ith deletion#
-	seq.to.mutate    <- sample(1:length(input.seqs),size=n.transpositions,replace=T)#
-	# numerical vector indicating the length of each deletion#
-	length.transpositions <- sample(c(min(length.lim):max(length.lim)),size=n.transpositions,replace=T)#
-	for(i in 1:n.transpositions){#
-		seq.to.mutate.i             <- seq.to.mutate[i]#
-		# Where ith transposed region occurs initially#
-		base.to.mutate.i            <- sample(c(1:width(input.seqs[seq.to.mutate.i])),size=1)#
-		length.transpositions.i     <- length.inversions[i]#
-		# Where ith transposed region will be inserted#
-		final.position.i            <- sample(c(1:width(input.seqs[seq.to.mutate.i])),size=1)#
-		# Sequence of transposed region#
-		transpositions.seq.i        <- Biostrings::subseq(input.seqs[seq.to.mutate.i],start=base.to.mutate.i,width=length.transpositions.i)#
-		# Remove transposed region from its origional location#
-		input.seqs[seq.to.mutate.i] <- Biostrings::replaceAt(input.seqs[seq.to.mutate.i],at=IRanges::IRanges(start=base.to.mutate.i,width=length.inversions.i),value="-")#
-		# Insert transposed region into its new location#
-		input.seqs[seq.to.mutate.i] <- Biostrings::replaceAt(input.seqs[seq.to.mutate.i],at=final.position.i,value=transpositions.seq.i)#
-	}#
-	result <- input.seqs#
-	result#
-}
-random.transpositions(input.seqs=Lacerta.agilis_exome[1:5],length.lim=c(50,50))
-random.transpositions <- function(input.seqs,n.transpositions=1,length.lim){#
-	# numerical vector with length n.transpositions; ith entry indicates which sequence will get the ith deletion#
-	seq.to.mutate    <- sample(1:length(input.seqs),size=n.transpositions,replace=T)#
-	# numerical vector indicating the length of each deletion#
-	length.transpositions <- sample(c(min(length.lim):max(length.lim)),size=n.transpositions,replace=T)#
-	for(i in 1:n.transpositions){#
-		seq.to.mutate.i             <- seq.to.mutate[i]#
-		# Where ith transposed region occurs initially#
-		base.to.mutate.i            <- sample(c(1:width(input.seqs[seq.to.mutate.i])),size=1)#
-		length.transpositions.i     <- length.transpositions[i]#
-		# Where ith transposed region will be inserted#
-		final.position.i            <- sample(c(1:width(input.seqs[seq.to.mutate.i])),size=1)#
-		# Sequence of transposed region#
-		transpositions.seq.i        <- Biostrings::subseq(input.seqs[seq.to.mutate.i],start=base.to.mutate.i,width=length.transpositions.i)#
-		# Remove transposed region from its origional location#
-		input.seqs[seq.to.mutate.i] <- Biostrings::replaceAt(input.seqs[seq.to.mutate.i],at=IRanges::IRanges(start=base.to.mutate.i,width=length.transpositions.i),value="-")#
-		# Insert transposed region into its new location#
-		input.seqs[seq.to.mutate.i] <- Biostrings::replaceAt(input.seqs[seq.to.mutate.i],at=final.position.i,value=transpositions.seq.i)#
-	}#
-	result <- input.seqs#
-	result#
-}
-random.transpositions(input.seqs=Lacerta.agilis_exome[1:5],length.lim=c(50,50))
-random.transpositions <- function(input.seqs,n.transpositions=1,length.lim){#
-	# numerical vector with length n.transpositions; ith entry indicates which sequence will get the ith deletion#
-	seq.to.mutate    <- sample(1:length(input.seqs),size=n.transpositions,replace=T)#
-	# numerical vector indicating the length of each deletion#
-	length.transpositions <- sample(c(min(length.lim):max(length.lim)),size=n.transpositions,replace=T)#
-	for(i in 1:n.transpositions){#
-		seq.to.mutate.i             <- seq.to.mutate[i]#
-		# Where ith transposed region occurs initially#
-		base.to.mutate.i            <- sample(c(1:width(input.seqs[seq.to.mutate.i])),size=1)#
-		length.transpositions.i     <- length.transpositions[i]#
-		# Where ith transposed region will be inserted#
-		final.position.i            <- sample(c(1:width(input.seqs[seq.to.mutate.i])),size=1)#
-		# Sequence of transposed region#
-		transpositions.seq.i        <- Biostrings::subseq(input.seqs[seq.to.mutate.i],start=base.to.mutate.i,width=length.transpositions.i)#
-		# Remove transposed region from its origional location#
-		input.seqs[seq.to.mutate.i] <- Biostrings::replaceAt(input.seqs[seq.to.mutate.i],at=IRanges::IRanges(start=base.to.mutate.i,width=length.transpositions.i),value=paste(rep("-",length.transpositions.i),collapse=""))#
-		# Insert transposed region into its new location#
-		input.seqs[seq.to.mutate.i] <- Biostrings::replaceAt(input.seqs[seq.to.mutate.i],at=final.position.i,value=transpositions.seq.i)#
-	}#
-	result <- input.seqs#
-	result#
-}
-random.transpositions(input.seqs=Lacerta.agilis_exome[1:5],length.lim=c(50,50))
-test <- matrix(data="text",nrow=3,ncol=3,mode="character")
-mode(test)
-test <- matrix(data="text",nrow=3,ncol=3)
-test
-mode(test)
-is(test,"character")
-class(test)
-test2 <- as.data.table(test)
-test2
-is(test2,"data.frame")
-class(test2)
-Podarcis.muralis_GFF.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.gff.gz"
-input.gff <- Podarcis.muralis_GFF.url
-input.gff
-is(input.gff,"character")
-file.exists(input.gff)
-temp.name <- tempfile()
-temp.name
-utils::download.file(input.gff,dest=temp.name,quiet=T)
-Line1 <- readLines(temp.name,n=1)
-nchar(Line1)
-Line1
-".+gff-version .+" %in% Line1
-grep("gff-version",Line1)
-?grep("gff-version",Line1)
-any(grep("gff-version",Line1))
-any(grep("ridiculous",Line1))
-any(grep("gff-version",Line1))
-gff.obj   <- ape::read.gff(temp.name, na.strings = c(".", "?"), GFF3 = TRUE)
-class(gff.obj)
-invisible(file.remove(temp.name))
-gff.obj <- data.table::as.data.table(gff.obj)
-gff.obj
-load.gff <- function(input.gff){#
-	if(is(input.gff,"character")){#
-		if(file.exists(input.gff)){#
-			### Check first line of file to determine if it is a GFF-like table or an actual GFF file (with a GFF header)#
-			Line1 <- readLines(input.gff,n=1)#
-			if(any(grep("gff-version",Line1))){#
-				### Read GFF using ape function read.gff#
-				gff.obj <- ape::read.gff(input.gff, na.strings = c(".", "?"), GFF3 = TRUE)#
-			} else {#
-				### Read the GFF as a data.table object and then coerce it to a data frame.#
-				gff.obj <- data.table::fread(input.gff)#
-			}#
-		} else {#
-			### Creates a path (character string) that the GFF will be saved to #
-			temp.name <- tempfile()#
-			### Downloads the GFF to temp.name#
-			utils::download.file(input.gff,dest=temp.name,quiet=T)#
-			### Now check if the downloaded file is a GFF-like table or an actual GFF file (with a GFF header)#
-			Line1 <- readLines(temp.name,n=1)#
-			if(any(grep("gff-version",Line1))){#
-				# Reads the GFF into R as a data.frame object#
-				gff.obj   <- ape::read.gff(temp.name, na.strings = c(".", "?"), GFF3 = TRUE)#
-				# Removes the temporary file#
-				invisible(file.remove(temp.name))#
-			} else {#
-				gff.obj <- data.table::fread(temp.name)#
-			}#
-		}#
-	} else {#
-		if(is(input.gff,"data.frame") | is(input.gff,"matrix")){#
-			gff.obj   <- input.gff#
-		} else {#
-			stop("input.gff has unrecognized format")#
-		}#
-	}#
-	### Coerce to data.table object#
-	gff.obj <- data.table::as.data.table(gff.obj)#
-	gff.obj#
-}
-load.gff(Podarcis.muralis_GFF.url)
-colnames(gff.obj)
-unfiltered.gff   <- as.data.frame(gff.obj)
-unfiltered.gff[1:10,]
-mode(unfiltered.gff[,1])
-unfiltered.gff[,1][1:10]
-is.numeric(unfiltered.gff[,1])
-mode(unfiltered.gff[,1])
-sapply(stats.table0[, numeric.columns], mode)
-test <- sapply(unfiltered.gff, mode)
-length(test)
-test
-numeric.columns <- which(colnames(unfiltered.gff) %in% c("start","end"))
-numeric.columns
-unfiltered.gff[, numeric.columns] <- sapply(unfiltered.gff[, numeric.columns], as.numeric)
-character.columns <- which(!(colnames(unfiltered.gff) %in% c("start","end")))
-character.columns
-unfiltered.gff[, character.columns] <- sapply(unfiltered.gff[, character.columns], as.character)
-unfiltered.gff[1:10,]
-test <- sapply(unfiltered.gff, mode)
-test
-length(which(unfiltered.gff[,3]==feature.type))
-feature.type="CDS"
-length(which(unfiltered.gff[,3]==feature.type))
-length(which(unfiltered.gff[,3]=="gene"))
-filtered.gff1A   <- unfiltered.gff[which(unfiltered.gff[,3]==feature.type),]
-nrow(filtered.gff1A)
-widths1A         <- abs(as.numeric(filtered.gff1A$start)-as.numeric(filtered.gff1A$end))
-length(widths1A )
-widths1A[1]
-widths1A[2]
-test <- sapply(filtered.gff1A, mode)
-test
-widths1A[1:10]
-widths1A         <- abs(filtered.gff1A$start-filtered.gff1A$end)
-widths1A[1:10]
-widths1A         <- (abs(filtered.gff1A$start-filtered.gff1A$end))+1
-widths1A[1:10]
-min.length=120
-filtered.gff1B   <- filtered.gff1A[which(widths1A>=min.length),]
-nrow(filtered.gff1B)
-load.gff <- function(input.gff){#
-	if(is(input.gff,"character")){#
-		if(file.exists(input.gff)){#
-			### Check first line of file to determine if it is a GFF-like table or an actual GFF file (with a GFF header)#
-			Line1 <- readLines(input.gff,n=1)#
-			if(any(grep("gff-version",Line1))){#
-				### Read GFF using ape function read.gff#
-				gff.obj <- ape::read.gff(input.gff, na.strings = c(".", "?"), GFF3 = TRUE)#
-			} else {#
-				### Read the GFF as a data.table object and then coerce it to a data frame.#
-				gff.obj <- data.table::fread(input.gff)#
-			}#
-		} else {#
-			### Creates a path (character string) that the GFF will be saved to #
-			temp.name <- tempfile()#
-			### Downloads the GFF to temp.name#
-			utils::download.file(input.gff,dest=temp.name,quiet=T)#
-			### Now check if the downloaded file is a GFF-like table or an actual GFF file (with a GFF header)#
-			Line1 <- readLines(temp.name,n=1)#
-			if(any(grep("gff-version",Line1))){#
-				# Reads the GFF into R as a data.frame object#
-				gff.obj   <- ape::read.gff(temp.name, na.strings = c(".", "?"), GFF3 = TRUE)#
-				# Removes the temporary file#
-				invisible(file.remove(temp.name))#
-			} else {#
-				gff.obj <- data.table::fread(temp.name)#
-			}#
-		}#
-	} else {#
-		if(is(input.gff,"data.frame") | is(input.gff,"matrix")){#
-			gff.obj   <- input.gff#
-		} else {#
-			stop("input.gff has unrecognized format")#
-		}#
-	}#
-	### Coerce to data.table object#
-	gff.obj <- data.table::as.data.table(gff.obj)#
-	gff.obj#
-}
-input.gff="/Users/alyssaleinweber/Downloads/Lacerta.agilis_GFF_CDS_longer120bp.txt"
-x <- input.gff
-filtered.gff1B <- as.data.frame(load.gff(x))
-class(filtered.gff1B)
-filtered.gff1B <- load.gff(x)
-class(filtered.gff1B)
-filtered.gff1B
-filtered.gff1B <- as.data.frame(load.gff(x))
-test <- sapply(filtered.gff1B, mode)
-test
-numeric.columns <- which(colnames(filtered.gff1B) %in% c("start","end"))
-numeric.columns
-filtered.gff1B[, numeric.columns] <- sapply(filtered.gff1B[, numeric.columns], as.numeric)
-character.columns <- which(!(colnames(filtered.gff1B) %in% c("start","end")))
-filtered.gff1B[, character.columns] <- sapply(filtered.gff1B[, character.columns], as.character)
-sapply(filtered.gff1B, mode)
-refseq.names   <- unlist(filtered.gff1B[,1])
-refseq.names[1]
 additional.ID
 additional.ID<-NULL
 !is.null(additional.ID)
@@ -557,8 +208,191 @@ if (as.numeric(tempMatrix[i,"num.Species"])>1){#
 				tempMatrix[i,(7:(length(species)+6))[!species %in% names(alignment.temp)]] <- NA#
 			}#
 		}
+library(REEs)
+Aspidoscelis.marmoratus.hits <- "/Users/alyssaleinweber/Downloads/Aspidoscelis.marmoratus.tblastx.exons.hits_max5.hsps5.e15.txt"
+input.table=Aspidoscelis.marmoratus.hits; output.table.path=NULL; remove.subseq.matches=T; min.bitscore=50; min.bitscore.difference=0
+if(is(input.table,"data.table") | is(input.table,"matrix")){#
+		all.matches <- as.data.frame(input.table)#
+	}#
+	## If input.table is a character string with the filepath, read the file in as a data.table and then coerce it to data frame.#
+	if(is(input.table,"character")){#
+		all.matches       <- as.data.frame(data.table::fread(input=input.table,sep="\t"))#
+	}#
+	# Set column names#
+	colnames(all.matches) <- c("qseqid","sseqid","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore")#
+	##### Set column modes#
+	# Set which columns should be mode numeric#
+	numeric.columns <- c(3:12)#
+	# Set mode to numeric for those columns that should be numeric#
+	all.matches[, numeric.columns] <- sapply(all.matches[, numeric.columns], as.numeric)#
+	# Set which columns should be mode character#
+	character.columns <- c(1:2)#
+	# Set mode to "character" for the columns indexed in the character.columns vector#
+	all.matches[, character.columns] <- sapply(all.matches[, character.columns], as.character)#
+	### Filter matches with bitscore less than min.bitscore#
+	if(any(all.matches$bitscore < min.bitscore)){#
+		filtered.matches <- all.matches[-which(all.matches$bitscore < min.bitscore),]#
+	} else {#
+		filtered.matches <- all.matches#
+	}
+matches.ordered  <- filtered.matches[with(filtered.matches, order(filtered.matches[,"qseqid"], filtered.matches[,"bitscore"], decreasing=T)),]
+remove.subseq.matches
+query.subject.pairs <- distinct(matches.ordered[,c("qseqid","sseqid")])
+query.subject.pairs <- dplyr::distinct(matches.ordered[,c("qseqid","sseqid")])
+query.subject.pairs[1:10,]
+which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"]) && which which(matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
+which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"]) && which(matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
+which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"] && matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
+which(matches.ordered[,"qseqid"] == query.subject.pairs[2,"qseqid"] && matches.ordered[,"sseqid"] == query.subject.pairs[2,"sseqid"])
+query.subject.pairs[2,"qseqid"]
+query.subject.pairs[2,"sseqid"]
+which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"]) & which(matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
+which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
+which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"])
+which(matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
+which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
+matches.ordered[1:4,]
+matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"]),]
+matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[2,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[2,"sseqid"]),]
+matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[3,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[3,"sseqid"]),]
+lapply(X=1:10,FUN=function(i){ matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]})
+matches.list        <- lapply(X=1:nrow(query.subject.pairs),FUN=function(i){ matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]})
+length(matches.list)
+nrow(query.subject.pairs)
+matches.list <- list(); length(matches.list) <- nrow(query.subject.pairs)
+i=1
+matches.list[[i]] <- matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]
+matches.list[1:10]
+for(i in 1:100){#
+			matches.list[[i]] <- matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]#
+		}
+matches.list[1:100]
+for(i in 1:nrow(query.subject.pairs)){#
+	#	for(i in 1:100){#
+			matches.list[[i]] <- matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]#
+		}
+i
+matches.list <- matches.list[1:4014]
+min.list            <- lapply(matches.list,FUN=function(x){apply(X=x[,c("sstart","send")],MARGIN=1,FUN=min)})#
+		max.list            <- lapply(matches.list,FUN=function(x){apply(X=x[,c("sstart","send")],MARGIN=1,FUN=max)})
+matches.list[[1]]
+apply(X=matches.list[[1]][,c("sstart","send")],MARGIN=1,FUN=min)
+apply(X=matches.list[[1]][,c("sstart","send")],MARGIN=1,FUN=max)
+matches.list <- matches.list[1:4013]
+min.list            <- lapply(matches.list,FUN=function(x){apply(X=x[,c("sstart","send")],MARGIN=1,FUN=min)})
+max.list            <- lapply(matches.list,FUN=function(x){apply(X=x[,c("sstart","send")],MARGIN=1,FUN=max)})
+subject.ranges      <- IRanges::IRangesList(start=min.list,end=max.list)
+drop.hits           <- IRanges::findOverlaps(subject.ranges,drop.self=T,type="within")
+remove.rows.list    <- lapply(drop.hits,FUN=function(x){unique(as.matrix(x)[,1])})
+dim(remove.rows.list)
+length(remove.rows.list)
+remove.rows.list[[1]]
+remove.rows.list[[2]]
+remove.rows.list[[4]]
+function1           <- function(A,B){if(length(B)>0){A[-B,]} else{A}}
+filtered.matches.ordered.temp  <- t(as.list(mapply(FUN=function1,A=matches.list,B=remove.rows.list)))
+filtered.matches.ordered.temp2 <- list(); length(filtered.matches.ordered.temp2) <- ncol(filtered.matches.ordered.temp)
+for(i in 1:ncol(filtered.matches.ordered.temp)){#
+			filtered.matches.ordered.temp2[[i]] <- unlist(filtered.matches.ordered.temp[,i])#
+		}
+class(filtered.matches.ordered.temp2)
+filtered.matches.ordered           <- as.data.frame(do.call(cbind,filtered.matches.ordered.temp2)
+)
+dim(filtered.matches.ordered)
+filtered.matches.ordered[1:10,]
+colnames(filtered.matches.ordered) <- colnames(matches.ordered)
+##### Set column modes#
+		# Set which columns should be mode numeric#
+		numeric.columns <- c(3:12)#
+		# Set mode to numeric for those columns that should be numeric#
+		filtered.matches.ordered[, numeric.columns] <- sapply(filtered.matches.ordered[, numeric.columns], as.numeric)#
+		# Set which columns should be mode character#
+		character.columns <- c(1:2)#
+		# Set mode to "character" for the columns indexed in the character.columns vector#
+		filtered.matches.ordered[, character.columns] <- sapply(filtered.matches.ordered[, character.columns], as.character)
+filtered.matches.ordered[1:10,]
+best.matches          <- as.numeric(match(unique(filtered.matches.ordered$qseqid), filtered.matches.ordered$qseqid))
+best.matches[1]
+best.data             <- filtered.matches.ordered[best.matches,]
+best.data[1:10,]
+if(min.bitscore.difference!=0){#
+		without.best.data     <- filtered.matches.ordered[-best.matches,]#
+		second.best.matches   <- as.numeric(match(unique(filtered.matches.ordered$qseqid), without.best.data$qseqid))#
+		second.best.data      <- without.best.data[second.best.matches]#
+		#### If a query does not have a second best match, then a bitscore of zero is used for an dummy second match. There is no consequence for having a single strong match.#
+		if(any(is.na(second.best.matches))){#
+			second.best.data$bitscore[which(is.na(second.best.matches))] <- 0#
+		}#
+		bitscore.difference             <- as.numeric(best.data$bitscore)-as.numeric(second.best.data$bitscore)#
+		if(any(bitscore.difference < min.bitscore.difference)){#
+			best.data <- best.data[-which(bitscore.difference < min.bitscore.difference)]#
+		}#
+	}
+best.data[1:10,]
+result <- data.table::as.data.table(best.data)
+result
+library(REEs)
+Lacerta.agilis_exome <- Biostrings::readDNAStringSet(filepath="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/Lacerta.agilis_exome_longer120bp.fas")
+grep("NC_046313.1:104728512-104728660",names(Lacerta.agilis_exome))
+length(Lacerta.agilis_exome)
+Lacerta.agilis.hits <- fread("/Users/alyssaleinweber/Downloads/Lacerta.agilis.tblastx.exons.hits_max10.hsps10.E10.txt")
+Lacerta.agilis.hits
+length(unique(Lacerta.agilis.hits$V1))
+Lacerta.agilis_exome[1:100]
+writeXStringSet(x=Lacerta.agilis_exome[1:100],filepath="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/Lacerta.agilis_exome_longer120bp_First100Loci.fas")
+as.character(Lacerta.agilis_exome[1])
+gb.data <- "/Users/alyssaleinweber/Documents/publications/data/Weinell-et-al_2018_Cyclocorinae_DNA-sequences.gb"
+gb.path <- gb.data
+gb.data <- biofiles::gbRecord(gb.path)
+gb.data
+AA.temp           <- biofiles::translation(gb.data)
+cdsFeatures.temp <- gb.data[[i]]["CDS"]
+cdsFeatures.temp <- gb.data[[1]]["CDS"]
+cdsFeatures.temp
+Lacerta.agilis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz"
+Lacerta.agilis_GFF    <- load.gff(input=Lacerta.agilis_GFF.url,local=F)
+Lacerta.agilis_GFF    <- load.gff(Lacerta.agilis_GFF.url)
+Lacerta.agilis_GFF.url   <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.gff.gz"
+Lacerta.agilis_GFF    <- load.gff(Lacerta.agilis_GFF.url)
+Lacerta.agilis_GFF[1:10,]
+which(Lacerta.agilis_GFF$seqid=="NC_046312.1" & Lacerta.agilis_GFF$start=="5644" & Lacerta.agilis_GFF$end=="5770" & Lacerta.agilis_GFF$type=="CDS")
+Lacerta.agilis_GFF[which(Lacerta.agilis_GFF$seqid=="NC_046312.1" & Lacerta.agilis_GFF$start=="5644" & Lacerta.agilis_GFF$end=="5770" & Lacerta.agilis_GFF$type=="CDS"),]
+Biostrings::translate(x=Lacerta.agilis_exome[1])
+?Biostrings
+?Biostrings::translate
+Biostrings::translate(x=Lacerta.agilis_exome[1],no.init.codon=T,if.fuzzy.codon="solve")
+library(devtools)
+getwd()
 setwd("Documents/REEs")
 devtools::document()
-library(devtools)
+grep("NC_046313.1:103112986-103113903",names(Lacerta.agilis_exome))
+grep("NC_046313.1:108730160-108730390",names(Lacerta.agilis_exome))
+grep("NC_021766.1:14101-15243",names(Lacerta.agilis_exome))
+Lacerta.agilis.hits <- data.table::fread("/Users/alyssaleinweber/Downloads/Lacerta.agilis.tblastx.hits_max5.hsps5.e05_Rv3.txt")
+Lacerta.agilis.hits
+length(unique(Lacerta.agilis.hits $qseqid))
+length(unique(Lacerta.agilis.hits$qseqid))
+unique(Lacerta.agilis.hits$qseqid)[1]
+unique(Lacerta.agilis.hits$qseqid)[2]
+length(unique(names(Lacerta.agilis_exome)))
+nomatch.queries <- setdiff(names(Lacerta.agilis_exome),unique(Lacerta.agilis.hits$qseqid))
+length(nomatch.queries)
+nomatch.queries[1]
+109589/9
+(109589/9)*2
+getwd()
 devtools::document()
+groups         <- sort(sample(1:8, size=10,replace=T))
+groups
+all(1:parallel.groups %in% groups)
+parallel.groups=8
+all(1:parallel.groups %in% groups)
+all(c(1:parallel.groups) %in% groups)
+c(1:parallel.groups) %in% groups
+query=1:10
+while(!all(1:parallel.groups %in% groups)){#
+				groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
+			}
+groups
 devtools::document()
+.libPaths("/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv3.6")

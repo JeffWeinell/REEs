@@ -26,30 +26,22 @@ The reasons for publishing these methods as an R package include (1) having a re
 sbatch --nodes=1 --ntasks-per-node=4 --time=6:00:00 --partition=sixhour /panfs/pfs.local/home/j926w878/programs/REEs_cluster_setup.sh
 ```
 
-
 <a name="InstallingREEs"></a>
 ### Installing REEs
-Installation involves the following steps, which are executed in the block of code below: (1–2) define where packages should be installed and where source files should be downloaded, and add these directories to R's library path (3) install and load BiocManager package, which provides access to CRAN and Bioconductor repositories, (4) install dependencies from CRAN and Bioconductor, (5) define URLs to source code of biofiles package (v1.0.0 from CRAN archive) and REEs (SnakeCap project on Open Science Framework), (6) download and install biofiles and REEs from source.
 
+Load R and then run the block of code below. Uncomment and modify the .libPaths() line to install REEs to a non-default location.
 ```
 # Define where packages should be installed.
-# If you want to install or load packages from somewhere other than the default R library path, then set .libPaths() to the directory to use. This must be set each time you start R.
-
-### Probably dont need to use the next few lines. Just set .libPaths().
-# packages.dir   <- .libPaths()
-
-# Add packages.dir to the R library path for the duration of the session.
+# If you want to install or load packages from somewhere other than the default R library path, set .libPaths() to the directory to use. This must be set each time you start R.
 .libPaths("/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv3.6")
 #.libPaths("/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv4.0")
 
-# Install BiocManager and several other dependencies
-# install.packages(pkgs="BiocManager",lib=packages.dir,repos = "http://cran.us.r-project.org")
-#### Test that setting libPaths() works such that lib argument is not needed for install functions, and lib.loc argument not needed for when loading installed packages.
+# Install BiocManager package
 install.packages(pkgs="BiocManager",repos = "http://cran.us.r-project.org")
+# Load BiocManager
 library(BiocManager)
 
-# Use BiocManager to install REEs and its other dependencies. Packages in their dependency graphs are also installed.
-# Set the version argument to "3.10" if using R v3.6; "3.12" for R v4.0; check https://bioconductor.org/about/release-announcements/ to determine which BioConductor version to use for later versions of R.
+# Use BiocManager to install REEs and its dependencies. Set version argument to "3.10" if using R v3.6; "3.12" for R v4.0; check https://bioconductor.org/about/release-announcements/ to determine which BioConductor version to use for later versions of R.
 BiocManager::install(c("BSgenome","DECIPHER","phangorn","dplyr","data.table", "foreach","reutils","curl","knitr","devtools","gschofl/biofiles"),update=FALSE, version="3.12",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4)
 # Install REEs. This can be added to the end of the previous line once the REEs repository is public.
 BiocManager::install("JeffWeinell/REEs",update=FALSE, version="3.12",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
