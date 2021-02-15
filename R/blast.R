@@ -111,6 +111,9 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			temp.file      <- unlist(temp.file)
 			#out.files.temp <- unlist(out.files.temp)
 			groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))
+			while(!all(1:parallel.groups %in% groups)){
+				groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))
+			}
 			query.groups   <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})
 			for(i in 1:parallel.groups){
 				Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")
@@ -138,6 +141,9 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 					temp.file      <- unlist(temp.file)
 					#out.files.temp <- unlist(out.files.temp)
 					groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))
+					while(!all(1:parallel.groups %in% groups)){
+						groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))
+					}
 					query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})
 					for(i in 1:parallel.groups){
 						Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")
@@ -170,6 +176,9 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 				temp.file      <- unlist(temp.file)
 				#out.files.temp <- unlist(out.files.temp)
 				groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))
+				while(!all(1:parallel.groups %in% groups)){
+					groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))
+				}
 				query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})
 				for(i in 1:parallel.groups){
 					Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")
