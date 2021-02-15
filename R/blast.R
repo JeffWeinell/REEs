@@ -201,7 +201,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 	### Run blast!!
 	if(is.null(parallel.groups)){
 		command <- paste(blast.exe.path,"-db",subject.path,"-query",query.path,"-out",output.path,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
-		system(command,wait=T)
+		system(command, wait=T)
 		# Need to find a way to check if the analysis is complete before doing things from here onward.
 		result <- data.table::fread(output.path)
 	} else {
@@ -210,7 +210,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			command.all[[i]] <- paste(blast.exe.path,"-db",subject.path,"-query",temp.file[[i]],"-out",out.files.temp[[i]],"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
 		}
 		### Run all commands in command.all, which are separated by " & " to allow for parallelization.
-		command <- gsub(" & $","",paste0(paste0(unlist(command.all)," & "),collapse=""))
+		command <- gsub(" & sleep(10) & $","",paste0(paste0(unlist(command.all)," & sleep(10) & "),collapse=""))
 		system(command, wait=T)
 		### Read each of the output hit tables and then merge them into one.
 		result <- do.call(rbind,lapply(out.files.temp,FUN=data.table::fread))

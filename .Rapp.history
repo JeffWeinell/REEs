@@ -1,3 +1,62 @@
+filtered.gff1B   <- filtered.gff1A[which(widths1A>=min.length),]
+nrow(filtered.gff1B)
+load.gff <- function(input.gff){#
+	if(is(input.gff,"character")){#
+		if(file.exists(input.gff)){#
+			### Check first line of file to determine if it is a GFF-like table or an actual GFF file (with a GFF header)#
+			Line1 <- readLines(input.gff,n=1)#
+			if(any(grep("gff-version",Line1))){#
+				### Read GFF using ape function read.gff#
+				gff.obj <- ape::read.gff(input.gff, na.strings = c(".", "?"), GFF3 = TRUE)#
+			} else {#
+				### Read the GFF as a data.table object and then coerce it to a data frame.#
+				gff.obj <- data.table::fread(input.gff)#
+			}#
+		} else {#
+			### Creates a path (character string) that the GFF will be saved to #
+			temp.name <- tempfile()#
+			### Downloads the GFF to temp.name#
+			utils::download.file(input.gff,dest=temp.name,quiet=T)#
+			### Now check if the downloaded file is a GFF-like table or an actual GFF file (with a GFF header)#
+			Line1 <- readLines(temp.name,n=1)#
+			if(any(grep("gff-version",Line1))){#
+				# Reads the GFF into R as a data.frame object#
+				gff.obj   <- ape::read.gff(temp.name, na.strings = c(".", "?"), GFF3 = TRUE)#
+				# Removes the temporary file#
+				invisible(file.remove(temp.name))#
+			} else {#
+				gff.obj <- data.table::fread(temp.name)#
+			}#
+		}#
+	} else {#
+		if(is(input.gff,"data.frame") | is(input.gff,"matrix")){#
+			gff.obj   <- input.gff#
+		} else {#
+			stop("input.gff has unrecognized format")#
+		}#
+	}#
+	### Coerce to data.table object#
+	gff.obj <- data.table::as.data.table(gff.obj)#
+	gff.obj#
+}
+input.gff="/Users/alyssaleinweber/Downloads/Lacerta.agilis_GFF_CDS_longer120bp.txt"
+x <- input.gff
+filtered.gff1B <- as.data.frame(load.gff(x))
+class(filtered.gff1B)
+filtered.gff1B <- load.gff(x)
+class(filtered.gff1B)
+filtered.gff1B
+filtered.gff1B <- as.data.frame(load.gff(x))
+test <- sapply(filtered.gff1B, mode)
+test
+numeric.columns <- which(colnames(filtered.gff1B) %in% c("start","end"))
+numeric.columns
+filtered.gff1B[, numeric.columns] <- sapply(filtered.gff1B[, numeric.columns], as.numeric)
+character.columns <- which(!(colnames(filtered.gff1B) %in% c("start","end")))
+filtered.gff1B[, character.columns] <- sapply(filtered.gff1B[, character.columns], as.character)
+sapply(filtered.gff1B, mode)
+refseq.names   <- unlist(filtered.gff1B[,1])
+refseq.names[1]
 additional.ID
 additional.ID<-NULL
 !is.null(additional.ID)
@@ -331,68 +390,45 @@ if(min.bitscore.difference!=0){#
 best.data[1:10,]
 result <- data.table::as.data.table(best.data)
 result
+.libPaths("/Users/alyssaleinweber/Documents/test_install")
+.libPaths
+.libPaths()
+install.packages(pkgs="BiocManager",repos = "http://cran.us.r-project.org")
+find.package("BiocManager")
+library(BiocManager)
+search()
 library(REEs)
 Lacerta.agilis_exome <- Biostrings::readDNAStringSet(filepath="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/Lacerta.agilis_exome_longer120bp.fas")
-grep("NC_046313.1:104728512-104728660",names(Lacerta.agilis_exome))
-length(Lacerta.agilis_exome)
-Lacerta.agilis.hits <- fread("/Users/alyssaleinweber/Downloads/Lacerta.agilis.tblastx.exons.hits_max10.hsps10.E10.txt")
-Lacerta.agilis.hits
-length(unique(Lacerta.agilis.hits$V1))
-Lacerta.agilis_exome[1:100]
-writeXStringSet(x=Lacerta.agilis_exome[1:100],filepath="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/Lacerta.agilis_exome_longer120bp_First100Loci.fas")
-as.character(Lacerta.agilis_exome[1])
-gb.data <- "/Users/alyssaleinweber/Documents/publications/data/Weinell-et-al_2018_Cyclocorinae_DNA-sequences.gb"
-gb.path <- gb.data
-gb.data <- biofiles::gbRecord(gb.path)
-gb.data
-AA.temp           <- biofiles::translation(gb.data)
-cdsFeatures.temp <- gb.data[[i]]["CDS"]
-cdsFeatures.temp <- gb.data[[1]]["CDS"]
-cdsFeatures.temp
-Lacerta.agilis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz"
-Lacerta.agilis_GFF    <- load.gff(input=Lacerta.agilis_GFF.url,local=F)
-Lacerta.agilis_GFF    <- load.gff(Lacerta.agilis_GFF.url)
-Lacerta.agilis_GFF.url   <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.gff.gz"
-Lacerta.agilis_GFF    <- load.gff(Lacerta.agilis_GFF.url)
-Lacerta.agilis_GFF[1:10,]
-which(Lacerta.agilis_GFF$seqid=="NC_046312.1" & Lacerta.agilis_GFF$start=="5644" & Lacerta.agilis_GFF$end=="5770" & Lacerta.agilis_GFF$type=="CDS")
-Lacerta.agilis_GFF[which(Lacerta.agilis_GFF$seqid=="NC_046312.1" & Lacerta.agilis_GFF$start=="5644" & Lacerta.agilis_GFF$end=="5770" & Lacerta.agilis_GFF$type=="CDS"),]
-Biostrings::translate(x=Lacerta.agilis_exome[1])
-?Biostrings
-?Biostrings::translate
-Biostrings::translate(x=Lacerta.agilis_exome[1],no.init.codon=T,if.fuzzy.codon="solve")
+grep("NC_046313.1:109543642-109543827",names(Lacerta.agilis_exome))
 library(devtools)
-getwd()
 setwd("Documents/REEs")
 devtools::document()
-grep("NC_046313.1:103112986-103113903",names(Lacerta.agilis_exome))
-grep("NC_046313.1:108730160-108730390",names(Lacerta.agilis_exome))
-grep("NC_021766.1:14101-15243",names(Lacerta.agilis_exome))
-Lacerta.agilis.hits <- data.table::fread("/Users/alyssaleinweber/Downloads/Lacerta.agilis.tblastx.hits_max5.hsps5.e05_Rv3.txt")
-Lacerta.agilis.hits
-length(unique(Lacerta.agilis.hits $qseqid))
-length(unique(Lacerta.agilis.hits$qseqid))
-unique(Lacerta.agilis.hits$qseqid)[1]
-unique(Lacerta.agilis.hits$qseqid)[2]
-length(unique(names(Lacerta.agilis_exome)))
-nomatch.queries <- setdiff(names(Lacerta.agilis_exome),unique(Lacerta.agilis.hits$qseqid))
-length(nomatch.queries)
-nomatch.queries[1]
-109589/9
-(109589/9)*2
-getwd()
-devtools::document()
-groups         <- sort(sample(1:8, size=10,replace=T))
-groups
-all(1:parallel.groups %in% groups)
-parallel.groups=8
-all(1:parallel.groups %in% groups)
-all(c(1:parallel.groups) %in% groups)
-c(1:parallel.groups) %in% groups
-query=1:10
-while(!all(1:parallel.groups %in% groups)){#
-				groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-			}
-groups
-devtools::document()
-.libPaths("/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv3.6")
+bait.number=1000
+bait.number=1000; bait.length=120; bait.tiling=0.5
+!is.null(bait.number)
+!is.null(bait.number) & (is.null(bait.length) | is.null(bait.tiling))
+bait.number=1000; bait.length=120; bait.tiling=NULL
+!is.null(bait.number) & (is.null(bait.length) | is.null(bait.tiling))
+bait.number=1000; bait.length=NULL; bait.tiling=0.5
+!is.null(bait.number) & (is.null(bait.length) | is.null(bait.tiling))
+bait.number=1000; bait.length=NULL; bait.tiling=NULL
+!is.null(bait.number) & (is.null(bait.length) | is.null(bait.tiling))
+bait.number=NULL; bait.length=NULL; bait.tiling=NULL
+!is.null(bait.number) & (is.null(bait.length) | is.null(bait.tiling))
+bait.number=NULL; bait.length=120; bait.tiling=0.5
+!is.null(bait.number) & (is.null(bait.length) | is.null(bait.tiling))
+library(REEs)
+stats.table4 <- data.table::fread("/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/statsTable_REEs_SnakeCap.txt")
+nrow(stats.table4)
+stats.table4 <- as.data.frame(stats.table4)
+length(which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))))==0
+length(which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),"Thamnophis.sirtalis"))))==0
+colnames(stats.table4)
+length(which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-","."),c("_","_","_"),"Thamnophis.sirtalis"))))==0
+mgsub(c(" ","-","."),c("_","_","_"),"Thamnophis.sirtalis")
+length(which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-","\\."),c("_","_","_"),"Thamnophis.sirtalis"))))==0
+mgsub(c(" ","-","\\."),c("_","_","_"),"Thamnophis.sirtalis")
+grep("^locus.length.",colnames(stats.table4))
+length(grep("^locus.length.",colnames(stats.table4)))
+find.packages("REEs")
+find.package("REEs")
