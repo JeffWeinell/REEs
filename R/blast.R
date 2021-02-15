@@ -227,7 +227,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			print(paste(i,Sys.time()))
 			### While the ith output file is missing or is empty (zero bytes), and less than 5 minutes has elapsed since beginning to blast the ith group, wait 10 more seconds.
 			while((!file.exists(out.files.temp[i]) | file.size(out.files.temp[i])==0) & (as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")) < 5)){
-				print(paste("elapsed time:",as.numeric(difftime(Sys.time(),start.time.command.i,units="mins"))))
+				print(paste("elapsed time:",round(as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")),digits=3),"min"))
 				system("sleep 10", wait=T)
 			}
 			### If after 5 minutes the ith output file is still missing, generate a warning and stop.
@@ -235,7 +235,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 				stop(paste(out.files.temp[i],"is still missing after 5 minutes of blasting. Aborting."))
 			} else {
 				if(file.size(out.files.temp[i])==0){
-					print(paste("elapsed time:",as.numeric(difftime(Sys.time(),start.time.command.i,units="mins"))))
+					print(paste("elapsed time:",round(as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")),digits=3),"min"))
 					### Wait 10 more minutes to see if anything is eventually written to the ith output file.
 					system("sleep 600", wait=T)
 					### If output file i is still zero bytes, stop with a warning, otherwise move on to the next i
@@ -251,15 +251,15 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 		# If all of the output file sizes do not change during one hour, then read them in and combine the tables into one table.
 		# Vector of file sizes
 		file.sizes.temp <- file.size(out.files.temp)
-		print(paste("file.sizes:",file.sizes.temp,"elapsed time:",as.numeric(difftime(Sys.time(),start.time.command.i,units="mins"))))
-		# Wait 300 seconds (5 minutes), take a time stamp, and then enter the while loop if any file sizes have changed.
-		system("sleep 300",wait=T)
+		print(paste("file.sizes:",file.sizes.temp,"elapsed time:",round(as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")),digits=3),"min"))
+		# Wait 1800 seconds (30 minutes), take a time stamp, and then enter the while loop if any file sizes have changed.
+		system("sleep 1800",wait=T)
 		start.time.i <- Sys.time()
-		### Every 300 seconds, check if any file sizes have changed. If so, wait 300 more seconds, unless the total time spent in the loop exceeds 48hrs (2,880 minutes). If none of the file sizes change, exit the loop because the analysis is assumed to be done.
+		### Every 1800 seconds, check if any file sizes have changed. If so, wait 1800 more seconds, unless the total time spent in the loop exceeds 48hrs (2,880 minutes). If none of the file sizes change, exit the loop because the analysis is assumed to be done.
 		while(all(file.size(out.files.temp)!= file.sizes.temp) & (as.numeric(difftime(Sys.time(),start.time.i,units="mins")) < 2880)){
 			file.sizes.temp <- file.size(out.files.temp)
-			system("sleep 300",wait=T)
-			print(paste("file.sizes:",file.sizes.temp,"elapsed time:",as.numeric(difftime(Sys.time(),start.time.command.i,units="mins"))))
+			system("sleep 1800",wait=T)
+			print(paste("file.sizes:",file.sizes.temp,"elapsed time:",round(as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")),digits=3),"min"))
 		}
 		### Read each of the output hit tables and then merge them into one.
 		result <- do.call(rbind,lapply(out.files.temp,FUN=data.table::fread))
