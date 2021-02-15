@@ -20,12 +20,6 @@ The reasons for publishing these methods as an R package include (1) having a re
   - [BLAST](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)
   - [MAFFT](https://mafft.cbrc.jp/alignment/software/)
 
-
-**"Quick" install on KU cluster. Delete this before making this repository public.**
-```
-sbatch --nodes=1 --ntasks-per-node=4 --time=6:00:00 --partition=sixhour /panfs/pfs.local/home/j926w878/programs/REEs_cluster_setup.sh
-```
-
 <a name="InstallingREEs"></a>
 ### Installing REEs
 
