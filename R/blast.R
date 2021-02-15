@@ -312,7 +312,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 #' @export makeBlastDB
 makeBlastDB  <- function(makeblastdb.path,subject.path){
 	### pastes the parts into a character string that can be executed in terminal
-	command  <- paste(makeblastdb.path,"-in",subject.path,"-parse_seqids -dbtype nucl -max_file_size 4GB")
+	command  <- paste(makeblastdb.path,"-in",subject.path,"-parse_seqids -dbtype nucl -max_file_sz 4GB")
 	### calls terminal to execute the character string "command"
 	system(command)
 }
