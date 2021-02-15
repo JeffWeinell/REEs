@@ -240,20 +240,19 @@ pick.loci <- function(statsTable, primary.species, output.path=NULL, species.sub
 	}
 	
 	###### Creates a column holding loci lengths for the primary species, if such a column doesnt already exist. This is calculated from the names used in the first column, and therefore this won't work if the first column does not include start and end positions.
-	if(length(which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))))==0){
+	#if(length(which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))))==0){
+	if(length(grep("^locus.length",colnames(stats.table4)))==0){
 		loci.ranges  <- gsub(".*\\.1_","",stats.table4[,1])
 		loci.lengths <- (abs(as.numeric(gsub(".*_","",loci.ranges))-as.numeric(gsub("_.*","",loci.ranges)))+1)
 		stats.table4 <- cbind(stats.table4,loci.lengths)
-		# Renaming the "loci.lengths" column to the form "locus.length.PrimarySpeciesName"
-		colnames(stats.table4)[which(colnames(stats.table4)=="loci.lengths")] <- paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))
+		# Renaming the "loci.lengths" column to "locus.length.ReferenceSpecies"
+		# colnames(stats.table4)[which(colnames(stats.table4)=="loci.lengths")] <- paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species))
+		colnames(stats.table4)[which(colnames(stats.table4)=="loci.lengths")] <- "locus.length.ReferenceSpecies"
+	} else {
+		# loci.lengths <- stats.table4[,which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species)))]
+		loci.lengths <- stats.table4[, grep("^locus.length", colnames(stats.table4))]
 	}
-	###### Calculate the rolling sum of the loci lengths column.
-	# Determine which column holds the loci lengths
-	loci.lengths.column                <- which(colnames(stats.table4)==paste0("locus.length.",mgsub(c(" ","-"),c("_","_"),primary.species)))
-	# as.numeric(unlist(stats.table4[,loci.lengths.column,with=F]))
-	# loci.lengths <- as.numeric(unlist(stats.table4[,loci.lengths.column,with=F]))
-	# Loci lengths
-	loci.lengths <- stats.table4[,loci.lengths.column]
+	###### Calculate the rolling sum of the locus.length column.
 	# Rolling Sum of loci lengths
 	roll.sum.loci.lengths   <- rollSum(loci.lengths)
 	### Calculate lengths of flanking regions if bait.length, bait.tiling, and flanking.length are all non null
