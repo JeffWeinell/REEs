@@ -43,12 +43,36 @@ translate.exome <- function(input.seqs,drop.if.stop=T){
 	result        <- REEs::collapse.DNAStringSet(result.list)
 	names(result) <- gsub("_$","",names(result))
 	if(drop.if.stop){
-		result    <- result[-grep("\\*.",test)]
+		result    <- result[-grep("\\*.",result)]
 	}
 	### Return result
 	result
 }
-
+#' @title AA Self-Alignment Score
+#' 
+#' The alignment score of an amino-acid sequence perfectly aligned to itself under the substitution matrix indicated by "method". Don't trust me on this quite yet!
+#' 
+#' @param input.seqs AAString or AAStringSet
+#' @param method One of the following: "BLOSUM62" (default), "BLOSUM45", "BLOSUM50", "BLOSUM80", "PAM250", "PAM30", or "PAM70".
+#' @return Number or numerical vector holding the self-alignment scores for each sequence in input.seqs for the substitution matrix indicated by "method".
+#' @export raw.score
+raw.score <- function(input.seqs,method="BLOSUM62"){
+	seqnames <- names(input.seqs)
+	data(BLOSUM45, BLOSUM50, BLOSUM62, BLOSUM80, PAM250, PAM30, PAM70)
+	scores.diag <- diag(get(method))
+	names(scores.diag) <- gsub("\\*","\\\\*",names(scores.diag))
+	AA.list       <- lapply(X=c(1:length(input.seqs)),FUN=function(x){unlist(strsplit(as.character(input.seqs[x]),split=""))})
+	result.list   <- lapply(X=c(1:length(AA.list)),FUN=function(x){sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[x]])))})
+	result        <- unlist(result.list)
+	names(result) <- seqnames
+	result
+	### Possibly take this info into account as well, from the BLAST book.
+	# Sequence length	Suggested matrix
+	# <35	PAM30
+	# 35-50	PAM70
+	# 50-85	BLOSUM80
+	# >85	BLOSUM62
+}
 
 
 

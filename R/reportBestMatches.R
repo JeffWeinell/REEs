@@ -17,7 +17,9 @@
 #' @export reportBestMatches
 reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq.matches=F, min.bitscore=50, min.bitscore.difference=0,blast.method=NULL,table.format=6){
 	if(table.format!=6){
-		stop("At present, only NCBI format 6 tables can be proccessed")
+		stop("At present, only NCBI format 6 tables can be processed.")
+	} else {
+		input.table <- input.table[,1:12]
 	}
 	## Coerce input.table to a data frame object if it is a data.table or matrix object
 	if(is(input.table,"data.table") | is(input.table,"matrix")){
@@ -39,8 +41,10 @@ reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq
 	# Set mode to "character" for the columns indexed in the character.columns vector
 	all.matches[, character.columns] <- sapply(all.matches[, character.columns], as.character)
 	### In the future, uncomment the next if statement to process hit tables generated from tblastn.
-	if(blast.method=="tblastn"){
-		all.matches[,"qseqid"] <- mgsub(c("_F1$","_F2$","_F3$","_RC1$","_RC2$","_RC3$"),c("","","","","",""), all.matches[,"qseqid"])
+	if(!is.null(blast.method)){
+		if(blast.method=="tblastn"){
+			all.matches[,"qseqid"] <- mgsub(c("_F1$","_F2$","_F3$","_RC1$","_RC2$","_RC3$"),c("","","","","",""), all.matches[,"qseqid"])
+		}
 	}
 	### Filter matches with bitscore less than min.bitscore
 	if(any(all.matches$bitscore < min.bitscore)){
