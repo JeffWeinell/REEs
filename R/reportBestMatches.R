@@ -11,9 +11,14 @@
 #' @param min.bitscore Number indicating the minimum bitscore required to keep the best match. Matches with a bitscore below this value are not included in the output table. This is useful for removing paralog matches. Default = 50.
 #' The reason for using a default min.bitscore of 50 is because values at or greater than this usually indicate that the sequences are homologous (doi: 10.1002/0471250953.bi0301s42).
 #' @param min.bitscore.difference Number indicating the minimum difference required between bitscores of the best and second best matches; must be greater than this value to keep matches for the query sequence. Default = 0. This is useful for removing loci with putatitive recent duplicates in the genome.
+#' @param blast.method At present, this argument is ignored unless set to "tblastn", in which case the translation frame suffix is removed from query sequence IDs (if present). In the future, I will either delete this argument or this argument will take as input one of the following: NULL (default), or one of "blastn", "blastp", "blastx", "tblastn", "tblastx".
+#' @param table.format Number indicating which NCBI table format is applicable to input.table; At present, only format 6 can be used. If more than 12 columns are present only the first 12 are used and assumed to correspond to the columns of format 6.
 #' @return A data.table object containing the best matche to each input query in the input blast table. If output.table.path argument is a path (character string), then the function also writes the output as a tab-separated file.
 #' @export reportBestMatches
-reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq.matches=F, min.bitscore=50, min.bitscore.difference=0){
+reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq.matches=F, min.bitscore=50, min.bitscore.difference=0,blast.method=NULL,table.format=6){
+	if(table.format!=6){
+		stop("At present, only NCBI format 6 tables can be proccessed")
+	}
 	## Coerce input.table to a data frame object if it is a data.table or matrix object
 	if(is(input.table,"data.table") | is(input.table,"matrix")){
 		all.matches <- as.data.frame(input.table)
@@ -33,6 +38,10 @@ reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq
 	character.columns <- c(1:2)
 	# Set mode to "character" for the columns indexed in the character.columns vector
 	all.matches[, character.columns] <- sapply(all.matches[, character.columns], as.character)
+	### In the future, uncomment the next if statement to process hit tables generated from tblastn.
+	if(blast.method=="tblastn"){
+		all.matches[,"qseqid"] <- mgsub(c("_F1$","_F2$","_F3$","_RC1$","_RC2$","_RC3$"),c("","","","","",""), all.matches[,"qseqid"])
+	}
 	### Filter matches with bitscore less than min.bitscore
 	if(any(all.matches$bitscore < min.bitscore)){
 		filtered.matches <- all.matches[-which(all.matches$bitscore < min.bitscore),]

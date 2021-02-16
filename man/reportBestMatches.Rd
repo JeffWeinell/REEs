@@ -9,7 +9,9 @@ reportBestMatches(
   output.table.path = NULL,
   remove.subseq.matches = F,
   min.bitscore = 50,
-  min.bitscore.difference = 0
+  min.bitscore.difference = 0,
+  blast.method = NULL,
+  table.format = 6
 )
 }
 \arguments{
@@ -23,6 +25,10 @@ reportBestMatches(
 The reason for using a default min.bitscore of 50 is because values at or greater than this usually indicate that the sequences are homologous (doi: 10.1002/0471250953.bi0301s42).}
 
 \item{min.bitscore.difference}{Number indicating the minimum difference required between bitscores of the best and second best matches; must be greater than this value to keep matches for the query sequence. Default = 0. This is useful for removing loci with putatitive recent duplicates in the genome.}
+
+\item{blast.method}{At present, this argument is ignored unless set to "tblastn", in which case the translation frame suffix is removed from query sequence IDs (if present). In the future, I will either delete this argument or this argument will take as input one of the following: NULL (default), or one of "blastn", "blastp", "blastx", "tblastn", "tblastx".}
+
+\item{table.format}{Number indicating which NCBI table format is applicable to input.table; At present, only format 6 can be used. If more than 12 columns are present only the first 12 are used and assumed to correspond to the columns of format 6.}
 }
 \value{
 A data.table object containing the best matche to each input query in the input blast table. If output.table.path argument is a path (character string), then the function also writes the output as a tab-separated file.
