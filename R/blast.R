@@ -10,9 +10,9 @@
 #' @param subject One of the following: 
 #' Character string indicating path to a local copy of a genome.
 #' Character string indicating URL to fasta-formatted sequences.
-#' DNAStringSet object. If a DNAStringSet object is used, then a temporary fasta file is created to hold the sequences to search within.
+#' XStringSet object (DNAStringSet or AAStringSet). If a XStringSet object is used, then a temporary fasta file is created to hold the sequences to search within.
 #' If DNAStringSet or URL character string, a local copy will be saved as a temporary file.
-#' @param query Path to the fasta file containing the query sequences to find matches for.  If a DNAStringSet object is used, then a temporary fasta file is created to hold the query sequences.
+#' @param query Path to the fasta file containing the query sequences to find matches for. If a XStringSet object is used, then a temporary fasta file is created to hold the query sequences.
 #' @param table.out Where to save the output table. If NULL, the output is written to a temporary file that is read into R.
 #' @param eval Number to use for the expect value (e-value); default is 1e-5.
 #' @param output.format Integer indicating which format to use for the output table of matches (default 6).
@@ -65,8 +65,8 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 	if(test.makeblastdb.exe!=0){
 		stop(paste0("'",makeblastdb.exe.path," is not executable. Aborting.'"))
 	}
-	#### Make a temporary fasta file holding the subject sequences if the value of the "subject" argument is a DNAStringSet or URL string.
-	if("DNAStringSet" %in% class(subject)){
+	#### Make a temporary fasta file holding the subject sequences if the value of the "subject" argument is an XStringSet or URL string.
+	if(is(subject,"XStringSet")){
 		subject.path   <- tempfile()
 		names(subject) <- gsub(" .+","",names(subject))
 		print("preparing subject sequences")
@@ -75,7 +75,13 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 	} else {
 		if(file.exists(subject)){
 			subject.path     <- subject
-			subject.obj.temp <- Biostrings::readDNAStringSet(subject.path)
+			if(method %in% c("blastn","tblastn","tblastx")){
+				# Check on what these do: "deltablast", "psiblast", "rpsblast", "rpstblastn"
+				subject.obj.temp <- Biostrings::readDNAStringSet(subject.path)
+			}
+			if(method %in% c("blastp","blastx")) {
+				subject.obj.temp <- Biostrings::readAAStringSet(subject.path)
+			}
 			names(subject.obj.temp) <- gsub(" .+","",names(subject.obj.temp))
 			subject.path <- tempfile()
 			print("preparing subject sequences")
@@ -87,7 +93,12 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			# sets time limit for downloading files to 1000 seconds
 			options(timeout=1000)
 			conn <- utils::download.file(url=subject, destfile=subject.path)
-			subject.obj.temp        <- Biostrings::readDNAStringSet(subject.path)
+			if(method %in% c("blastn","tblastn","tblastx")){
+				subject.obj.temp <- Biostrings::readDNAStringSet(subject.path)
+			}
+			if(method %in% c("blastp","blastx")) {
+				subject.obj.temp <- Biostrings::readAAStringSet(subject.path)
+			}
 			names(subject.obj.temp) <- gsub(" .+","",names(subject.obj.temp))
 			print("preparing subject sequences")
 			Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path, append=F, format="fasta")
@@ -95,8 +106,8 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			rm(subject.obj.temp)
 		}
 	}
-	#### Make a temporary fasta file holding the query sequences if the value of the query argument is a DNAStringSet or URL string.
-	if("DNAStringSet" %in% class(query)){
+	#### Make a temporary fasta file holding the query sequences if the value of the query argument is an XStringSet or URL string.
+	if(is(query,"XStringSet")){
 		query.path   <- tempfile()
 		names(query) <- mgsub(c(" ",","),c("_","_"),names(query))
 		names(query) <- substring(names(query),first=1,last=50)
@@ -127,7 +138,12 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 	} else {
 		if(file.exists(query)){
 			query.path     <- query
-			query.obj.temp <- Biostrings::readDNAStringSet(query.path)
+			if(method %in% c("blastn","tblastx","blastx")){
+				query.obj.temp <- Biostrings::readDNAStringSet(query.path)
+			}
+			if(method %in% c("tblastn","blastp")){
+				query.obj.temp <- Biostrings::readAAStringSet(query.path)
+			}
 			if(any(nchar(unlist(names(query.obj.temp)))>50) | any(!is.na(stringr::str_locate(unlist(names(query.obj.temp))," ")))){
 				query.path <- tempfile()
 				names(query.obj.temp) <- mgsub(c(" ",","),c("_","_"),names(query.obj.temp))
@@ -166,6 +182,12 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			# Increases time limit for downloading files to 1000 seconds.
 			options(timeout=1000)
 			conn <- utils::download.file(url=query, destfile=query.path)
+			if(method %in% c("blastn","tblastx","blastx")){
+				query.obj.temp <- Biostrings::readDNAStringSet(query.path)
+			}
+			if(method %in% c("tblastn","blastp")){
+				query.obj.temp <- Biostrings::readAAStringSet(query.path)
+			}
 			query.obj.temp        <- Biostrings::readDNAStringSet(query.path)
 			names(query.obj.temp) <- mgsub(c(" ",","),c("_","_"),names(query.obj.temp))
 			names(query.obj.temp) <- substring(names(query.obj.temp),first=1,last=50)

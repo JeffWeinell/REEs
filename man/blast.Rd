@@ -33,10 +33,10 @@ blast(
 \item{subject}{One of the following:
 Character string indicating path to a local copy of a genome.
 Character string indicating URL to fasta-formatted sequences.
-DNAStringSet object. If a DNAStringSet object is used, then a temporary fasta file is created to hold the sequences to search within.
+XStringSet object (DNAStringSet or AAStringSet). If a XStringSet object is used, then a temporary fasta file is created to hold the sequences to search within.
 If DNAStringSet or URL character string, a local copy will be saved as a temporary file.}
 
-\item{query}{Path to the fasta file containing the query sequences to find matches for.  If a DNAStringSet object is used, then a temporary fasta file is created to hold the query sequences.}
+\item{query}{Path to the fasta file containing the query sequences to find matches for. If a XStringSet object is used, then a temporary fasta file is created to hold the query sequences.}
 
 \item{table.out}{Where to save the output table. If NULL, the output is written to a temporary file that is read into R.}
 
