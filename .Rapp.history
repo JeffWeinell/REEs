@@ -1,188 +1,3 @@
-test <- organize.seqs.by.locus(species.seqs=species.seqs.all,index.matrix=index.matrix.all)
-length(temp.seqs.all)
-temp.seqs.all[1]
-names.temp.seqs.all         <- apply(X=index.matrix.all,MARGIN=2,FUN=function(input){species[!is.na(input)]})
-length(names.temp.seqs.all)
-if(is(names.temp.seqs.all,"list")){#
-		for(i in 1:length(temp.seqs.all)){#
-			names(temp.seqs.all[[i]]) <- names.temp.seqs.all[[i]]#
-		}#
-	}#
-	if(is(names.temp.seqs.all,"matrix")){#
-		for(i in 1:length(temp.seqs.all)){#
-			names(temp.seqs.all[[i]]) <- names.temp.seqs.all[,i]#
-		}#
-	}
-tempMatrix.all           <- matrix(data=0, nrow=length(1:length(all.loci)), ncol=12+length(species))
-tempMatrix.all
-colnames(tempMatrix.all) <- c(paste0(species[1],".locus"), "num.Species","CountCover","absolutePIS","percentPIS","mean.pident", paste0("pident.",species), "gene.name",paste0("locus.length.",species[1]),"mean.variable.sites","min.pident.all","min.pident.subgroup","alignment.width")#
-	tempMatrix.all[,1]             <- all.loci
-nrow(tempMatrix.all)
-length(gene.names.all)
-gene.names.all[1]
-colnames(tempMatrix.all) <- c(paste0(species[1],".locus"), "num.Species","CountCover","absolutePIS","percentPIS","mean.pident", paste0("pident.",species), "gene.name",paste0("locus.length.",species[1]),"mean.variable.sites","min.pident.all","min.pident.subgroup","alignment.width")#
-	tempMatrix.all[,1]             <- all.loci#
-	tempMatrix.all[,"gene.name"]   <- gsub("gene=","",gene.names.all)#
-	tempMatrix.all[,"num.Species"] <- sapply(temp.seqs.all,length)
-tempMatrix.all[1:10,]
-# Find which column is the gene.name column#
-	which.is.gene.name.column <- which(colnames(tempMatrix.all)=="gene.name")#
-	# Columns that should be character mode#
-	character.columns <- c(1,which.is.gene.name.column)#
-	# Columns that should be numeric mode#
-	numeric.columns   <- setdiff(1:ncol(tempMatrix.all),character.columns)#
-	# Set the mode to numeric for those columns that should be numeric#
-	tempMatrix.all[, numeric.columns] <- sapply(tempMatrix.all[, numeric.columns], as.numeric)
-tempMatrix.all[1:10,]
-class(tempMatrix.all)
-tempMatrix.all[,1]             <- all.loci#
-	tempMatrix.all[,"gene.name"]   <- gsub("gene=","",gene.names.all)#
-	tempMatrix.all[,"num.Species"] <- sapply(temp.seqs.all,length)
-tempMatrix   <- tempMatrix.all#
-	temp.seqs    <- temp.seqs.all#
-	loci.lengths <- loci.lengths.all
-i=1
-if (as.numeric(tempMatrix[i,"num.Species"])>1){#
-			### aligns the ith locus of each species#
-#			alignment.temp              <- REEs::mafft(temp.seqs[[i]],param="--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6")#
-			alignment.temp              <- REEs::mafft(temp.seqs[[i]],param=mafft.params)#
-			### Number of sites in alignment#
-			alignment.width             <- width(alignment.temp)[1]#
-			### pairwise matrix of absolute genetic distance#
-			distances                   <- 100*as.matrix(ape::dist.dna(ape::as.DNAbin(alignment.temp),model="raw",pairwise.deletion=T))#
-			### Alternative method for calculating genetic distances. Doesnt seem any faster than the ape method.#
-			# distances <- (100*(Biostrings::stringDist(alignment.temp)/alignment.width))#
-			### pairwise matrix of percent genetic identity#
-			pident                      <- round(100-distances,digits=2)#
-			mean.pident                 <- round(mean(pident[1,-1]),digits=2)#
-			### mean percent identity of the primary species to each of the other species.#
-			tempMatrix[i,"mean.pident"] <- mean.pident#
-			### percent identity of the primary species to each species in the alignment (including itself, with should be 100% idendical).#
-			tempMatrix[i,(7:(length(species)+6))[species %in% names(alignment.temp)]] <- pident[1,]#
-			if(any(!species %in% names(alignment.temp))){#
-				tempMatrix[i,(7:(length(species)+6))[!species %in% names(alignment.temp)]] <- NA#
-			}#
-		}
-library(REEs)
-Aspidoscelis.marmoratus.hits <- "/Users/alyssaleinweber/Downloads/Aspidoscelis.marmoratus.tblastx.exons.hits_max5.hsps5.e15.txt"
-input.table=Aspidoscelis.marmoratus.hits; output.table.path=NULL; remove.subseq.matches=T; min.bitscore=50; min.bitscore.difference=0
-if(is(input.table,"data.table") | is(input.table,"matrix")){#
-		all.matches <- as.data.frame(input.table)#
-	}#
-	## If input.table is a character string with the filepath, read the file in as a data.table and then coerce it to data frame.#
-	if(is(input.table,"character")){#
-		all.matches       <- as.data.frame(data.table::fread(input=input.table,sep="\t"))#
-	}#
-	# Set column names#
-	colnames(all.matches) <- c("qseqid","sseqid","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore")#
-	##### Set column modes#
-	# Set which columns should be mode numeric#
-	numeric.columns <- c(3:12)#
-	# Set mode to numeric for those columns that should be numeric#
-	all.matches[, numeric.columns] <- sapply(all.matches[, numeric.columns], as.numeric)#
-	# Set which columns should be mode character#
-	character.columns <- c(1:2)#
-	# Set mode to "character" for the columns indexed in the character.columns vector#
-	all.matches[, character.columns] <- sapply(all.matches[, character.columns], as.character)#
-	### Filter matches with bitscore less than min.bitscore#
-	if(any(all.matches$bitscore < min.bitscore)){#
-		filtered.matches <- all.matches[-which(all.matches$bitscore < min.bitscore),]#
-	} else {#
-		filtered.matches <- all.matches#
-	}
-matches.ordered  <- filtered.matches[with(filtered.matches, order(filtered.matches[,"qseqid"], filtered.matches[,"bitscore"], decreasing=T)),]
-remove.subseq.matches
-query.subject.pairs <- distinct(matches.ordered[,c("qseqid","sseqid")])
-query.subject.pairs <- dplyr::distinct(matches.ordered[,c("qseqid","sseqid")])
-query.subject.pairs[1:10,]
-which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"]) && which which(matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
-which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"]) && which(matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
-which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"] && matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
-which(matches.ordered[,"qseqid"] == query.subject.pairs[2,"qseqid"] && matches.ordered[,"sseqid"] == query.subject.pairs[2,"sseqid"])
-query.subject.pairs[2,"qseqid"]
-query.subject.pairs[2,"sseqid"]
-which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"]) & which(matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
-which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
-which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"])
-which(matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
-which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
-matches.ordered[1:4,]
-matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"]),]
-matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[2,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[2,"sseqid"]),]
-matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[3,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[3,"sseqid"]),]
-lapply(X=1:10,FUN=function(i){ matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]})
-matches.list        <- lapply(X=1:nrow(query.subject.pairs),FUN=function(i){ matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]})
-length(matches.list)
-nrow(query.subject.pairs)
-matches.list <- list(); length(matches.list) <- nrow(query.subject.pairs)
-i=1
-matches.list[[i]] <- matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]
-matches.list[1:10]
-for(i in 1:100){#
-			matches.list[[i]] <- matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]#
-		}
-matches.list[1:100]
-for(i in 1:nrow(query.subject.pairs)){#
-	#	for(i in 1:100){#
-			matches.list[[i]] <- matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]#
-		}
-i
-matches.list <- matches.list[1:4014]
-min.list            <- lapply(matches.list,FUN=function(x){apply(X=x[,c("sstart","send")],MARGIN=1,FUN=min)})#
-		max.list            <- lapply(matches.list,FUN=function(x){apply(X=x[,c("sstart","send")],MARGIN=1,FUN=max)})
-matches.list[[1]]
-apply(X=matches.list[[1]][,c("sstart","send")],MARGIN=1,FUN=min)
-apply(X=matches.list[[1]][,c("sstart","send")],MARGIN=1,FUN=max)
-matches.list <- matches.list[1:4013]
-min.list            <- lapply(matches.list,FUN=function(x){apply(X=x[,c("sstart","send")],MARGIN=1,FUN=min)})
-max.list            <- lapply(matches.list,FUN=function(x){apply(X=x[,c("sstart","send")],MARGIN=1,FUN=max)})
-subject.ranges      <- IRanges::IRangesList(start=min.list,end=max.list)
-drop.hits           <- IRanges::findOverlaps(subject.ranges,drop.self=T,type="within")
-remove.rows.list    <- lapply(drop.hits,FUN=function(x){unique(as.matrix(x)[,1])})
-dim(remove.rows.list)
-length(remove.rows.list)
-remove.rows.list[[1]]
-remove.rows.list[[2]]
-remove.rows.list[[4]]
-function1           <- function(A,B){if(length(B)>0){A[-B,]} else{A}}
-filtered.matches.ordered.temp  <- t(as.list(mapply(FUN=function1,A=matches.list,B=remove.rows.list)))
-filtered.matches.ordered.temp2 <- list(); length(filtered.matches.ordered.temp2) <- ncol(filtered.matches.ordered.temp)
-for(i in 1:ncol(filtered.matches.ordered.temp)){#
-			filtered.matches.ordered.temp2[[i]] <- unlist(filtered.matches.ordered.temp[,i])#
-		}
-class(filtered.matches.ordered.temp2)
-filtered.matches.ordered           <- as.data.frame(do.call(cbind,filtered.matches.ordered.temp2)
-)
-dim(filtered.matches.ordered)
-filtered.matches.ordered[1:10,]
-colnames(filtered.matches.ordered) <- colnames(matches.ordered)
-##### Set column modes#
-		# Set which columns should be mode numeric#
-		numeric.columns <- c(3:12)#
-		# Set mode to numeric for those columns that should be numeric#
-		filtered.matches.ordered[, numeric.columns] <- sapply(filtered.matches.ordered[, numeric.columns], as.numeric)#
-		# Set which columns should be mode character#
-		character.columns <- c(1:2)#
-		# Set mode to "character" for the columns indexed in the character.columns vector#
-		filtered.matches.ordered[, character.columns] <- sapply(filtered.matches.ordered[, character.columns], as.character)
-filtered.matches.ordered[1:10,]
-best.matches          <- as.numeric(match(unique(filtered.matches.ordered$qseqid), filtered.matches.ordered$qseqid))
-best.matches[1]
-best.data             <- filtered.matches.ordered[best.matches,]
-best.data[1:10,]
-if(min.bitscore.difference!=0){#
-		without.best.data     <- filtered.matches.ordered[-best.matches,]#
-		second.best.matches   <- as.numeric(match(unique(filtered.matches.ordered$qseqid), without.best.data$qseqid))#
-		second.best.data      <- without.best.data[second.best.matches]#
-		#### If a query does not have a second best match, then a bitscore of zero is used for an dummy second match. There is no consequence for having a single strong match.#
-		if(any(is.na(second.best.matches))){#
-			second.best.data$bitscore[which(is.na(second.best.matches))] <- 0#
-		}#
-		bitscore.difference             <- as.numeric(best.data$bitscore)-as.numeric(second.best.data$bitscore)#
-		if(any(bitscore.difference < min.bitscore.difference)){#
-			best.data <- best.data[-which(bitscore.difference < min.bitscore.difference)]#
-		}#
-	}
 best.data[1:10,]
 result <- data.table::as.data.table(best.data)
 result
@@ -196,867 +11,30 @@ search()
 library(REEs)
 Lacerta.agilis_exome <- Biostrings::readDNAStringSet(filepath="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/Lacerta.agilis_exome_longer120bp.fas")
 grep("NC_046313.1:109543642-109543827",names(Lacerta.agilis_exome))
-find.package("REEs")
-list.files(find.package("REEs"))
-setwd(find.package("REEs"))
-setwd("blast-mafft")
-list.files()
-list.files("blast")
-list.files("blast/ncbi-blast-2.11.0+")
-list.files("blast/ncbi-blast-2.11.0+/bin")
-blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-5,output.format=6,max.targets.per.query=10,max.matches.per.target=10,parallel.groups=NULL,num.threads="max",other.args=NULL){#
-	#### Path to output table(s)#
-	if(is.null(table.out)){#
-		output.path  <- tempfile()#
-		delete.table <- T#
-		if(!is.null(parallel.groups)){#
-			out.files.temp    <- list()#
-			length(out.files.temp) <- parallel.groups#
-			for(i in 1:parallel.groups){#
-				out.files.temp[[i]] <- tempfile()#
-			}#
-			out.files.temp <- unlist(out.files.temp)#
-		}#
-	} else {#
-		output.path  <- table.out#
-		delete.table <- F#
-		if(!is.null(parallel.groups)){#
-			out.files.temp  <- paste0(tools::file_path_sans_ext(table.out),"_",c(1:parallel.groups),".tsv")#
-		}#
-	}#
-	#### Prepare the path to the executables#
-	if(blast.path=="auto"){#
-		REEs.blast.dir   <- paste0(find.package("REEs"),"/blast-mafft/blast")#
-		blast.dir.path   <- list.dirs(REEs.blast.dir)[grep("bin$",list.dirs(REEs.blast.dir))]#
-	} else {#
-		### In the future, include another if statement to check if any directories on the path contain blast executables.#
-		blast.dir.path <- blast.path#
-	}#
-	### path to the executable of whichever blast method is to be implemented#
-	blast.exe.path       <- paste(blast.dir.path,method,sep="/")#
-	### path to the executable makeblastdb#
-	makeblastdb.exe.path <- paste(blast.dir.path,"makeblastdb",sep="/")#
-	#### Verify that blast.exe.path and makeblastdb.exe.path are executable. Stop and warn if not.#
-	test.blast.exe       <- check.if.executable(exe.path=blast.exe.path)#
-	test.makeblastdb.exe <- check.if.executable(exe.path=makeblastdb.exe.path)#
-	if(test.blast.exe!=0){#
-		stop(paste0("'",blast.exe.path," is not executable. Aborting. Run blast.install() with argument defaults to install BLAST to REEs package.'"))#
-	}#
-	if(test.makeblastdb.exe!=0){#
-		stop(paste0("'",makeblastdb.exe.path," is not executable. Aborting.'"))#
-	}#
-	#### Make a temporary fasta file holding the subject sequences if the value of the "subject" argument is a DNAStringSet or URL string.#
-	if("DNAStringSet" %in% class(subject)){#
-		subject.path   <- tempfile()#
-		names(subject) <- gsub(" .+","",names(subject))#
-		Biostrings::writeXStringSet(x = subject, filepath=subject.path, append=F, format="fasta")#
-		delete.subject <- T#
-	} else {#
-		if(file.exists(subject)){#
-			subject.path     <- subject#
-			subject.obj.temp <- Biostrings::readDNAStringSet(subject.path)#
-			names(subject.obj.temp) <- gsub(" .+","",names(subject.obj.temp))#
-			subject.path <- tempfile()#
-			Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path, append=F, format="fasta")#
-			delete.subject <- T#
-			rm(subject.obj.temp)#
-		} else {#
-			subject.path <- tempfile()#
-			# sets time limit for downloading files to 1000 seconds#
-			options(timeout=1000)#
-			conn <- utils::download.file(url=subject, destfile=subject.path)#
-			subject.obj.temp        <- Biostrings::readDNAStringSet(subject.path)#
-			names(subject.obj.temp) <- gsub(" .+","",names(subject.obj.temp))#
-			Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path, append=F, format="fasta")#
-			delete.subject <- T#
-			rm(subject.obj.temp)#
-		}#
-	}#
-	#### Make a temporary fasta file holding the query sequences if the value of the query argument is a DNAStringSet or URL string.#
-	if("DNAStringSet" %in% class(query)){#
-		query.path   <- tempfile()#
-		names(query) <- mgsub(c(" ",","),c("_","_"),names(query))#
-		names(query) <- substring(names(query),first=1,last=50)#
-		if(is.null(parallel.groups)){#
-			Biostrings::writeXStringSet(x = query, filepath=query.path, append=F, format="fasta")#
-			delete.query <- T#
-		} else {#
-			temp.file <- list()#
-			length(temp.file) <- parallel.groups#
-			#out.files.temp    <- temp.file#
-			for(i in 1:parallel.groups){#
-				temp.file[[i]]      <- tempfile()#
-			#	out.files.temp[[i]] <- tempfile()#
-			}#
-			temp.file      <- unlist(temp.file)#
-			#out.files.temp <- unlist(out.files.temp)#
-			groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-			while(!all(1:parallel.groups %in% groups)){#
-				groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-			}#
-			query.groups   <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})#
-			for(i in 1:parallel.groups){#
-				Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")#
-			}#
-		}#
-	} else {#
-		if(file.exists(query)){#
-			query.path     <- query#
-			query.obj.temp <- Biostrings::readDNAStringSet(query.path)#
-			if(any(nchar(unlist(names(query.obj.temp)))>50) | any(!is.na(stringr::str_locate(unlist(names(query.obj.temp))," ")))){#
-				query.path <- tempfile()#
-				names(query.obj.temp) <- mgsub(c(" ",","),c("_","_"),names(query.obj.temp))#
-				names(query.obj.temp) <- substring(names(query.obj.temp),first=1,last=50)#
-				if(is.null(parallel.groups)){#
-					Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path, append=F, format="fasta")#
-					delete.query <- T#
-				} else {#
-					temp.file <- list()#
-					length(temp.file) <- parallel.groups#
-					#out.files.temp <- temp.file#
-					for(i in 1:parallel.groups){#
-						temp.file[[i]]      <- tempfile()#
-						#out.files.temp[[i]] <- tempfile()#
-					}#
-					temp.file      <- unlist(temp.file)#
-					#out.files.temp <- unlist(out.files.temp)#
-					groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-					while(!all(1:parallel.groups %in% groups)){#
-						groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-					}#
-					query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})#
-					for(i in 1:parallel.groups){#
-						Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")#
-					}#
-				}#
-				rm(query.obj.temp)#
-			} else{#
-				rm(query.obj.temp)#
-				delete.query <- F#
-			}#
-		} else {#
-			query.path <- tempfile()#
-			# Increases time limit for downloading files to 1000 seconds.#
-			options(timeout=1000)#
-			conn <- utils::download.file(url=query, destfile=query.path)#
-			query.obj.temp        <- Biostrings::readDNAStringSet(query.path)#
-			names(query.obj.temp) <- mgsub(c(" ",","),c("_","_"),names(query.obj.temp))#
-			names(query.obj.temp) <- substring(names(query.obj.temp),first=1,last=50)#
-			if(is.null(parallel.groups)){#
-				Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path, append=F, format="fasta")#
-				delete.query <- T#
-			} else {#
-				temp.file <- list()#
-				length(temp.file) <- parallel.groups#
-				#out.files.temp <- temp.file#
-				for(i in 1:parallel.groups){#
-					temp.file[[i]]      <- tempfile()#
-					#out.files.temp[[i]] <- tempfile()#
-				}#
-				temp.file      <- unlist(temp.file)#
-				#out.files.temp <- unlist(out.files.temp)#
-				groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-				while(!all(1:parallel.groups %in% groups)){#
-					groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-				}#
-				query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})#
-				for(i in 1:parallel.groups){#
-					Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")#
-				}#
-			}#
-			rm(query)#
-		}#
-	}#
-	#### Vector of file extensions that should be present if a local database has been created to query against.#
-	DB.extensions        <- c(".nog",".nsq",".nhr",".nin")#
-	### A vectory of filenames that should be present if local NCBI database exists for the subject sequences.#
-	expected.db.files    <- paste(subject.path,DB.extensions,sep="")#
-	#### Run makeBlastDB to make a blast database if any of expected.db.files do not exist#
-	if(!all(file.exists(expected.db.files))){#
-		makeBlastDB(makeblastdb.exe.path,subject.path)#
-	}#
-	### If num.threads argument is set to "max", set num.threads equal to the number of cores available.#
-	if(num.threads=="max"){#
-		num.threads <- parallel::detectCores()#
-	}#
-	### Run blast!!#
-	if(is.null(parallel.groups)){#
-		command <- paste(blast.exe.path,"-db",subject.path,"-query",query.path,"-out",output.path,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)#
-		system(command, wait=T)#
-		# Need to find a way to check if the analysis is complete before doing things from here onward.#
-		result <- data.table::fread(output.path)#
-	} else {#
-		command.all <- list(); length(command.all) <- parallel.groups#
-		for(i in 1:parallel.groups){#
-			command.all[[i]] <- paste(blast.exe.path,"-db",subject.path,"-query",temp.file[[i]],"-out",out.files.temp[[i]],"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)#
-		}#
-		### Run all commands in command.all, which are separated by " & " to allow for parallelization.#
-		command <- gsub(" & sleep(10) & $","",paste0(paste0(unlist(command.all)," & sleep(10) & "),collapse=""))#
-		system(command, wait=T)#
-		### Read each of the output hit tables and then merge them into one.#
-		result <- do.call(rbind,lapply(out.files.temp,FUN=data.table::fread))#
-	}#
-	if(output.format==6){#
-		colnames(result) <- c("qseqid","sseqid","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore")#
-	}#
-	if(!is.null(table.out)){#
-		all.matches <- write.table(x=result,file=table.out,sep="\t",quote=F,col.names=T,row.names=F)#
-	}#
-	### Delete the temporary files#
-	#if(delete.subject){#
-	#	file.remove(subject.path)#
-	#	file.remove(expected.db.files)#
-	#}#
-	#if(delete.query){#
-	#	file.remove(query.path)#
-	#}#
-	#if(delete.table){#
-	#	file.remove(output.path)#
-	#}#
-	result#
-}
-start.time <- Sys.time()
-end.time <- Sys.time()
-end.time=start.time
-Sys.time()-end.time
-class(Sys.time()-end.time)
-(Sys.time()-end.time) < 1000
-(Sys.time()-end.time) < 10
-(Sys.time()-end.time) < 1
-(Sys.time()-end.time)
-(Sys.time()-end.time) < 3
-(Sys.time()-end.time) < 2
-as.numeric((Sys.time()-end.time))
-file.exists("/Users/alyssaleinweber/Documents/sequences.txt")
-file.size("/Users/alyssaleinweber/Documents/sequences.txt")
-file.size("/Users/alyssaleinweber/Documents/sequences.txt")==0
-write(x="",file="/Users/alyssaleinweber/Documents/blank_file.txt")
-write(x=NULL,file="/Users/alyssaleinweber/Documents/blank_file.txt")
-write(file="/Users/alyssaleinweber/Documents/blank_file.txt")
-file.size("/Users/alyssaleinweber/Documents/blank_file.txt")==0
-(!file.exists("/Users/alyssaleinweber/Documents/blank_file.txt") | file.size("/Users/alyssaleinweber/Documents/blank_file.txt")==0)
-start.time.command.i <-
-start.time.command.i <- Sys.time()
-(!file.exists("/Users/alyssaleinweber/Documents/blank_file.txt") | file.size("/Users/alyssaleinweber/Documents/blank_file.txt")==0) & (Sys.time() - start.time.command.i < 5)
-(Sys.time() - start.time.command.i < 5)
-start.time.command.i
-Sys.time() - start.time.command.i
-Sys.time() - start.time.command.i
-as.numeric(Sys.time() - start.time.command.i)
-as.numeric(Sys.time() - start.time.command.i)
-difftime(start.time.command.i,Sys.time(),units="secs")
-difftime(Sys.time(),start.time.command.i,units="secs")
-as.numeric(difftime(Sys.time(),start.time.command.i,units="secs"))
-start.time.command.i <- Sys.time()
-as.numeric(difftime(Sys.time(),start.time.command.i,units="secs"))
-as.numeric(difftime(Sys.time(),start.time.command.i,units="mins"))
-(!file.exists("/Users/alyssaleinweber/Documents/blank_file.txt") | file.size("/Users/alyssaleinweber/Documents/blank_file.txt")==0) & (Sys.time() - start.time.command.i < 5)
-(!file.exists("/Users/alyssaleinweber/Documents/blank_file.txt") | file.size("/Users/alyssaleinweber/Documents/blank_file.txt")==0) & (as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")) < 5)
-(!file.exists("/Users/alyssaleinweber/Documents/blank_file.txt") | file.size("/Users/alyssaleinweber/Documents/blank_file.txt")==0) & (as.numeric(difftime(Sys.time(),start.time.command.i,units="secs")) < 5)
-(!file.exists("/Users/alyssaleinweber/Documents/blank_file2.txt") | file.size("/Users/alyssaleinweber/Documents/blank_file2.txt")==0) & (as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")) < 5)
-file.size("/Users/alyssaleinweber/Documents/blank_file2.txt")==0)
-file.size("/Users/alyssaleinweber/Documents/blank_file2.txt")==0
-file.size("/Users/alyssaleinweber/Documents/blank_file2.txt")==NA
-is.na(file.size("/Users/alyssaleinweber/Documents/blank_file2.txt"))
-blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-5,output.format=6,max.targets.per.query=10,max.matches.per.target=10,parallel.groups=NULL,num.threads="max",other.args=NULL){#
-	#### Path to output table(s)#
-	if(is.null(table.out)){#
-		output.path  <- tempfile()#
-		delete.table <- T#
-		if(!is.null(parallel.groups)){#
-			out.files.temp    <- list()#
-			length(out.files.temp) <- parallel.groups#
-			for(i in 1:parallel.groups){#
-				out.files.temp[[i]] <- tempfile()#
-			}#
-			out.files.temp <- unlist(out.files.temp)#
-		}#
-	} else {#
-		output.path  <- table.out#
-		delete.table <- F#
-		if(!is.null(parallel.groups)){#
-			out.files.temp  <- paste0(tools::file_path_sans_ext(table.out),"_",c(1:parallel.groups),".tsv")#
-		}#
-	}#
-	#### Prepare the path to the executables#
-	if(blast.path=="auto"){#
-		REEs.blast.dir   <- paste0(find.package("REEs"),"/blast-mafft/blast")#
-		blast.dir.path   <- list.dirs(REEs.blast.dir)[grep("bin$",list.dirs(REEs.blast.dir))]#
-	} else {#
-		### In the future, include another if statement to check if any directories on the path contain blast executables.#
-		blast.dir.path <- blast.path#
-	}#
-	### path to the executable of whichever blast method is to be implemented#
-	blast.exe.path       <- paste(blast.dir.path,method,sep="/")#
-	### path to the executable makeblastdb#
-	makeblastdb.exe.path <- paste(blast.dir.path,"makeblastdb",sep="/")#
-	#### Verify that blast.exe.path and makeblastdb.exe.path are executable. Stop and warn if not.#
-	test.blast.exe       <- check.if.executable(exe.path=blast.exe.path)#
-	test.makeblastdb.exe <- check.if.executable(exe.path=makeblastdb.exe.path)#
-	if(test.blast.exe!=0){#
-		stop(paste0("'",blast.exe.path," is not executable. Aborting. Run blast.install() with argument defaults to install BLAST to REEs package.'"))#
-	}#
-	if(test.makeblastdb.exe!=0){#
-		stop(paste0("'",makeblastdb.exe.path," is not executable. Aborting.'"))#
-	}#
-	#### Make a temporary fasta file holding the subject sequences if the value of the "subject" argument is a DNAStringSet or URL string.#
-	if("DNAStringSet" %in% class(subject)){#
-		subject.path   <- tempfile()#
-		names(subject) <- gsub(" .+","",names(subject))#
-		Biostrings::writeXStringSet(x = subject, filepath=subject.path, append=F, format="fasta")#
-		delete.subject <- T#
-	} else {#
-		if(file.exists(subject)){#
-			subject.path     <- subject#
-			subject.obj.temp <- Biostrings::readDNAStringSet(subject.path)#
-			names(subject.obj.temp) <- gsub(" .+","",names(subject.obj.temp))#
-			subject.path <- tempfile()#
-			Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path, append=F, format="fasta")#
-			delete.subject <- T#
-			rm(subject.obj.temp)#
-		} else {#
-			subject.path <- tempfile()#
-			# sets time limit for downloading files to 1000 seconds#
-			options(timeout=1000)#
-			conn <- utils::download.file(url=subject, destfile=subject.path)#
-			subject.obj.temp        <- Biostrings::readDNAStringSet(subject.path)#
-			names(subject.obj.temp) <- gsub(" .+","",names(subject.obj.temp))#
-			Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path, append=F, format="fasta")#
-			delete.subject <- T#
-			rm(subject.obj.temp)#
-		}#
-	}#
-	#### Make a temporary fasta file holding the query sequences if the value of the query argument is a DNAStringSet or URL string.#
-	if("DNAStringSet" %in% class(query)){#
-		query.path   <- tempfile()#
-		names(query) <- mgsub(c(" ",","),c("_","_"),names(query))#
-		names(query) <- substring(names(query),first=1,last=50)#
-		if(is.null(parallel.groups)){#
-			Biostrings::writeXStringSet(x = query, filepath=query.path, append=F, format="fasta")#
-			delete.query <- T#
-		} else {#
-			temp.file <- list()#
-			length(temp.file) <- parallel.groups#
-			#out.files.temp    <- temp.file#
-			for(i in 1:parallel.groups){#
-				temp.file[[i]]      <- tempfile()#
-			#	out.files.temp[[i]] <- tempfile()#
-			}#
-			temp.file      <- unlist(temp.file)#
-			#out.files.temp <- unlist(out.files.temp)#
-			groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-			while(!all(1:parallel.groups %in% groups)){#
-				groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-			}#
-			query.groups   <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})#
-			for(i in 1:parallel.groups){#
-				Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")#
-			}#
-		}#
-	} else {#
-		if(file.exists(query)){#
-			query.path     <- query#
-			query.obj.temp <- Biostrings::readDNAStringSet(query.path)#
-			if(any(nchar(unlist(names(query.obj.temp)))>50) | any(!is.na(stringr::str_locate(unlist(names(query.obj.temp))," ")))){#
-				query.path <- tempfile()#
-				names(query.obj.temp) <- mgsub(c(" ",","),c("_","_"),names(query.obj.temp))#
-				names(query.obj.temp) <- substring(names(query.obj.temp),first=1,last=50)#
-				if(is.null(parallel.groups)){#
-					Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path, append=F, format="fasta")#
-					delete.query <- T#
-				} else {#
-					temp.file <- list()#
-					length(temp.file) <- parallel.groups#
-					#out.files.temp <- temp.file#
-					for(i in 1:parallel.groups){#
-						temp.file[[i]]      <- tempfile()#
-						#out.files.temp[[i]] <- tempfile()#
-					}#
-					temp.file      <- unlist(temp.file)#
-					#out.files.temp <- unlist(out.files.temp)#
-					groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-					while(!all(1:parallel.groups %in% groups)){#
-						groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-					}#
-					query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})#
-					for(i in 1:parallel.groups){#
-						Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")#
-					}#
-				}#
-				rm(query.obj.temp)#
-			} else{#
-				rm(query.obj.temp)#
-				delete.query <- F#
-			}#
-		} else {#
-			query.path <- tempfile()#
-			# Increases time limit for downloading files to 1000 seconds.#
-			options(timeout=1000)#
-			conn <- utils::download.file(url=query, destfile=query.path)#
-			query.obj.temp        <- Biostrings::readDNAStringSet(query.path)#
-			names(query.obj.temp) <- mgsub(c(" ",","),c("_","_"),names(query.obj.temp))#
-			names(query.obj.temp) <- substring(names(query.obj.temp),first=1,last=50)#
-			if(is.null(parallel.groups)){#
-				Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path, append=F, format="fasta")#
-				delete.query <- T#
-			} else {#
-				temp.file <- list()#
-				length(temp.file) <- parallel.groups#
-				#out.files.temp <- temp.file#
-				for(i in 1:parallel.groups){#
-					temp.file[[i]]      <- tempfile()#
-					#out.files.temp[[i]] <- tempfile()#
-				}#
-				temp.file      <- unlist(temp.file)#
-				#out.files.temp <- unlist(out.files.temp)#
-				groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-				while(!all(1:parallel.groups %in% groups)){#
-					groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-				}#
-				query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})#
-				for(i in 1:parallel.groups){#
-					Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")#
-				}#
-			}#
-			rm(query)#
-		}#
-	}#
-	#### Vector of file extensions that should be present if a local database has been created to query against.#
-	DB.extensions        <- c(".nog",".nsq",".nhr",".nin")#
-	### A vectory of filenames that should be present if local NCBI database exists for the subject sequences.#
-	expected.db.files    <- paste(subject.path,DB.extensions,sep="")#
-	#### Run makeBlastDB to make a blast database if any of expected.db.files do not exist#
-	if(!all(file.exists(expected.db.files))){#
-		makeBlastDB(makeblastdb.exe.path,subject.path)#
-	}#
-	### If num.threads argument is set to "max", set num.threads equal to the number of cores available.#
-	if(num.threads=="max"){#
-		num.threads <- parallel::detectCores()#
-	}#
-	### Run blast!!#
-	if(is.null(parallel.groups)){#
-		command <- paste(blast.exe.path,"-db",subject.path,"-query",query.path,"-out",output.path,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)#
-		system(command, wait=T)#
-		# Need to find a way to check if the analysis is complete before doing things from here onward.#
-		result <- data.table::fread(output.path)#
-	} else {#
-		command.all <- list(); length(command.all) <- parallel.groups#
-		for(i in 1:parallel.groups){#
-			command.all[[i]] <- paste(blast.exe.path,"-db",subject.path,"-query",temp.file[[i]],"-out",out.files.temp[[i]],"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)#
-		}#
-		for(i in 1:parallel.groups){#
-			system(command.all[[i]],wait=F)#
-			start.time.command.i <- Sys.time()#
-			### While the ith output file is missing or is empty (zero bytes), and less than 5 minutes has elapsed since beginning to blast the ith group, wait 10 more seconds.#
-			while((!file.exists(out.files.temp[[i]]) | file.size(out.files.temp[[i]])==0) & (as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")) < 5)){#
-				system("sleep 10", wait=T)#
-			}#
-			### If after 5 minutes the ith output file is still missing, generate a warning and stop.#
-			if(!file.exists(out.files.temp[[i]])){#
-				stop(paste(out.files.temp[[i]],"is still missing after 5 minutes of blasting. Aborting.")#
-			} else {#
-				### Wait 5 more minutes to see if anything is eventually written to the ith output file.#
-				system("sleep 10", wait=T)#
-				### If output file i is still zero bytes, stop with a warning, otherwise move on to the next i#
-				if(file.size(out.files.temp[[i]])==0){#
-					stop(paste(out.files.temp[[i]],"is still empty after 10 minutes of blasting. Aborting.")#
-				}#
-			}#
-		}#
-		### Run all commands in command.all, which are separated by " & " to allow for parallelization.#
-#		command <- gsub(" & sleep(10) & $","",paste0(paste0(unlist(command.all)," & sleep(10) & "),collapse=""))#
-#		system(command, wait=T)#
-#
-		### Read each of the output hit tables and then merge them into one.#
-		result <- do.call(rbind,lapply(out.files.temp,FUN=data.table::fread))#
-	}#
-	if(output.format==6){#
-		colnames(result) <- c("qseqid","sseqid","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore")#
-	}#
-	if(!is.null(table.out)){#
-		all.matches <- write.table(x=result,file=table.out,sep="\t",quote=F,col.names=T,row.names=F)#
-	}#
-	### Delete the temporary files#
-	#if(delete.subject){#
-	#	file.remove(subject.path)#
-	#	file.remove(expected.db.files)#
-	#}#
-	#if(delete.query){#
-	#	file.remove(query.path)#
-	#}#
-	#if(delete.table){#
-	#	file.remove(output.path)#
-	#}#
-	result#
-}
-blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-5,output.format=6,max.targets.per.query=10,max.matches.per.target=10,parallel.groups=NULL,num.threads="max",other.args=NULL){#
-	#### Path to output table(s)#
-	if(is.null(table.out)){#
-		output.path  <- tempfile()#
-		delete.table <- T#
-		if(!is.null(parallel.groups)){#
-			out.files.temp    <- list()#
-			length(out.files.temp) <- parallel.groups#
-			for(i in 1:parallel.groups){#
-				out.files.temp[[i]] <- tempfile()#
-			}#
-			out.files.temp <- unlist(out.files.temp)#
-		}#
-	} else {#
-		output.path  <- table.out#
-		delete.table <- F#
-		if(!is.null(parallel.groups)){#
-			out.files.temp  <- paste0(tools::file_path_sans_ext(table.out),"_",c(1:parallel.groups),".tsv")#
-		}#
-	}#
-	#### Prepare the path to the executables#
-	if(blast.path=="auto"){#
-		REEs.blast.dir   <- paste0(find.package("REEs"),"/blast-mafft/blast")#
-		blast.dir.path   <- list.dirs(REEs.blast.dir)[grep("bin$",list.dirs(REEs.blast.dir))]#
-	} else {#
-		### In the future, include another if statement to check if any directories on the path contain blast executables.#
-		blast.dir.path <- blast.path#
-	}#
-	### path to the executable of whichever blast method is to be implemented#
-	blast.exe.path       <- paste(blast.dir.path,method,sep="/")#
-	### path to the executable makeblastdb#
-	makeblastdb.exe.path <- paste(blast.dir.path,"makeblastdb",sep="/")#
-	#### Verify that blast.exe.path and makeblastdb.exe.path are executable. Stop and warn if not.#
-	test.blast.exe       <- check.if.executable(exe.path=blast.exe.path)#
-	test.makeblastdb.exe <- check.if.executable(exe.path=makeblastdb.exe.path)#
-	if(test.blast.exe!=0){#
-		stop(paste0("'",blast.exe.path," is not executable. Aborting. Run blast.install() with argument defaults to install BLAST to REEs package.'"))#
-	}#
-	if(test.makeblastdb.exe!=0){#
-		stop(paste0("'",makeblastdb.exe.path," is not executable. Aborting.'"))#
-	}#
-	#### Make a temporary fasta file holding the subject sequences if the value of the "subject" argument is a DNAStringSet or URL string.#
-	if("DNAStringSet" %in% class(subject)){#
-		subject.path   <- tempfile()#
-		names(subject) <- gsub(" .+","",names(subject))#
-		Biostrings::writeXStringSet(x = subject, filepath=subject.path, append=F, format="fasta")#
-		delete.subject <- T#
-	} else {#
-		if(file.exists(subject)){#
-			subject.path     <- subject#
-			subject.obj.temp <- Biostrings::readDNAStringSet(subject.path)#
-			names(subject.obj.temp) <- gsub(" .+","",names(subject.obj.temp))#
-			subject.path <- tempfile()#
-			Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path, append=F, format="fasta")#
-			delete.subject <- T#
-			rm(subject.obj.temp)#
-		} else {#
-			subject.path <- tempfile()#
-			# sets time limit for downloading files to 1000 seconds#
-			options(timeout=1000)#
-			conn <- utils::download.file(url=subject, destfile=subject.path)#
-			subject.obj.temp        <- Biostrings::readDNAStringSet(subject.path)#
-			names(subject.obj.temp) <- gsub(" .+","",names(subject.obj.temp))#
-			Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path, append=F, format="fasta")#
-			delete.subject <- T#
-			rm(subject.obj.temp)#
-		}#
-	}#
-	#### Make a temporary fasta file holding the query sequences if the value of the query argument is a DNAStringSet or URL string.#
-	if("DNAStringSet" %in% class(query)){#
-		query.path   <- tempfile()#
-		names(query) <- mgsub(c(" ",","),c("_","_"),names(query))#
-		names(query) <- substring(names(query),first=1,last=50)#
-		if(is.null(parallel.groups)){#
-			Biostrings::writeXStringSet(x = query, filepath=query.path, append=F, format="fasta")#
-			delete.query <- T#
-		} else {#
-			temp.file <- list()#
-			length(temp.file) <- parallel.groups#
-			#out.files.temp    <- temp.file#
-			for(i in 1:parallel.groups){#
-				temp.file[[i]]      <- tempfile()#
-			#	out.files.temp[[i]] <- tempfile()#
-			}#
-			temp.file      <- unlist(temp.file)#
-			#out.files.temp <- unlist(out.files.temp)#
-			groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-			while(!all(1:parallel.groups %in% groups)){#
-				groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-			}#
-			query.groups   <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})#
-			for(i in 1:parallel.groups){#
-				Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")#
-			}#
-		}#
-	} else {#
-		if(file.exists(query)){#
-			query.path     <- query#
-			query.obj.temp <- Biostrings::readDNAStringSet(query.path)#
-			if(any(nchar(unlist(names(query.obj.temp)))>50) | any(!is.na(stringr::str_locate(unlist(names(query.obj.temp))," ")))){#
-				query.path <- tempfile()#
-				names(query.obj.temp) <- mgsub(c(" ",","),c("_","_"),names(query.obj.temp))#
-				names(query.obj.temp) <- substring(names(query.obj.temp),first=1,last=50)#
-				if(is.null(parallel.groups)){#
-					Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path, append=F, format="fasta")#
-					delete.query <- T#
-				} else {#
-					temp.file <- list()#
-					length(temp.file) <- parallel.groups#
-					#out.files.temp <- temp.file#
-					for(i in 1:parallel.groups){#
-						temp.file[[i]]      <- tempfile()#
-						#out.files.temp[[i]] <- tempfile()#
-					}#
-					temp.file      <- unlist(temp.file)#
-					#out.files.temp <- unlist(out.files.temp)#
-					groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-					while(!all(1:parallel.groups %in% groups)){#
-						groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-					}#
-					query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})#
-					for(i in 1:parallel.groups){#
-						Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")#
-					}#
-				}#
-				rm(query.obj.temp)#
-			} else{#
-				rm(query.obj.temp)#
-				delete.query <- F#
-			}#
-		} else {#
-			query.path <- tempfile()#
-			# Increases time limit for downloading files to 1000 seconds.#
-			options(timeout=1000)#
-			conn <- utils::download.file(url=query, destfile=query.path)#
-			query.obj.temp        <- Biostrings::readDNAStringSet(query.path)#
-			names(query.obj.temp) <- mgsub(c(" ",","),c("_","_"),names(query.obj.temp))#
-			names(query.obj.temp) <- substring(names(query.obj.temp),first=1,last=50)#
-			if(is.null(parallel.groups)){#
-				Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path, append=F, format="fasta")#
-				delete.query <- T#
-			} else {#
-				temp.file <- list()#
-				length(temp.file) <- parallel.groups#
-				#out.files.temp <- temp.file#
-				for(i in 1:parallel.groups){#
-					temp.file[[i]]      <- tempfile()#
-					#out.files.temp[[i]] <- tempfile()#
-				}#
-				temp.file      <- unlist(temp.file)#
-				#out.files.temp <- unlist(out.files.temp)#
-				groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-				while(!all(1:parallel.groups %in% groups)){#
-					groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))#
-				}#
-				query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})#
-				for(i in 1:parallel.groups){#
-					Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")#
-				}#
-			}#
-			rm(query)#
-		}#
-	}#
-	#### Vector of file extensions that should be present if a local database has been created to query against.#
-	DB.extensions        <- c(".nog",".nsq",".nhr",".nin")#
-	### A vectory of filenames that should be present if local NCBI database exists for the subject sequences.#
-	expected.db.files    <- paste(subject.path,DB.extensions,sep="")#
-	#### Run makeBlastDB to make a blast database if any of expected.db.files do not exist#
-	if(!all(file.exists(expected.db.files))){#
-		makeBlastDB(makeblastdb.exe.path,subject.path)#
-	}#
-	### If num.threads argument is set to "max", set num.threads equal to the number of cores available.#
-	if(num.threads=="max"){#
-		num.threads <- parallel::detectCores()#
-	}#
-	### Run blast!!#
-	if(is.null(parallel.groups)){#
-		command <- paste(blast.exe.path,"-db",subject.path,"-query",query.path,"-out",output.path,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)#
-		system(command, wait=T)#
-		# Need to find a way to check if the analysis is complete before doing things from here onward.#
-		result <- data.table::fread(output.path)#
-	} else {#
-		command.all <- list(); length(command.all) <- parallel.groups#
-		for(i in 1:parallel.groups){#
-			command.all[[i]] <- paste(blast.exe.path,"-db",subject.path,"-query",temp.file[[i]],"-out",out.files.temp[[i]],"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)#
-		}#
-		for(i in 1:parallel.groups){#
-			system(command.all[[i]],wait=F)#
-			start.time.command.i <- Sys.time()#
-			### While the ith output file is missing or is empty (zero bytes), and less than 5 minutes has elapsed since beginning to blast the ith group, wait 10 more seconds.#
-			while((!file.exists(out.files.temp[[i]]) | file.size(out.files.temp[[i]])==0) & (as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")) < 5)){#
-				system("sleep 10", wait=T)#
-			}#
-			### If after 5 minutes the ith output file is still missing, generate a warning and stop.#
-			if(!file.exists(out.files.temp[[i]])){#
-				stop(paste(out.files.temp[[i]],"is still missing after 5 minutes of blasting. Aborting."))#
-			} else {#
-				### Wait 5 more minutes to see if anything is eventually written to the ith output file.#
-				system("sleep 10", wait=T)#
-				### If output file i is still zero bytes, stop with a warning, otherwise move on to the next i#
-				if(file.size(out.files.temp[[i]])==0){#
-					stop(paste(out.files.temp[[i]],"is still empty after 10 minutes of blasting. Aborting."))#
-				}#
-			}#
-		}#
-		### Run all commands in command.all, which are separated by " & " to allow for parallelization.#
-#		command <- gsub(" & sleep(10) & $","",paste0(paste0(unlist(command.all)," & sleep(10) & "),collapse=""))#
-#		system(command, wait=T)#
-#
-		### Read each of the output hit tables and then merge them into one.#
-		result <- do.call(rbind,lapply(out.files.temp,FUN=data.table::fread))#
-	}#
-	if(output.format==6){#
-		colnames(result) <- c("qseqid","sseqid","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore")#
-	}#
-	if(!is.null(table.out)){#
-		all.matches <- write.table(x=result,file=table.out,sep="\t",quote=F,col.names=T,row.names=F)#
-	}#
-	### Delete the temporary files#
-	#if(delete.subject){#
-	#	file.remove(subject.path)#
-	#	file.remove(expected.db.files)#
-	#}#
-	#if(delete.query){#
-	#	file.remove(query.path)#
-	#}#
-	#if(delete.table){#
-	#	file.remove(output.path)#
-	#}#
-	result#
-}
-print(paste(i,Sys.time()))
-Sys.time()
-?system()
-172800/60
-getwd()
-setwd("/Users/alyssaleinweber/Documents/REEs")
+library(devtools)
+setwd("Documents/REEs")
 devtools::document()
-rm(list = c("blast"))
-devtools::document()
-devtools::document()
+library(REEs)
 Lacerta.agilis_exome <- Biostrings::readDNAStringSet(filepath="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/Lacerta.agilis_exome_longer120bp.fas")
-Lacerta.agilis_exome[4]
-as.character(Lacerta.agilis_exome[4])
-as.character(Lacerta.agilis_exome[3])
-as.character(Lacerta.agilis_exome[2])
-as.character(Lacerta.agilis_exome[1])
-Biostrings::translate(x=as.character(Lacerta.agilis_exome[4]))
-Biostrings::translate(x=Lacerta.agilis_exome[4])
-as.character(Biostrings::translate(x=Lacerta.agilis_exome[4]))
-as.character(Biostrings::translate(x=Lacerta.agilis_exome[1:5]))
-as.character(Biostrings::translate(x=reverseComplement(Lacerta.agilis_exome[1:5])))
-forward <- Biostrings::translate(x=Lacerta.agilis_exome[1:5])
-suppressWarnings(forward <- Biostrings::translate(x=Lacerta.agilis_exome[1:5]))
-forward <- suppressWarnings(Biostrings::translate(x=Lacerta.agilis_exome[1:5]))
-forward
-forward.one <- suppressWarnings(Biostrings::translate(x=Lacerta.agilis_exome[1:5]))
-rc.one <- suppressWarnings(Biostrings::translate(x=reverseComplement(Lacerta.agilis_exome[1:5])))
-rc.one
-grep("\\*",rc.one)
-lapply(X=,FUN=function(x){ temp.seqs <- c(forward[x],rc.one[x]); counts.temp <- countChars(temp.seqs); temp.seqs[which(counts.temp==min(counts.temp))]})
-lapply(X=c(1:length(forward)),FUN=function(x){ temp.seqs <- c(forward[x],rc.one[x]); counts.temp <- countChars(temp.seqs); temp.seqs[which(counts.temp==min(counts.temp))]})
-lapply(X=c(1:length(forward)),FUN=function(x){ temp.seqs <- c(forward[x],rc.one[x]); counts.temp <- countChars(temp.seqs,pattern="\\*"); temp.seqs[which(counts.temp==min(counts.temp))]})
-lapply(X=c(1:length(forward)),FUN=function(x){ temp.seqs <- c(forward[x],rc.one[x]); counts.temp <- countChars(as.character(temp.seqs),pattern="\\*"); temp.seqs[which(counts.temp==min(counts.temp))]})
-?reverseComplement
-result.list <- lapply(X=c(1:length(forward)),FUN=function(x){ temp.seqs <- c(forward[x],rc.one[x]); counts.temp <- countChars(as.character(temp.seqs),pattern="\\*"); temp.seqs[which(counts.temp==min(counts.temp))]})
-REEs::collapse.DNAStringSet(result.list)
-translate.exome <- function(input.seqs){#
-	forward.one <- input.seqs#
-	rc.one      <- Biotrings::reverseComplement(input.seqs)#
-	result.list <- lapply(X=c(1:length(input.seqs)),FUN=function(x){temp.seqs = c(forward.one[x],rc.one[x]); counts.temp = countChars(as.character(temp.seqs),pattern="\\*"); temp.seqs[which(counts.temp==min(counts.temp))]})#
-	result      <- REEs::collapse.DNAStringSet(result.list)#
-	result#
-}
-translate.exome(Lacerta.agilis_exome[1:5])
-translate.exome <- function(input.seqs){#
-	forward.one <- input.seqs#
-	rc.one      <- Biostrings::reverseComplement(input.seqs)#
-	result.list <- lapply(X=c(1:length(input.seqs)),FUN=function(x){temp.seqs = c(forward.one[x],rc.one[x]); counts.temp = REEs::countChars(as.character(temp.seqs),pattern="\\*"); temp.seqs[which(counts.temp==min(counts.temp))]})#
-	result      <- REEs::collapse.DNAStringSet(result.list)#
-	result#
-}
-translate.exome(Lacerta.agilis_exome[1:5])
-input.seqs <- Lacerta.agilis_exome[1:5]
-forward.one <- input.seqs#
-	rc.one      <- Biostrings::reverseComplement(input.seqs)
-length(input.seqs)
-result.list <- lapply(X=c(1:length(input.seqs)),FUN=function(x){temp.seqs = c(forward.one[x],rc.one[x]); counts.temp = REEs::countChars(as.character(temp.seqs),pattern="\\*"); temp.seqs[which(counts.temp==min(counts.temp))]})
-result.list
-temp.seqs = c(forward.one[x],rc.one[x])
-x=1
-temp.seqs = c(forward.one[x],rc.one[x])
-temp.seqs
-counts.temp = REEs::countChars(as.character(temp.seqs),pattern="\\*")
-counts.temp
-counts.temp = countChars(as.character(temp.seqs),pattern="\\*")
-counts.temp
-countChars(countChars(as.character(temp.seqs),pattern="\\*"))
-countChars(as.character(temp.seqs),pattern="\\*")
-translate.exome <- function(input.seqs){#
-	forward.one <- input.seqs#
-	rc.one      <- Biostrings::reverseComplement(input.seqs)#
-	result.list <- lapply(X=c(1:length(input.seqs)),FUN=function(x){temp.seqs = Biostrings::translate(c(forward.one[x],rc.one[x])); counts.temp = REEs::countChars(as.character(temp.seqs),pattern="\\*"); temp.seqs[which(counts.temp==min(counts.temp))]})#
-	result      <- REEs::collapse.DNAStringSet(result.list)#
-	result#
-}
-translate.exome(Lacerta.agilis_exome[1:5])
-translate.exome <- function(input.seqs){#
-	forward.one <- input.seqs#
-	rc.one      <- Biostrings::reverseComplement(input.seqs)#
-	result.list <- lapply(X=c(1:length(input.seqs)),FUN=function(x){temp.seqs = suppressWarnings(Biostrings::translate(c(forward.one[x],rc.one[x]))); counts.temp = REEs::countChars(as.character(temp.seqs),pattern="\\*"); temp.seqs[which(counts.temp==min(counts.temp))]})#
-	result      <- REEs::collapse.DNAStringSet(result.list)#
-	result#
-}
-translate.exome(Lacerta.agilis_exome[1:5])
-translate.exome(Lacerta.agilis_exome[1:10])
-translated.exome <- translate.exome(Lacerta.agilis_exome)
-writeXStringSet(translated.exome,filepath="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/Lacerta.agilis_translated.exome_longer120bp.fas")
-translate.exome
-length(translate.exome)
-length(translated.exome)
-length(Lacerta.agilis_exome)
-width(input.seqs[1:10])
-width(Lacerta.agilis_exome[1:5])
-widths.F1 <- Lacerta.agilis_exome
-length(widths.F1)
-F1.10 <- F1[1:10]
-F1 <- input.seqs
-F1.10 <- F1[1:10]
-length(input.seqs)
-input.seqs <- Lacerta.agilis_exome
-F1 <- input.seqs
-F1.10 <- F1[1:10]
-F1.10
-subseq(F1.10,start=2)
-?subseq()
-?Biostrings::subseq()
+input.seqs=Lacerta.agilis_exome
+F1          <- input.seqs
+names(F1[1])
+names(F1[2])
+F2          <- subseq(F1,start=2)
+names(F2)
 F1          <- input.seqs#
 	F2          <- subseq(F1,start=2)#
 	F3          <- subseq(F1,start=3)#
 	RC1         <- Biostrings::reverseComplement(input.seqs)#
 	RC2         <- subseq(RC1,start=2)#
-	RC3         <- subseq(RC1,start=3)
-widths.F1 <- floor(width(F1)/3)*3
-widths.F1[1:10]
-126/3
-widths.F1   <- floor(width(F1)/3)*3#
-	widths.F2   <- floor(width(F2)/3)*3#
-	widths.F3   <- floor(width(F3)/3)*3#
-	widths.RC1  <- floor(width(RC1)/3)*3#
-	widths.RC2  <- floor(width(RC2)/3)*3#
-	widths.RC3  <- floor(width(RC3)/3)*3
-F1          <- subseq(F1,start=1,end=widths.F1)
-F1
-171/3
-F2          <- subseq(F2,start=1,end=widths.F2)#
-	F3          <- subseq(F3,start=1,end=widths.F3)#
-	RC1         <- subseq(RC1,start=1,end=widths.RC1)#
-	RC2         <- subseq(RC2,start=1,end=widths.RC2)#
-	RC3         <- subseq(RC3,start=1,end=widths.RC3)
-translate.exome <- function(input.seqs){#
-	### Obtain Forward and Reverse Complement reading frames (three each)#
-	F1          <- input.seqs#
-	F2          <- subseq(F1,start=2)#
-	F3          <- subseq(F1,start=3)#
-	RC1         <- Biostrings::reverseComplement(input.seqs)#
-	RC2         <- subseq(RC1,start=2)#
 	RC3         <- subseq(RC1,start=3)#
+	### Append frame info to sequence names#
+	names(F1)   <- paste0(names(F1),"_F1")#
+	names(F2)   <- paste0(names(F2),"_F2")#
+	names(F3)   <- paste0(names(F3),"_F3")#
+	names(RC1)  <- paste0(names(RC1),"_RC1")#
+	names(RC2)  <- paste0(names(RC2),"_RC2")#
+	names(RC3)  <- paste0(names(RC3),"_RC3")#
 	### Calculate subsequence widths that would be divisible by three#
 	widths.F1   <- floor(width(F1)/3)*3#
 	widths.F2   <- floor(width(F2)/3)*3#
@@ -1070,10 +48,341 @@ translate.exome <- function(input.seqs){#
 	F3          <- subseq(F3,start=1,end=widths.F3)#
 	RC1         <- subseq(RC1,start=1,end=widths.RC1)#
 	RC2         <- subseq(RC2,start=1,end=widths.RC2)#
-	RC3         <- subseq(RC3,start=1,end=widths.RC3)#
-	result.list <- lapply(X=c(1:length(input.seqs)),FUN=function(x){temp.seqs = suppressWarnings(Biostrings::translate(c(F1[x],F2[x],F3[x],RC1[x],RC2[x],RC3[x]))); counts.temp = REEs::countChars(as.character(temp.seqs),pattern="\\*"); temp.seqs[which(counts.temp==min(counts.temp))[1]]})#
-	result      <- REEs::collapse.DNAStringSet(result.list)#
+	RC3         <- subseq(RC3,start=1,end=widths.RC3)
+names(RC3)[1]
+F1 <- input.seqs[1:5]
+F2          <- subseq(F1,start=2)#
+	F3          <- subseq(F1,start=3)#
+	RC1         <- Biostrings::reverseComplement(input.seqs)#
+	RC2         <- subseq(RC1,start=2)#
+	RC3         <- subseq(RC1,start=3)#
+	### Append frame info to sequence names#
+	names(F1)   <- paste0(names(F1),"_F1")#
+	names(F2)   <- paste0(names(F2),"_F2")#
+	names(F3)   <- paste0(names(F3),"_F3")#
+	names(RC1)  <- paste0(names(RC1),"_RC1")#
+	names(RC2)  <- paste0(names(RC2),"_RC2")#
+	names(RC3)  <- paste0(names(RC3),"_RC3")#
+	### Calculate subsequence widths that would be divisible by three#
+	widths.F1   <- floor(width(F1)/3)*3#
+	widths.F2   <- floor(width(F2)/3)*3#
+	widths.F3   <- floor(width(F3)/3)*3#
+	widths.RC1  <- floor(width(RC1)/3)*3#
+	widths.RC2  <- floor(width(RC2)/3)*3#
+	widths.RC3  <- floor(width(RC3)/3)*3#
+	### Update F1, F2, F3, RC1, RC2, RC3 such that each is divisible by three#
+	F1          <- subseq(F1,start=1,end=widths.F1)#
+	F2          <- subseq(F2,start=1,end=widths.F2)#
+	F3          <- subseq(F3,start=1,end=widths.F3)#
+	RC1         <- subseq(RC1,start=1,end=widths.RC1)#
+	RC2         <- subseq(RC2,start=1,end=widths.RC2)#
+	RC3         <- subseq(RC3,start=1,end=widths.RC3)
+result.list <- lapply(X=c(1:length(input.seqs)),FUN=function(x){temp.seqs = suppressWarnings(Biostrings::translate(c(F1[x],F2[x],F3[x],RC1[x],RC2[x],RC3[x]))); counts.temp = REEs::countChars(as.character(temp.seqs),pattern="\\*"); temp.seqs[which(counts.temp==min(counts.temp))]})
+result.list <- lapply(X=c(1:5),FUN=function(x){temp.seqs = suppressWarnings(Biostrings::translate(c(F1[x],F2[x],F3[x],RC1[x],RC2[x],RC3[x]))); counts.temp = REEs::countChars(as.character(temp.seqs),pattern="\\*"); temp.seqs[which(counts.temp==min(counts.temp))]})
+result.list
+result.list <- lapply(X=c(1:length(input.seqs)),FUN=function(x){temp.seqs = suppressWarnings(Biostrings::translate(c(F1[x],F2[x],F3[x],RC1[x],RC2[x],RC3[x]))); temp.seqs})
+result.list <- lapply(X=c(1:5),FUN=function(x){temp.seqs = suppressWarnings(Biostrings::translate(c(F1[x],F2[x],F3[x],RC1[x],RC2[x],RC3[x]))); temp.seqs})
+result.list
+result      <- REEs::collapse.DNAStringSet(result.list)
+result
+names(result)
+names(result) <- gsub("_$","",result)
+names(result)
+getwd()
+devtools::document()
+translate.exome
+devtools::load_all()
+translate.exome
+translate.exome(Lacerta.agilis_exome[1:5])
+test <- translate.exome(Lacerta.agilis_exome[1:5])
+names(test)
+grep("\\*.",test)
+devtools::document()
+translate.exome
+test <- translate.exome(Lacerta.agilis_exome[1:5])
+test
+names(test)
+writeXStringSet(test,"/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/Lacerta.agilis_five.translated.CDS.fas")
+hits <- fread("/Users/alyssaleinweber/Downloads/2S7YUFVC013-Alignment-HitTable.txt")
+hits
+ncol(hits)
+length(c("qseqid","sseqid","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore"))
+hits <- hits[,1:12]
+hits
+colnames(hits) <- c("qseqid","sseqid","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore")
+hits
+hits$qseqid <- mgsub(c("_F1$","_F2$","_F3$","_RC1$","_RC2$","_RC3$"),c("","","","","",""),hits$qseqid)
+hits <- fread("/Users/alyssaleinweber/Downloads/2S7YUFVC013-Alignment-HitTable.txt")
+devtoos::document()
+devtools::document()
+devtools::document()
+best.hits <- reportBestMatches(input.table=6,blast.method="tblastn")
+class(hits)
+input.table=hits
+hits
+is(input.table,"data.table")
+hits2 <- as.data.frame(hits)
+nrow(hits2)
+hits2[1:10,]
+devtools::document()
+best.hits <- reportBestMatches(input.table=hits,blast.method="tblastn")
+nrow(best.hits)
+best.hits
+best.hits2 <- reportBestMatches(input.table=hits,blast.method=NULL)
+devtools::document()
+best.hits <- reportBestMatches(input.table=hits,blast.method="tblastn")
+best.hits
+best.hits2 <- reportBestMatches(input.table=hits,blast.method=NULL)
+nrow(best.hits2)
+best.hits2
+substitution_matrices
+substitution_matrices()
+Biostrings::substitution_matrices()
+Biostrings::data(BLOSUM62)
+data(BLOSUM62)
+BLOSUM62
+diag(BLOSUM62)
+class(diag(BLOSUM62))
+sum(diag(BLOSUM62))
+test[1]
+length(test)
+test[1]
+test2 <- unlist(strsplit(as.character(test),split=""))
+test2
+test2 <- unlist(strsplit(as.character(test[1]),split=""))
+test2
+names(test2) <- NULL
+test2
+diag(BLOSUM62)
+test3 <- mgsub(names(diag(BLOSUM62)),diag(BLOSUM62),test2)
+test3
+test3 <- as.numeric(mgsub(names(diag(BLOSUM62)),diag(BLOSUM62),test2))
+test3
+sum(test3)
+scores.diag <- diag(BLOSUM62)
+scores.diag
+raw.score <- function(input.seqs,method="BLOSUM62"){#
+	if(method=="BLOSUM62"){#
+		data(BLOSUM62)#
+		scores.diag <- diag(BLOSUM62)#
+	}#
+	AA.list <- lapply(X=c(1:length(input.seqs)),FUN=function(x){unlist(strsplit(as.character(x)))})#
+	result.list <- lapply(X=c(1:length(AA.list)),FUN=function(x){sum(as.numeric(mgsub(names(scores.diag),scores.diag,x)))})#
+	result <- unlist(result)#
+	names(result) <- names(input.seqs)#
 	result#
 }
-translate.exome(input.seqs[1:5])
+raw.score(input.seqs=test)
+raw.score <- function(input.seqs,method="BLOSUM62"){#
+	if(method=="BLOSUM62"){#
+		data(BLOSUM62)#
+		scores.diag <- diag(BLOSUM62)#
+	}#
+	AA.list <- lapply(X=c(1:length(input.seqs)),FUN=function(x){unlist(strsplit(as.character(x),split=""))})#
+	result.list <- lapply(X=c(1:length(AA.list)),FUN=function(x){sum(as.numeric(mgsub(names(scores.diag),scores.diag,x)))})#
+	result <- unlist(result)#
+	names(result) <- names(input.seqs)#
+	result#
+}
+raw.score(input.seqs=test)
+names(test)
+rownames(test)
+raw.score <- function(input.seqs,method="BLOSUM62"){#
+	if(method=="BLOSUM62"){#
+		data(BLOSUM62)#
+		scores.diag <- diag(BLOSUM62)#
+	}#
+	AA.list <- lapply(X=c(1:length(input.seqs)),FUN=function(x){unlist(strsplit(as.character(x),split=""))})#
+	result.list <- lapply(X=c(1:length(AA.list)),FUN=function(x){sum(as.numeric(mgsub(names(scores.diag),scores.diag,x)))})#
+	result <- unlist(result)#
+	names(result) <- Biostrings::names(input.seqs)#
+	result#
+}
+raw.score(input.seqs=test)
+raw.score <- function(input.seqs,method="BLOSUM62"){#
+	seqnames <- names(input.seqs)#
+	if(method=="BLOSUM62"){#
+		data(BLOSUM62)#
+		scores.diag <- diag(BLOSUM62)#
+	}#
+	AA.list <- lapply(X=c(1:length(input.seqs)),FUN=function(x){unlist(strsplit(as.character(x),split=""))})#
+	result.list <- lapply(X=c(1:length(AA.list)),FUN=function(x){sum(as.numeric(mgsub(names(scores.diag),scores.diag,x)))})#
+	result <- unlist(result)#
+	names(result) <- seqnames#
+	result#
+}
+raw.score(input.seqs=test)
+input.seqs=test;method="BLOSUM62"
+seqnames <- names(input.seqs)
+method=="BLOSUM62"
+if(method=="BLOSUM62"){#
+		data(BLOSUM62)#
+		scores.diag <- diag(BLOSUM62)#
+	}
+scores.diag
+AA.list <- lapply(X=c(1:length(input.seqs)),FUN=function(x){unlist(strsplit(as.character(x),split=""))})
+AA.list
+AA.list <- lapply(X=c(1:length(input.seqs)),FUN=function(x){unlist(strsplit(as.character(input.seqs[x]),split=""))})
+AA.list
+result.list <- lapply(X=c(1:length(AA.list)),FUN=function(x){sum(as.numeric(mgsub(names(scores.diag),scores.diag,x)))})
+result.list
+result.list <- lapply(X=c(1:length(AA.list)),FUN=function(x){sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[x])))})
+result.list <- lapply(X=c(1:length(AA.list)),FUN=function(x){sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[x]])))})
+c(1:length(AA.list))
+sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[1]])))
+sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[2]])))
+sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[3]])))
+sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[4]])))
+sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[5]])))
+sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[6]])))
+result.list <- lapply(X=c(1:length(AA.list)),FUN=function(x){res=sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[x]])));res})
+result.list
+sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[8]])))
+AA.list[[8]]
+mgsub(names(scores.diag),scores.diag,AA.list[[8]])
+scores.diag
+names(scores.diag)
+class(names(scores.diag))
+gsub
+gsub("*","\\*","*")
+gsub("\\*","\\*","*")
+gsub("\\*","\\\\*","*")
+gsub("\\*","\\\\*",names(scores.diag))
+raw.score <- function(input.seqs,method="BLOSUM62"){#
+	seqnames <- names(input.seqs)#
+	if(method=="BLOSUM62"){#
+		data(BLOSUM62)#
+		scores.diag <- diag(BLOSUM62)#
+		gsub("\\*","\\\\*",names(scores.diag))#
+	}#
+	AA.list     <- lapply(X=c(1:length(input.seqs)),FUN=function(x){unlist(strsplit(as.character(input.seqs[x]),split=""))})#
+	result.list <- lapply(X=c(1:length(AA.list)),FUN=function(x){res=sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[x]])));res})#
+	result <- unlist(result)#
+	names(result) <- seqnames#
+	result#
+}
+raw.score(test)
+AA.list
+AA.list[[8]]
+raw.score <- function(input.seqs,method="BLOSUM62"){#
+	seqnames <- names(input.seqs)#
+	if(method=="BLOSUM62"){#
+		data(BLOSUM62)#
+		scores.diag <- diag(BLOSUM62)#
+		names(scores.diag) <- gsub("\\*","\\\\*",names(scores.diag))#
+	}#
+	AA.list     <- lapply(X=c(1:length(input.seqs)),FUN=function(x){unlist(strsplit(as.character(input.seqs[x]),split=""))})#
+	result.list <- lapply(X=c(1:length(AA.list)),FUN=function(x){res=sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[x]])));res})#
+	result <- unlist(result)#
+	names(result) <- seqnames#
+	result#
+}
+raw.score(test)
+input.seqs
+seqnames <- names(input.seqs)#
+	if(method=="BLOSUM62"){#
+		data(BLOSUM62)#
+		scores.diag <- diag(BLOSUM62)#
+		names(scores.diag) <- gsub("\\*","\\\\*",names(scores.diag))#
+	}#
+	AA.list     <- lapply(X=c(1:length(input.seqs)),FUN=function(x){unlist(strsplit(as.character(input.seqs[x]),split=""))})#
+	result.list <- lapply(X=c(1:length(AA.list)),FUN=function(x){res=sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[x]])));res})
+result.list
+AA.list
+sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[1]])))
+as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[x]]))
+as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[1]]))
+as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[2]]))
+as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[3]]))
+as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[4]]))
+as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[8]]))
+result.list
+result <- unlist(result)
+result
+result <- unlist(result.list)
+result
+names(result) <- seqnames
+result
+raw.score <- function(input.seqs,method="BLOSUM62"){#
+	seqnames <- names(input.seqs)#
+	if(method=="BLOSUM62"){#
+		data(BLOSUM62)#
+		scores.diag <- diag(BLOSUM62)#
+		names(scores.diag) <- gsub("\\*","\\\\*",names(scores.diag))#
+	}#
+	AA.list     <- lapply(X=c(1:length(input.seqs)),FUN=function(x){unlist(strsplit(as.character(input.seqs[x]),split=""))})#
+	result.list <- lapply(X=c(1:length(AA.list)),FUN=function(x){sum(as.numeric(mgsub(names(scores.diag),scores.diag,AA.list[[x]])))})#
+	result <- unlist(result.list)#
+	names(result) <- seqnames#
+	result#
+}
+raw.score(test)
+reportBestMatches(hits)
+best.hits2
+order(best.hits2$bitscore)
+order(raw.score(test))
+best.hits2$qseqid
+match(best.hits2$qseqid,names(raw.score(test)))
+best.hits2[match(best.hits2$qseqid,names(raw.score(test))),]
+table.bitscore <- best.hits2[match(best.hits2$qseqid,names(raw.score(test))),"bitscore"]
+table.bitscore
+order(raw.score(test))
+order(table.bitscore)
+best.hits2[match(best.hits2$qseqid,names(raw.score(test))),]
+raw.score(test)
+data(get("BLOSUM62"))
+x <- data(BLOSUM62)
+x
+data(BLOSUM62,BLOSUM45)
+BLOSUM45
+get("BLOSUM45")
+method="BLOSUM62"
+get(method)
+data(BLOSUM45, BLOSUM50, BLOSUM62, BLOSUM80, BLOSUM90, PAM250, PAM30, PAM70)
+data(BLOSUM45, BLOSUM50, BLOSUM62, BLOSUM80, PAM250, PAM30, PAM70)
+devtools::document()
+rm(list = c("raw.score"))
+devtools::document()
+raw.score(input.seqs=test,method="BLOSUM45")
+raw.score(input.seqs=test,method="BLOSUM62")
+devtools::document()
+best.hits2[match(best.hits2$qseqid,names(raw.score(test))),]
+raw.score(input.seqs=test,method="BLOSUM62")
+hits.all <- Biostrings::readAAStringSet("/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/Lacerta.agilis_translated.exome_longer120bp.fas")
+Lacerta.agilis.translated.exome <- hits.all
+Lacerta.agilis.translated.exome
+result    <- Lacerta.agilis.translated.exome[-grep("\\*.",Lacerta.agilis.translated.exome)]
+length(result)
+result
+devtools::document()
+Lacerta.agilis_exome
+test100 <- translate.exome(Lacerta.agilis_exome[1:100])
+test1000 <- translate.exome(Lacerta.agilis_exome[1:1000])
+48.64778*108
+(48.64778*108)/60
+Lacerta.agilis_translated.10to20K <- readAAStringSet("/Users/alyssaleinweber/Downloads/Lacerta.agilis_translated.exome_longer120bp_10Kto20K.InputSeqs.fas")
+Lacerta.agilis_translated.10to20K
+length(unique(names(Lacerta.agilis_translated.10to20K)))
+names(Lacerta.agilis_translated.10to20K)[1:10]
+137311/6
+length(unique(mgsub(c("_F1$","_F2$","_F3$","_RC1$","_RC2$","_RC3$"),rep("",6),names(Lacerta.agilis_translated.10to20K))))
+Lacerta.agilis_translated.100K <- readAAStringSet("/Users/alyssaleinweber/Downloads/Lacerta.agilis_translated.exome_longer120bp_100000InputSeqs.fas")
+length(unique(mgsub(c("_F1$","_F2$","_F3$","_RC1$","_RC2$","_RC3$"),rep("",6),names(Lacerta.agilis_translated.100K))))
+blast.install()
+test.tblastn <- blast(method="tblastn",subject=Lacerta.agilis.genome_url,query=Lacerta.agilis_translated.100K[1:10])
+Lacerta.agilis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz"
+test.tblastn <- blast(method="tblastn",subject=Lacerta.agilis.genome_url,query=Lacerta.agilis_translated.100K[1:10])
+class(Lacerta.agilis_exome)
+is(Lacerta.agilis_exome,"DNAStringSet")
+is(Lacerta.agilis_exome,"XStringSet")
+is(Lacerta.agilis_exome,"AAStringSet")
+is(Lacerta.agilis_translated.100K,"XStringSet")
+"XStringSet" %in% class(Lacerta.agilis_translated.100K)
+is(Lacerta.agilis_translated.100K,"XStringSet")
 getwd()
+devtools::document()
+devtools::document()
+library(BiocManager)
+BiocManager::install("JeffWeinell/REEs",update=FALSE, version="3.12",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+library(REEs)
+blast.install()
