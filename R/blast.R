@@ -92,7 +92,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			subject.path <- tempfile()
 			# sets time limit for downloading files to 1000 seconds
 			options(timeout=1000)
-			conn <- utils::download.file(url=subject, destfile=subject.path)
+			conn <- utils::download.file(url=subject, destfile=subject.path,method="auto")
 			if(method %in% c("blastn","tblastn","tblastx")){
 				subject.obj.temp <- Biostrings::readDNAStringSet(subject.path)
 			}
@@ -181,7 +181,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			query.path <- tempfile()
 			# Increases time limit for downloading files to 1000 seconds.
 			options(timeout=1000)
-			conn <- utils::download.file(url=query, destfile=query.path)
+			conn <- utils::download.file(url=query, destfile=query.path,method="auto")
 			if(method %in% c("blastn","tblastx","blastx")){
 				query.obj.temp <- Biostrings::readDNAStringSet(query.path)
 			}
