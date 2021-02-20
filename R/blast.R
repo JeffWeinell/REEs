@@ -71,6 +71,9 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 	dircon            <- dir.check.create(temp.path)
 	subject.path.temp <- paste0(temp.path,"/",basename(tempfile()))
 	query.path.temp   <- paste0(temp.path,"/",basename(tempfile()))
+	if(!is.null(parallel.groups)){
+		query.paths.all   <- paste0(query.path.temp,"_",c(1:parallel.groups))
+	}
 	if(is(subject,"XStringSet")){
 #		subject.path <- tempfile()
 		#temp.path      <- paste0(dirname(output.path),"/temp")
@@ -139,23 +142,23 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 			qcon4 <- Biostrings::writeXStringSet(x = query, filepath=query.path.temp, append=F, format="fasta")
 			# delete.query <- T
 		} else {
-			temp.file <- list()
-			length(temp.file) <- parallel.groups
+			#temp.file <- list()
+			#length(temp.file) <- parallel.groups
 			#out.files.temp    <- temp.file
-			for(i in 1:parallel.groups){
-				temp.file[[i]]      <- paste0(temp.path,"/",basename(tempfile()))
+			#for(i in 1:parallel.groups){
+			#	temp.file[[i]]      <- paste0(temp.path,"/",basename(tempfile()))
 			#	out.files.temp[[i]] <- tempfile()
-			}
-			temp.file      <- unlist(temp.file)
+			#}
+			#temp.file      <- unlist(temp.file)
 			#out.files.temp <- unlist(out.files.temp)
 			groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))
 			while(!all(1:parallel.groups %in% groups)){
-				groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))
+				groups     <- sort(sample(1:parallel.groups, size=length(query),replace=T))
 			}
 			query.groups   <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})
 			print("preparing query sequences")
 			for(i in 1:parallel.groups){
-				qcon.temp <- Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")
+				qcon.temp <- Biostrings::writeXStringSet(x = query.groups[[i]], filepath=query.paths.all[i], append=F, format="fasta")
 			}
 		}
 	} else {
@@ -172,7 +175,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 			}
 			if(any(nchar(unlist(names(query.obj.temp)))>50) | any(!is.na(stringr::str_locate(unlist(names(query.obj.temp))," ")))){
 #				query.path <- tempfile()
-				query.path   <- paste0(temp.path,"/query.fas")
+				query.path            <- paste0(temp.path,"/query.fas")
 				names(query.obj.temp) <- mgsub(c(" ",","),c("_","_"),names(query.obj.temp))
 				names(query.obj.temp) <- substring(names(query.obj.temp),first=1,last=50)
 				if(is.null(parallel.groups)){
@@ -180,14 +183,14 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 					qcon5 <- Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path.temp, append=F, format="fasta")
 					#delete.query <- T
 				} else {
-					temp.file <- list()
-					length(temp.file) <- parallel.groups
+					#temp.file <- list()
+					#length(temp.file) <- parallel.groups
 					#out.files.temp <- temp.file
-					for(i in 1:parallel.groups){
-						temp.file[[i]]      <- paste0(temp.path,"/",basename(tempfile()))
-						#out.files.temp[[i]] <- tempfile()
-					}
-					temp.file      <- unlist(temp.file)
+					#for(i in 1:parallel.groups){
+					#	temp.file[[i]]      <- paste0(temp.path,"/",basename(tempfile()))
+					#	#out.files.temp[[i]] <- tempfile()
+					#}
+					#temp.file      <- unlist(temp.file)
 					#out.files.temp <- unlist(out.files.temp)
 					groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))
 					while(!all(1:parallel.groups %in% groups)){
@@ -196,7 +199,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 					query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})
 					print("preparing query sequences")
 					for(i in 1:parallel.groups){
-						qcon.temp <- Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")
+						qcon.temp <- Biostrings::writeXStringSet(x = query.groups[[i]], filepath=query.paths.all[i], append=F, format="fasta")
 					}
 				}
 				rm(query.obj.temp)
@@ -224,14 +227,14 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 				qcon6 <- Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path.temp, append=F, format="fasta")
 				delete.query <- T
 			} else {
-				temp.file <- list()
-				length(temp.file) <- parallel.groups
-				#out.files.temp <- temp.file
-				for(i in 1:parallel.groups){
-					temp.file[[i]]      <- paste0(temp.path,"/",basename(tempfile()))
-					#out.files.temp[[i]] <- tempfile()
-				}
-				temp.file      <- unlist(temp.file)
+				#temp.file <- list()
+				#length(temp.file) <- parallel.groups
+				##out.files.temp <- temp.file
+				#for(i in 1:parallel.groups){
+				#	temp.file[[i]]      <- paste0(temp.path,"/",basename(tempfile()))
+				#	#out.files.temp[[i]] <- tempfile()
+				#}
+				#temp.file      <- unlist(temp.file)
 				#out.files.temp <- unlist(out.files.temp)
 				groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))
 				while(!all(1:parallel.groups %in% groups)){
@@ -240,7 +243,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 				query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})
 				print("preparing query sequences")
 				for(i in 1:parallel.groups){
-					qcon.temp <- Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")
+					qcon.temp <- Biostrings::writeXStringSet(x = query.groups[[i]], filepath=query.paths.all[i], append=F, format="fasta")
 				}
 			}
 			rm(query)
@@ -257,8 +260,16 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 		dbcon <- makeBlastDB(makeblastdb.exe.path,subject.path.temp)
 	}
 	### If num.threads argument is set to "max", set num.threads equal to the number of cores available.
-	if(num.threads=="max"){
-		num.threads <- parallel::detectCores()
+	if(is.null(parallel.groups)){
+		if(num.threads=="max"){
+			num.threads <- parallel::detectCores()
+		}
+	} else {
+		if(num.threads=="max"){
+			num.threads <- max(floor(parallel::detectCores()/parallel.groups),1)
+		} else {
+			num.threads <- max(floor(num.threads/parallel.groups),1)
+		}
 	}
 	### Run blast!!
 	print("about to run blast")
