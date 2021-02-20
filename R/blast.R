@@ -272,7 +272,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 #		for(i in 1:parallel.groups){
 #			command.all[[i]] <- paste(blast.exe.path,"-db",subject.path,"-query",temp.file[i],"-out",out.files.temp[i],"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
 #		}
-		command.all <- paste(blast.exe.path,"-db",subject.path,"-query",temp.file,"-out",out.files.temp,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
+		command.all <- paste(blast.exe.path,"-db",subject.path.temp,"-query",temp.file.temp,"-out",out.files.temp,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
 		for(i in 1:parallel.groups){
 			system(command.all[i],wait=F)
 			start.time.command.i <- Sys.time()
