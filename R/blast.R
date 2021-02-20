@@ -18,13 +18,13 @@
 #' @param output.format Integer indicating which format to use for the output table of matches (default 6).
 #' @param max.targets.per.query Integer indicating the maximum number of targets (subject contigs) containing a match per query sequence. This sets the BLAST's max_target_seqs argument. Importantly, this argument does not control the total number of matches per query, because multiple matches may occer on the same subject contig.
 #' @param max.matches.per.target Integer indicating the maximum number of matches per target (subject contig) per query. This sets BLAST's max_hsps argument. To determine the maximum total number of matches per query, multiply max.targets.per.query by max.matches.per.target.
-#' @param parallel.groups  Number of groups to split the query sequences into for running in parallel. This is experimental.
+#' @param parallel.groups Number of groups to split the query sequences into for running in parallel. Default 10. Will likely produce an error if less than the number of query sequences.
 #' @param num.threads Either an integer indicating how many threads to use, or "max" (default), in which case num.threads is set to the number of cores available.
-#' @param max.runtime Maximum number of minutes to run blast before quitting. Default is 2,880 (48 hours). You may need to increase this.
+#' @param cleanup Logical indicating if temporary output files should be deleted. Default is TRUE.
 #' @param other.args A character string of the form "-argument1 value1 -argument2 value2" with additional arguments and values to pass to BLAST. See BLAST manual for definitions of available arguments. Default is NULL.
 #' @return Table of matches.
 #' @export blast
-blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,output.format=6,max.targets.per.query=10,max.matches.per.target=10,parallel.groups=NULL,num.threads="max",max.runtime=2880,other.args=NULL){
+blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,output.format=6,max.targets.per.query=10,max.matches.per.target=10,parallel.groups=10,num.threads="max",cleanup=T,other.args=NULL){
 	#### Path to output table(s)
 	# if(is.null(table.out)){
 	# 	output.path  <- tempfile()
@@ -38,11 +38,6 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 	# 		out.files.temp <- unlist(out.files.temp)
 	# 	}
 	# } else {
-		output.path  <- table.out
-		delete.table <- F
-		if(!is.null(parallel.groups)){
-			out.files.temp  <- paste0(tools::file_path_sans_ext(table.out),"_",c(1:parallel.groups),".tsv")
-		}
 	#}
 	#### Prepare the path to the executables
 	if(blast.path=="auto"){
@@ -67,12 +62,15 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 	}
 	#### Make a temporary fasta file holding the subject sequences if the value of the "subject" argument is an XStringSet or URL string.
 	# Where subject and query files data should be held.
-	temp.path         <- paste0(dirname(output.path),"/temp")
+	temp.path         <- paste0(dirname(output.path),"/",basename(tempfile(pattern="tempoutdir")))
 	dircon            <- dir.check.create(temp.path)
 	subject.path.temp <- paste0(temp.path,"/",basename(tempfile()))
 	query.path.temp   <- paste0(temp.path,"/",basename(tempfile()))
+	output.path       <- table.out
+	#delete.table      <- F
 	if(!is.null(parallel.groups)){
-		query.paths.all   <- paste0(query.path.temp,"_",c(1:parallel.groups))
+		out.files.temp   <- paste0(temp.path,"/",basename(paste0(tools::file_path_sans_ext(table.out),"_",c(1:parallel.groups),".tsv")))
+		query.paths.all  <- paste0(query.path.temp,"_",c(1:parallel.groups))
 	}
 	if(is(subject,"XStringSet")){
 #		subject.path <- tempfile()
@@ -82,7 +80,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 		names(subject) <- gsub(" .+","",names(subject))
 		print("preparing subject sequences")
 		scon1 <- Biostrings::writeXStringSet(x = subject, filepath=subject.path.temp, append=F, format="fasta")
-		delete.subject <- T
+		#delete.subject <- T
 	} else {
 		if(file.exists(subject)){
 			subject.path     <- subject
@@ -111,7 +109,6 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 			#temp.path    <- paste0(dirname(output.path),"/temp")
 			#dircon       <- dir.check.create(temp.path)
 			#subject.path <- paste0(temp.path,"/subject.fas")
-			con3         <- Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path.temp, append=F, format="fasta")
 			# sets time limit for downloading files to 1000 seconds
 			options(timeout=1000)
 			conn <- utils::download.file(url=subject, destfile=subject.path,method="auto")
@@ -126,7 +123,8 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 			}
 			names(subject.obj.temp) <- gsub(" .+","",names(subject.obj.temp))
 			print("preparing subject sequences")
-			con2 <- Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path.temp, append=F, format="fasta")
+			#con2 <- Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path.temp, append=F, format="fasta")
+			con3  <- Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path.temp, append=F, format="fasta")
 			# delete.subject <- T
 			# rm(subject.obj.temp)
 		}
@@ -134,7 +132,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 	#### Make a temporary fasta file holding the query sequences if the value of the query argument is an XStringSet or URL string.
 	if(is(query,"XStringSet")){
 #		query.path   <- tempfile()
-		query.path   <- paste0(temp.path,"/query.fas")
+		#query.path   <- paste0(temp.path,"/query.fas")
 		names(query) <- mgsub(c(" ",","),c("_","_"),names(query))
 		names(query) <- substring(names(query),first=1,last=50)
 		if(is.null(parallel.groups)){
@@ -142,15 +140,10 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 			qcon4 <- Biostrings::writeXStringSet(x = query, filepath=query.path.temp, append=F, format="fasta")
 			# delete.query <- T
 		} else {
-			#temp.file <- list()
-			#length(temp.file) <- parallel.groups
-			#out.files.temp    <- temp.file
-			#for(i in 1:parallel.groups){
-			#	temp.file[[i]]      <- paste0(temp.path,"/",basename(tempfile()))
-			#	out.files.temp[[i]] <- tempfile()
-			#}
-			#temp.file      <- unlist(temp.file)
-			#out.files.temp <- unlist(out.files.temp)
+			### Ensure that number of parallel groups is not more than number of query sequences.
+			if(parallel.groups>length(query)){
+				parallel.groups <- length(query)
+			}
 			groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))
 			while(!all(1:parallel.groups %in% groups)){
 				groups     <- sort(sample(1:parallel.groups, size=length(query),replace=T))
@@ -175,7 +168,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 			}
 			if(any(nchar(unlist(names(query.obj.temp)))>50) | any(!is.na(stringr::str_locate(unlist(names(query.obj.temp))," ")))){
 #				query.path <- tempfile()
-				query.path            <- paste0(temp.path,"/query.fas")
+				#query.path            <- paste0(temp.path,"/query.fas")
 				names(query.obj.temp) <- mgsub(c(" ",","),c("_","_"),names(query.obj.temp))
 				names(query.obj.temp) <- substring(names(query.obj.temp),first=1,last=50)
 				if(is.null(parallel.groups)){
@@ -192,6 +185,10 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 					#}
 					#temp.file      <- unlist(temp.file)
 					#out.files.temp <- unlist(out.files.temp)
+					### Ensure that number of parallel groups is not more than number of query sequences.
+					if(parallel.groups>length(query)){
+						parallel.groups <- length(query)
+					}
 					groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))
 					while(!all(1:parallel.groups %in% groups)){
 						groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))
@@ -202,9 +199,9 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 						qcon.temp <- Biostrings::writeXStringSet(x = query.groups[[i]], filepath=query.paths.all[i], append=F, format="fasta")
 					}
 				}
-				rm(query.obj.temp)
+				#rm(query.obj.temp)
 			} else{
-				rm(query.obj.temp)
+				#rm(query.obj.temp)
 				#delete.query <- F
 			}
 		} else {
@@ -236,6 +233,10 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 				#}
 				#temp.file      <- unlist(temp.file)
 				#out.files.temp <- unlist(out.files.temp)
+				### Ensure that number of parallel groups is not more than number of query sequences.
+				if(parallel.groups>length(query)){
+					parallel.groups <- length(query)
+				}
 				groups <- sort(sample(1:parallel.groups, size=length(query),replace=T))
 				while(!all(1:parallel.groups %in% groups)){
 					groups         <- sort(sample(1:parallel.groups, size=length(query),replace=T))
@@ -246,13 +247,13 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 					qcon.temp <- Biostrings::writeXStringSet(x = query.groups[[i]], filepath=query.paths.all[i], append=F, format="fasta")
 				}
 			}
-			rm(query)
+			# rm(query)
 		}
 	}
 	#### Vector of file extensions that should be present if a local database has been created to query against.
-	DB.extensions        <- c(".nog",".nsq",".nhr",".nin")
+	DB.extensions      <- c(".nog",".nsq",".nhr",".nin")
 	### A vectory of filenames that should be present if local NCBI database exists for the subject sequences.
-	expected.db.files    <- paste0(subject.path.temp,DB.extensions)
+	expected.db.files  <- paste0(subject.path.temp,DB.extensions)
 	# expected.db.files.new <- paste0(subject.path.new,DB.extensions)
 	#### Run makeBlastDB to make a blast database if any of expected.db.files do not exist
 	if(!all(file.exists(expected.db.files))){
@@ -283,49 +284,63 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 #		for(i in 1:parallel.groups){
 #			command.all[[i]] <- paste(blast.exe.path,"-db",subject.path,"-query",temp.file[i],"-out",out.files.temp[i],"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
 #		}
-		command.all <- paste(blast.exe.path,"-db",subject.path.temp,"-query",temp.file.temp,"-out",out.files.temp,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
-		for(i in 1:parallel.groups){
-			system(command.all[i],wait=F)
-			start.time.command.i <- Sys.time()
-			print(paste(i,Sys.time()))
-			### While the ith output file is missing or is empty (zero bytes), and less than 10 minutes has elapsed since beginning to blast the ith group, wait 30 more seconds.
-			while((!file.exists(out.files.temp[i]) | file.size(out.files.temp[i])==0) & (as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")) < 10)){
-				print(paste("elapsed time:",round(as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")),digits=3),"min"))
-				system("sleep 30", wait=T)
-			}
-			### If after 5 minutes the ith output file is still missing, generate a warning and stop.
-			if(!file.exists(out.files.temp[i])){
-				stop(paste(out.files.temp[i],"is still missing after 5 minutes of blasting. Aborting."))
-			} else {
-				if(file.size(out.files.temp[i])==0){
-					print(paste("elapsed time:",round(as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")),digits=3),"min"))
-					### Wait 10 more minutes to see if anything is eventually written to the ith output file.
-					system("sleep 600", wait=T)
-					### If output file i is still zero bytes, stop with a warning, otherwise move on to the next i
-					if(file.size(out.files.temp[i])==0){
-						stop(paste(out.files.temp[i],"is still empty after", as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")) ,"minutes of blasting. Aborting."))
-					}
-				}
-			}
+		#command.all <- gsub(" & $","",paste(paste(blast.exe.path,"-db",subject.path.temp,"-query",query.paths.all,"-out",out.files.temp,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args,"& "),collapse=""))
+		command.all <- paste(blast.exe.path,"-db",subject.path.temp,"-query",query.paths.all,"-out",out.files.temp,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
+		#res        <- sapply() system(command.all,wait=T)
+		res         <- parallel::mclapply(X=command.all,FUN=system,wait=T)
+		if(any(unlist(res)!=0)){
+			warn.incomplete <- warning(paste("nonzero exit status for groups",which(unlist(res)!=0)))
 		}
+		### Now check which output files are nonempty
+		if(any(file.size(out.files.temp)!=0)){
+			out.files.nonempty <- out.files.temp[which(file.size(out.files.temp)!=0)]
+		} else {
+			stop("all output files empty")
+		}
+		
+		#command.all <- paste(blast.exe.path,"-db",subject.path.temp,"-query",temp.file.temp,"-out",out.files.temp,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
+#		for(i in 1:parallel.groups){
+#			system(command.all[i],wait=F)
+#			start.time.command.i <- Sys.time()
+#			print(paste(i,Sys.time()))
+#			### While the ith output file is missing or is empty (zero bytes), and less than 10 minutes has elapsed since beginning to blast the ith group, wait 30 more seconds.
+#			while((!file.exists(out.files.temp[i]) | file.size(out.files.temp[i])==0) & (as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")) < 10)){
+#				print(paste("elapsed time:",round(as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")),digits=3),"min"))
+#				system("sleep 30", wait=T)
+#			}
+#			### If after 5 minutes the ith output file is still missing, generate a warning and stop.
+#			if(!file.exists(out.files.temp[i])){
+#				stop(paste(out.files.temp[i],"is still missing after 5 minutes of blasting. Aborting."))
+#			} else {
+#				if(file.size(out.files.temp[i])==0){
+#					print(paste("elapsed time:",round(as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")),digits=3),"min"))
+#					### Wait 10 more minutes to see if anything is eventually written to the ith output file.
+#					system("sleep 600", wait=T)
+#					### If output file i is still zero bytes, stop with a warning, otherwise move on to the next i
+#					if(file.size(out.files.temp[i])==0){
+#						stop(paste(out.files.temp[i],"is still empty after", as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")) ,"minutes of blasting. Aborting."))
+#					}
+#				}
+#			}
+#		}
 		### Run all commands in command.all, which are separated by " & " to allow for parallelization.
 #		command <- gsub(" & sleep(10) & $","",paste0(paste0(unlist(command.all)," & sleep(10) & "),collapse=""))
 #		system(command, wait=T)
 		# If all of the output file sizes do not change during one hour, then read them in and combine the tables into one table.
 		# Vector of file sizes
-		file.sizes.temp <- file.size(out.files.temp)
-		print(paste("file.sizes:",file.sizes.temp,"elapsed time:",round(as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")),digits=3),"min"))
-		# Wait 1800 seconds (30 minutes), take a time stamp, and then enter the while loop if any file sizes have changed.
-		system("sleep 1800",wait=T)
-		start.time.i <- Sys.time()
-		### Every 1800 seconds, check if any file sizes have changed. If so, wait 1800 more seconds, unless the total time spent in the loop exceeds the numbr of minutes indicated by the max.runtime argument. If none of the file sizes change, exit the loop because the analysis is assumed to be done.
-		while(all(file.size(out.files.temp)!= file.sizes.temp) & (as.numeric(difftime(Sys.time(),start.time.i,units="mins")) < as.numeric(max.runtime))){
-			file.sizes.temp <- file.size(out.files.temp)
-			system("sleep 1800",wait=T)
-			print(paste("file.sizes:",file.sizes.temp,"elapsed time:",round(as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")),digits=3),"min"))
-		}
+		#file.sizes.temp <- file.size(out.files.temp)
+		#print(paste("file.sizes:",file.sizes.temp,"elapsed time:",round(as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")),digits=3),"min"))
+		## Wait 1800 seconds (30 minutes), take a time stamp, and then enter the while loop if any file sizes have changed.
+		#system("sleep 1800",wait=T)
+		#start.time.i <- Sys.time()
+		#### Every 1800 seconds, check if any file sizes have changed. If so, wait 1800 more seconds, unless the total time spent in the loop exceeds the numbr of minutes indicated by the max.runtime argument. If none of the file sizes change, exit the loop because the analysis is assumed to be done.
+		#while(all(file.size(out.files.temp)!= file.sizes.temp) & (as.numeric(difftime(Sys.time(),start.time.i,units="mins")) < as.numeric(max.runtime))){
+		#	file.sizes.temp <- file.size(out.files.temp)
+		#	system("sleep 1800",wait=T)
+		#	print(paste("file.sizes:",file.sizes.temp,"elapsed time:",round(as.numeric(difftime(Sys.time(),start.time.command.i,units="mins")),digits=3),"min"))
+		#}
 		### Read each of the output hit tables and then merge them into one.
-		result <- do.call(rbind,lapply(out.files.temp,FUN=data.table::fread))
+		result <- do.call(rbind,lapply(out.files.nonempty,FUN=data.table::fread))
 	}
 	if(output.format==6){
 		colnames(result) <- c("qseqid","sseqid","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore")
@@ -344,6 +359,9 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 	#if(delete.table){
 	#	file.remove(output.path)
 	#}
+	if(cleanup==TRUE){
+		system(paste("rm -R",temp.path))
+	}
 	result
 }
 #' @examples
