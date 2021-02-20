@@ -13,14 +13,14 @@ blast(
   method,
   subject,
   query,
-  table.out = NULL,
+  table.out,
   eval = 1e-05,
   output.format = 6,
   max.targets.per.query = 10,
   max.matches.per.target = 10,
-  parallel.groups = NULL,
+  parallel.groups = 10,
   num.threads = "max",
-  max.runtime = 2880,
+  cleanup = T,
   other.args = NULL
 )
 }
@@ -38,7 +38,7 @@ If DNAStringSet or URL character string, a local copy will be saved as a tempora
 
 \item{query}{Path to the fasta file containing the query sequences to find matches for. If a XStringSet object is used, then a temporary fasta file is created to hold the query sequences.}
 
-\item{table.out}{Where to save the output table. If NULL, the output is written to a temporary file that is read into R.}
+\item{table.out}{Path where to save the output table (including filename).}
 
 \item{eval}{Number to use for the expect value (e-value); default is 1e-5.}
 
@@ -48,11 +48,11 @@ If DNAStringSet or URL character string, a local copy will be saved as a tempora
 
 \item{max.matches.per.target}{Integer indicating the maximum number of matches per target (subject contig) per query. This sets BLAST's max_hsps argument. To determine the maximum total number of matches per query, multiply max.targets.per.query by max.matches.per.target.}
 
-\item{parallel.groups}{Number of groups to split the query sequences into for running in parallel. This is experimental.}
+\item{parallel.groups}{Number of groups to split the query sequences into for running in parallel. Default 10. Will likely produce an error if less than the number of query sequences.}
 
 \item{num.threads}{Either an integer indicating how many threads to use, or "max" (default), in which case num.threads is set to the number of cores available.}
 
-\item{max.runtime}{Maximum number of minutes to run blast before quitting. Default is 2,880 (48 hours). You may need to increase this.}
+\item{cleanup}{Logical indicating if temporary output files should be deleted. Default is TRUE.}
 
 \item{other.args}{A character string of the form "-argument1 value1 -argument2 value2" with additional arguments and values to pass to BLAST. See BLAST manual for definitions of available arguments. Default is NULL.}
 }
