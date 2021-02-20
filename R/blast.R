@@ -13,7 +13,7 @@
 #' XStringSet object (DNAStringSet or AAStringSet). If a XStringSet object is used, then a temporary fasta file is created to hold the sequences to search within.
 #' If DNAStringSet or URL character string, a local copy will be saved as a temporary file.
 #' @param query Path to the fasta file containing the query sequences to find matches for. If a XStringSet object is used, then a temporary fasta file is created to hold the query sequences.
-#' @param table.out Where to save the output table. If NULL, the output is written to a temporary file that is read into R.
+#' @param table.out Path where to save the output table (including filename).
 #' @param eval Number to use for the expect value (e-value); default is 1e-5.
 #' @param output.format Integer indicating which format to use for the output table of matches (default 6).
 #' @param max.targets.per.query Integer indicating the maximum number of targets (subject contigs) containing a match per query sequence. This sets the BLAST's max_target_seqs argument. Importantly, this argument does not control the total number of matches per query, because multiple matches may occer on the same subject contig.
@@ -24,26 +24,26 @@
 #' @param other.args A character string of the form "-argument1 value1 -argument2 value2" with additional arguments and values to pass to BLAST. See BLAST manual for definitions of available arguments. Default is NULL.
 #' @return Table of matches.
 #' @export blast
-blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-5,output.format=6,max.targets.per.query=10,max.matches.per.target=10,parallel.groups=NULL,num.threads="max",max.runtime=2880,other.args=NULL){
+blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,output.format=6,max.targets.per.query=10,max.matches.per.target=10,parallel.groups=NULL,num.threads="max",max.runtime=2880,other.args=NULL){
 	#### Path to output table(s)
-	if(is.null(table.out)){
-		output.path  <- tempfile()
-		delete.table <- T
-		if(!is.null(parallel.groups)){
-			out.files.temp    <- list()
-			length(out.files.temp) <- parallel.groups
-			for(i in 1:parallel.groups){
-				out.files.temp[[i]] <- tempfile()
-			}
-			out.files.temp <- unlist(out.files.temp)
-		}
-	} else {
+	# if(is.null(table.out)){
+	# 	output.path  <- tempfile()
+	# 	delete.table <- T
+	# 	if(!is.null(parallel.groups)){
+	# 		out.files.temp    <- list()
+	# 		length(out.files.temp) <- parallel.groups
+	# 		for(i in 1:parallel.groups){
+	# 			out.files.temp[[i]] <- tempfile()
+	# 		}
+	# 		out.files.temp <- unlist(out.files.temp)
+	# 	}
+	# } else {
 		output.path  <- table.out
 		delete.table <- F
 		if(!is.null(parallel.groups)){
 			out.files.temp  <- paste0(tools::file_path_sans_ext(table.out),"_",c(1:parallel.groups),".tsv")
 		}
-	}
+	#}
 	#### Prepare the path to the executables
 	if(blast.path=="auto"){
 		REEs.blast.dir   <- paste0(find.package("REEs"),"/blast-mafft/blast")
@@ -66,11 +66,19 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 		stop(paste0("'",makeblastdb.exe.path," is not executable. Aborting.'"))
 	}
 	#### Make a temporary fasta file holding the subject sequences if the value of the "subject" argument is an XStringSet or URL string.
+	# Where subject and query files data should be held.
+	temp.path         <- paste0(dirname(output.path),"/temp")
+	dircon            <- dir.check.create(temp.path)
+	subject.path.temp <- paste0(temp.path,"/",basename(tempfile()))
+	query.path.temp   <- paste0(temp.path,"/",basename(tempfile()))
 	if(is(subject,"XStringSet")){
-		subject.path   <- tempfile()
+#		subject.path <- tempfile()
+		#temp.path      <- paste0(dirname(output.path),"/temp")
+		#dircon         <- dir.check.create(temp.path)
+		#subject.path   <- paste0(temp.path,"/subject.fas")
 		names(subject) <- gsub(" .+","",names(subject))
 		print("preparing subject sequences")
-		Biostrings::writeXStringSet(x = subject, filepath=subject.path, append=F, format="fasta")
+		scon1 <- Biostrings::writeXStringSet(x = subject, filepath=subject.path.temp, append=F, format="fasta")
 		delete.subject <- T
 	} else {
 		if(file.exists(subject)){
@@ -78,49 +86,64 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			if(method %in% c("blastn","tblastn","tblastx")){
 				# Check on what these do: "deltablast", "psiblast", "rpsblast", "rpstblastn"
 				subject.obj.temp <- Biostrings::readDNAStringSet(subject.path)
-			}
-			if(method %in% c("blastp","blastx")) {
-				subject.obj.temp <- Biostrings::readAAStringSet(subject.path)
+			} else {
+				if(method %in% c("blastp","blastx")) {
+					subject.obj.temp <- Biostrings::readAAStringSet(subject.path)
+				} else {
+					stop("'method' argument must be 'blastn','tblastn','tblastx', 'blastp', or 'blastx'")
+				}
 			}
 			names(subject.obj.temp) <- gsub(" .+","",names(subject.obj.temp))
-			subject.path <- tempfile()
 			print("preparing subject sequences")
-			Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path, append=F, format="fasta")
-			delete.subject <- T
-			rm(subject.obj.temp)
+#			subject.path <- tempfile()
+#			con2 <- Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path, append=F, format="fasta")
+			#temp.path    <- paste0(dirname(output.path),"/temp")
+			#dircon       <- dir.check.create(temp.path)
+			#subject.path <- paste0(temp.path,"/subject.fas")
+			con3         <- Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path.temp, append=F, format="fasta")
+			# delete.subject <- T
+			# rm(subject.obj.temp)
 		} else {
-			subject.path <- tempfile()
+#			subject.path <- tempfile()
+			#temp.path    <- paste0(dirname(output.path),"/temp")
+			#dircon       <- dir.check.create(temp.path)
+			#subject.path <- paste0(temp.path,"/subject.fas")
+			con3         <- Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path.temp, append=F, format="fasta")
 			# sets time limit for downloading files to 1000 seconds
 			options(timeout=1000)
 			conn <- utils::download.file(url=subject, destfile=subject.path,method="auto")
 			if(method %in% c("blastn","tblastn","tblastx")){
 				subject.obj.temp <- Biostrings::readDNAStringSet(subject.path)
-			}
-			if(method %in% c("blastp","blastx")) {
-				subject.obj.temp <- Biostrings::readAAStringSet(subject.path)
+			} else{
+				if(method %in% c("blastp","blastx")) {
+					subject.obj.temp <- Biostrings::readAAStringSet(subject.path)
+				} else {
+					stop("'method' argument must be 'blastn','tblastn','tblastx', 'blastp', or 'blastx'")
+				}
 			}
 			names(subject.obj.temp) <- gsub(" .+","",names(subject.obj.temp))
 			print("preparing subject sequences")
-			Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path, append=F, format="fasta")
-			delete.subject <- T
-			rm(subject.obj.temp)
+			con2 <- Biostrings::writeXStringSet(x = subject.obj.temp, filepath=subject.path.temp, append=F, format="fasta")
+			# delete.subject <- T
+			# rm(subject.obj.temp)
 		}
 	}
 	#### Make a temporary fasta file holding the query sequences if the value of the query argument is an XStringSet or URL string.
 	if(is(query,"XStringSet")){
-		query.path   <- tempfile()
+#		query.path   <- tempfile()
+		query.path   <- paste0(temp.path,"/query.fas")
 		names(query) <- mgsub(c(" ",","),c("_","_"),names(query))
 		names(query) <- substring(names(query),first=1,last=50)
 		if(is.null(parallel.groups)){
 			print("preparing query sequences")
-			Biostrings::writeXStringSet(x = query, filepath=query.path, append=F, format="fasta")
-			delete.query <- T
+			qcon4 <- Biostrings::writeXStringSet(x = query, filepath=query.path.temp, append=F, format="fasta")
+			# delete.query <- T
 		} else {
 			temp.file <- list()
 			length(temp.file) <- parallel.groups
 			#out.files.temp    <- temp.file
 			for(i in 1:parallel.groups){
-				temp.file[[i]]      <- tempfile()
+				temp.file[[i]]      <- paste0(temp.path,"/",basename(tempfile()))
 			#	out.files.temp[[i]] <- tempfile()
 			}
 			temp.file      <- unlist(temp.file)
@@ -132,7 +155,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			query.groups   <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})
 			print("preparing query sequences")
 			for(i in 1:parallel.groups){
-				Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")
+				qcon.temp <- Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")
 			}
 		}
 	} else {
@@ -140,24 +163,28 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			query.path     <- query
 			if(method %in% c("blastn","tblastx","blastx")){
 				query.obj.temp <- Biostrings::readDNAStringSet(query.path)
-			}
-			if(method %in% c("tblastn","blastp")){
-				query.obj.temp <- Biostrings::readAAStringSet(query.path)
+			} else {
+				if(method %in% c("tblastn","blastp")){
+					query.obj.temp <- Biostrings::readAAStringSet(query.path)
+				} else {
+					stop("'method' argument must be 'blastn','tblastn','tblastx', 'blastp', or 'blastx'")
+				}
 			}
 			if(any(nchar(unlist(names(query.obj.temp)))>50) | any(!is.na(stringr::str_locate(unlist(names(query.obj.temp))," ")))){
-				query.path <- tempfile()
+#				query.path <- tempfile()
+				query.path   <- paste0(temp.path,"/query.fas")
 				names(query.obj.temp) <- mgsub(c(" ",","),c("_","_"),names(query.obj.temp))
 				names(query.obj.temp) <- substring(names(query.obj.temp),first=1,last=50)
 				if(is.null(parallel.groups)){
 					print("preparing query sequences")
-					Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path, append=F, format="fasta")
-					delete.query <- T
+					qcon5 <- Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path.temp, append=F, format="fasta")
+					#delete.query <- T
 				} else {
 					temp.file <- list()
 					length(temp.file) <- parallel.groups
 					#out.files.temp <- temp.file
 					for(i in 1:parallel.groups){
-						temp.file[[i]]      <- tempfile()
+						temp.file[[i]]      <- paste0(temp.path,"/",basename(tempfile()))
 						#out.files.temp[[i]] <- tempfile()
 					}
 					temp.file      <- unlist(temp.file)
@@ -169,16 +196,17 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 					query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})
 					print("preparing query sequences")
 					for(i in 1:parallel.groups){
-						Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")
+						qcon.temp <- Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")
 					}
 				}
 				rm(query.obj.temp)
 			} else{
 				rm(query.obj.temp)
-				delete.query <- F
+				#delete.query <- F
 			}
 		} else {
-			query.path <- tempfile()
+#			query.path <- tempfile()
+			#query.path <- paste0(temp.path,"/query.fas")
 			# Increases time limit for downloading files to 1000 seconds.
 			options(timeout=1000)
 			conn <- utils::download.file(url=query, destfile=query.path,method="auto")
@@ -193,14 +221,14 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 			names(query.obj.temp) <- substring(names(query.obj.temp),first=1,last=50)
 			if(is.null(parallel.groups)){
 				print("preparing query sequences")
-				Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path, append=F, format="fasta")
+				qcon6 <- Biostrings::writeXStringSet(x = query.obj.temp, filepath=query.path.temp, append=F, format="fasta")
 				delete.query <- T
 			} else {
 				temp.file <- list()
 				length(temp.file) <- parallel.groups
 				#out.files.temp <- temp.file
 				for(i in 1:parallel.groups){
-					temp.file[[i]]      <- tempfile()
+					temp.file[[i]]      <- paste0(temp.path,"/",basename(tempfile()))
 					#out.files.temp[[i]] <- tempfile()
 				}
 				temp.file      <- unlist(temp.file)
@@ -212,7 +240,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 				query.groups <- lapply(X=c(1:parallel.groups),FUN=function(x){query[which(groups==x)]})
 				print("preparing query sequences")
 				for(i in 1:parallel.groups){
-					Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")
+					qcon.temp <- Biostrings::writeXStringSet(x = query.groups[[i]], filepath=temp.file[[i]], append=F, format="fasta")
 				}
 			}
 			rm(query)
@@ -221,11 +249,12 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 	#### Vector of file extensions that should be present if a local database has been created to query against.
 	DB.extensions        <- c(".nog",".nsq",".nhr",".nin")
 	### A vectory of filenames that should be present if local NCBI database exists for the subject sequences.
-	expected.db.files    <- paste(subject.path,DB.extensions,sep="")
+	expected.db.files    <- paste0(subject.path.temp,DB.extensions)
+	# expected.db.files.new <- paste0(subject.path.new,DB.extensions)
 	#### Run makeBlastDB to make a blast database if any of expected.db.files do not exist
 	if(!all(file.exists(expected.db.files))){
 		print("creating blast database")
-		makeBlastDB(makeblastdb.exe.path,subject.path)
+		dbcon <- makeBlastDB(makeblastdb.exe.path,subject.path.temp)
 	}
 	### If num.threads argument is set to "max", set num.threads equal to the number of cores available.
 	if(num.threads=="max"){
@@ -234,7 +263,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out=NULL,eval=1e-
 	### Run blast!!
 	print("about to run blast")
 	if(is.null(parallel.groups)){
-		command <- paste(blast.exe.path,"-db",subject.path,"-query",query.path,"-out",output.path,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
+		command <- paste(blast.exe.path,"-db",subject.path.temp,"-query",query.path.temp,"-out",output.path,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
 		system(command, wait=T)
 		# Need to find a way to check if the analysis is complete before doing things from here onward.
 		result <- data.table::fread(output.path)
