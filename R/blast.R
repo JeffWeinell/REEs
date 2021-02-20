@@ -62,11 +62,11 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 	}
 	#### Make a temporary fasta file holding the subject sequences if the value of the "subject" argument is an XStringSet or URL string.
 	# Where subject and query files data should be held.
+	output.path       <- table.out
 	temp.path         <- paste0(dirname(output.path),"/",basename(tempfile(pattern="tempoutdir")))
 	dircon            <- dir.check.create(temp.path)
 	subject.path.temp <- paste0(temp.path,"/",basename(tempfile()))
 	query.path.temp   <- paste0(temp.path,"/",basename(tempfile()))
-	output.path       <- table.out
 	#delete.table      <- F
 	if(!is.null(parallel.groups)){
 		out.files.temp   <- paste0(temp.path,"/",basename(paste0(tools::file_path_sans_ext(table.out),"_",c(1:parallel.groups),".tsv")))
