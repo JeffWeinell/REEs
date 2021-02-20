@@ -171,18 +171,35 @@ Lacerta.agilis_exome   <- get.seqs.from.gff(input.seqs=Lacerta.agilis.genome_url
 Biostrings::writeXStringSet(x=Lacerta.agilis_exome,filepath=paste0(working.dir,"/Lacerta.agilis_exome_longer120bp.fas"))
 ```
 
-TBLASTX the extracted sequences against each genome. In each case the output is a hit table of matches. The arguments max.matches.per.query sets the maximum number of contigs in the subject species that can contain a match per query sequence; other.args="-max_hsps 10" indicates to return at most 10 matches for each pair of query and subject contigs; eval sets the maximum Expectation Value to consider as a match.
+Option 1: Translate extracted CDS sequences using the ```translate.exome``` function. The function translates each of the six possible reading frames and then filters sequences with internal stop codons. Then, run ```blast``` with method="tblastn", AA sequences as the query, and DNA sequences of each genome as subjects.
+
+```
+# Translate extracted CDS sequences
+Lacerta.agilis_translated.exome <- REEs::translate.exome(input.seqs=Lacerta.agilis_exome)
+# Write AA sequences to file
+writeXStringSet(Lacerta.agilis.translated.exome, paste0(working.dir,"/Lacerta.agilis_translated.exome_longer120bp.fas"))
+
+# Run TBLASTN. I strongly recommend using a bash script and submitting each of these individually to run on a high performance computing cluster.
+Podarcis.muralis.hits        <- REEs::blast(method="tblastn",subject=Podarcis.muralis.genome_url,query=Lacerta.agilis_translated.exome,table.out=paste0(working.dir,"/Podarcis.muralis.tblastn.hits.txt"),max.targets.per.query=10,max.matches.per.target=10,eval=1e-5)
+Lacerta.agilis.hits          <- REEs::blast(method="tblastn",subject=Lacerta.agilis.genome_url,query=Lacerta.agilis_translated.exome,table.out=paste0(working.dir,"/Lacerta.agilis.tblastn.hits.txt"),max.targets.per.query=10,max.matches.per.target=10,eval=1e-5)
+Zootoca.vivipara.hits        <- REEs::blast(method="tblastn",subject=Zootoca.vivipara.genome_url,query=Lacerta.agilis_translated.exome,table.out=paste0(working.dir,"/Zootoca.vivipara.tblastn.hits.txt"),max.targets.per.query=10,max.matches.per.target=10,eval=1e-5)
+Aspidoscelis.marmoratus.hits <- REEs::blast(method="tblastn",subject=Aspidoscelis.marmoratus.genome_url,query=Lacerta.agilis_translated.exome,table.out=paste0(working.dir,"/Aspidoscelis.marmoratus.tblastn.hits.txt"),max.targets.per.query=10,max.matches.per.target=10,eval=1e-5)
+Salvator.merianae.hits       <- REEs::blast(method="tblastn",subject=Salvator.merianae.genome_url,query=Lacerta.agilis_translated.exome,table.out=paste0(working.dir,"/Salvator.merianae.tblastn.hits.txt"),max.targets.per.query=10,max.matches.per.target=10,eval=1e-5)
+
+```
+
+Option 2 (takes longer than option 1 and there is no obvious advantage): TBLASTX the extracted sequences against each genome. In each case the output is a hit table of matches. The arguments max.matches.per.query sets the maximum number of contigs in the subject species that can contain a match per query sequence; other.args="-max_hsps 10" indicates to return at most 10 matches for each pair of query and subject contigs; eval sets the maximum Expectation Value to consider as a match.
 You may need to experiment with the values of these parameters. One strategy is to query a small number of sequences with relaxed settings for -max_hsps, max.matches.per.query, and eval (i.e., use high values for these parameters, e.g. eval=10, max.matches.per.query=50, other.args="-max_hsps 50", to allow many matches per query including low scoring matches). Then examine the output table to determine how stringent (low values) you can set these parameters while still obtaining the likely best match.
 
 For this example, I initially used -max_hsps unlimited, max.matches.per.query=50, and eval=1e-05, but these analyses never finished running and the output files had grown to > 5Gb. Tweaking the parameters to those shown below seemed appropriate, and bitscores were usually high for only the top one to a few matches.
 It is a good idea to consult the [BLAST Help Manual](https://www.ncbi.nlm.nih.gov/books/NBK279690/) for a variety of strategies for searching with BLAST. [This table](https://www.ncbi.nlm.nih.gov/books/NBK279684/) of arguments is also useful.
 
-**Important**: I strongly suggest that you don't run this locally, unless you have a A LOT of RAM.
+**Important**: I strongly suggest that you don't run this locally, unless you have a A LOT of RAM. You may need to run each of these in batches of 10K queries per run because of memory issues.
 
 <!---Running with eval=1e-18,max.matches.per.query=7,other.args="-best_hit_overhang 0.1 -best_hit_score_edge 0.1" did not work to keep only the best match per contig pair.--->
 ```
 # Run TBLASTX. I strongly recommend using a bash script and submitting each of these individually to run on a high performance computing cluster. This will likely take days to run.
-Podarcis.muralis.hits        <- REEs::blast(method="tblastx",subject=Podarcis.muralis.genome_url,query=Lacerta.agilis_exome[1:2],table.out=paste0(working.dir,"/Podarcis.muralis.tblastx.exons.hits.txt"),max.targets.per.query=10,max.matches.per.target=10,eval=1e-15)
+Podarcis.muralis.hits        <- REEs::blast(method="tblastx",subject=Podarcis.muralis.genome_url,query=Lacerta.agilis_exome,table.out=paste0(working.dir,"/Podarcis.muralis.tblastx.exons.hits.txt"),max.targets.per.query=10,max.matches.per.target=10,eval=1e-15)
 Lacerta.agilis.hits          <- REEs::blast(method="tblastx",subject=Lacerta.agilis.genome_url,query=Lacerta.agilis_exome,table.out=paste0(working.dir,"/Lacerta.agilis.tblastx.exons.hits.txt"),max.targets.per.query=10,max.matches.per.target=10,eval=1e-15)
 Zootoca.vivipara.hits        <- REEs::blast(method="tblastx",subject=Zootoca.vivipara.genome_url,query=Lacerta.agilis_exome,table.out=paste0(working.dir,"/Zootoca.vivipara.tblastx.exons.hits.txt"),max.targets.per.query=10,max.matches.per.target=10,eval=1e-15)
 Aspidoscelis.marmoratus.hits <- REEs::blast(method="tblastx",subject=Aspidoscelis.marmoratus.genome_url,query=Lacerta.agilis_exome,table.out=paste0(working.dir,"/Aspidoscelis.marmoratus.tblastx.exons.hits.txt"),max.targets.per.query=10,max.matches.per.target=10,eval=1e-15)
