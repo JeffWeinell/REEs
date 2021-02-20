@@ -91,7 +91,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 			if(method %in% c("blastn","tblastn","tblastx")){
 				subject.obj.temp <- Biostrings::readDNAStringSet(subject.path)
 			} else{
-				if(method %in% c("blastp","blastx")) {
+				if(method %in% c("blastp","deltablast","psiblast","blastx")) {
 					subject.obj.temp <- Biostrings::readAAStringSet(subject.path)
 				} else {
 					stop("'method' argument must be 'blastn','tblastn','tblastx', 'blastp', or 'blastx'")
@@ -130,7 +130,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 			if(method %in% c("blastn","tblastx","blastx")){
 				query.obj.temp <- Biostrings::readDNAStringSet(query.path)
 			} else {
-				if(method %in% c("tblastn","blastp")){
+				if(method %in% c("tblastn","blastp","deltablast","psiblast")){
 					query.obj.temp <- Biostrings::readAAStringSet(query.path)
 				} else {
 					stop("'method' argument must be 'blastn','tblastn','tblastx', 'blastp', or 'blastx'")
@@ -162,7 +162,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 			if(method %in% c("blastn","tblastx","blastx")){
 				query.obj.temp <- Biostrings::readDNAStringSet(query.path)
 			}
-			if(method %in% c("tblastn","blastp")){
+			if(method %in% c("tblastn","blastp","deltablast","psiblast")){
 				query.obj.temp <- Biostrings::readAAStringSet(query.path)
 			}
 			query.obj.temp        <- Biostrings::readDNAStringSet(query.path)
