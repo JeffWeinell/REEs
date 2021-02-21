@@ -199,17 +199,17 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 		dbcon <- makeBlastDB(makeblastdb.exe.path,subject.path.temp)
 	}
 	### If num.threads argument is set to "max", set num.threads equal to the number of cores available.
-	if(is.null(parallel.groups)){
+#	if(is.null(parallel.groups)){
 		if(num.threads=="max"){
 			num.threads <- parallel::detectCores()
 		}
-	} else {
-		if(num.threads=="max"){
-			num.threads <- max(floor(parallel::detectCores()/parallel.groups),1)
-		} else {
-			num.threads <- max(floor(num.threads/parallel.groups),1)
-		}
-	}
+#	} else {
+#		if(num.threads=="max"){
+#			num.threads <- max(floor(parallel::detectCores()/parallel.groups),1)
+#		} else {
+#			num.threads <- max(floor(num.threads/parallel.groups),1)
+#		}
+#	}
 	### Run blast!!
 	print("about to run blast")
 	if(is.null(parallel.groups)){
