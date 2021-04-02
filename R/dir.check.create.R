@@ -1,8 +1,12 @@
+#### Neither of these is needed anymore, because you can use the base function dir.create(dir.temp,recursive=T)
+
+
 #' Create directory unless it already exists
 #' 
 #' Checks if a directory exists, and if not, creates it. Parent directories are also created if they do not already exist.
+#' Avoids calling 'mkdir -p dir'
 #'
-#' @param directory name or path to the directory to check and create
+#' @param directory name or path to the directory to check/create
 #' @return A new directory unless it already existed
 #' @export dir.check.create.v2
 dir.check.create.v2 <- function(directory){

@@ -32,7 +32,8 @@ makeStatsTable <- function(input.seqs,species.names,reference.species,input.gff,
 	}
 	### If alignments.out is not NULL, check if it exists and if not, create it.
 	if(!is.null(alignments.out)){
-		dir.check.create(alignments.out)
+		# dir.check.create(alignments.out)
+		dir.create(alignments.out,recursive=T)
 	}
 	### A list of numbers indicating which of the species are also in the subgroup.
 	is.subgroup     <- mgrep(query=subgroup,subject=species)
@@ -350,7 +351,8 @@ align.and.concatenate.best.exons <- function(input.seqs,statsTable.path,output.d
 		i.stop  <- length(CDS.names)   ### default i.stop, ie which exons to stop the loop at
 	}
 	
-	dir.check.create(paste(output.dir,"exonAlignments",sep=""))
+	# dir.check.create(paste(output.dir,"exonAlignments",sep=""))
+	dir.create(paste(output.dir,"exonAlignments",sep=""),recursive=T)
 	
 	for(i in i.start:i.stop){
 	

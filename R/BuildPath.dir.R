@@ -6,15 +6,15 @@
 #' @return Character vector containing paths to each directory on the input path.
 #' @export BuildPath.dir
 BuildPath.dir <- function(path){
-    if(file.exists(path)==T & dir.exists(path)==F){
-        stop("input path is to a file, but should be a directory")
-    } else {
-        subpath <- path
-        result  <- subpath
-        while(!(dirname(subpath) %in% c("/",""))){
-            subpath <- dirname(subpath)
-            result  <- c(subpath,result)
-        }
-    }
-    result
+	if(file.exists(path)==T & dir.exists(path)==F){
+		stop("input path is to a file, but should be a directory")
+	} else {
+		subpath <- path
+		result  <- subpath
+		while(!(dirname(subpath) %in% c("/",""))){
+			subpath <- dirname(subpath)
+			result  <- c(subpath,result)
+		}
+	}
+	result
 }

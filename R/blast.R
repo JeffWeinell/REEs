@@ -57,7 +57,8 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 	output.path       <- table.out
 	# Create a directory to hold output files other than output.table; this directory will be deleted upon close if cleanup = TRUE
 	temp.path         <- paste0(dirname(output.path),"/",basename(tempfile(pattern="tempoutdir")))
-	dircon            <- dir.check.create(temp.path)
+	# dircon            <- dir.check.create(temp.path)
+	dircon            <- dir.create(temp.path,recursive=T)
 	subject.path.temp <- paste0(temp.path,"/",basename(tempfile()))
 	query.path.temp   <- paste0(temp.path,"/",basename(tempfile()))
 	if(!is.null(parallel.groups)){
@@ -265,29 +266,4 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 #' test.subject  <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/625/485/GCA_001625485.1_ASM162548v1/GCA_001625485.1_ASM162548v1_genomic.fna.gz"
 #' test.50hits   <- blast(method="tblastx",subject=test.subject,query=test.query)
 
-#' @title Make Local Blast Database
-#' 
-#' Wrapper for the NCBI makeblastdb command. This function makes an NCBI blast database (which is needed to run blast against).
-#' 
-#' @param makeblastdb.path Path to makeblastdb (included in the bin folder of blast)
-#' @param subject.path Path to the file containing the sequences to include in the database
-#' @return Creates a blast database file.
-#' @export makeBlastDB
-makeBlastDB  <- function(makeblastdb.path,subject.path){
-	### pastes the parts into a character string that can be executed in terminal
-	command  <- paste(makeblastdb.path,"-in",subject.path,"-parse_seqids -dbtype nucl -max_file_sz 4GB")
-	### calls terminal to execute the character string "command"
-	system(command)
-}
-
-#' @title Check Executable
-#' 
-#' Checks if the input path is executable.
-#' 
-#' @param exe.path Character string with input path to check.
-#' @return Integer 0 if exe.path is executable, otherwise 1.
-#' @export check.if.executable
-check.if.executable <- function(exe.path){
-	system(paste("command -v",paste0("'",exe.path,"'"),">/dev/null 2>&1 || { echo >&2 ''; exit 1; }"))
-}
 
