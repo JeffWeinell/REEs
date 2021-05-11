@@ -960,21 +960,21 @@ The following species were sequenced:
 *Acrochordus granulatus* | Acrochordidae |--- | KU 302952|
 *Achalinus spinalis* | Xenodermidae | --- |KU 312258 (MCB 516)|
 *Cerberus schneideri*| Homalopsidae| ---|KU 324534 (CDS 5109)|
-*Aplopeltura boa*|Pareidae|--| KU 315147 (RMB 10058)|
+*Aplopeltura boa*|Pareidae|---| KU 315147 (RMB 10058)|
 *Ahaetulla prasina preocularis*| Colubridae|Ahaetulliinae | KU 323364|
 *Calamaria gervaisii*| Colubridae | Calamariinae | KU 327406|
-*Boiga irregularis*|Colubridae|Colubrinae||
-*Scolecophis atrocinctus*|Colubridae|Colubrinae|XXXX|
-*Tantilla taeniata*|Colubridae|Colubrinae|XXXX|
+*Boiga irregularis*|Colubridae|Colubrinae|KU 345021|
+*Scolecophis atrocinctus*|Colubridae|Colubrinae|KU 289804|
+*Tantilla taeniata*|Colubridae|Colubrinae|KU 289863|
 *Dipsas indica*| Colubridae| Dipsadinae | KU 215336|
 *Grayia smythii*|Colubridae|Grayiinae | KU 341872|
 *Pseudoxenodon* sp.|Colubridae| Pseudoxenodontinae | KU 312221|
 *Sibynophis bivittatus*| Colubridae |Sibynophiinae | KU 309608|
-*Elapsoidea sundevalli*|Elapidae|---| Voucher XXXX (MCZ-A 27807)|
+*Elapsoidea sundevalli*|Elapidae|---| MCZ R-190390 (MCZ A-27807)|
 *Micrurus corallinus*|Elapidae |--- | KU 289205|
 *Hemibungarus mcclungi*|Elapidae |--- | KU 303027|
 *Buhoma depressiceps marlieri*|*incertae sedis*|---|Voucher XXXX (CFS 1528)|
-*Aparallactus capensis* |Atractaspididae|Aparallactinae| Voucher XXXX (MCZ-A 28808) | 
+*Aparallactus capensis* |Atractaspididae|Aparallactinae| MCZ R-193258 (MCZ A-28808) | 
 *Cyclocorus lineatus lineatus*|Cyclocoridae|---|KU 335808|
 *Oxyrhabdium* cf. *modestum*|Cyclocoridae|---|KU 338101|
 *Oxyrhabdium leporinum*|Cyclocoridae|---| KU 346583 (RMB 23647)|
@@ -983,15 +983,14 @@ The following species were sequenced:
 *Hologerrhum philippinum*|Cyclocoridae |--- | KU 330752|
 *Myersophis alpestris*|Cyclocoridae |---| KU 308684|
 *Chamaelycus fasciatus*|Lamprophiidae|---|KU 348632 (KAE 243)|
-*Lamprophis lineatus*|Lamprophiidae|--- | EBG 706|
-*Prosymna visseri*|Prosymidae|---| MCZ-R 190223 (AMB 8075) |
+*Lamprophis lineatus*|Lamprophiidae|--- | Voucher XXXX (EBG 706)|
+*Prosymna visseri*|Prosymidae|---| MCZ R-190223 (AMB 8075) |
 *Psammophis sibilans*|Psammophiidae |--- | RAX 2053|
-*Pseudaspis cana*|Pseudaspididae|---| XXXX (MCZ-A 27068) |
+*Pseudaspis cana*|Pseudaspididae|---| Voucher XXXX (MCZ A-27068) |
 *Pseudoxyrhopus tritaeniatus*|Pseudoxyrhophiidae|---|KU 340969 (SML 029)|
 *Rhamphiophis oxyrhynchus*|Rhamphiophiidae|---|KU 290451 (RAX 2104)|
-*Psammodynastes pulverulentus*|*incertae sedis*|| KU 329686; KU 328547|
-*Micrelaps* sp.| *incertae sedis* |--- | TauM 16738|
-
+*Psammodynastes pulverulentus*|*incertae sedis*|---| KU 329686; KU 328547|
+*Micrelaps* sp.| *incertae sedis* |--- | Voucher XXXX (TauM 16738)|
 
 <a name="LibraryPrep"></a>
 ## Sequence capture library prep
