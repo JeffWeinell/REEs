@@ -954,7 +954,31 @@ species | genome assembly accession | contig prefixes | n target loci with baits
 <a name="Sampling"></a>
 ## Taxa sampled
 
-The following species were sequenced: *Achalinus spinalis*, *Aparallactus capensis*, *Aplopeltura boa*, *Elapsoidea sundevalli*, *Boiga irregularis*, *Buhoma depressiceps*, *Cerberus schneideri*, *Chamaelycus fasciatus*, *Cyclocorus lineatus*, *Oxyrhabdium* cf. *modestum*, *Oxyrhabdium leporinum*, *Oxyrhabdium modestum*, *Prosymna visseri*, *Psammodynastes pulverulentus*, *Pseudaspis cana*, *Pseudoxyrhopus tritaeniatus*, *Rhamphiophis oxyrhynchus*, *Scolecophis atrocinctus*, *Tantilla taeniata*.
+The following species were sequenced: 
+ Species|Family |Subfamily| Voucher | Locality
+---|---|---|---|---
+*Achalinus spinalis* | Xenodermidae | --- ||
+*Aparallactus capensis* |Atractaspididae|Aparallactinae||
+*Aplopeltura boa*|Pareidae|--||
+*Elapsoidea sundevalli*|Elapidae|---||
+*Boiga irregularis*|Colubridae|Colubrinae||
+*Buhoma depressiceps*|*incertae sedis*|||
+*Cerberus schneideri*|Homalopsidae|||
+*Chamaelycus fasciatus*|Lamprophiidae|||
+*Cyclocorus lineatus*|Cyclocoridae|||
+*Oxyrhabdium* cf. *modestum*|Cyclocoridae|||
+*Oxyrhabdium leporinum*|Cyclocoridae|||
+*Oxyrhabdium modestum*|Cyclocoridae|||
+*Prosymna visseri*|Prosymidae|---||
+*Psammodynastes pulverulentus*|*incertae sedis*|||
+*Pseudaspis cana*|Pseudaspididae|---||
+*Pseudoxyrhopus tritaeniatus*|Pseudoxyrhophiidae|||
+*Rhamphiophis oxyrhynchus*|Rhamphiophiidae|||
+*Scolecophis atrocinctus*|Colubridae|Colubrinae||
+*Tantilla taeniata*|Colubridae|Colubrinae||
+
+Library-prep in progress: 
+
 
 <a name="LibraryPrep"></a>
 ## Sequence capture library prep
