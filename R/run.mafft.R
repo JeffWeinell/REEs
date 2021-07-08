@@ -3,6 +3,7 @@
 #' R wrapper for running MAFFT alignment software.
 #' Need to check if there is any reason to use this function instead of the REEs::mafft
 #' 
+#' @param mafft.path Path to MAFFT executable. Default NULL, in which case the mafft executable is searched for on your path and environement.
 #' @param unaligned.contigs Input DNA sequences in an object of class DNAStringSet.
 #' @param add.contigs Default is NULL. This argument not currently implemented in this function.
 #' @param algorithm Alignment algorithm to use. Default is "localpair". Alternatives are "genafpair" and "globalpair". See MAFFT documentation for more details: https://mafft.cbrc.jp/alignment/software/manual/manual.html.
@@ -11,7 +12,7 @@
 #' @param threads How many threads should be used (default is 6)
 #' @param delete.files If files should be deleted (default is T)
 #' @return DNAStringSet object holding the aligned DNA sequences
-run.mafft<-function(unaligned.contigs, add.contigs = NULL, algorithm = "localpair", rev.dir = T, save.name = NULL, threads = 6, delete.files = T){
+run.mafft<-function(mafft.path=NULL,unaligned.contigs, add.contigs = NULL, algorithm = "localpair", rev.dir = T, save.name = NULL, threads = 6, delete.files = T){
   save.contigs<-as.list(as.character(unaligned.contigs))
   if (is.null(save.name) == T) {
        save.name <- paste(sample(LETTERS, 5, replace = T), collapse = "")
@@ -21,7 +22,14 @@ run.mafft<-function(unaligned.contigs, add.contigs = NULL, algorithm = "localpai
   	} else {
   		adjust.direction <- ""
   	}
-  
+  if(is.null(mafft.path)){
+    mafft.testpath <- find.exe.path("mafft")
+    if(mafft.testpath!=1){
+      mafft.path <- mafft.testpath
+    } else {
+      stop("No valid path to MAFFT identified. Set 'mafft.path' to location of 'MAFFT' executable file")
+    }
+  }
   #Adds a sequence into the alignment. Saves much computation.
   #if (algorithm == "add"){
   #  #Saves to folder to run with mafft
@@ -45,7 +53,9 @@ run.mafft<-function(unaligned.contigs, add.contigs = NULL, algorithm = "localpai
     seqinr::write.fasta(sequences = save.contigs, names = names(save.contigs), paste0(save.name, ".fa"), nbchar = 1000000, as.string = T)
     
     #Runs MAFFT to align
-    system(paste0("mafft --",algorithm, " --maxiterate 1000 ", adjust.direction, " --quiet --op 3 --ep 0.123"," --thread ", threads, " ", save.name, ".fa > ", save.name, "_align.fa"))
+    # system(paste0("mafft --",algorithm, " --maxiterate 1000 ", adjust.direction, " --quiet --op 3 --ep 0.123"," --thread ", threads, " ", save.name, ".fa > ", save.name, "_align.fa"))
+    system(sprintf("%s --%s --maxiterate 1000 %s --quiet --op 3 --ep 0.123 --thread %s %s.fa > %s_align.fa",mafft.path,algorithm,adjust.direction,threads,save.name,save.name))
+
     # Loads up fasta file
     alignment <- Rsamtools::scanFa(Rsamtools::FaFile(paste0(save.name, "_align.fa")))
     unlink(paste0(save.name, ".fa"))
@@ -58,3 +68,4 @@ run.mafft<-function(unaligned.contigs, add.contigs = NULL, algorithm = "localpai
       return(alignment)
     }
 }#function end
+
