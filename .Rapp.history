@@ -1,322 +1,49 @@
-query.subject.pairs[2,"sseqid"]
-which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"]) & which(matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
-which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
-which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"])
-which(matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
-which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"])
-matches.ordered[1:4,]
-matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[1,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[1,"sseqid"]),]
-matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[2,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[2,"sseqid"]),]
-matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[3,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[3,"sseqid"]),]
-lapply(X=1:10,FUN=function(i){ matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]})
-matches.list        <- lapply(X=1:nrow(query.subject.pairs),FUN=function(i){ matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]})
-length(matches.list)
-nrow(query.subject.pairs)
-matches.list <- list(); length(matches.list) <- nrow(query.subject.pairs)
-i=1
-matches.list[[i]] <- matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]
-matches.list[1:10]
-for(i in 1:100){#
-			matches.list[[i]] <- matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]#
-		}
-matches.list[1:100]
-for(i in 1:nrow(query.subject.pairs)){#
-	#	for(i in 1:100){#
-			matches.list[[i]] <- matches.ordered[which(matches.ordered[,"qseqid"] == query.subject.pairs[i,"qseqid"] & matches.ordered[,"sseqid"] == query.subject.pairs[i,"sseqid"]),]#
-		}
-i
-matches.list <- matches.list[1:4014]
-min.list            <- lapply(matches.list,FUN=function(x){apply(X=x[,c("sstart","send")],MARGIN=1,FUN=min)})#
-		max.list            <- lapply(matches.list,FUN=function(x){apply(X=x[,c("sstart","send")],MARGIN=1,FUN=max)})
-matches.list[[1]]
-apply(X=matches.list[[1]][,c("sstart","send")],MARGIN=1,FUN=min)
-apply(X=matches.list[[1]][,c("sstart","send")],MARGIN=1,FUN=max)
-matches.list <- matches.list[1:4013]
-min.list            <- lapply(matches.list,FUN=function(x){apply(X=x[,c("sstart","send")],MARGIN=1,FUN=min)})
-max.list            <- lapply(matches.list,FUN=function(x){apply(X=x[,c("sstart","send")],MARGIN=1,FUN=max)})
-subject.ranges      <- IRanges::IRangesList(start=min.list,end=max.list)
-drop.hits           <- IRanges::findOverlaps(subject.ranges,drop.self=T,type="within")
-remove.rows.list    <- lapply(drop.hits,FUN=function(x){unique(as.matrix(x)[,1])})
-dim(remove.rows.list)
-length(remove.rows.list)
-remove.rows.list[[1]]
-remove.rows.list[[2]]
-remove.rows.list[[4]]
-function1           <- function(A,B){if(length(B)>0){A[-B,]} else{A}}
-filtered.matches.ordered.temp  <- t(as.list(mapply(FUN=function1,A=matches.list,B=remove.rows.list)))
-filtered.matches.ordered.temp2 <- list(); length(filtered.matches.ordered.temp2) <- ncol(filtered.matches.ordered.temp)
-for(i in 1:ncol(filtered.matches.ordered.temp)){#
-			filtered.matches.ordered.temp2[[i]] <- unlist(filtered.matches.ordered.temp[,i])#
-		}
-class(filtered.matches.ordered.temp2)
-filtered.matches.ordered           <- as.data.frame(do.call(cbind,filtered.matches.ordered.temp2)
-)
-dim(filtered.matches.ordered)
-filtered.matches.ordered[1:10,]
-colnames(filtered.matches.ordered) <- colnames(matches.ordered)
-##### Set column modes#
-		# Set which columns should be mode numeric#
-		numeric.columns <- c(3:12)#
-		# Set mode to numeric for those columns that should be numeric#
-		filtered.matches.ordered[, numeric.columns] <- sapply(filtered.matches.ordered[, numeric.columns], as.numeric)#
-		# Set which columns should be mode character#
-		character.columns <- c(1:2)#
-		# Set mode to "character" for the columns indexed in the character.columns vector#
-		filtered.matches.ordered[, character.columns] <- sapply(filtered.matches.ordered[, character.columns], as.character)
-filtered.matches.ordered[1:10,]
-best.matches          <- as.numeric(match(unique(filtered.matches.ordered$qseqid), filtered.matches.ordered$qseqid))
-best.matches[1]
-best.data             <- filtered.matches.ordered[best.matches,]
-best.data[1:10,]
-if(min.bitscore.difference!=0){#
-		without.best.data     <- filtered.matches.ordered[-best.matches,]#
-		second.best.matches   <- as.numeric(match(unique(filtered.matches.ordered$qseqid), without.best.data$qseqid))#
-		second.best.data      <- without.best.data[second.best.matches]#
-		#### If a query does not have a second best match, then a bitscore of zero is used for an dummy second match. There is no consequence for having a single strong match.#
-		if(any(is.na(second.best.matches))){#
-			second.best.data$bitscore[which(is.na(second.best.matches))] <- 0#
-		}#
-		bitscore.difference             <- as.numeric(best.data$bitscore)-as.numeric(second.best.data$bitscore)#
-		if(any(bitscore.difference < min.bitscore.difference)){#
-			best.data <- best.data[-which(bitscore.difference < min.bitscore.difference)]#
-		}#
-	}
-best.data[1:10,]
-result <- data.table::as.data.table(best.data)
-result
-.libPaths("/Users/alyssaleinweber/Documents/test_install")
-.libPaths
-.libPaths()
+library(devtools)
+install.packages("devtools")
+library(devtools)
+devtools::install_github("JeffWeinell/misc.wrappers")
+devtools::install_github("ropensci/rnaturalearthhires")
+install_github("dipetkov/reemsplots2")
+devtools::install_github("dipetkov/reemsplots2")
+pkgbuild::check_build_tools(debug = TRUE)
+install_github("dipetkov/reemsplots2")
+pkgbuild::check_build_tools(debug = TRUE)
+devtools::install_github("dipetkov/reemsplots2")
+devtools::install_github("JeffWeinell/misc.wrappers")
+library(misc.wrappers)
 install.packages(pkgs="BiocManager",repos = "http://cran.us.r-project.org")
-find.package("BiocManager")
 library(BiocManager)
-search()
-library(REEs)
-Lacerta.agilis_exome <- Biostrings::readDNAStringSet(filepath="/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/Lacerta.agilis_exome_longer120bp.fas")
-grep("NC_046313.1:109543642-109543827",names(Lacerta.agilis_exome))
+BiocManager::install(c("BSgenome","DECIPHER","phangorn","dplyr","data.table", "foreach","reutils","curl","knitr","devtools","gschofl/biofiles"),update=FALSE,dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4)
+BiocManager::install("JeffWeinell/REEs",update=FALSE,dependencies=c("Depends", "Imports"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+BiocManager::install("JeffWeinell/REEs",update=FALSE,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+BiocManager::install("JeffWeinell/REEs",auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+BiocManager::install("JeffWeinell/REEs",update=FALSE, version="3.12",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+BiocManager::install("JeffWeinell/REEs",update=FALSE, version="3.13",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+library(BSgenome)
+library(DECIPHER)
+library(phangorn)
+library(dplyr)
+library(data.table)
+library(foreach)
+library(reutils)
+library(curl)
+library(knitr)
+library(devtools)
+library(biofiles)
+BiocManager::install("JeffWeinell/REEs",update=FALSE, dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+BiocManager::install("JeffWeinell/REEs",update=FALSE, version="3.12",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+library(remotes)
+remotes::install_github("JeffWeinell/REEs")
+remotes::install_github("JeffWeinell/REEs",auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+remotes::install_github("JeffWeinell/REEs",auth_token="323d9e4cd00247a39a805dbb66f37db6403cfb8b")
+getwd()
+list.files()
+setwd("Documents/REEs")
+devtools::build()
+devtools::install("REEs_1.9.tar.gz")
+devtools::install()
 library(REEs)
 blast.install()
-Lacerta.agilis_translated.100K <- readAAStringSet("/Users/alyssaleinweber/Downloads/Lacerta.agilis_translated.exome_longer120bp_100000InputSeqs.fas")
-Lacerta.agilis.genome <- "/Users/alyssaleinweber/Documents/genomes/genomes_seqs/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz"
-test.tblastn <- blast(method="tblastn",subject=Lacerta.agilis.genome,query=Lacerta.agilis_translated.100K[1:10])
-dim(test.tblastn)
-test.tblastn
-length(unique(gsub(c("_F1$","_F2$","_F3$","_RC1$","_RC2$","_RC3$"),rep("",6),test.tblastn$qseqid)))
-length(unique(mgsub(c("_F1$","_F2$","_F3$","_RC1$","_RC2$","_RC3$"),rep("",6),test.tblastn$qseqid)))
-unique(mgsub(c("_F1$","_F2$","_F3$","_RC1$","_RC2$","_RC3$"),rep("",6),test.tblastn$qseqid))
-names(Lacerta.agilis_translated.100K[1:10])
-test.tblastn.best <- reportBestMatches(input.table=test.tblastn,blast.method="tblastn")
-test.tblastn.best
-test.best <- reportBestMatches(input.table=test.tblastn)
-test.best
-raw.score(Lacerta.agilis_translated.100K[1:10])
-BLOSUM62
-diag(BLOSUM62)
-diag(BLOSUM45)
-Lacerta.agilis_translated <- readAAStringSet("/Users/alyssaleinweber/Downloads/Lacerta.agilis_translated.exome_longer120bp.fas")
-Lacerta.agilis_translated
-Lacerta.agilis_translated[1485]
-names(Lacerta.agilis_translated[1485])
-names(Lacerta.agilis_translated[3483])
-Lacerta.agilis_translated[3483]
-raw.score(Lacerta.agilis_translated[1485])
-diag(BLOSUM62)
-unlist(strsplit("AGRRRRAGVRRVRQLGDRGGLGPRRRGLHGLRLRPRGQHHRLRGAVRGEQRRRVVGRRAVRLPR",split=""))
-table(unlist(strsplit("AGRRRRAGVRRVRQLGDRGGLGPRRRGLHGLRLRPRGQHHRLRGAVRGEQRRRVVGRRAVRLPR",split="")))
-table(unlist(strsplit(as.character(Lacerta.agilis_translated[3483]),split="")))
-letterFrequency(Lacerta.agilis_translated[3483])
-table(Lacerta.agilis_translated[3483])
-table(as.character(Lacerta.agilis_translated[3483]))
-table(unlist(as.character(Lacerta.agilis_translated[3483])))
-(unlist(as.character(Lacerta.agilis_translated[3483]))
-)
-table(unlist(strsplit( Lacerta.agilis_translated[3483],split="")))
-table(unlist(strsplit( as.character(Lacerta.agilis_translated[3483]),split="")))
-table(unlist(strsplit(as.character(Lacerta.agilis_translated[3483,3484]),split="")))
-table(unlist(strsplit(as.character(Lacerta.agilis_translated[3483:3484]),split="")))
-table(strsplit(as.character(Lacerta.agilis_translated[3483:3484]),split=""))
-strsplit(as.character(Lacerta.agilis_translated[3483:3484]),split="")
-lapply(X=strsplit(as.character(Lacerta.agilis_translated[3483:3484]),split=""),FUN=table)
-lapply(X=strsplit(as.character(Lacerta.agilis_translated[1:10]),split=""),FUN=table)
-lapply(X=strsplit(as.character(Lacerta.agilis_translated[8003]),split=""),FUN=table)
-lapply(X=strsplit(as.character(Lacerta.agilis_translated[8046]),split=""),FUN=table)
-hits <- fread("/Users/alyssaleinweber/Downloads/Lacerta.agilis.tblastn.hits_Rv4_bi.txt")
-hits
-length(unique(hits$qseqid))
-unique(hits$qseqid)[length(unique(hits$qseqid))]
-grep("NC_046313.1:70372111-70373346_F1",names(Lacerta.agilis_translated))
-best.hits <- reportBestMatches(hits,table.format="tblastn")
-ncol(hits)
-best.hits <- reportBestMatches(hits,blast.method="tblastn")
-best.hits
-length(unique(best.hits$sseqid))
-basename("https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.fna.gz")
-Podarcis.muralis.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/329/235/GCF_004329235.1_PodMur_1.0/GCF_004329235.1_PodMur_1.0_genomic.fna.gz"#
-Lacerta.agilis.genome_url          <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/819/535/GCF_009819535.1_rLacAgi1.pri/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz"#
-Zootoca.vivipara.genome_url        <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/011/800/845/GCF_011800845.1_UG_Zviv_1/GCF_011800845.1_UG_Zviv_1_genomic.fna.gz"#
-Aspidoscelis.marmoratus.genome_url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/014/337/955/GCA_014337955.1_AspMar1.0/GCA_014337955.1_AspMar1.0_genomic.fna.gz"#
-Salvator.merianae.genome_url       <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/586/115/GCA_003586115.2_HLtupMer6/GCA_003586115.2_HLtupMer6_genomic.fna.gz"#
-#
-subject      <- Lacerta.agilis.genome_url#
-subject.path <- paste0("/panfs/pfs.local/home/j926w878/scratch/scratch_v1/lacertid_genomes/",basename(subject))
-subject.path
-?download.file()
-raw.score(Lacerta.agilis_translated[1485])
-raw.score(Lacerta.agilis_translated[1484])
-raw.score(Lacerta.agilis_translated[1483])
-raw.score(Lacerta.agilis_translated[1482])
-raw.score(Lacerta.agilis_translated[1486])
-raw.score(Lacerta.agilis_translated[1487])
-raw.score(Lacerta.agilis_translated[1488])
-raw.score(Lacerta.agilis_translated[1485])
-Lacerta.agilis_translated[1483:1486]
-raw.score(Lacerta.agilis_translated[1483:1486])
-raw.score(Lacerta.agilis_translated[1483:1486],method="PAM30")
-order(raw.score(Lacerta.agilis_translated[1483:1486]))
-order(raw.score(Lacerta.agilis_translated[1483:1486],method="PAM30"))
-hits.part2 <- fread("/Users/alyssaleinweber/Downloads/Lacerta.agilis.tblastn.hits_Rv4_sixhour_26315toEnd.txt")
-hits.part2$qseqid[lenth(hits.part2$qseqid)]
-hits.part2$qseqid[length(hits.part2$qseqid)]
-grep("NC_046313.1:106428795-106429412_RC1",names(Lacerta.agilis_translated))
-hits.part2v2 <- fread("/Users/alyssaleinweber/Downloads/Lacerta.agilis.tblastn.hits_Rv4_sixhour_26315to26400.txt")
-hits.part2v2$qseqid[length(hits.part2v2$qseqid)]
-grep("NC_046313.1:70720874-70721014_RC1",names(Lacerta.agilis_translated))
-library(osfr)
-hits <- fread("/Users/alyssaleinweber/Downloads/Lacerta.agilis.tblastn.hits_Rv4_sixhour_10K.txt")
-hits
-grep(hits$qseqid[length(hits$qseqid)],Lacerta.agilis_translated)
-grep(hits$qseqid[length(hits$qseqid)],names(Lacerta.agilis_translated))
-library(osfr)
-options(timeout=10000)
-osf_auth("GcCONY1dA7nzLkCl5uTXSwajf8OsNL8Qu0klSoVxyvghrmIno0RGpLvPbcpnV5P5QYxHvZ")
-project <- project <- osf_retrieve_node("bhn6r")
-file.path <- "/Users/alyssaleinweber/Downloads/KT_JW_P2_2_CKDL200146889-1a-6_H7GWYBBXX_L2_1.fq.gz"
-con <- osf_upload(project,file.path)
-library(REEs)
-subject <- "/Users/alyssaleinweber/Documents/genomes/genomes_seqs/GCF_009819535.1_rLacAgi1.pri_genomic.fna.gz"
-file.exists(subject)
-subject.path     <- subject
-subject.obj.temp <- Biostrings::readDNAStringSet(subject.path)
-length(subject.obj.temp)
-basename(tempfile())
-query.path <- "/panfs/pfs.local/home/j926w878/scratch/scratch_v1/REEs_example_output/temp/file13f3e14ad988f"
-query.path.temp <- "/panfs/pfs.local/home/j926w878/scratch/scratch_v1/REEs_example_output/temp/file13f3e14ad988f"
-parallel.groups=10
-if(!is.null(parallel.groups)){#
-		query.paths.all   <- paste0(query.path.temp,"_",c(1:parallel.groups))#
-	}
-query.paths.all
-parallel.groups <- 10
-num.threads="auto"
-parallel::detectCores()
-if(is.null(parallel.groups)){#
-		if(num.threads=="max"){#
-			num.threads <- parallel::detectCores()#
-		}#
-	} else {#
-		if(num.threads=="max"){#
-			num.threads <- max(floor(parallel::detectCores()/parallel.groups),1)#
-		} else {#
-			num.threads <- max(floor(num.threads/parallel.groups),1)#
-		}#
-	}
-is.null(parallel.groups)
-num.threads=="max"
-num.threads/parallel.groups
-num.threads
-num.threads="max"
-if(is.null(parallel.groups)){#
-		if(num.threads=="max"){#
-			num.threads <- parallel::detectCores()#
-		}#
-	} else {#
-		if(num.threads=="max"){#
-			num.threads <- max(floor(parallel::detectCores()/parallel.groups),1)#
-		} else {#
-			num.threads <- max(floor(num.threads/parallel.groups),1)#
-		}#
-	}
-num.threads
-out.files.temp
-table.out <- "test/path/"
-if(!is.null(parallel.groups)){#
-			out.files.temp  <- paste0(tools::file_path_sans_ext(table.out),"_",c(1:parallel.groups),".tsv")#
-		}
-out.files.temp
-table.out <- "test/path/out.tsv"
-if(!is.null(parallel.groups)){#
-			out.files.temp  <- paste0(tools::file_path_sans_ext(table.out),"_",c(1:parallel.groups),".tsv")#
-		}
-out.files.temp
-command.all <- paste("blast.exe.path","-db","subject.path.temp","-query",query.paths.all,"-out",out.files.temp,"-evalue",0.05,"-outfmt",6,"-max_target_seqs",10,"-max_hsps",10,"-num_threads",num.threads,NULL)
-command.all
-command.all <- paste(blast.exe.path,"-db",subject.path.temp,"-query",query.paths.all,"-out",out.files.temp,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args,"&")
-command.all <- paste("blast.exe.path","-db","subject.path.temp","-query",query.paths.all,"-out",out.files.temp,"-evalue",0.05,"-outfmt",6,"-max_target_seqs",10,"-max_hsps",10,"-num_threads",num.threads,NULL,"&")
-command.all
-command.all <- gsub(" & $","",paste(paste("blast.exe.path","-db","subject.path.temp","-query",query.paths.all,"-out",out.files.temp,"-evalue",0.05,"-outfmt",6,"-max_target_seqs",10,"-max_hsps",10,"-num_threads",num.threads,NULL,"& "),collapse=""))
-command.all
-command.all <- gsub(" & $","",paste(paste("blast.exe.path","-db","subject.path.temp","-query",query.paths.all,"-out",out.files.temp,"-evalue",0.05,"-outfmt",6,"-max_target_seqs",10,"-max_hsps",10,"-num_threads",num.threads,NULL,"& "),collapse=""))
-command.all
-?mclapply
-getwd()
-setwd("Documents/REEs")
-library("devtools")
-devtools:document()
-library(devtools)
-devtools:document()
-devtools::document()
-devtools::document()
-library(BiocManager)
-?BiocManager::install()
-devtools::document()
-200000/35
-dirname("output.tsv")
-dirname("output.tsv") != "."
-getwd()
-dirname(getwd()) != "."
-"/" != "."
-table.out="output.tsv"
-if(basename(table.out) == "."){#
-		table.out <- paste0(getwd(),"/",table.out)#
-	}
-table.out
-basename(table.out)
-if(dirname(table.out) == "."){#
-		table.out <- paste0(getwd(),"/",table.out)#
-	}
-table.out
-file.exists(table.out)
-dir.exists(table.out)
-if(dirname(table.out) == "."){#
-		table.out <- paste0(getwd(),"/",table.out)#
-	}#
-	if(file.exists(table.out) | dir.exists(table.out)){#
-		stop("invalid table.out")#
-	}
-table.out
-!dir.exists(dirname(table.out))
-dirname(table.out)
-if(file.exists(table.out) | dir.exists(table.out) | !dir.exists(dirname(table.out))){#
-		stop("invalid table.out")#
-	}
-devtools::document()
-devtools::document()
-42849/49339
-data.specify <- fread("/Users/alyssaleinweber/Downloads/query_results_2021-02-26T14_16_24.944164.csv")
-data.specify
-input.order <- c(349874,349873,349872,348501,348502,346314,346315,346309,346310,346311,345697,322355,322356,322357,323367,327778,330587,330586,322354,276595,276596,276597,276598,276599,345191,324542,324543,328836,328834,328835,313909,313910,346578,346325,346326,346566,346567,345700,323379,323371,323380,323381,323370,323388,323375,323376,323377,323378,323382,327760,315385,327762,323372,323373,323374,330027,330025,330024,330026,330029,330028,329413,329412,345263,345264,345265,328973,328974,328975,275738,275739,313890,313887,313888,313889,324547,305576,349973,349033,346352,346360,348411,330030,329678,329679,305577,328967,345354,345359,345360,345361,345362,345363,345364,345365,345366,345367,345368,313891,313892,350213,346377,347941,348427,348428,348429,348430,348431,327573,323383,323384,323385,275885,275886,275887,345672,345673,327783,313912,313913,306604,350369,350370,350371,350373,350372,346383,346384,346385,348179,348180,348181,322352,330134,327784,329430,329295,329432,344621,348185,348186,348187,346306,346304,347847,347848,346305,313881,313884,313885,313882,313883,348963,349843,349849,329700,329697,329704,329702,320076,330037,330032,330033,327172,323363,323364,345189,345190,328960,327173,328961,345183,345184,345185,324650,324648,324649,324651,313886,315158,349934,349935,349936,349937,346316,346317,346318,346319,348440,348441,322328,322329,322330,307441,329684,329685,327406,324661,325970,345250,330747,330748,328956,328958,329408,345248,345249,275732,275733,350250,347963,346582,327706,348439,346583,347964,346585,346584,322335,322337,322338,322339,323386,323387,329691,330079,275927,328970,328972,329417,330740,345784,345786)
-input.order <- c("349874","349873","349872","348501","348502","346314","346315","346309","346310","346311","345697","322355","322356","322357","323367","327778","330587","330586","322354","276595","276596","276597","276598","276599","345191","324542","324543","328836","328834","328835","313909","313910","346578","346325","346326","346566","346567","345700","323379","323371","323380","323381","323370","323388","323375","323376","323377","323378","323382","327760","315385","327762","323372","323373","323374","330027","330025","330024","330026","330029","330028","329413","329412","345263","345264","345265","328973","328974","328975","275738","275739","313890","313887","313888","313889","324547","305576","349973","349033","346352","346360","348411","330030","329678","329679","305577","328967","345354","345359","345360","345361","345362","345363","345364","345365","345366","345367","345368","313891","313892","350213","346377","347941","348427","348428","348429","348430","348431","327573","323383","323384","323385","275885","275886","275887","345672","345673","327783","313912","313913","306604","350369","350370","350371","350373","350372","346383","346384","346385","348179","348180","348181","322352","330134","327784","329430","329295","329432","344621","348185","348186","348187","346306","346304","347847","347848","346305","313881","313884","313885","313882","313883","348963","349843","349849","329700","329697","329704","329702","320076","330037","330032","330033","327172","323363","323364","345189","345190","328960","327173","328961","345183","345184","345185","324650","324648","324649","324651","313886","315158","349934","349935","349936","349937","346316","346317","346318","346319","348440","348441","322328","322329","322330","307441","329684","329685","327406","324661","325970","345250","330747","330748","328956","328958","329408","345248","345249","275732","275733","350250","347963","346582","327706","348439","346583","347964","346585","346584","322335","322337","322338","322339","323386","323387","329691","330079","275927","328970","328972","329417","330740","345784","345786")
-match(input.order,data.specify$CatalogNumber)
-data.specify.ordered <- data.specify[match(input.order,data.specify$CatalogNumber),]
-data.specify.ordered
-write.table(x=data.specify.ordered,file="/Users/alyssaleinweber/Downloads/reordered_specify1.csv")
-write.table(x=data.specify.ordered,file="/Users/alyssaleinweber/Downloads/reordered_specify1.tsv",sep="\t")
-data.specify2 <- fread("/Users/alyssaleinweber/Downloads/query_results_2021-02-26T15_31_27.344968.csv",sep="\t")
-data.specify2
-data.specify2 <- fread("/Users/alyssaleinweber/Downloads/query_results_2021-02-26T15_31_27.344968.csv")
-data.specify2
-input.order2 <- c("303287","307717","324570","315180","326682","327232","327247","334390","334394","334395","334491","338094","338095","343984","343987","344392","275921","275922","275923","275925","275926","275928","327233","327251","328838","328839","334389","334401","334762","338090","338093","338096","343981","343982","345787","345788")
-data.specify2.ordered <- data.specify2[match(input.order2,data.specify2$CatalogNumber),]
-data.specify2.ordered
-write.table(x=data.specify.ordered,file="/Users/alyssaleinweber/Downloads/reordered_specify2.tsv",sep="\t",row.names=F)
-write.table(x=data.specify2.ordered,file="/Users/alyssaleinweber/Downloads/reordered_specify2.tsv",sep="\t",row.names=F)
+blast.install()
+mafft.install()
+q()
