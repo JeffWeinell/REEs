@@ -23,6 +23,7 @@
 
 #4.1# conda create --prefix $WORK/conda/frogcap
 #4.2# source activate /panfs/pfs.local/work/bi/c111h652/conda/frogcap
+    # source activate /panfs/pfs.local/work/bi/j926w878/conda/snakecap
 #4.3# conda config --add channels bioconda
 #4.4# conda config --add channels conda-forge
 #4.5# conda config --add channels defaults
