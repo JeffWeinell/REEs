@@ -1000,7 +1000,7 @@ Conducted by Arbor Biosciences; eight samples/pool; ...
 <a name="DNASequencing"></a>
 ## DNA sequencing
 
-Novogene Illumina HiSeqX; paired-end sequencing, read length 150nt, insert size 400nt?.
+Novogene Illumina HiSeqX; paired-end sequencing, read length 150nt.
 
 <a name="PostSequencing"></a>
 ## Post-sequencing
@@ -1008,9 +1008,10 @@ Novogene Illumina HiSeqX; paired-end sequencing, read length 150nt, insert size 
 <a name="Demultiplexing"></a>
 #### Demultiplexing
 
-To demultiplex raw DNA sequence reads from Illumina, I either used used **bcl2fastq** (Illumina; not sure if I actually used this)... or (more likely) the **bbmap** script **demuxbyname.sh** (Bushnell, 2014).
 
-Running **demuxbyname.sh**:
+To demultiplex raw DNA sequence reads from Illumina, I either used used **bcl2fastq** (Illumina; not sure if I actually used this)... or (more likely) the **bbmap** script **demuxbyname.sh** (Bushnell, 2014), or in the case of the second batch of 16 samples the samples were demultiplexed prior to me handling the data.
+
+Running **demuxbyname.sh**
 
 ```
 demuxbyname.sh in="HF10_N2_USPD16097067_HY25JBBXX_L4_1.fq" in2="HF10_N2_USPD16097067_HY25JBBXX_L4_2.fq.gz" out=out_%_1.fq out2=out_%_2.fq prefixmode=f names=GGTTACTG+CGAACTTA,TGCGTACA+CATTCGCT,TAGCGTTG+GGTGTTCG,ACTTCCTG+GGTGTCCG,CCGAAGTA+ACCGGTTC,TCGAAGCT+TGAACAGG,GAATCTGG+TTCTGGTG,AATCGGCG+TGAAGCCA,GGCTACAG+ATCACTAC,AAACATCG+TATGCGGT,GGACTATT+ATTCAGAA,TCTACGAC+TGCCTATG,GTGTTGTA+CGTGGACA,TAATGCGC+CAGTGTGG,CGTCAACG+GAGATTCC,TTTCATAG+GCCAGAGG,CTTGCTAT+AAGTCTCC,TGGAGCTG+AAGGATAA,TGCCTATG+GCCAAGAC,CACCACGG+TTGTTCTC,TTGTAGAT+TAAGATTA,GTTCATCT+CAATGATG,AACAGTTG+ACTCCTCC,ATTCAGAA+GGAATTAA,GTGCTTAT+GATCTGCC,GAATCAAT+AGCATCAG,ACCGTAGT+TCGTAGAT,ATCCGCAG+ACCTCCAA,CGTACGTT+TCTCAATT,TTGCCATC+AGCATATT,AGGTGGTC+ACGCTTAT,ACCTTAGA+CTTTTTGA,CATGATGA+TACCACCA,ACAGCAGA+ACTACTTA,TGAAGAGA+TTCGTTCT,ACGGCCGC+TAATGCGC,GATGCCGG+TACAGGTC,AACACATA+CTACGCAT,GTTATATA+GGTTACTG,GCGCCGTG+ATACTACT,TTCGAACC+TCGCCGGC,ACCTCCAA+TACTGTTA,ACTCCTCC+AGTCTTCT,TAACATAG+TGAGTTAG,TATGCGGT+ACTAGCTC,AAGACTGT+GAATCTGT,AAGGTAGG+GGCGAGGA,CCGTGAGA+CAATCGAA,ACGCTTAT+CTACCTTG,ACCGCTAT+TAGCACTT,TGTCTAAC+TGAATGCG,GAATATCC+ATTCAGCG,GAATTCGT+TAAGTACC,GGATTAGG+CGGCGTAA,TTAGAGTC+TGTTAGAC,GAAGTCTT+CAGAAGAT,AAGACGAA+ACACACCT,GACTAGTA+AAGTACAG,GTTCTACT+TGACTACT,TTGCGTAC+TAGCCGAT,CTGTCGAG+GATAGACA,GATAGAGG+AGTTACAT,CTGGAAGC+GAGCTGAA,TAGGATGA+GCTGCATG,GGCGAGGA+TTGGCAGG,ATAGCGAC+CGTCCGTG,AAGTCTCC+CAACTGCT,AATGTTGC+AAGGCAAT,GGTGTCCG+GTGGCTAC,AGCAGGAA+CTCTTGAA,TTATCTAC+GGATAATA,AATCGTTA+TGTTCTCC,GGTTGACG+TGCGTGAA,TGTGGTTG+GTCTGTGC,TAGCCGAT+TTAGGTTG,GTGATTCC+GCATAATT,ATCACAGA+AAGTTATC,CCTAGCCA+AGGTGGTC,ACCATTAA+AACGTGTA,CTACGAGG+CGGATTGC,GAGCTGAA+TAACATAG,AATGCAAA+ATCCGCAG,CTGGCCTC+AAGTCGTG,TAGCACTT+GGCCATCA,GCCAGAGG+GATCTCTT,CGTATTGG+TGCTTGTC,CAGAAGAT+GGTTGACG,GCAGCCTC+CCGCTACA,TGGCTCAG+GCCTGTTC,TGGTCATT+GGACTCTG,GTCGCTGT+GCAGCATA,CAAGCCGC+ACCATTAA,CGCGCCAA+GTAAGGTG,GAAGAGGC+ACAGCCTT,ACCTGACT+ACCGCTAT,CTACTGAC+ACCATATC,CGGATAAC+GAGTTAGC,ACTCTACG+GTCCACTC,TCGGATGT+TGAAGAAT,TCTATCAG+CAGGTTCC,TTGTGTTC+AGGCTATA,AAGGATAA+GCATGGCT,CGCATACA+ACCTTAGA,TTCAAGAA+TTCGGCCG,ACAGGCAG+TAGCTTGT,TTGGTGGC+ATTACTCG,CGGTGGTA+TTATGTAT,GCACTTGG+ATCATTCC,ACGTAGTC+ATTGGCTC,AAGAGAGC+TGAGGCGC,CAGATATT+TATAAGTC,AATCCGTT+AACACATA,AGTGTGTC+AAACATCG
@@ -1018,6 +1019,7 @@ demuxbyname.sh in="HF10_N2_USPD16097067_HY25JBBXX_L4_1.fq" in2="HF10_N2_USPD1609
 <a name="ProcessingReads"></a>
 #### Processing sequence reads
 
+For the first batch of 16 samples:
 To processes sequence reads (assemble contigs for each sample) I followed the FrogCap pipeline (Hutter et al., 2019), which involved running the following R scripts:
 - [01_Pre_Process_Reads_Apr10.R](PostSequencing/01_Pre_Process_Reads_Apr10.R) uses fastp and bbmap to trim adapters and remove contaminant reads.
 - [02_Assemble_Spades_Apr18.R](PostSequencing/02_Assemble_Spades_Apr18.R) uses dipspades.py from Spades version 3.12.0 (must be this version!)
@@ -1029,6 +1031,13 @@ To processes sequence reads (assemble contigs for each sample) I followed the Fr
 - [07_Concat_CompleteMatrix_Aug29.R](PostSequencing/07_Concat_CompleteMatrix_Aug29.R)
 - [07-2_IQTREE_1May2019.R](PostSequencing/07-2_IQTREE_1May2019.R)
 - **Sort_Alignments_by_LocusType.R**
+
+For the second batch of 16 samples (I will also use these to re-process the first batch), I used the following bash scripts for pre-processing raw reads, assembling loci, and target matching loci:
+- [preprocessingReads.sh](PostSequencing/preprocessingReads.sh) uses fastp and bbmap to trim adapters, remove contaminant reads, remove duplicates, and merge mergeable read pairs.
+- [dipspades.sh](PostSequencing/dipspades.sh) uses dipspades.py from Spades version 3.12.0 (only this version works!)
+- [targetMatching.sh](PostSequencing/targetMatching.sh) uses blast+/2.9.0 to match contigs against a database of target sequences. 
+
+
 
 <a name="DNA.Alignment"></a>
 #### DNA alignment
