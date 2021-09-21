@@ -1,23 +1,24 @@
 #!/bin/bash
-#module load java
-#module load python/3.7
-# OldUsage: '/dipspades.sh' '/Path/To/Working/Directory/' '/Path/To/File_rename.csv' <nth individual to process>
-# NewUsage: '/dipspades.sh' <nth individual to process> '/Path/To/Working/Directory/'
-# Variable names for argument values
+module load java
+module load python/3.7
+
+# Usage: /dipspades.sh <nth sample in 'File_rename.csv' to process> ['/Path/To/Working/Directory/']
+
+# Variables associated with arguments
 declare -i INDV=$1+1
 WORKDIR=${2:-$PWD}
 
+# Path to 'File_rename.csv' and 'Assembled_Contigs' directory
 SAMPLEFILE=$WORKDIR'/File_rename.csv'
 ASSEMBLYDIR=$WORKDIR'/Assembled_Contigs'
 
-# Check that dipspades is the proper version, and if not exit with a message that version 12 must be used.
+# Check that dipspades is the proper version, and if not exit with a message that version 3.12.0 must be used.
 DIPSVER=$(dipspades.py --version)
 DIPSEXP="SPAdes v3.12.0 [dipSPAdes mode]"
 [ ! "$DIPSVER" = "$DIPSEXP" ] && echo "SPAdes v3.12.0 is required, older or newer versions will fail" && exit 1
 
 # Path to dipspades.py
-DIPSPADES='/panfs/pfs.local/home/j926w878/programs/SPAdes-3.12.0-Linux/bin/dipspades.py'
-# DIPSPADES='dipspades.py'
+DIPSPADES='dipspades.py'
 
 # Getting the old and new patterns to use for filenames from a 2-column CSV file containing a header row
 SAMPLEROW=$(head -n $INDV $SAMPLEFILE|tail -n 1)
