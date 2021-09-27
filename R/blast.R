@@ -158,6 +158,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 			}
 		} else {
 			# Increases time limit for downloading files to 5000 seconds.
+			query.path <- query
 			options(timeout=5000)
 			conn <- utils::download.file(url=query, destfile=query.path,method="auto")
 			if(method %in% c("blastn","tblastx","blastx")){
