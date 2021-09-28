@@ -5,7 +5,7 @@
 # ' (1) Drop matches if bitscore of top hit is not much better than other matches.
 #'  (2) Drop query sequences if the best match has a bitscore below some threshold.
 #' 
-#' @param input.table Character string with path BLAST hit table, or, a BLAST hit table held as an object of class data.table, data.frame, or matrix.
+#' @param input.table Character string with path to BLAST hit table, or, a BLAST hit table held as an object of class data.table, data.frame, or matrix.
 #' @param output.table.path Character to string with path where output table should be saved; default is NULL.
 #' @param remove.subseq.matches Logical with whether or not to drop matches for which the subject sequence is a subsequence of another match. Default is FALSE.
 #' @param min.bitscore Number indicating the minimum bitscore required to keep the best match. Matches with a bitscore below this value are not included in the output table. This is useful for removing paralog matches. Default = 50.
@@ -19,7 +19,7 @@ reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq
 	if(table.format!=6){
 		stop("At present, only NCBI format 6 tables can be processed.")
 	} else {
-		input.table <- input.table[,1:12]
+		# input.table <- input.table[,1:12]
 	}
 	## Coerce input.table to a data frame object if it is a data.table or matrix object
 	if(is(input.table,"data.table") | is(input.table,"matrix")){
