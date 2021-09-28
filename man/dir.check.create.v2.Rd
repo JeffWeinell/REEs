@@ -7,11 +7,12 @@
 dir.check.create.v2(directory)
 }
 \arguments{
-\item{directory}{name or path to the directory to check and create}
+\item{directory}{name or path to the directory to check/create}
 }
 \value{
 A new directory unless it already existed
 }
 \description{
 Checks if a directory exists, and if not, creates it. Parent directories are also created if they do not already exist.
+Avoids calling 'mkdir -p dir'
 }

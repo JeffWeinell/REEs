@@ -15,7 +15,7 @@ reportBestMatches(
 )
 }
 \arguments{
-\item{input.table}{Character string with path BLAST hit table, or, a BLAST hit table held as an object of class data.table, data.frame, or matrix.}
+\item{input.table}{Character string with path to BLAST hit table, or, a BLAST hit table held as an object of class data.table, data.frame, or matrix.}
 
 \item{output.table.path}{Character to string with path where output table should be saved; default is NULL.}
 

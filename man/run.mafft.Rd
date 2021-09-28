@@ -5,6 +5,7 @@
 \title{Run MAFFT}
 \usage{
 run.mafft(
+  mafft.path = NULL,
   unaligned.contigs,
   add.contigs = NULL,
   algorithm = "localpair",
@@ -15,6 +16,8 @@ run.mafft(
 )
 }
 \arguments{
+\item{mafft.path}{Path to MAFFT executable. Default NULL, in which case the mafft executable is searched for on your path and environement.}
+
 \item{unaligned.contigs}{Input DNA sequences in an object of class DNAStringSet.}
 
 \item{add.contigs}{Default is NULL. This argument not currently implemented in this function.}
