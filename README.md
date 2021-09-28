@@ -1038,6 +1038,20 @@ For the second batch of 16 samples (I will also use these to re-process the firs
 - [targetMatching.sh](PostSequencing/targetMatching.sh) uses blast+/2.9.0 to match contigs against a database of target sequences. 
 
 
+- [04.sh](PostSequencing/04.sh) to run [04_Loci_alignment_23Sep2022_SnakeCap2.R](PostSequencing/04_Loci_alignment_23Sep2022_SnakeCap2.R), which uses the function ```REEs::lociAlignment04``` with arguments passed from ```04.sh```.
+
+Usage for the bash script '04.sh' is as follows:
+```
+### This will run a separate shell job to identify and align orthologs for each target locus
+# Define working directory and path to file containing target loci sequences
+WORKDIR='./SnakeCap_AllSamples/'
+TARGS=$WORKDIR'/Weinell_TargetLoci_Snakes_Final_18April2019.txt'
+# For loop to submit a separate job to align contigs that matched the ith target locus. You may not want to submit all of these jobs at once.
+for i in {1..3200}; do
+	TARGETi=$(echo $i)
+	sbatch --nodes=1 --ntasks-per-node=10 --mem=20Gb --time=1:00:00 --partition=sixhour '04.sh' $TARGS $WORKDIR  $TARGETi $TARGETi
+done
+```
 
 <a name="DNA.Alignment"></a>
 #### DNA alignment
