@@ -1144,7 +1144,11 @@ make.partitioned.alignment(InputAlignmentFolder="~/Vision/unpartitioned/", outpu
 
 SPADES...
 
+Armstrong J., Hickey G., Diekhans M. et al. 2020. Progressive Cactus is a multiple-genome aligner for the thousand-genome era. Nature 587, 246–251. https://doi.org/10.1038/s41586-020-2871-y.
+
 Bushnell, B. 2014. BBMap: A Fast, Accurate, Splice-Aware Aligner...
+
+Hickey G., Paten B., Earl D., Zerbino D., and D. Haussler . 2013. HAL: a hierarchical format for storing and analyzing multiple genome alignments, Bioinformatics, 29(10) 1341–1342. doi: https://doi.org/10.1093/bioinformatics/btt128.
 
 Holthaus K.B., Mlitz V., Strasser B., Tschachler E., Alibardi L., and L. Eckhart. 2017. Identification and comparative analysis of the epidermal differentiation complex in snakes. *Scientific Reports* 7, 45338. doi: http://doi.org/10.1038/srep45338.
 
@@ -1153,9 +1157,6 @@ Hutter C.R., Cobb K.A., Portik D., Travers S., Wood Jr. P.L., and R.M. Brown. 20
 Schott R.K., Panesar B., Card D.C., Preston M., Castoe T.A., and B.S.W. Chang. 2017. Targeted Capture of Complete Coding Regions across Divergent Species. *Genome Biology and Evolution* 9(2), 398–414. doi: http://doi.org/10.1093/gbe/evx005
 
 Streicher J.W., and J.J Wiens J.J. 2017. Phylogenomic analyses of more than 4000 nuclear loci resolve the origin of snakes among lizard families. *Biology Letters* 13, 20170393. doi: http://doi.org/10.1098/rsbl.2017.0393.
-
-
-
 
 
 
