@@ -1053,6 +1053,23 @@ for i in {1..3200}; do
 done
 ```
 
+- An alternative Step 4 uses the non-reference genome alignment program Cactus () to align sequence capture contigs for 35 species plus 30 snake genomes on NCBI. I used the bash script [cactus.sh]() to submit the Cactus job.
+
+```
+# Running Cactus
+module use ~/sw/modules
+module load cactus
+
+cactus jobStore './seqFile_Snakes.txt' './Snakes.HAL' --root sr --binariesMode local
+
+# Use the script 'hal2maf' (included with Cactus) to convert from HAL to MAF format.
+hal2maf ./Snakes.HAL' --refGenome <reference> './Snakes.HAL'
+
+then...
+
+```
+
+
 <a name="DNA.Alignment"></a>
 #### DNA alignment
 
