@@ -1064,11 +1064,9 @@ cactus jobStore './seqFile_Snakes.txt' './Snakes.HAL' --root sr --binariesMode l
 
 # Use the script 'hal2maf' (included with Cactus) to convert from HAL to MAF format.
 hal2maf ./Snakes.HAL' --refGenome <reference> './Snakes.HAL'
-
-then...
-
 ```
 
+Then, will use the [Comparative Genomics Toolkit](https://github.com/ComparativeGenomicsToolkit/Comparative-Annotation-Toolkit) to annotate assemblies.
 
 <a name="DNA.Alignment"></a>
 #### DNA alignment
