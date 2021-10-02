@@ -1,467 +1,1022 @@
-concensus2
-consensus2
-length(length(consensus2))
-length(lengths(consensus2))
-lengths(consensus2)[1]
-lengths(consensus2)[2]
-all(lengths(consensus1)==lengths(consensus2))
-matches.df <- read.table("")
-matches.df <- read.table("Psammodynastes-pulverulentus_KU328547_match.txt",header=F,sep="\t")
-matches.df <- read.table("/Users/jeff/Downloads/Psammodynastes-pulverulentus_KU328547_match.txt",header=F,sep="\t")
-dim(matches.df)
-setnames(match.df, headers)
-colnames(match.df, headers)
-colnames(matches.df, headers)
-headers<-c("qName", "tName", "pident", "matches", "misMatches", "gapopen","qStart", "qEnd", "tStart", "tEnd", "evalue", "bitscore")
-colnames(matches.df, headers)
-match.data <- fread("/Users/jeff/Downloads/Psammodynastes-pulverulentus_KU328547_match.txt")
-??fread
-library(data.table)
-match.data <- fread("/Users/jeff/Downloads/Psammodynastes-pulverulentus_KU328547_match.txt")
-setnames(match.data,headers)
-match.data
-filt.data <- match.data[match.data$matches > 40 & filt.data$evalue <= 0.05,]
-filt.data <- match.data[match.data$matches > 40 & match.data $evalue <= 0.05,]
-filt.data <- match.data[match.data$matches > 40 & match.data$evalue <= 0.05,]
-filt.data
-nrow(filt.data)
-length(unique(filt.data$tName))
-match.data <- fread("/Users/jeff/Downloads/Micrelaps-sp_TauM16738_match.txt")
-setnames(match.data,headers)
-filt.data <- match.data[match.data$matches > 40 & match.data$evalue <= 0.05,]
-length(unique(filt.data$tName))
-match.data <- fread("/Users/jeff/Downloads/Acrochordus-granulatus_KU302952_match.txt")
-setnames(match.data,headers)
-filt.data <- match.data[match.data$matches > 40 & match.data$evalue <= 0.05,]
-length(unique(filt.data$tName))
-10874224/4
-1665343/2
-700039*2
-700039+1665343
-?scanFa
-??scanFa
-df <- data.frame(A=c("a","a","a"),B=c("a","a","b"))
-df
-duplicated(df)
-df <- data.frame(A=c("a","a","a","a"),B=c("a","a","a","b"))
-duplicated(df)
-df <- data.table::data.frame(A=c("a","a","a","a"),B=c("a","a","a","b"))
-df <- data.table::duplicated(data.frame(A=c("a","a","a","a"),B=c("a","a","a","b")))
-?duplicated
-df <- duplicated(data.frame(A=c("a","a","a","a"),B=c("a","a","a","b")),incomparables=T)
-df <- duplicated(data.frame(A=c("a","a","a","a"),B=c("a","a","a","b")),incomparables=F)
-df <- data.frame(A=c("a","a","a","a"),B=c("a","a","a","b"))
-duplicated(df)
-df
-t(df)
-class(t(df))
-data.frame(t(df))
-unique(data.frame(t(df)))
-tdf <- data.frame(t(df))
-as.list(tdf)
-unique(as.list(tdf))
-counts(as.list(tdf))
-table(as.list(tdf))
-length(table(as.list(tdf)))
-data.frame(table(df))
-dtable(df)
-table(df)
-df1 <- data.frame(table(df))
-df1$Freq > 1
-?table()
-?table
-test <- data.frame(grp=c(1,1,2,2,2,3,3,3,4,4,4,4,4),val=c("C","I","E","I","C","E","I","A","C","I","E","E","A"))
-test
-library(dplyr)
-test %>% #
-  group_by(grp) %>%#
-  filter(all(c("E", "I", "C") %in% val))
-? group_by
-test %>% group_by(grp,val)
-test
-unique(test)
-length(315:369)
-?strsplit()
-?strsplit
-library(devtools)
-?mafft()
-?mafft
-??mafft
-?write.phylip
-library(REEs)
-?plotAlignment()
-alignment <- readDNAStringSet("test.fa")
-alignment <- readDNAStringSet("users/jeff/Downloads/test.fa")
-alignment <- readDNAStringSet("/users/jeff/Downloads/test.fa")
-alignment
-plotAlignment(alignment)
-alignment2 <- readDNAStringSet("/users/jeff/Downloads/test2.fa")
-plotAlignment(alignment2)
-alignment2
-plotAlignment(alignment)
-plotAlignment(alignment2)
-plotAlignment
-plotAlignment(alignment)
-plotAlignment(alignment2)
-names(alignment)
-names(alignment2)
-plotAlignment(alignment2)
-library(misc.wrappers)
-pairwise_dist()
-?pairwise_dist
-?dist.dna()
-choose(3,1)
-?combn
-expand.grid(0:1, 0:1, 0:1)
-expand.grid(1:2, 0:1, 0:1)
-expand.grid(1:2, 3, 4)
-test <- ape::as.DNAbin(aligned.ij)
-meanpdist.ij <- mean(ape::dist.dna(ape::as.DNAbin(aligned.ij),pairwise.deletion=T),na.rm=T)
-range(1:10)
-?rowsum
-?colSums()
-?colSums
-install.package("taxize")
-install.packages("taxize")
-library(taxize)
-species <- c("Acanthisitta chloris","Acanthochaenus luetkenii","Acanthochromis polyacanthus","Acanthopagrus latus","Accipiter gentilis","Accipiter nisus","Acipenser oxyrinchus","Acipenser ruthenus","Acipenser transmontanus","Acridotheres javanicus","Acrocephalus arundinaceus","Acrocephalus scirpaceus","Actinemys marmorata","Aegithalos caudatus","Aegotheles bennettii","Aeoliscus strigatus","Agapornis roseicollis","Agelaius phoeniceus","Agelaius tricolor","Ageneiosus marmoratus","Alauda arvensis","Alaudala cheleensis","Albula glossodonta","Alca torda","Aleadryas rufinucha","Alectoris rufa","Alectura lathami","Alfaro cultratus","Alligator mississippiensis","Alligator sinensis","Alopecoenas beccarii","Alosa alosa","Alosa sapidissima","Altolamprologus calvus","Altolamprologus compressiceps","Altolamprologus sp. compressiceps shell AB-2019","Amazona aestiva","Amazona collaria","Amazona guildingii","Amazona vittata","Amblyornis subalaris","Amblyraja radiata","Ambystoma mexicanum","Ameiurus melas","Amia calva","Amp
-hilophus citrinellus","Amphilophus zaliosus","Amphiprion ocellaris","Amphiprion percula","Anabarilius grahami","Anabas testudineus","Anableps anableps","Anarrhichthys ocellatus","Anas platyrhynchos","Anas zonorhyncha","Andinoacara biseriatus","Anguilla anguilla","Anguilla japonica","Anguilla marmorata","Anguilla megastoma","Anguilla obscura","Anguilla rostrata","Anhinga anhinga","Anhinga rufa","Anodorhynchus hyacinthinus","Anolis carolinensis","Anomalopteryx didiformis","Anoplogaster cornuta","Anoplopoma fimbria","Anser brachyrhynchus","Anser cygnoides","Anser indicus","Anseranas semipalmata","Antennarius maculatus","Antennarius striatus","Anthochaera phrygia","Anthoscopus minutus","Antigone vipio","Antrostomus carolinensis","Apaloderma vittatum","Apalone spinifera","Aphelocoma coerulescens","Aphyosemion australe","Apistogramma diplotaenia","Aplochiton taeniatus","Aptenodytes forsteri","Aptenodytes patagonicus","Apteryx haastii","Apteryx mantelli","Apteryx owenii","Apteryx rowi","Aquila chrysaetos","Ara ara
-rauna","Ara chloropterus","Ara glaucogularis","Ara macao","Ara militaris","Aramus guarauna","Arapaima gigas","Aratinga solstitialis","Aratinga weddellii","Archocentrus centrarchus","Arctogadus glacialis","Ardeotis arabs","Ardeotis kori","Arenaria interpres","Argyrosomus japonicus","Arothron firmamentum","Asarcornis scutulata","Aspidoscelis marmoratus","Astatoreochromis straeleni","Astatotilapia calliptera","Astatotilapia flaviijosephi","Astatotilapia stappersii","Astyanax mexicanus","Athene cunicularia","Atlantisia rogersi","Atractosteus spatula","Atrichornis clamosus","Aulonocranus dewindti","Australoheros scitulus","Austrofundulus limnaeus","Aythya fuligula","Bagarius yarrelli","Baileychromis centropomoides","Balaeniceps rex","Balearica regulorum","Bambusicola thoracicus","Baryphthengus martii","Bathybates fasciatus","Bathybates ferox","Bathybates graueri","Bathybates hornii","Bathybates leo","Bathybates minor","Bathybates vittatus","Bathygadus melanobranchus","Beaufortia kweichowensis","Benitochromis con
-junctus","Benthochromis horii","Benthochromis melanoides","Benthochromis sp. horii mahale AB-2019","Benthochromis tricoti","Benthosema glaciale","Beryx splendens","Betta splendens","Boleophthalmus pectinirostris","Bombina variegata","Bombycilla garrulus","Boreogadus saida","Borostomias antarcticus","Bostrychus sinensis","Bothrops jararaca","Boulengerochromis microlepis","Brachirus orientalis","Brachypodius atriceps","Brachypteracias leptosomus","Brachyrhaphis roseni","Branta canadensis","Bregmaceros cantori","Brevimyrus niger","Brosme brosme","Brotula barbata","Bubo blakistoni","Bubo bubo","Bubo scandiacus","Bucco capensis","Buceros rhinoceros","Bucorvus abyssinicus","Bufo bufo","Bufo gargarizans","Bujurquina vittata","Buphagus erythrorhynchus","Burhinus bistriatus","Burhinus oedicnemus","Buteo japonicus","Butorides virescens","Cairina moschata","Calcarius ornatus","Calidris pugnax","Calidris pygmaea","Callaeas wilsoni","Callionymus lyra","Callipepla squamata","Callochromis macrops","Callochromis melanostig
-ma","Callochromis pleurospilus","Callopanchax toddi","Callorhinchus milii","Caloenas nicobarica","Calonectris borealis","Calypte anna","Calyptomena viridis","Camarhynchus parvulus","Campylorhamphus procurvoides","Caprimulgus europaeus","Caranx melampygus","Carapus acus","Carassius auratus","Carassius gibelio","Carcharodon carcharias","Cardinalis cardinalis","Cardiopharynx schoutedeni","Carettochelys insculpta","Cariama cristata","Casuarius casuarius","Cathartes aura","Catharus fuscescens","Catharus ustulatus","Cebidichthys violaceus","Centrocercus minimus","Centrocercus urophasianus","Centropus bengalensis","Centropus unirufus","Cephalopholis sonnerati","Cephalopterus ornatus","Cepphus grylle","Cercotrichas coryphoeus","Certhia americana","Certhia brachydactyla","Certhia familiaris","Cetomimus sp. NI1144","Cettia cetti","Ceuthmochares aereus","Ceyx cyanopectus","Chaenocephalus aceratus","Chaenogobius annularis","Chaetops frenatus","Chaetorhynchus papuensis","Chaetura pelagica","Chalinochromis brichardi","Ch
-alinochromis cyanophleps","Chalinochromis popelini","Chalinochromis sp. bifrenatus ","Chalinochromis sp. ndobhoi AB-2019","Channa argus","Chanos chanos","Charadrius alexandrinus","Charadrius vociferus","Chascanopsetta lugubris","Chatrabus melanurus","Chauna torquata","Cheilinus undulatus","Chelmon rostratus","Chelonia mydas","Chelonoidis abingdonii","Chelydra serpentina","Chiloscyllium plagiosum","Chiloscyllium punctatum","Chionis minor","Chionodraco hamatus","Chionodraco myersi","Chiroxiphia lanceolata","Chlamydotis macqueenii","Chlamydotis undulata","Chloebia gouldiae","Chloroceryle aenea","Chlorodrepanis virens","Chloropsis cyanopogon","Chloropsis hardwickii","Chordeiles acutipennis","Chroicocephalus maculipennis","Chromis chromis","Chrysemys picta","Chrysolophus pictus","Chrysopelea ornata","Chunga burmeisteri","Ciccaba nigrolineata","Cicinnurus regius","Ciconia boyciana","Ciconia maguari","Cinclus mexicanus","Circaetus pectoralis","Cirrhinus cirrhosus","Cirrhinus molitorella","Cisticola juncidis","Clar
-ias batrachus","Clarias macrocephalus","Clarias magur","Climacteris rufus","Clupea harengus","Cnemophilus loriae","Cochlearius cochlearius","Coilia nasus","Colaptes auratus","Colinus virginianus","Colistium nudipinnis","Colius striatus","Collichthys lucidus","Coloeus monedula","Colossoma macropomum","Columba janthina","Columba livia","Columbina picui","Copsychus sechellarum","Coptodon bakossiorum","Coptodon rendalli","Corapipo altera","Coregonus clupeaformis","Coregonus lavaretus","Coregonus sp. balchen ","Coreoperca whiteheadi","Corvus brachyrhynchos","Corvus cornix","Corvus hawaiiensis","Corvus kubaryi","Corvus macrorhynchos","Corvus moneduloides","Corydoras maculifer","Corydoras sp. C115","Coryphaenoides rupestris","Corythaeola cristata","Corythaixoides concolor","Cottoperca gobio","Cottus rhenanus","Coturnix japonica","Crocodylus porosus","Cromileptes altivelis","Crossoptilon mantchuricum","Crotalus adamanteus","Crotalus horridus","Crotalus pyrrhus","Crotalus tigris","Crotalus viridis","Crotophaga sulci
-rostris","Crypturellus cinnamomeus","Crypturellus soui","Crypturellus undulatus","Ctenochromis horei","Ctenopharyngodon idella","Cuculus canorus","Culter alburnus","Cunningtonia longiventralis","Cuora amboinensis","Cuora mccordi","Cyanistes caeruleus","Cyanoderma ruficeps","Cyathopharynx foae","Cyathopharynx furcifer","Cyclopterus lumpus","Cygnus atratus","Cygnus buccinator","Cygnus cygnus","Cygnus olor","Cynoglossus semilaevis","Cyphotilapia frontosa","Cyphotilapia gibberosa","Cyphotilapia sp. 5-bar frontosa AB-2019","Cyprichromis coloratus","Cyprichromis leptosoma","Cyprichromis microlepidotus","Cyprichromis pavo","Cyprichromis sp. dwarf jumbo AB-2019","Cyprichromis sp. jumbo AB-2019","Cyprichromis sp. kibishi AB-2019","Cyprichromis zonatus","Cyprinodon brontotheroides","Cyprinodon nevadensis","Cyprinodon tularosa","Cyprinodon variegatus","Cyprinus carpio","Cyttopsis rosea","Dactylopterus volitans","Dallia pectoralis","Danio aesculapii","Danio albolineatus","Danio choprai","Danio jaintianensis","Danio kya
-thit","Danio rerio","Danio tinwini","Danionella dracula","Danionella translucida","Daphoenositta chrysoptera","Dasyornis broadbenti","Datnioides undecimradiatus","Dendrocopos noguchii","Denticeps clupeoides","Dermatemys mawii","Dermochelys coriacea","Dicaeum eximium","Dicentrarchus labrax","Dicrurus megarhynchus","Diglossa brunneiventris","Diphyllodes magnificus","Diplodus sargus","Diretmoides pauciradiatus","Diretmus argenteus","Dissostichus mawsoni","Donacobius atricapilla","Dromaius novaehollandiae","Dromas ardeola","Drymodes brunneopygia","Dryobates pubescens","Dryoscopus gambensis","Dunckerocampus dactyliophorus","Echeneis naucrates","Eclectus roratus","Ectodus descampsii","Ectodus sp. north ","Edolisoma coerulescens","Egretta garzetta","Elachura formosa","Electrophorus electricus","Eleutherodactylus coqui","Eleutheronema tetradactylum","Emberiza fucata","Empidonax traillii","Emydocephalus ijimae","Emydura subglobosa","Enantiopus melanogenys","Engystomops pustulosus","Entelurus aequoreus","Entosphenus
-tridentatus","Eolophus roseicapilla","Eopsaltria australis","Epinephelus coioides","Epinephelus fuscoguttatus","Epinephelus lanceolatus","Epinephelus moara","Eptatretus burgeri","Eremophila alpestris","Eretmodus cyanostictus","Eretmodus marksmithi","Erithacus rubecula","Erpetoichthys calabaricus","Erpornis zantholeuca","Erythrocercus mccallii","Esox lucius","Esox masquinongy","Esox niger","Etheostoma cragini","Etheostoma spectabile","Etia nguti","Etroplus canarensis","Eubucco bourcierii","Eudromia elegans","Eudyptes chrysocome","Eudyptes chrysolophus","Eudyptes filholi","Eudyptes moseleyi","Eudyptes pachyrhynchus","Eudyptes robustus","Eudyptes schlegeli","Eudyptes sclateri","Eudyptula albosignata","Eudyptula minor","Eudyptula novaehollandiae","Eulacestoma nigropectus","Eupsittula pertinax","Eurypyga helias","Eurystomus gularis","Euthynnus affinis","Falco cherrug","Falco naumanni","Falco peregrinus","Falco rusticolus","Falco tinnunculus","Falcunculus frontatus","Ficedula albicollis","Fistularia tabacaria","F
-ormicarius rufipectus","Fratercula arctica","Fratercula cirrhata","Fregata magnificens","Fregetta grallaria","Fringilla coelebs","Fulica atra","Fulmarus glacialis","Fundulus heteroclitus","Furnarius figulus","Gadiculus argenteus","Gadus chalcogrammus","Gadus morhua","Galbula dea","Gallirallus okinawae","Gallus gallus","Gambusia affinis","Gambusia holbrooki","Gasterosteus aculeatus","Gasterosteus nipponicus","Gavia stellata","Gavialis gangeticus","Gekko japonicus","Geococcyx californianus","Geospiza fortis","Geothlypis trichas","Geotrypetes seraphini","Gephyroberyx darwinii","Girardinus metallicus","Glandirana rugosa","Glareola pratincola","Glaucidium brasilianum","Gnathochromis permaxillaris","Gnathochromis pfefferi","Gobiocypris rarus","Gopherus agassizii","Gopherus evgoodei","Gorsachius goisagi","Gouania willdenowi","Grallaria varia","Grammatotria lemairii","Grantiella picta","Greenwoodochromis bellcrossi","Greenwoodochromis christyi","Grus americana","Grus japonensis","Grus monacha","Grus nigricollis","G
-uaruba guarouba","Guentherus altivela","Gymnarchus niloticus","Gymnodraco acuticeps","Gymnogyps californianus","Gymnorhina tibicen","Halcyon senegalensis","Haliaeetus albicilla","Haliaeetus leucocephalus","Haliaeetus pelagicus","Haplochromis burtoni","Haplochromis chilotes","Haplochromis paludinosus","Haplochromis sauvagei","Haplochromis sp. Chipwa","Haplochromis vanheusdeni","Haplotaxodon microlepis","Haplotaxodon trifasciatus","Harpagifer antarcticus","Heliornis fulica","Helostoma temminkii","Hemibagrus wyckioides","Hemibates koningsi","Hemibates stenosoma","Hemichromis elongatus","Hemignathus wilsoni","Hemiprocne comata","Hepsetus odoe","Herpetotheres cachinnans","Heterochromis multidens","Heteronetta atricapilla","Heterotilapia buettikoferi","Heterotis niloticus","Himantopus himantopus","Hippocampus abdominalis","Hippocampus comes","Hippocampus kuda","Hippocampus whitei","Hippoglossus hippoglossus","Hippoglossus stenolepis","Hippolais icterina","Hirundichthys speculiger","Hirundo rustica","Holocentrus r
-ufus","Hoplostethus atlanticus","Horornis vulcanius","Hucho hucho","Hydrolagus affinis","Hydrophis curtus","Hydrophis cyanocinctus","Hydrophis hardwickii","Hydrophis melanocephalus","Hylia prasina","Hymenochirus boettgeri","Hypocryptadius cinnamomeus","Hypomesus nipponensis","Hypophthalmichthys molitrix","Hypophthalmichthys nobilis","Hypoplectrus puella","Ibidorhyncha struthersii","Ictalurus punctatus","Ifrita kowaldi","Illadopsis cleaveri","Indicator maculatus","Interochromis loocki","Irena cyanogastra","Istiophorus platypterus","Jacana jacana","Julidochromis dickfeldi","Julidochromis marksmithi","Julidochromis marlieri","Julidochromis ornatus","Julidochromis regani","Julidochromis sp. kombe AB-2019","Julidochromis sp. marlieri south AB-2019","Julidochromis sp. regani south AB-2019","Julidochromis sp. unterfels AB-2019","Julidochromis transcriptus","Junco hyemalis","Kryptolebias hermaphroditus","Kryptolebias marmoratus","Labeo calbasu","Labeo catla","Labeo gonius","Labeo rohita","Labeotropheus fuelleborni"
-,"Labrus bergylta","Lacerta agilis","Lacerta bilineata","Lacerta viridis","Laemonema laureysi","Lagopus leucura","Lagopus muta","Lampris guttatus","Lamprogrammus exutus","Lamprologus callipterus","Lamprologus kungweensis","Lamprologus laparogramma","Lamprologus lemairii","Lamprologus meleagris","Lamprologus ocellatus","Lamprologus ornatipinnis","Lamprologus signatus","Lamprologus sp. ornatipinnis congo AB-2019","Lamprologus sp. ornatipinnis zambia AB-2019","Lamprologus speciosus","Lamprologus tigripictilis","Lamprotornis superbus","Lanius collurio","Lanius ludovicianus","Larimichthys crocea","Larimichthys polyactis","Larus smithsonianus","Lateolabrax maculatus","Lates calcarifer","Laticauda colubrina","Laticauda laticaudata","Latimeria chalumnae","Leiothrix lutea","Lepidiolamprologus attenuatus","Lepidiolamprologus cunningtoni","Lepidiolamprologus elongatus","Lepidiolamprologus kamambae","Lepidiolamprologus kendalli","Lepidiolamprologus mimicus","Lepidiolamprologus profundicola","Lepidiolamprologus sp. meel
-i kipili AB-2019","Lepidothrix coronata","Lepisosteus oculatus","Leptobrachium ailaonicum","Leptobrachium leishanense","Leptocoma aspasia","Leptosomus discolor","Lestradea perspicax","Lestradea stappersii","Lesueurigobius sanzi","Lethenteron camtschaticum","Lethenteron reissneri","Leuciscus waleckii","Leucopsar rothschildi","Leucoraja erinacea","Lichenostomus cassidix","Limnochromis abeelei","Limnochromis auritus","Limnochromis staneri","Limnodynastes dumerilii","Limnothrissa miodon","Limnotilapia dardennii","Limosa lapponica","Liparis tanakae","Lithobates catesbeianus","Lithochromis rufus","Lobochilotes labiatus","Locustella ochotensis","Lonchura striata","Lophius piscatorius","Lophochroa leadbeateri","Lophotis ruficrista","Lorius garrulus","Lota lota","Loxia curvirostra","Loxia leucoptera","Lucifuga dentata","Lutjanus erythropterus","Lycocorax pyrrhopterus","Lyrurus tetrix","Lythrypnus dalli","Maccullochella peelii","Machaerirhynchus nigripectus","Macquaria ambigua","Macquaria australasica","Macroramphosu
-s scolopax","Macrourus berglax","Malaclemys terrapin","Malacocephalus occidentalis","Mallotus villosus","Malurus cyaneus","Malurus elegans","Manacus vitellinus","Mastacembelus armatus","Mauremys reevesii","Maylandia zebra","Mchenga conophoros","Megadyptes antipodes","Megalobrama amblycephala","Megalops atlanticus","Megalops cyprinoides","Melanerpes aurifrons","Melanocharis versteri","Melanochromis auratus","Melanogrammus aeglefinus","Melanonus zugmayeri","Melanotaenia boesemani","Meleagris gallopavo","Melopsittacus undulatus","Melospiza melodia","Menidia beryllina","Menidia menidia","Menura novaehollandiae","Merlangius merlangus","Merluccius capensis","Merluccius merluccius","Merluccius polli","Merops nubicus","Mesembrinibis cayennensis","Mesitornis unicolor","Mesoclemmys tuberculata","Microcaecilia unicolor","Micropoecilia picta","Micropterus floridanus","Micropterus salmoides","Miichthys miiuy","Mionectes macconnelli","Mixornis gularis","Mohoua ochrocephala","Mola mola","Molothrus ater","Molva molva","Mon
-ocentris japonicus","Monopterus albus","Montifringilla adamsi","Mora moro","Mormyrus iriodes","Mormyrus lacerda","Morone chrysops","Morone saxatilis","Motacilla alba","Motacilla tschutschensis","Mugilogobius chulae","Mullus surmuletus","Muraenolepis marmorata","Myanophis thanlyinensis","Myiagra hebetior","Myiopsitta monachus","Myoxocephalus scorpius","Myripristis jacobus","Myripristis murdjan","Mystacornis crossleyi","Myxocyprinus asiaticus","Naja naja","Nanorana parkeri","Nematolebias whitei","Neoceratodus forsteri","Neodrepanis coruscans","Neogobius melanostomus","Neolamprologus bifasciatus","Neolamprologus boulengeri","Neolamprologus brevis","Neolamprologus brichardi","Neolamprologus buescheri","Neolamprologus calliurus","Neolamprologus cancellatus","Neolamprologus caudopunctatus","Neolamprologus chitamwebwai","Neolamprologus christyi","Neolamprologus crassus","Neolamprologus cylindricus","Neolamprologus devosi","Neolamprologus falcicula","Neolamprologus fasciatus","Neolamprologus furcifer","Neolamprolog
-us gracilis","Neolamprologus hecqui","Neolamprologus helianthus","Neolamprologus leleupi","Neolamprologus leloupi","Neolamprologus longicaudatus","Neolamprologus longior","Neolamprologus marunguensis","Neolamprologus meeli","Neolamprologus modestus","Neolamprologus mondabu","Neolamprologus multifasciatus","Neolamprologus mustax","Neolamprologus niger","Neolamprologus nigriventris","Neolamprologus obscurus","Neolamprologus olivaceous","Neolamprologus pectoralis","Neolamprologus petricola","Neolamprologus pleuromaculatus","Neolamprologus prochilus","Neolamprologus pulcher","Neolamprologus savoryi","Neolamprologus sexfasciatus","Neolamprologus similis","Neolamprologus sp. brevis magara AB-2019","Neolamprologus sp. caudopunctatus kipili AB-2019","Neolamprologus sp. cygnus AB-2019","Neolamprologus sp. eseki AB-2019","Neolamprologus sp. falcicula mahale AB-2019","Neolamprologus sp. furcifer ulwile AB-2019","Neolamprologus sp. gracilis tanzania AB-2019","Neolamprologus sp. kombe AB-2019","Neolamprologus sp. ventra
-lis stripe AB-2019","Neolamprologus tetracanthus","Neolamprologus timidus","Neolamprologus toae","Neolamprologus tretocephalus","Neolamprologus variostigma","Neolamprologus ventralis","Neolamprologus walteri","Neoniphon sammara","Neopelma chrysocephalum","Neopipo cinnamomea","Neostethus bicornis","Nerophis ophidion","Nesospiza acunhae","Nestor notabilis","Nettapus auritus","Nibea albiflora","Nicator chloris","Nipponia nippon","Nisaetus nipalensis","Notechis scutatus","Nothobranchius furzeri","Nothobranchius kuhntae","Nothocercus julius","Nothocercus nigrocapillus","Nothoprocta ornata","Nothoprocta pentlandii","Nothoprocta perdicaria","Notiomystis cincta","Notolabrus celidotus","Notothenia coriiceps","Novumbra hubbsi","Numida meleagris","Nyctibius bracteatus","Nyctibius grandis","Nycticryphes semicollaris","Nyctiprogne leucopyga","Nymphicus hollandicus","Oceanites oceanicus","Oceanodroma tethys","Odontesthes bonariensis","Odontophorus gujanensis","Oenanthe oenanthe","Ompok bimaculatus","Oncorhynchus gorbusch
-a","Oncorhynchus keta","Oncorhynchus kisutch","Oncorhynchus mykiss","Oncorhynchus nerka","Oncorhynchus tshawytscha","Onychorhynchus coronatus","Onychostoma macrolepis","Onychostruthus taczanowskii","Oophaga pumilio","Ophiodon elongatus","Ophiophagus hannah","Ophthalmotilapia boops","Ophthalmotilapia heterodonta","Ophthalmotilapia nasuta","Ophthalmotilapia sp. paranasuta AB-2019","Ophthalmotilapia sp. white cap AB-2019","Ophthalmotilapia ventralis","Opisthocomus hoazin","Oplegnathus fasciatus","Opsanus beta","Oreocharis arfaki","Oreochromis aureus","Oreochromis malagarasi","Oreochromis niloticus","Oreochromis spilurus","Oreochromis tanganicae","Oreotrochilus melanogaster","Orestias ascotanensis","Origma solitaria","Oriolus oriolus","Orthochromis indermauri","Orthochromis malagaraziensis","Orthochromis mazimeroensis","Orthochromis uvinzae","Orthonyx spaldingii","Oryzias celebensis","Oryzias javanicus","Oryzias latipes","Oryzias melastigma","Oryzias sinensis","Oryzias woworae","Osmerus eperlanus","Otus sunia",
-"Oxygymnocypris stewartii","Oxylabes madagascariensis","Oxyruncus cristatus","Oxyura jamaicensis","Pachycephala philippinensis","Pachypanchax playfairii","Pachyramphus minor","Paedocypris sp. Pulau Singkep","Pagrus major","Pampus argenteus","Pandion haliaetus","Pangasianodon hypophthalmus","Pantherophis guttatus","Pantherophis obsoletus","Panurus biarmicus","Pao palembangensis","Parablennius parvicornis","Paracanthobrama guichenoti","Paracyprichromis brieni","Paracyprichromis nigripinnis","Paracyprichromis sp. brieni south AB-2019","Paracyprichromis sp. tembwe AB-2019","Paradisaea raggiana","Paradisaea rubra","Paralichthys olivaceus","Parambassis ranga","Paramormyrops kingsleyae","Paraplagusia blochii","Parasudis fraserbrunneri","Paratilapia polleni","Pardalotus punctatus","Paroedura picta","Parotia lawesii","Parus major","Passer domesticus","Passer montanus","Passerina amoena","Patagioenas fasciata","Pavo cristatus","Pavo muticus","Pedionomus torquatus","Pelecanoides urinatrix","Pelecanus crispus","Pelmato
-lapia mariae","Pelodiscus sinensis","Pelusios castaneus","Pelvicachromis taeniatus","Penelope pileata","Perca flavescens","Perca fluviatilis","Percina caprodes","Percopsis transmontana","Periophthalmodon schlosseri","Periophthalmus magnuspinnatus","Periophthalmus modestus","Perissodus eccentricus","Perissodus microlepis","Perissodus multidentatus","Petrochromis famula","Petrochromis fasciolatus","Petrochromis horii","Petrochromis macrognathus","Petrochromis orthognathus","Petrochromis polyodon","Petrochromis sp. giant AB-2019","Petrochromis sp. kazumbae AB-2019","Petrochromis sp. kipili brown AB-2019","Petrochromis sp. macrognathus rainbow AB-2019","Petrochromis sp. moshi yellow AB-2019","Petrochromis sp. orthognathus ikola AB-2019","Petrochromis sp. polyodon texas AB-2019","Petrochromis sp. red AB-2019","Petrochromis trewavasae","Petromyzon marinus","Peucedramus taeniatus","Phaethon lepturus","Phaetusa simplex","Phainopepla nitens","Phalacrocorax auritus","Phalacrocorax brasilianus","Phalacrocorax carbo","
-Phalacrocorax harrisi","Phalacrocorax pelagicus","Phalloptychus januarius","Pharyngochromis acuticeps","Phasianus colchicus","Pheucticus melanocephalus","Phoebastria albatrus","Phoenicopterus ruber","Pholis gunnellus","Phycis blennoides","Phycis phycis","Phyllopteryx taeniolatus","Phylloscopus plumbeitarsus","Phylloscopus trochiloides","Phylloscopus trochilus","Phylloscopus whistleri","Piaya cayana","Picathartes gymnocephalus","Pimephales promelas","Pionus senilis","Pipa parva","Pipra filicauda","Piprites chloris","Pitta sordida","Pituophis catenifer","Planiliza haematocheilus","Platichthys stellatus","Platyplectrum ornatum","Platysteira castanea","Platysternon megacephalum","Plecodus elaviae","Plecodus paradoxus","Plecodus straeleni","Plecoglossus altivelis","Plectropomus leopardus","Ploceus nigricollis","Pluvialis apricaria","Pluvianellus socialis","Podarcis muralis","Podargus strigoides","Podiceps cristatus","Podilymbus podiceps","Podocnemis expansa","Poecile atricapillus","Poecilia formosa","Poecilia la
-tipinna","Poecilia mexicana","Poecilia reticulata","Poeciliopsis gracilis","Poeciliopsis infans","Poeciliopsis occidentalis","Poeciliopsis paucimaculata","Poeciliopsis presidionis","Poeciliopsis prolifica","Poeciliopsis retropinna","Poeciliopsis turneri","Poeciliopsis turrubarensis","Pogona vitticeps","Pogoniulus pusillus","Polioptila caerulea","Pollachius virens","Pollimyrus isidori","Pollimyrus plagiostoma","Polydactylus sextarius","Polymixia japonica","Polyodon spathula","Polypterus senegalus","Pomatorhinus ruficollis","Pomatostomus ruficeps","Poropuntius huangchuchieni","Pristis pectinata","Probosciger aterrimus","Promerops cafer","Protobothrops flavoviridis","Protobothrops mucrosquamatus","Protopterus annectens","Protosalanx chinensis","Prunella fulvescens","Prunella himalayana","Psettodes erumei","Pseudochaenichthys georgianus","Pseudochromis fuscus","Pseudoliparis sp. Yap Trench","Pseudonaja textilis","Pseudopleuronectes yokohamae","Pseudopodoces humilis","Pseudorectes ferrugineus","Pseudorhombus dup
-liciocellatus","Pseudosimochromis babaulti","Pseudosimochromis curvifrons","Pseudosimochromis marginatus","Psilopogon haemacephalus","Psittacula krameri","Psittacus erithacus","Psittacus timneh","Psitteuteles goldiei","Psophia crepitans","Pterocles burchelli","Pterocles gutturalis","Pterocles orientalis","Pteruthius melanotis","Ptilonorhynchus violaceus","Ptilorrhoa leucosticta","Ptyas mucosa","Ptychochromis oligocanthus","Pundamilia nyererei","Pungitius pungitius","Pungu maclareni","Puntigrus tetrazona","Pycnonotus jocosus","Pygocentrus nattereri","Pygoscelis adeliae","Pygoscelis antarcticus","Pygoscelis papua","Pyrgilauda ruficollis","Pyrrhura cruentata","Pyrrhura frontalis","Pyrrhura griseipectus","Pyrrhura lepida","Pyrrhura molinae","Pyrrhura perlata","Python bivittatus","Python molurus","Pyxicephalus adspersus","Quiscalus mexicanus","Rafetus swinhoei","Ramphastos sulfuratus","Rana temporaria","Ranitomeya imitator","Recurvirostra avosetta","Regalecus glesne","Reganochromis calliurus","Regulus satrapa","
-Reinhardtius hippoglossoides","Rhabdornis inornatus","Rhadina sibilatrix","Rhagologus leucostigma","Rhamphochromis esox","Rhea americana","Rhea pennata","Rhegmatorhina hoffmannsi","Rhinatrema bivittatum","Rhincodon typus","Rhinella marina","Rhinogobius similis","Rhinopomastus cyanomelas","Rhinoptilus africanus","Rhipidura dahli","Rhodinocichla rosea","Rhynochetos jubatus","Rissa tridactyla","Rondeletia loricata","Rostratula benghalensis","Rynchops niger","Sagittarius serpentarius","Sakesphorus luctuosus","Salarias fasciatus","Salmo salar","Salmo trutta","Salvator merianae","Salvelinus namaycush","Salvelinus sp. IW2-2015","Sander lucioperca","Sander vitreus","Sapayoa aenigma","Sardina pilchardus","Sargochromis carlottae","Sarotherodon caroli","Sarotherodon lohbergeri","Sarotherodon steinbachi","Saxicola maurus","Scaphiopus couchii","Scaphiopus holbrookii","Scartelaos histophorus","Sceloporus tristichus","Sceloporus undulatus","Sciaenops ocellatus","Scleropages formosus","Sclerurus mexicanus","Scolopax mira",
-"Scophthalmus maximus","Scopus umbretta","Scyliorhinus canicula","Scyliorhinus torazame","Scytalopus superciliaris","Sebastes aleutianus","Sebastes koreanus","Sebastes minor","Sebastes nigrocinctus","Sebastes norvegicus","Sebastes nudus","Sebastes rubrivinctus","Sebastes schlegelii","Sebastes steindachneri","Sebastes umbrosus","Selene dorsalis","Semnornis frantzii","Serilophus lunatus","Serinus canaria","Seriola dumerili","Seriola lalandi","Seriola quinqueradiata","Seriola rivoliana","Serranochromis macrocephalus","Serranus cabrilla","Setophaga coronata","Setophaga kirtlandii","Sialia sialis","Silurus glanis","Silurus meridionalis","Simochromis diagramma","Siniperca chuatsi","Siniperca knerii","Siniperca scherzeri","Sinocyclocheilus anophthalmus","Sinocyclocheilus anshuiensis","Sinocyclocheilus grahami","Sinocyclocheilus maitianheensis","Sinocyclocheilus rhinocerous","Sinosuthora webbiana","Sitta europaea","Smithornis capensis","Solea senegalensis","Sparus aurata","Spathodus erythrodon","Spathodus marlieri"
-,"Spea bombifrons","Spea multiplicata","Sphaeramia orbicularis","Spheniscus demersus","Spheniscus humboldti","Spheniscus magellanicus","Spheniscus mendiculus","Sphenodon punctatus","Spizaetus tyrannus","Spizella passerina","Spondyliosoma cantharus","Sporophila hypoxantha","Squalius pyrenaicus","Steatocranus sp. ultraslender AB-2019","Steatornis caripensis","Stegastes partitus","Stercorarius parasiticus","Sterna hirundo","Sterrhoptilus dennistouni","Stictonetta naevosa","Stomatepia pindu","Stomatorhinus ivindoensis","Streptopelia turtur","Strigops habroptila","Strix occidentalis","Struthidea cinerea","Struthio camelus","Sturnus vulgaris","Stylephorus chordatus","Sula dactylatra","Sylvia atricapilla","Sylvia borin","Sylvietta virens","Symphodus melops","Synchiropus splendidus","Syngnathoides biaculeatus","Syngnathus acus","Syngnathus floridae","Syngnathus rostellatus","Syngnathus typhle","Syrmaticus mikado","Syrrhaptes paradoxus","Tachuris rubrigastra","Tachycineta bicolor","Tachysurus fulvidraco","Taeniopygi
-a guttata","Takifugu bimaculatus","Takifugu flavidus","Takifugu rubripes","Tangachromis dhanisi","Tanganicodus irsacae","Tauraco erythrolophus","Taurulus bubalis","Telmatochromis bifrenatus","Telmatochromis brachygnathus","Telmatochromis brichardi","Telmatochromis dhonti","Telmatochromis sp. dhonti north AB-2019","Telmatochromis sp. dhonti twiyu AB-2019","Telmatochromis sp. longola AB-2019","Telmatochromis sp. lufubu AB-2019","Telmatochromis sp. shell AB-2019","Telmatochromis temporalis","Telmatochromis vittatus","Tenualosa ilisha","Terrapene carolina","Tetraodon nigroviridis","Tetrax tetrax","Thalassarche chlororhynchos","Thalassoma bifasciatum","Thalassophryne amazonica","Thaleichthys pacificus","Thamnaconus septentrionalis","Thamnophis elegans","Thamnophis sirtalis","Thermophis baileyi","Thinocorus orbignyianus","Thoracochromis brauschi","Thryothorus ludovicianus","Thunnus albacares","Thunnus maccoyii","Thunnus orientalis","Thunnus thynnus","Thymallus thymallus","Tichodroma muraria","Tilapia brevimanus",
-"Tilapia sparmanii","Tinamus guttatus","Todus mexicanus","Toxostoma redivivum","Toxotes chatareus","Toxotes jaculatrix","Trachemys scripta","Trachinotus ovatus","Trachurus trachurus","Trachyrincus murrayi","Trachyrincus scabrus","Trematocara caparti","Trematocara macrostoma","Trematocara marginatum","Trematocara nigrifrons","Trematocara stigmaticum","Trematocara unimaculatum","Trematocara variabile","Trematocara zebra","Trematochromis benthicola","Trematomus bernacchii","Trematomus loennbergii","Tricholaema leucomelas","Triglachromis otostigma","Trinectes maculatus","Triplophysa dalaica","Triplophysa siluroides","Triplophysa tibetana","Trisopterus minutus","Trogon melanurus","Tropheus annectens","Tropheus brichardi","Tropheus duboisi","Tropheus moorii","Tropheus polli","Tropheus sp. Kirschfleck ","Tropheus sp. black ","Tropheus sp. brichardi kipili AB-2019","Tropheus sp. lukuga AB-2019","Tropheus sp. lunatus AB-2019","Tropheus sp. mpimbwe AB-2019","Tropheus sp. murago AB-2019","Tropheus sp. red AB-2019","Tu
-rdus rufiventris","Turnix velox","Tylochromis polylepis","Tympanuchus cupido","Typhlichthys subterraneus","Tyrannus savana","Tyto alba","Umbra pygmaea","Upupa epops","Uria aalge","Uria lomvia","Urocolius indicus","Urocynchramus pylzowi","Varanus komodoensis","Variabilichromis moorii","Verasper variegatus","Vidua chalybeata","Vidua macroura","Vipera berus","Vireo altiloquus")
-species.classification <- classification(species)
-species.classification <- classification(species,db="itis")
-species.classification[1]
-species.classification
-species.classification <- classification(species[1],db="itis")
-length(species)
-species.classication
-species.classification
-length(species.classification)
-class(species.classification)
-str(species.classification)
-species.classification$`Acanthisitta chloris`
-species.classification$[[1]]
-species.classification[[1]]
-species.classification[[1]]$order
-species.classification[[1]]@order
-species.classification[[1]]$order
-species.classification[[1]]$rank
-species.classification[[1]]$name[species.classification[[1]]$rank=="order"]
-?classification
-species.classification1 <- classification(species[1:100],db="itis")
-Order1 <- sapply(1:length(species.classification1), function(x) {species.classification1[[x]]$name[species.classification[[x]]$rank=="order"]})
-Order1 <- sapply(1:length(species.classification1), function(x) {species.classification1[[x]]$name[species.classification1[[x]]$rank=="order"]})
-species.classification[[1]]
-species.classification[[2]]
-species.classification1[[2]]
-species.classification1[[3]]
-length(species.classification1)
-Order1a <- sapply(1:50, function(x) {species.classification1[[x]]$name[species.classification1[[x]]$rank=="order"]})
-Order1a <- lapply(1:50, function(x) {species.classification1[[x]]$name[species.classification1[[x]]$rank=="order"]})
-Order1a <- lapply(1:5, function(x) {species.classification1[[x]]$name[species.classification1[[x]]$rank=="order"]})
-Order1b <- lapply(6:10, function(x) {species.classification1[[x]]$name[species.classification1[[x]]$rank=="order"]})
-Order1c <- lapply(1:20, function(x) {species.classification1[[x]]$name[species.classification1[[x]]$rank=="order"]})
-Order1a <- lapply(1:20, function(x) {species.classification1[[x]]$name[species.classification1[[x]]$rank=="order"]})
-Order1a <- lapply(1:30, function(x) {species.classification1[[x]]$name[species.classification1[[x]]$rank=="order"]})
-Order1a <- lapply(1:25, function(x) {species.classification1[[x]]$name[species.classification1[[x]]$rank=="order"]})
-Order1a <- lapply(1:21, function(x) {species.classification1[[x]]$name[species.classification1[[x]]$rank=="order"]})
-Order1a <- lapply(1:22, function(x) {species.classification1[[x]]$name[species.classification1[[x]]$rank=="order"]})
-Order1a <- lapply(1:21, function(x) {species.classification1[[x]]$name[species.classification1[[x]]$rank=="order"]})
-species.classification1[[22]]
-Order1 <- sapply(1:length(species.classification1), function(x) {if(!is.na(species.classification1[[x]])){ species.classification1[[x]]$name[species.classification[[x]]$rank=="order"]} else {NA} })
-Order1 <- sapply(1:length(species.classification1), function(x) {if(!all(is.na(species.classification1[[x]]))){ species.classification1[[x]]$name[species.classification[[x]]$rank=="order"]} else {NA} })
-Order1 <- sapply(1:length(species.classification1), function(x) {if(!all(is.na(species.classification1[[x]]))){ species.classification1[[x]]$name[species.classification1[[x]]$rank=="order"]} else {NA} })
-Order1[[1]]
-Order1
-Order1 <- sapply(1:length(species.classification1), function(x) {if(!is.na(species.classification1[[x]])){ species.classification1[[x]]$name[species.classification1[[x]]$rank=="order"]} else {NA} })
-Order1 <- sapply(1:length(species.classification1), function(x) {if(!all(is.na(species.classification1[[x]]))){ species.classification1[[x]]$name[species.classification1[[x]]$rank=="order"]} else {NA} })
-unlist(Order1)
-names(Order1) <- species[1:100]
-Order1
-which(Order1=="Squamata")
-species.classification2 <- classification(species[101:400],db="itis")
-REEs::blast
-Order2 <- unlist(sapply(1:length(species.classification2), function(x) {if(!all(is.na(species.classification2[[x]]))){ species.classification2[[x]]$name[species.classification2[[x]]$rank=="order"]} else {NA} }))
-names(Order2) <- species[101:400]
-length(Order2)
-length(species.classification2)
-Order2[[1]]
-Order2[[2]]
-species.classification2[1:5]
-lengths(species.classification2)
-species.classification2[[2]]
-species.classification2[[1]][1]
-species.classification2[[1]][2]
-which(lengths(species.classification2)==3)
-length(which(lengths(species.classification2)==3))
-species.classification2b <- species.classification2[which(lengths(species.classification2)==3)]
-species.classification2b[[1]]
-Order2 <- unlist(sapply(1:length(species.classification2b), function(x) {if(!all(is.na(species.classification2b[[x]]))){ species.classification2b[[x]]$name[species.classification2b[[x]]$rank=="order"]} else {NA} }))
-Species2 <- unlist(sapply(1:length(species.classification2b), function(x) {if(!all(is.na(species.classification2b[[x]]))){ species.classification2b[[x]]$name[species.classification2b[[x]]$rank=="species"]} else {NA} }))
-Species2[1]
-Species2[2]
-names(Order2) <- Species2
-Order2   <- unlist(sapply(1:length(species.classification2b), function(x) {if(!all(is.na(species.classification2b[[x]]))){ species.classification2b[[x]]$name[species.classification2b[[x]]$rank=="order"]} else {NA} }))
-Species2 <- unlist(sapply(1:length(species.classification2b), function(x) {if(!all(is.na(species.classification2b[[x]]))){ species.classification2b[[x]]$name[species.classification2b[[x]]$rank=="species"]} else {NA} }))
-length(Order2)
-length(Species2)
-Species2
-REEs::makeBlastDB
-length(species)
-write(species,file="/users/jeff/Documents/temptext.txt")
-genera <- unique(gsub(" .+","",species))
-length(genera)
-?consensus
-data(package="REEs")
-#' Step 3b: target matching assessment#
-#'#
-#' This function performs step 3b of the post-sequencing pipeline used for SnakeCap#
-#' In this step, haplocontig consensus sequences generating during step 2 (dipspades.sh), target sequences used to generate probes prior to sequencing, and blast hit tables generated during step 3a (targetMatching.sh) are processed to sort/filer assembled consensus haplocontigs#
-#' #
-#' @param workdir Path to the directory containing the 'Processed_Samples' folder used in steps 1–3 of SnakeCap. Default is the current directory.#
-#' @param targets.path Path to the file containing the loci that were targetted for capture, and from which probes were designed.#
-#' @return NULL#
-#' @export#
-targetMatchingAssessment03b  <- function(workdir=getwd(), targets.path, minOverlap=41, maxeval=0.05, minbitscore=50){#
-	procdir <- file.path(workdir,"/Processed_Samples/")#
-	setwd(procdir)#
-	# paths to consensus contig fasta files (consensus among haplocontigs of an individual)#
-	consensusContigs.paths <- list.files(pattern='.+_consensus-contigs-dipspades.fa',recursive=T,full.names=T)#
-	# paths to hit tables#
-	matches.paths <- list.files(pattern='.+_match.txt$',recursive=T, full.names=T)#
-	# Checking that input files exist#
-	if(length(consensusContigs.paths) == 0){#
-		stop("Could not find '*_consensus-contigs-dipspades.fa' files generated by dipspades")#
+wapply(x=seq1,FUN=complexity,windowsize=50,windowshift=50)
+wapply(x=seq1,FUN=complexity,windowsize=40,windowshift=50)
+wapply(x=seq1,FUN=complexity,windowsize=30,windowshift=50)
+wapply(x=seq1,FUN=complexity,windowsize=10,windowshift=50)
+wapply(x=seq1,FUN=complexity,windowsize=50,windowshift=50)
+wapply(x=seq1,FUN=complexity,windowsize=55,windowshift=50)
+wapply(x=seq1,FUN=complexity,windowsize=100,windowshift=50)
+wapply(x=seq1,FUN=complexity,windowsize=100,windowshift=100)
+wapply(x=seq1,FUN=complexity,windowsize=100)
+wapply <- function(x,FUN,windowsize=NULL,windowshift=NULL,startbase=1,remainder=T){#
+	if(class(x)=="DNAString"){#
+		x <- as.character(unlist(x))#
 	}#
-	if(length(matches.paths) == 0){#
-		stop("Could not find files with pattern '*_match.txt' (hit tables) generated by BLAST")#
+	if(length(x)>1){#
+		stop("Sequences must supplied as a DNAString object or a length 1 DNAStringSet object")#
 	}#
-	if(length(consensusContigs.paths)!=length()){#
-		stop("Number of sequence consensus contig files with filenames '.+_consensus-contigs-dipspades.fa' differs from number of hit tables with filenames '*_match.txt'")#
+	if(class(x)=="DNAStringSet"){#
+		x <- as.list(x[1])[[1]]#
 	}#
-#
-	# For the ith individual, filter/sort the set of matches in the BLAST hit table, and sorted write sequences#
-	for(i in 1:length(matches.paths)){#
-		SampleName            <- basename(dirname(matches.paths[i]))#
-		match.data <- data.table::fread(matches.paths[i], sep = "\t", header = F, stringsAsFactors = FALSE)#
-		headers    <- c("qName", "tName", "pident", "matches", "misMatches", "gapopen","qStart", "qEnd", "tStart", "tEnd", "evalue", "bitscore")#
-		data.table::setnames(match.data, headers)#
-		# Moderate or strong matches#
-		filt.data <- match.data[match.data$matches > minOverlap & match.data$evalue <= maxeval & match.data$bitscore >= minbitscore,]#
-		# Remove weak matches#
-		matches.removed <- match.data[match.data$matches <= minOverlap | match.data$evalue > maxeval | match.data$bitscore < minbitscore,]#
-		# Read in assembled contigs#
-		contigs <- Biostrings::readDNAStringSet(consensusContigs.paths[i])#
-		names(contigs) <- gsub(" .+","",names(contigs))#
-		# Read in target loci#
-		query.seqs <- Biostrings::readDNAStringSet(targets.path)#
-		# Adds a column that will hold direction information#
-		filt.data[,qDir:= "+"]#
-		filt.data$qDir[filt.data$tStart > filt.data$tEnd] <- "-"#
-		# New column that holds the contig name and target name for each match#
-		ContigTarget <- paste(filt.data$qName,filt.data$tName)#
-		filt.data[,ContigTarget:=paste(filt.data$qName,filt.data$tName)]#
-		filt.df      <- filt.data[match(unique(filt.data$ContigTarget),filt.data$ContigTarget),]#
-		# Filtered hit table for the set of contigs that match a single target locus. If the contigs are large they may contain multiple targets though.#
-		filt.df.SingleMatches   <- filt.df[match(names(which(table(filt.df$qName)==1)),filt.df$qName),]#
-		# Filtered hit table for the set of contigs that match multiple target loci. Not sure what to do with these yet#
-		filt.df.MultipleMatches <- filt.df[filt.df$qName %in% names(which(table(filt.df$qName)>1)),]#
-		# Contigs that strongly match only one target#
-		contigs.single        <- contigs[pmatch(filt.df.SingleMatches$qName,names(contigs))]#
-		newNames.single       <- paste0(names(contigs.single),"_|_",filt.df.SingleMatches$tName,"_|_",SampleName)#
-		names(contigs.single) <- newNames.single#
-		# Write the set of contigs that match a single target locus, and include the sample name, contig name, and target name in the sequence name#
-		Biostrings::writeXStringSet(contigs.single,file.path(dirname(matches.paths[i]),paste0(SampleName,"_contigs-SingleTargetMatches.fa")))#
-		# Write the filtered Hit table for the contigs that match a single target#
-		write.table(filt.df.SingleMatches,file.path(dirname(matches.paths[i]),paste0(SampleName,"_Hits-SingleTargetMatches.tsv")),quote=F,sep="\t",col.names=T,row.names=F)#
-		# Contigs that moderately or strongly match multiple target#
-		contigs.multi        <- contigs[match(filt.df.MultipleMatches$qName,names(contigs))]#
-		newNames.multi       <- paste0(names(contigs.multi),"_|_",SampleName)#
-		names(contigs.multi) <- newNames.multi#
-		# Write the set of contigs that match multiple target loci, and include the sample name and contig name in the sequence name#
-		Biostrings::writeXStringSet(contigs.multi,file.path(dirname(matches.paths[i]),paste0(SampleName,"_contigs-MultipleTargetMatches.fa")))#
-		# Write the filtered Hit table for the contigs that match multiple targets#
-		write.table(filt.df.MultipleMatches,file.path(dirname(matches.paths[i]),paste0(SampleName,"_Hits-MultipleTargetMatches.tsv")),quote=F,sep="\t",col.names=T,row.names=F)#
-		# Contigs that only weakly match one or more targets#
-		if(any(!matches.removed$qName %in% filt.data$qName)){#
-			contigs.weakMatches <- contigs[match(unique(matches.removed$qName[which(!matches.removed$qName %in% filt.data$qName)]),names(contigs))]#
-			newNames.weak       <- paste0(names(contigs.weakMatches),"_|_",SampleName)#
-			# Write the set of contigs that had only weak matche(s) to targets, and include the sample name and contig name in the sequence name#
-			Biostrings::writeXStringSet(contigs.weakMatches,file.path(dirname(matches.paths[i]),paste0(SampleName,"_contigs-WeakTargetMatchesOnly.fa")))#
-			# write the hit table containing only weak matches#
-			write.table(matches.removed,file.path(dirname(matches.paths[i]),paste0(SampleName,"_Hits-WeakMatches.tsv")),quote=F,sep="\t",col.names=T,row.names=F)#
-		}#
-		# Contigs that do not match any targets#
-		if(any(!names(contigs) %in% match.data$qName)){#
-			contigs.unmatched  <- contigs[!names(contigs) %in% match.data$qName]#
-			newNames.unmatched <- paste0(names(contigs.unmatched),"_|_",SampleName)#
-			# Write the set of contigs that did not match any of the targets#
-			Biostrings::writeXStringSet(contigs.unmatched,file.path(dirname(matches.paths[i]),paste0(SampleName,"_contigs-unmatched.fa")))#
-		}#
+	tempseq       <- unlist(strsplit(as.character(unlist(x)),split=""))#
+	if(is.null(windowsize)){#
+		windowsize <- length(tempseq)#
 	}#
-	# res#
-}#
-#
-#' Step 4: Align Captured Loci#
-#'#
-#' This function performs step 4 of the post-sequencing pipeline used for SnakeCap#
-#' MAFFT is used for multiple sequence alignment with the settings '--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6', and using a jacknifing approach to find the the set of putatively orthologous contigs among individuals.#
-#' The input sequences should be the fasta files generated in step 3 that are named '.*contigs-SingleTargetMatches.fa'#
-#' #
-#' @param workdir Path to the directory containing the 'Processed_Samples' folder used in steps 1–3 of SnakeCap. Default is the current directory.#
-#' @param targets.path Path to the file containing the loci that were targetted for capture, and from which probes were designed.#
-#' @return NULL # Later this function will return a data frame with the paths to output files#
-#' @export #
-lociAlignment04 <- function(workdir=getwd(),targets.path){#
-	# paths to consensus sequence fasta files#
-	# contigs.paths <- list.files(pattern='.+_consensus-contigs-dipspades.fa',recursive=T,full.names=T)#
-	#targets.path   <- file.path(workdir,'Weinell_TargetLoci_Snakes_Final_18April2019.txt')#
-	# paths to hit tables#
-	# matches.paths <- list.files(pattern='.+_match.txt$',recursive=T, full.names=T)#
-	# Read in assembled contigs#
-	# contigs <- Biostrings::readDNAStringSet(contigs.paths)#
-	setwd(workdir)#
-	# Read in target loci#
-	query.seqs <- Biostrings::readDNAStringSet(targets.path)#
-	# Paths to consensus contigs that strongly match only one target. This file was generated in step 3.#
-	SingleTargetContigs.paths <- list.files(pattern='.+_contigs-SingleTargetMatches.fa',recursive=T,full.names=T)#
-	# DNAStringSet holding the consensus contigs that strongly match only one target, for all of the species sampled#
-	SingleTargetContigs    <- Biostrings::readDNAStringSet(SingleTargetContigs.paths)#
-	##### Define output directories and create them if they do not already exist.#
-	SingleTargetContigsDir <- file.path(workdir,"/SingleTargetContigs")#
-	dir.check.create(SingleTargetContigsDir)#
-	setwd(SingleTargetContigsDir)#
-	# Directories where each multiple sequence alignment will be written#
-	AlignmentDir1 <- file.path(SingleTargetContigsDir,"/UntrimmedAlignments_SamplesOnly/")#
-	AlignmentDir2 <- file.path(SingleTargetContigsDir,"/UntrimmedAlignments_SamplesAndTarget/")#
-	# Where to write the consensus sequence of each locus alignment#
-	ConsensusDir  <- file.path(SingleTargetContigsDir,"/AlignmentConsensus_SamplesAndTarget/")#
-	# Where to write unaligned sequences#
-	orthologsDir  <- file.path(SingleTargetContigsDir,"/PutativeOrthologs_unaligned/")#
-	paralogsDir   <- file.path(SingleTargetContigsDir,"/PutativeParalogs_unaligned/")#
-	unresolvedDir <- file.path(SingleTargetContigsDir,"/UnresolvedHomologs_unaligned/")#
-	# Directory where sequences will be written if the target was only sequenced in one individual.#
-	underSampledDir <- file.path(SingleTargetContigsDir,"/undersampledTargets_unaligned/")#
-	# Create the directories defined above, if they dont already exist.#
-	dir.check.create(AlignmentDir1)#
-	dir.check.create(AlignmentDir2)#
-	dir.check.create(ConsensusDir)#
-	dir.check.create(unresolvedDir)#
-	dir.check.create(paralogsDir)#
-	dir.check.create(orthologsDir)#
-	dir.check.create(underSampledDir)#
-#
-	###### For each target, write a separate fasta file containing the set of species' contigs that match it#
-	# data frame with contig name, target name, and individual name parsed from sequence names#
-	contigInfo.df <- as.data.frame(do.call(rbind,strsplit(names(SingleTargetContigs),split="_|_",fixed=T)))#
-	colnames(contigInfo.df) <- c("contig","target","sample")#
-	# The set of unique target names with at least one matching contig#
-	uniqueTargets <- unique(contigInfo.df$target)#
-	# For each target and each individual, the number of sequence contigs#
-	SampleContigsPerTarget <- table(contigInfo.df[,c("target","sample")])#
-	IndvsPerTarget         <- SampleContigsPerTarget#
-	IndvsPerTarget[SampleContigsPerTarget!=0] <- 1#
-	print(sprintf("%s target loci with %s–%s contigs/target and %s–%s individuals/target",length(uniqueTargets), min(rowSums(SampleContigsPerTarget)),max(rowSums(SampleContigsPerTarget)),min(rowSums(IndvsPerTarget)),max(rowSums(IndvsPerTarget))))#
-	for(i in 1:length(uniqueTargets)){#
-		# DNAStringSet of sample contigs for the ith target#
-		contigs.i      <- SingleTargetContigs[contigInfo.df$target==uniqueTargets[i]]#
-		# Number of times that each individual occurs in the sequence set. Would only be once if only orthologs present (assuming consensus haplocontigs are used).#
-		countSamples   <- table(gsub(".+_\\|_.*_\\|_","",names(contigs.i)))#
-		# Jump to next target locus if only one individual sequenced#
-		if(length(countSamples)==1){#
-			Biostrings::writeXStringSet(contigs.i,file.path(underSampledDir,paste0("/",uniqueTargets[i],"_undersampled.fa")))#
-			next#
-		}#
-		# Jump to next target locus if more than 100 possible alternative alignments#
-		if(prod(countSamples)>100){#
-			Biostrings::writeXStringSet(contigs.i,file.path(unresolvedDir,paste0("/",uniqueTargets[i],"_HomologyUnresolved.fa")))#
-			next#
-		}#
-		# DNAStringSet of sample contigs and the target for the ith target#
-		seqs.i         <- c(query.seqs[uniqueTargets[i]],contigs.i)#
-		# A list of vectors. Each vector holds contig names for putative homologs of the target sequence, one of which is assumed to be an ortholog and the others paralogs to the target sequence.#
-		alternativeContigs.list <- lapply(names(countSamples),function(x) names(contigs.i)[grep(x,names(contigs.i))])#
-		# Data frame with each row holding the contig names to include in an alignment. Each row has a different set of contig names, and each column represents an individual. The best-scoring alignment will be saved and assumed to contain orthologous contigs.#
-		alternativeContigs.df   <- expand.grid(alternativeContigs.list)#
-		# Create empty lists to hold alternative alignments and pairwise genetic distance calculations obtained in the for loop below#
-		alignments.list <- list(); length(alignments.list) <- nrow(alternativeContigs.df)#
-		pdist.list      <- list(); length(pdist.list)      <- nrow(alternativeContigs.df)#
-		# Align alternative sets of individuals' contigs for the ith locus, and calculate the pairwise genetic distance for each alternative alignment#
-		for(j in 1:nrow(alternativeContigs.df)){#
-			contigs.ij <- seqs.i[as.character(unlist(alternativeContigs.df[j,]))]#
-			# including the target#
-			seqs.ij    <- c(query.seqs[uniqueTargets[i]],contigs.ij)#
-			# alignment for the jth alternative set of contigs for the ith target locus#
-			aligned.ij <- Biostrings::DNAStringSet(REEs::mafft(seqs.ij, param="--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6"))#
-			# mean pairwise distance of aligned.ij; for now this will be a measure of the #
-			meanpdist.ij <- mean(ape::dist.dna(ape::as.DNAbin(aligned.ij),pairwise.deletion=T),na.rm=T)#
-			alignments.list[[j]] <- aligned.ij#
-			pdist.list[[j]] <- meanpdist.ij#
-			print(sprintf("alternative contigs alignment %s of %s determined for target '%s' (%s of %s)",j,nrow(alternativeContigs.df),uniqueTargets[i],i,length(uniqueTargets)))#
-		}#
-#
-		# Names of the putatively orthologous contigs (the contigs in the alignment with the lowest pairwise genetic distance)#
-		bestContigs.names   <- as.character(unlist(alternativeContigs.df[which(unlist(pdist.list)==min(unlist(pdist.list)))[1],]))#
-		# The alignment that includes the best contigs and the reference target#
-		alignedContigsTarget.best <- alignments.list[[which(unlist(pdist.list)==min(unlist(pdist.list)))[1]]]#
-		# Aligns the best contigs without including the target reference#
-		contigs.best        <- contigs.i[bestContigs.names]#
-		alignedContigs.best <- Biostrings::DNAStringSet(REEs::mafft(contigs.best, param="--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6"))#
-		# Writing the best alignment (with and without the reference target) for the ith target#
-		Biostrings::writeXStringSet(alignedContigs.best,file.path(AlignmentDir1,paste0("/",uniqueTargets[i],".fa")))#
-		Biostrings::writeXStringSet(alignedContigsTarget.best,file.path(AlignmentDir2,paste0("/",uniqueTargets[i],".fa")))#
-		# Determining and then writing the consensus sequence of the best alignment that includes contigs and the reference target#
-		consensus.of.alignedContigsTarget.best <- Biostrings::DNAStringSet(Biostrings::consensusString(Biostrings::DNAStringSet(gsub("-","N",alignedContigsTarget.best)),ambiguityMap=IUPAC_CODE_MAP))#
-		names(consensus.of.alignedContigsTarget.best) <- paste0(uniqueTargets[i],"_consensus")#
-		Biostrings::writeXStringSet(consensus.of.alignedContigsTarget.best,file.path(ConsensusDir,paste0("/",uniqueTargets[i],"_consensus.fa")))#
-		# Writing unaligned putative orthologs of the ith target to a fasta file#
-		Biostrings::writeXStringSet(contigs.best,file.path(orthologsDir,paste0("/",uniqueTargets[i],"_orthologs.fa")))#
-		# Writing unaligned putative paralogs of the ith target to a fasta file#
-		if(nrow(alternativeContigs.df) > 1){#
-			paralogs.i   <- contigs.i[setdiff(names(contigs.i),bestContigs.names)]#
-			paralogInfo  <- as.data.frame(do.call(rbind,strsplit(names(paralogs.i),split="_|_",fixed=T)))#
-			paralogNames <- sapply(1:nrow(paralogInfo),function(x) paste(data.frame(V1=paralogInfo[x,1],V2=paste0(paralogInfo[x,2],"-putative-paralog"),V3=paralogInfo[x,3]),collapse="_|_"))#
-			names(paralogs.i) <- paralogNames#
-			Biostrings::writeXStringSet(paralogs.i,file.path(paralogsDir,paste0("/",uniqueTargets[i],"_paralogs.fa")))#
-		}#
-		print(sprintf("ortholog alignment of %s (target %s of %s) complete!",uniqueTargets[i],i,length(uniqueTargets)))#
+	if(is.null(windowshift)){#
+		windowshift <- windowsize#
 	}#
-}#
-## For SnakeCap loci:#
-# res04 <- lociAlignment04(workdir="/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/", targets.path="Weinell_TargetLoci_Snakes_Final_18April2019.txt", istart=1, iend=NULL)
-q("no")
-library(devtools)
+	window.starts <- seq(from=startbase,to=length(tempseq),by=windowshift)#
+	window.ends   <- window.starts+(windowsize-1)#
+	window.starts[!window.starts <= length(tempseq)] <- length(tempseq)#
+	window.ends[!window.ends <= length(tempseq)] <- length(tempseq)#
+	windows.mat   <- unique(cbind(window.starts,window.ends))#
+	if(!remainder){#
+		windows.mat <- windows.mat[((windows.mat[,2]-windows.mat[,1])+1)==windowsize,]#
+	}#
+	window.starts <- windows.mat[,1]#
+	window.ends   <- windows.mat[,2]#
+	funres <- list(); length(funres) <- length(window.starts)#
+	for(i in 1:length(window.starts)){#
+		windowseq <- DNAString(paste(tempseq[window.starts[i]:window.ends[i]],collapse=""))#
+		funres[[i]] <- FUN(windowseq)#
+	}#
+	classes <- lapply(funres, class)#
+	if(all(lengths(funres)==1) & length(unique(unlist(classes)))==1){#
+		funres <- unlist(funres)#
+	}#
+	funres#
+}
+wapply(x=seq1,FUN=complexity,windowsize=100)
+wapply(x=seq1,FUN=complexity,windowsize=100)
+wapply(x=seq1,FUN=complexity,windowsize=10)
+wapply(x=seq1,FUN=complexity,windowsize=1)
+wapply(x=seq1,FUN=complexity,windowsize=2)
+wapply(x=seq1,FUN=complexity,windowsize=3)
+wapply(x=seq1,FUN=complexity,windowsize=4)
+wapply(x=seq1,FUN=complexity,windowsize=5)
+wapply(x=seq1,FUN=complexity,windowsize=6)
+wapply(x=seq1,FUN=complexity,windowsize=7)
+wapply(x=seq1,FUN=complexity,windowsize=8)
+wapply(x=seq1,FUN=complexity,windowsize=9)
+wapply(x=seq1,FUN=complexity,windowsize=9,remainder=F)
+wapply(x=seq1,FUN=complexity,windowsize=3,remainder=F)
+wapply <- function(x,FUN,windowsize=NULL,windowshift=NULL,startbase=1,remainder=T,minwindowsize=2){#
+	if(class(x)=="DNAString"){#
+		x <- as.character(unlist(x))#
+	}#
+	if(length(x)>1){#
+		stop("Sequences must supplied as a DNAString object or a length 1 DNAStringSet object")#
+	}#
+	if(class(x)=="DNAStringSet"){#
+		x <- as.list(x[1])[[1]]#
+	}#
+	tempseq       <- unlist(strsplit(as.character(unlist(x)),split=""))#
+	if(is.null(windowsize)){#
+		windowsize <- length(tempseq)#
+	}#
+	if(is.null(windowshift)){#
+		windowshift <- windowsize#
+	}#
+	window.starts <- seq(from=startbase,to=length(tempseq),by=windowshift)#
+	window.ends   <- window.starts+(windowsize-1)#
+	window.starts[!window.starts <= length(tempseq)] <- length(tempseq)#
+	window.ends[!window.ends <= length(tempseq)] <- length(tempseq)#
+	windows.mat   <- unique(cbind(window.starts,window.ends))#
+	if(!remainder){#
+		windows.mat <- windows.mat[((windows.mat[,2]-windows.mat[,1])+1)==windowsize,]#
+	}#
+	if(windowsize >= minwindowsize){#
+		windows.mat <- windows.mat[((windows.mat[,2]-windows.mat[,1])+1)>=minwindowsize,]#
+	}#
+	window.starts <- windows.mat[,1]#
+	window.ends   <- windows.mat[,2]#
+	funres <- list(); length(funres) <- length(window.starts)#
+	for(i in 1:length(window.starts)){#
+		windowseq <- DNAString(paste(tempseq[window.starts[i]:window.ends[i]],collapse=""))#
+		funres[[i]] <- FUN(windowseq)#
+	}#
+	classes <- lapply(funres, class)#
+	if(all(lengths(funres)==1) & length(unique(unlist(classes)))==1){#
+		funres <- unlist(funres)#
+	}#
+	funres#
+}
+wapply(x=seq1,FUN=complexity,windowsize=9)
+wapply(x=seq1,FUN=complexity,windowsize=3)
 getwd()
 setwd("Documents/REEs")
-library(BiocManager)
-BiocManager::install("JeffWeinell/REEs",auth_token="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")
+library(devtools)
+devtools::document()
+rm(list = c("complexity", "wapply"))
+devtools::document()
+Psammodynastes.dna <- readDNAStringSet("/users/jeff/Documents/Psammodynastes-pulverulentus_KU329686_consensus-contigs-dipspades.fa")
+Psammodynastes.dna <- readDNAStringSet("/users/jeff/Downloads/Psammodynastes-pulverulentus_KU329686_consensus-contigs-dipspades.fa")
+Psammodynastes.dna
+Psammodynastes.dna[1]
+Psammodynastes.dna[1]; wapply(x=Psammodynastes.dna,FUN=complexity,windowsize=10,window.shift=5)
+Psammodynastes.dna[1]; test <- wapply(x=Psammodynastes.dna,FUN=complexity,windowsize=10,windowshift=5)
+test <- wapply(x=Psammodynastes.dna[1],FUN=complexity,windowsize=10,windowshift=5)
+length(test)
+test[1:100]
+plot(1:length(test),test)
+lineplot(1:length(test),test)
+plot(1:length(test),test,type="l")
+test2 <- wapply(x=Psammodynastes.dna[1],FUN=complexity,windowsize=100,windowshift=50)
+lines(1:length(test2),test2,col="red")
+plot(seq(from=1,to=width(Psammodynastes.dna[1]),by=5),test,type="l")
+lines(seq(from=1,to=width(Psammodynastes.dna[1]),by=50),test2,col="red")
+seq1 <- DNAString(paste(sample(c("A","C","G","T"),size=6640,replace=T),collapse=""))
+test3 <- wapply(x=seq1,FUN=complexity,windowsize=100,windowshift=50)
+lines(seq(from=1,to=width(seq1),by=50),test2,col="blue")
+lines(seq(from=1,to=length(seq1),by=50),test2,col="blue")
+lines(seq(from=1,to=width(Psammodynastes.dna[1]),by=50),test2,col="blue")
+lines(seq(from=1,to=width(Psammodynastes.dna[1]),by=50),test2,col="red")
+lines(seq(from=1,to=width(Psammodynastes.dna[1]),by=50),test2,col="red")
+lines(seq(from=1,to=width(seq1),by=50),test3,col="blue")
+lines(seq(from=1,to=length(seq1),by=50),test3,col="blue")
+#' @title Plot sliding window DNA complexity#
+#'#
+#' Plots sequence complexity of an input DNA sequence along sliding windows and a random sequence of the same length.#
+#' Black line shows complexity of the indput DNA sequence for a sliding window with windowsize=10 and windowshift=5#
+#' Red line shows complexity of the indput DNA sequence for a sliding window with windowsize=100 and windowshift=50#
+#' Blue line shows complexity of the randomly generated DNA sequence using a sliding window with windowsize=100 and windowshift=50#
+#' #
+#' @param dna Character string, or a DNAString object, or a length 1 DNAStringSet object as defined by the Biostrings package.#
+#' @return NULL#
+#' @export complexityPlot#
+complexityPlot <- function(dna){#
+	dna   <- DNAStringSet(dna)#
+	test1 <- wapply(x=dna, FUN=complexity, windowsize=10, windowshift=5)#
+	test2 <- wapply(x=dna, FUN=complexity, windowsize=100, windowshift=50)#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=complexity, windowsize=100, windowshift=50)#
+	plot(seq(from=1,to=width(dna),by=5),test1,type="l")#
+	lines(seq(from=1,to=width(dna),by=50),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),by=50),test3,col="blue")#
+}
+complexityPlot(Psammodynastes.dna[1])
+complexityPlot <- function(dna){#
+	dna   <- DNAStringSet(dna)#
+	test1 <- wapply(x=dna, FUN=complexity, windowsize=10, windowshift=5)#
+	test2 <- wapply(x=dna, FUN=complexity, windowsize=100, windowshift=50)#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=complexity, windowsize=100, windowshift=50)#
+	plot(seq(from=1,to=width(dna),by=5),test1,type="l",xlab="nucleotide position along sequence",ylab="DNA sequence complexity")#
+	lines(seq(from=1,to=width(dna),by=50),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),by=50),test3,col="blue")#
+}
+complexityPlot(Psammodynastes.dna[1])
+complexityPlot <- function(dna){#
+	dna   <- DNAStringSet(dna)#
+	test1 <- wapply(x=dna, FUN=complexity, windowsize=10, windowshift=5)#
+	test2 <- wapply(x=dna, FUN=complexity, windowsize=100, windowshift=50)#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=complexity, windowsize=100, windowshift=50)#
+	plot(seq(from=1,to=width(dna),by=5),test1,type="l",xlab="nucleotide position along sequence",ylab="DNA sequence complexity",sub="black and red = empirical; blue random")#
+	lines(seq(from=1,to=width(dna),by=50),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),by=50),test3,col="blue")#
+}
+complexityPlot(Psammodynastes.dna[1])
+complexityPlot <- function(dna){#
+	dna   <- DNAStringSet(dna)#
+	test1 <- wapply(x=dna, FUN=complexity, windowsize=10, windowshift=5)#
+	test2 <- wapply(x=dna, FUN=complexity, windowsize=100, windowshift=50)#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=complexity, windowsize=100, windowshift=50)#
+	plot(seq(from=1,to=width(dna),by=5),test1,type="l",xlab="nucleotide position along sequence",ylab="DNA sequence complexity",sub="black and red = empirical; blue = random")#
+	lines(seq(from=1,to=width(dna),by=50),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),by=50),test3,col="blue")#
+}
+complexityPlot <- function(dna){#
+	dna   <- DNAStringSet(dna)#
+	test1 <- wapply(x=dna, FUN=complexity, windowsize=10, windowshift=5)#
+	test2 <- wapply(x=dna, FUN=complexity, windowsize=100, windowshift=50)#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=complexity, windowsize=100, windowshift=50)#
+	plot(seq(from=1,to=width(dna),by=5),test1,type="l",xlab="nucleotide position along sequence",ylab="DNA sequence complexity",sub="black and red = empirical; blue = random")#
+	lines(seq(from=1,to=width(dna),by=50),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),by=50),test3,col="blue")#
+}
+complexityPlot(Psammodynastes.dna[1])
+complexityPlot(Psammodynastes.dna[2])
+complexityPlot(Psammodynastes.dna[3])
+complexityPlot(Psammodynastes.dna[4])
+complexityPlot(Psammodynastes.dna[5])
+complexityPlot <- function(dna){#
+	dna   <- DNAStringSet(dna)#
+	test1 <- wapply(x=dna, FUN=complexity, windowsize=10, windowshift=5)#
+	test2 <- wapply(x=dna, FUN=complexity, windowsize=200, windowshift=100)#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=complexity, windowsize=200, windowshift=100)#
+	plot(seq(from=1,to=width(dna),by=5),test1,type="l",xlab="nucleotide position along sequence",ylab="DNA sequence complexity",sub="black and red = empirical; blue = random")#
+	lines(seq(from=1,to=width(dna),by=50),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),by=50),test3,col="blue")#
+}
+complexityPlot(Psammodynastes.dna[5])
+seq(from=1,to=10,length.out=2)
+complexityPlot <- function(dna){#
+	dna   <- DNAStringSet(dna)#
+	test1 <- wapply(x=dna, FUN=complexity, windowsize=10, windowshift=5)#
+	test2 <- wapply(x=dna, FUN=complexity, windowsize=200, windowshift=100)#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=complexity, windowsize=200, windowshift=100)#
+	plot(seq(from=1,to=width(dna),length.out=length(test1)),test1,type="l",xlab="nucleotide position along sequence",ylab="DNA sequence complexity",sub="black and red = empirical; blue = random")#
+	lines(seq(from=1,to=width(dna),length.out=length(test2)),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),length.out=length(test3)),test3,col="blue")#
+}
+seq(from=1,to=10,length.out=2)
+complexityPlot(Psammodynastes.dna[5])
+complexityPlot(Psammodynastes.dna[1])
+complexityPlot <- function(dna,size=1){#
+	dna   <- DNAStringSet(dna)#
+	test1 <- wapply(x=dna, FUN=complexity, windowsize=10, windowshift=5)#
+	test2 <- wapply(x=dna, FUN=complexity, windowsize=200, windowshift=100)#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=complexity, windowsize=200, windowshift=100)#
+	plot(seq(from=1,to=width(dna),length.out=length(test1)),test1,type="l",xlab="nucleotide position along sequence",ylab="DNA sequence complexity",sub="black and red = empirical; blue = random")#
+	lines(seq(from=1,to=width(dna),length.out=length(test2)),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),length.out=length(test3)),test3,col="blue")#
+}
+complexityPlot <- function(dna,wsize=1){#
+	dna   <- DNAStringSet(dna)#
+	test1 <- wapply(x=dna, FUN=complexity, windowsize=10, windowshift=5)#
+	test2 <- wapply(x=dna, FUN=complexity, windowsize=200*wsize, windowshift=100*wsize)#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=complexity, windowsize=200*wsize, windowshift=100*wsize)#
+	plot(seq(from=1,to=width(dna),length.out=length(test1)),test1,type="l",xlab="nucleotide position along sequence",ylab="DNA sequence complexity",sub="black and red = empirical; blue = random")#
+	lines(seq(from=1,to=width(dna),length.out=length(test2)),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),length.out=length(test3)),test3,col="blue")#
+}
+complexityPlot(Psammodynastes.dna[5])
+complexityPlot(Psammodynastes.dna[5],wsize=0.5)
+complexityPlot(Psammodynastes.dna[5],wsize=0.2)
+complexityPlot(Psammodynastes.dna[5],wsize=2)
+complexityPlot(Psammodynastes.dna[5],wsize=10)
+complexityPlot(Psammodynastes.dna[1],wsize=10)
+complexityPlot(Psammodynastes.dna[2],wsize=10)
+complexityPlot(Psammodynastes.dna[3],wsize=10)
+complexityPlot(Psammodynastes.dna[4],wsize=10)
+complexity <- function(x,w=1){#
+	if(class(x)=="DNAString"){#
+		x <- as.character(unlist(x))#
+	}#
+	if(length(x)>1){#
+		stop("Sequences must supplied as a DNAString object or a length 1 DNAStringSet object")#
+	}#
+	if(class(x)=="DNAStringSet"){#
+		x <- as.list(x[1])[[1]]#
+	}#
+	tempseq <- unlist(strsplit(as.character(unlist(x)),split=""))#
+	res     <- length(which(sapply(1:(length(tempseq)-1),function(i){length(unique(tempseq[i:(i+w)]))!=1})))/length(tempseq)#
+	res#
+}
+complexityPlot <- function(dna,wsize=1){#
+	dna   <- DNAStringSet(dna)#
+	test1 <- wapply(x=dna, FUN=complexity, windowsize=10, windowshift=5)#
+	test2 <- wapply(x=dna, FUN=complexity, windowsize=200*wsize, windowshift=100*wsize)#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=complexity, windowsize=200*wsize, windowshift=100*wsize)#
+	plot(seq(from=1,to=width(dna),length.out=length(test1)),test1,type="l",xlab="nucleotide position along sequence",ylab="DNA sequence complexity",sub="black and red = empirical; blue = random")#
+	lines(seq(from=1,to=width(dna),length.out=length(test2)),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),length.out=length(test3)),test3,col="blue")#
+}
+complexityPlot(Psammodynastes.dna[1])
+complexity <- function(x,w=2){#
+	if(class(x)=="DNAString"){#
+		x <- as.character(unlist(x))#
+	}#
+	if(length(x)>1){#
+		stop("Sequences must supplied as a DNAString object or a length 1 DNAStringSet object")#
+	}#
+	if(class(x)=="DNAStringSet"){#
+		x <- as.list(x[1])[[1]]#
+	}#
+	tempseq <- unlist(strsplit(as.character(unlist(x)),split=""))#
+	res     <- length(which(sapply(1:(length(tempseq)-1),function(i){length(unique(tempseq[i:(i+w)]))!=1})))/length(tempseq)#
+	res#
+}
+complexityPlot(Psammodynastes.dna[1])
+complexityPlot <- function(dna,wsize=1){#
+	dna   <- DNAStringSet(dna)#
+	test1 <- wapply(x=dna, FUN=complexity, windowsize=10, windowshift=5)#
+	test2 <- wapply(x=dna, FUN=complexity, windowsize=200*wsize, windowshift=100*wsize)#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=complexity, windowsize=200*wsize, windowshift=100*wsize)#
+	plot(seq(from=1,to=width(dna),length.out=length(test1)),test1,type="l",xlab="nucleotide position along sequence",ylab="DNA sequence complexity",sub="black and red = empirical; blue = random",ylim=c(0,1))#
+	lines(seq(from=1,to=width(dna),length.out=length(test2)),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),length.out=length(test3)),test3,col="blue")#
+}
+complexityPlot(Psammodynastes.dna[1])
+complexity <- function(x,w=1){#
+	if(class(x)=="DNAString"){#
+		x <- as.character(unlist(x))#
+	}#
+	if(length(x)>1){#
+		stop("Sequences must supplied as a DNAString object or a length 1 DNAStringSet object")#
+	}#
+	if(class(x)=="DNAStringSet"){#
+		x <- as.list(x[1])[[1]]#
+	}#
+	tempseq <- unlist(strsplit(as.character(unlist(x)),split=""))#
+	res     <- length(which(sapply(1:(length(tempseq)-1),function(i){length(unique(tempseq[i:(i+w)]))!=1})))/length(tempseq)#
+	res#
+}
+complexityPlot(Psammodynastes.dna[1])
+complexityPlot(Psammodynastes.dna[6])
+complexityPlot(Psammodynastes.dna[7],wsize=10)
+complexityPlot(Psammodynastes.dna[7],wsize=10)
+complexityPlot(Psammodynastes.dna[7],wsize=10)
+complexityPlot(Psammodynastes.dna[8],wsize=10)
+complexityPlot(Psammodynastes.dna[9],wsize=10)
+complexityPlot(Psammodynastes.dna[10],wsize=10)
+complexityPlot(Psammodynastes.dna[10],wsize=5)
+complexityPlot(Psammodynastes.dna[10],wsize=4)
+repeatScore <- function(x,rp="1.1"){#
+	if(class(x)=="DNAString"){#
+		x <- as.character(unlist(x))#
+	}#
+	if(length(x)>1){#
+		stop("Sequences must supplied as a DNAString object or a length 1 DNAStringSet object")#
+	}#
+	if(class(x)=="DNAStringSet"){#
+		x <- as.list(x[1])[[1]]#
+	}#
+	tempseq <- unlist(strsplit(as.character(unlist(x)),split=""))#
+	if(rp=="1.1"){#
+		res     <- length(which(sapply(1:(length(tempseq)-2),function(i){tempseq[i]==tempseq[i+2]})))/length(tempseq)#
+	}#
+	res#
+}
+seq <- "ACACACACACACACACACACACACACACACACA"
+repeatScore(seq)
+nchar(repearScore)
+nchar(seq)
+complexity(seq)
+complexity <- function(x,w=1){#
+	if(class(x)=="DNAString"){#
+		x <- as.character(unlist(x))#
+	}#
+	if(length(x)>1){#
+		stop("Sequences must supplied as a DNAString object or a length 1 DNAStringSet object")#
+	}#
+	if(class(x)=="DNAStringSet"){#
+		x <- as.list(x[1])[[1]]#
+	}#
+	tempseq <- unlist(strsplit(as.character(unlist(x)),split=""))#
+	res     <- length(which(sapply(1:(length(tempseq)-1),function(i){length(unique(tempseq[i:(i+w)]))!=1})))/(length(tempseq)-1)#
+	res#
+}
+complexity(seq)
+repeatScore(seq)
+repeatScore <- function(x,rp="1.1"){#
+	if(class(x)=="DNAString"){#
+		x <- as.character(unlist(x))#
+	}#
+	if(length(x)>1){#
+		stop("Sequences must supplied as a DNAString object or a length 1 DNAStringSet object")#
+	}#
+	if(class(x)=="DNAStringSet"){#
+		x <- as.list(x[1])[[1]]#
+	}#
+	tempseq <- unlist(strsplit(as.character(unlist(x)),split=""))#
+	if(rp=="1.1"){#
+		res     <- length(which(sapply(1:(length(tempseq)-2),function(i){tempseq[i]==tempseq[i+2]})))/(length(tempseq)-2)#
+	}#
+	res#
+}
+repeatScore(seq)
+repeatScore <- function(x,rp="1.1"){#
+	if(class(x)=="DNAString"){#
+		x <- as.character(unlist(x))#
+	}#
+	if(length(x)>1){#
+		stop("Sequences must supplied as a DNAString object or a length 1 DNAStringSet object")#
+	}#
+	if(class(x)=="DNAStringSet"){#
+		x <- as.list(x[1])[[1]]#
+	}#
+	patternWidth=nchar(rp)#
+	tempseq <- unlist(strsplit(as.character(unlist(x)),split=""))#
+	if(rp=="1.1"){#
+		res     <- length(which(sapply(1:(length(tempseq)-2),function(i){tempseq[i]==tempseq[i+2]})))/(length(tempseq)-(patternWidth-1))#
+	}#
+	res#
+}
+repeatScore(seq)
+rp="1.1"
+pattern <- unlist(strsplit(rp,split=""))
+pattern
+which(pattern==pattern[1])
+x=seq
+tempseq <- unlist(strsplit(as.character(unlist(x)),split=""))
+tempseq
+patternWidth <- nchar(rp)#
+	pattern      <- unlist(strsplit(rp,split=""))#
+	relpattern   <- which(pattern==pattern[1])#
+	tempseq      <- unlist(strsplit(as.character(unlist(x)),split=""))
+relpattern
+i=1
+tempseq[relpattern+(i-1)]
+repeatScore <- function(x,rp="1.1"){#
+	if(class(x)=="DNAString"){#
+		x <- as.character(unlist(x))#
+	}#
+	if(length(x)>1){#
+		stop("Sequences must supplied as a DNAString object or a length 1 DNAStringSet object")#
+	}#
+	if(class(x)=="DNAStringSet"){#
+		x <- as.list(x[1])[[1]]#
+	}#
+	patternWidth <- nchar(rp)#
+	pattern      <- unlist(strsplit(rp,split=""))#
+	relpattern   <- which(pattern==pattern[1])#
+	tempseq      <- unlist(strsplit(as.character(unlist(x)),split=""))#
+	res          <- length(which(sapply(1:(length(tempseq)-(patternWidth-1)),function(i){length(unique(tempseq[relpattern+(i-1)]))==1})))/(length(tempseq)-(patternWidth-1))#
+	#if(rp=="1.1"){#
+	#	res     <- length(which(sapply(1:(length(tempseq)-2),function(i){tempseq[i]==tempseq[i+2]})))/(length(tempseq)-(patternWidth-1))#
+	#}#
+	res#
+}
+seq
+repeatScore(seq)
+repeatScore(seq,rp="1..1")
+repeatScore(seq,rp="1...1")
+repeatScore(seq,rp="1..11")
+seq2 <- sample(x=c("A","C","G","T"),size=100,replace=T)
+seq2 <- DNAStringSet(paste(sample(x=c("A","C","G","T"),size=100,replace=T),collapse=""))
+seq2
+repeatScore(seq2)
+repeatScore(seq2,rep="1..1")
+repeatScore(seq2,rp="1..1")
+repeatScore(seq2,rp="1...1")
+repeatScore(seq2,rp="1..11")
+#' @title Plot sliding window DNA repeat score#
+#'#
+#' Plots sequence repeat score for a specified repeat pattern along an input DNA sequence along sliding windows and for a random sequence of the same length.#
+#' #
+#' Black line shows repeat score of the input DNA sequence for a sliding window with windowsize=10 and windowshift=5#
+#' Red line shows repeat score of the indput DNA sequence for a sliding window with windowsize=200 and windowshift=100#
+#' Blue line shows repeat score of the randomly generated DNA sequence using a sliding window with windowsize=200 and windowshift=100#
+#' Note: I may change this to a ggplot and provide options to control sliding windows#
+#' #
+#' @param dna Character string, or a DNAString object, or a length 1 DNAStringSet object as defined by the Biostrings package.#
+#' @param rp Text string defining that defines how complexity is defined. [AT PRESENT ONLY PATTERNS COMPOSED OF "1" and "." CAN BE USED]. Default is "1.1", which specifies to return the fraction of bases in which base[i] == base[i+2].#
+#' @param wsize Number that controls windowsizes; default window sizes of the larger windows (indicated by red and blue lines) are multiplied by this number.#
+#' @return NULL#
+#' @export repeatScorePlot#
+repeatScorePlot <- function(dna,rp="1.1",wsize=1){#
+	dna   <- DNAStringSet(dna)#
+	test1 <- wapply(x=dna, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=10, windowshift=5)#
+	test2 <- wapply(x=dna, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=200*wsize, windowshift=100*wsize)#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=200*wsize, windowshift=100*wsize)#
+	plot(seq(from=1,to=width(dna),length.out=length(test1)),test1,type="l",xlab="nucleotide position along sequence",ylab="DNA sequence complexity",sub="black and red = empirical; blue = random",ylim=c(0,1))#
+	lines(seq(from=1,to=width(dna),length.out=length(test2)),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),length.out=length(test3)),test3,col="blue")#
+}
+repeatScorePlot(seq)
+seq
+seq=DNAStringSet("ACACACACACACACACACACACACACACACACA")
+seq
+seq1=DNAStringSet("ACACACACACACACACACACACACACACACACA")
+dna=seq1
+rp="1.1"
+wsize=1
+dna   <- DNAStringSet(dna)
+test1 <- wapply(x=dna, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=10, windowshift=5)
+test
+test2 <- wapply(x=dna, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=200*wsize, windowshift=100*wsize)
+length(seq1)
+width(dna)
+dna
+seq1
+repeatScorePlot(seq1,wsize=40)
+repeatScorePlot(seq1,wsize=0.1)
+repeatScorePlot <- function(dna,rp="1.1",wsize=1){#
+	dna   <- DNAStringSet(dna)#
+	smallwindow <- min( max((width(dna)/100),nchar(rp)),10)#
+	smallshift  <- ceiling(smallwindow/2)#
+	bigwindow   <- min(max((width(dna)/10),nchar(rp)),50)#
+	bigshift    <- bigwindow#
+	test1 <- wapply(x=dna, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=smallwindow, windowshift=smallshift)#
+	test2 <- wapply(x=dna, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=bigwindow*wsize, windowshift=(bigshift*wsize))#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=bigwindow*wsize, windowshift=(bigshift*wsize))#
+	plot(seq(from=1,to=width(dna),length.out=length(test1)),test1,type="l",xlab="nucleotide position along sequence",ylab="DNA sequence complexity",sub="black and red = empirical; blue = random",ylim=c(0,1))#
+	lines(seq(from=1,to=width(dna),length.out=length(test2)),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),length.out=length(test3)),test3,col="blue")#
+}
+repeatScorePlot(seq1,wsize=1)
+repeatScorePlot <- function(dna,rp="1.1",wsize=1){#
+	dna   <- DNAStringSet(dna)#
+	smallwindow <- min( max((width(dna)/100),nchar(rp)),10)#
+	smallshift  <- ceiling(smallwindow/2)#
+	bigwindow   <- min(max((width(dna)/10),nchar(rp)),50)#
+	bigshift    <- bigwindow#
+	test1 <- wapply(x=dna, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=smallwindow, windowshift=smallshift)#
+	test2 <- wapply(x=dna, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=bigwindow*wsize, windowshift=(bigshift*wsize))#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=bigwindow*wsize, windowshift=(bigshift*wsize))#
+	plot(seq(from=1,to=width(dna),length.out=length(test1)),test1,type="l",xlab="nucleotide position along sequence",ylab=sprintf("DNA repeat score for pattern %s",rp),sub="black and red = empirical; blue = random",ylim=c(0,1))#
+	lines(seq(from=1,to=width(dna),length.out=length(test2)),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),length.out=length(test3)),test3,col="blue")#
+}
+repeatScorePlot(seq1,wsize=1)
+repeatScorePlot <- function(dna,rp="1.1",wsize=1){#
+	dna   <- DNAStringSet(dna)#
+	smallwindow <- min( max((width(dna)/100),nchar(rp)),10)#
+	smallshift  <- ceiling(smallwindow/2)#
+	bigwindow   <- min(max((width(dna)/10),nchar(rp)),50)#
+	bigshift    <- bigwindow#
+	test1 <- wapply(x=dna, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=smallwindow, windowshift=smallshift)#
+	test2 <- wapply(x=dna, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=bigwindow*wsize, windowshift=(bigshift*wsize))#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=bigwindow*wsize, windowshift=(bigshift*wsize))#
+	plot(seq(from=1,to=width(dna),length.out=length(test1)),test1,type="l",xlab="nucleotide position along sequence",ylab=sprintf("DNA repeat score for pattern '%s'",rp),sub="black and red = empirical; blue = random",ylim=c(0,1))#
+	lines(seq(from=1,to=width(dna),length.out=length(test2)),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),length.out=length(test3)),test3,col="blue")#
+}
+repeatScorePlot(seq1,wsize=1)
+seq1
+seq2 <- DNAStringSet(paste(rep("AC",500),collapse=""))
+repeatScorePlot(seq2)
+repeatScorePlot <- function(dna,rp="1.1",wsize=1){#
+	dna   <- DNAStringSet(dna)#
+	smallwindow <- min( max((width(dna)/100),nchar(rp)),10)#
+	smallshift  <- 1#
+	bigwindow   <- min(max((width(dna)/10),nchar(rp)),50)#
+	bigshift    <- bigwindow#
+	test1 <- wapply(x=dna, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=smallwindow, windowshift=smallshift)#
+	test2 <- wapply(x=dna, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=bigwindow*wsize, windowshift=(bigshift*wsize))#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=bigwindow*wsize, windowshift=(bigshift*wsize))#
+	plot(seq(from=1,to=width(dna),length.out=length(test1)),test1,type="l",xlab="nucleotide position along sequence",ylab=sprintf("DNA repeat score for pattern '%s'",rp),sub="black and red = empirical; blue = random",ylim=c(0,1))#
+	lines(seq(from=1,to=width(dna),length.out=length(test2)),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),length.out=length(test3)),test3,col="blue")#
+}
+repeatScorePlot(seq2)
+seq1
+c(seq1,seq1)
+xscat(seq1,seq1)
+xscat(seq1,DNAStringSet(paste(sample(c("A","C","G","T"),1000),collapse="")))
+xscat(seq1,DNAStringSet(paste(sample(c("A","C","G","T"),1000,replace=T),collapse="")))
+seq3 <- xscat(seq1,DNAStringSet(paste(sample(c("A","C","G","T"),1000,replace=T),collapse="")))
+repeatScorePlot(seq3)
+test <- read.table('/users/jeff/Downloads/new_taxdump/nodes.dmp',sep="\t\|\t")
+test <- read.table('/users/jeff/Downloads/new_taxdump/nodes.dmp',sep="\t|\t")
+test <- read.table('/users/jeff/Downloads/new_taxdump/nodes.dmp',sep="|")
+repeatScorePlot(seq3)
+repeatScorePlot <- function(dna,rp="1.1",wsize=1){#
+	dna   <- DNAStringSet(dna)#
+	smallwindow <- min( max((width(dna)/100),nchar(rp)),10)#
+	smallshift  <- 1#
+	bigwindow   <- min(max((width(dna)/10),nchar(rp)),50)#
+	bigshift    <- bigwindow#
+	test1 <- wapply(x=dna, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=smallwindow, windowshift=smallshift)#
+	test2 <- wapply(x=dna, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=bigwindow*wsize, windowshift=(bigshift*wsize))#
+	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
+	test3 <- wapply(x=sim1, FUN=function(x){repeatScore(x,rp=rp)}, windowsize=bigwindow*wsize, windowshift=(bigshift*wsize))#
+	plot(seq(from=1,to=width(dna),length.out=length(test1)),test1,type="l",xlab="nucleotide position along sequence",ylab=sprintf("DNA repeat score for pattern '%s'",rp),sub="black and red = empirical; blue = random",ylim=c(0,1))#
+	lines(seq(from=1,to=width(dna),length.out=length(test2)),test2,col="red")#
+	lines(seq(from=1,to=width(sim1),length.out=length(test3)),test3,col="blue")#
+	res <- list(scores.smallwindow=test1,scores.bigwindow=test2,sim.scores=test3)#
+	res#
+}
+seq3.plot <- repeatScorePlot(seq3)
+seq3.plot[[1]]
+seq3.plot[[1]] > 0.75
+stringtest <- 0 ; stringtest[seq3.plot[[1]] > 0.75] <- 1; stringtest <- paste(stringtest,collapse="")
+stringtest
+stringtest <- rep(0,length(seq3.plot[[1]])) ; stringtest[seq3.plot[[1]] > 0.75] <- 1; stringtest <- paste(stringtest,collapse="")
+stringtest
+summarizeGBmtc <- function(pathGB){#
+	mtcGB       <- REEs::read.gb(pathGB,progress=FALSE)#
+	features.df <- as.data.frame(do.call(rbind, lapply(X=1:length(mtcGB@features),function(x){ c(product=product(mtcGB@features[x]),gene=geneID(mtcGB@features[x]),start=as.numeric(start(mtcGB@features[x])),end=as.numeric(end(mtcGB@features[x])),sense=strand(mtcGB@features[x]),"strand"=NA,key=mtcGB@features@.Data[[x]]@key)})))#
+	features.df$gene[is.na(features.df$gene)] <- gsub("tRNA-","",features.df$product[is.na(features.df$gene)])#
+	features.df2      <- features.df[which(!features.df$key %in% c("gene","source")),c("gene","start","end","sense","strand","key")]#
+	if(any(is.na(features.df2$gene))){#
+		features.df2$gene[which(is.na(features.df2$gene))] <- features.df2$key[which(is.na(features.df2$gene))]#
+	}#
+	features.df2$gene <- gsub("s-rRNA","12S",features.df2$gene)#
+	features.df2$gene <- gsub("l-rRNA","16S",features.df2$gene)#
+	features.df2$gene <- gsub(" ribosomal RNA","",features.df2$gene)#
+#
+	dupGenes <- names(table(features.df2$gene)[which(table(features.df2$gene) > 1)])#
+	if(length(dupGenes)>0){#
+		for(x in 1:length(dupGenes)){#
+			features.df2$gene[which(features.df2$gene==dupGenes[x])] <- paste0(dupGenes[x],"_",1:length(which(features.df2$gene==dupGenes[x])))#
+		}#
+	}#
+#	if(any(features.df2$gene=="misc_feature")){#
+#		features.df2$gene[which(features.df2$gene=="misc_feature")] <- paste0("misc_feature_",1:length(which(features.df2$gene=="misc_feature")))#
+#	}#
+	mode(features.df2$start) <- "numeric"#
+	mode(features.df2$end)   <- "numeric"#
+	if(nchar(gsub("[A,G]","",getSequence(mtcGB))) < nchar(gsub("[A,G]","",reverseComplement(getSequence(mtcGB))))) {#
+		strand1_weight="heavy"#
+		heavyStrand=1#
+		lightStrand=-1#
+	} else {#
+		strand1_weight="light"#
+		heavyStrand=-1#
+		lightStrand=1#
+	}#
+	features.df2$strand[features.df2$sense==heavyStrand] <- "heavy"#
+	features.df2$strand[features.df2$sense==lightStrand] <- "light"#
+#
+	mtcSummary <- list(organism=mtcGB@features@.Data[[1]]@qualifiers["organism"],organelle=mtcGB@features@.Data[[1]]@qualifiers["organelle"],ntLength=getLength(mtcGB),strands=c(heavy=heavyStrand,light=lightStrand),features=features.df2)#
+	mtcSummary#
+}
+library(misc.wrappers)
+test <- summarizeGBmtc("/users/jeff/Downloads/sequence2.gb")
+plotGBmtc <- function(pathGB, type="file", additionalDF=NULL, zoomout=1.1, radii=c(lightStrand=1, heavyStrand=0.85), linetypes=c(lightStrand=1,heavyStrand=1, CDS=1,stem_loop=1,misc_feature=1,tRNA=1,rRNA=1), widths=c(lightStrand=1,heavyStrand=2, CDS=4, stem_loop=4, misc_feature=4, tRNA=4, rRNA=4), colors=c(lightStrand="black",heavyStrand="black",CDS="green",stem_loop="orange",misc_feature="yellow",tRNA="purple",rRNA="brown"),textadj=c(heavy=0.95,light=1.04)){#
+	if(type=="accession"){#
+		accessionGB  <- pathGB#
+		subject.path <- tempfile()#
+		URL  <- sprintf("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&id=%s&rettype=gb&retmode=text",paste(accessionGB,collapse=","))#
+		conn <- utils::download.file(url=URL, destfile=subject.path,quiet=T)#
+		mtcSummary  <- summarizeGBmtc(subject.path)#
+	} else {#
+		mtcSummary  <- summarizeGBmtc(pathGB)#
+	}#
+	features.df <- mtcSummary$features#
+	strands.df  <- data.frame(arcname=factor(c("heavyStrand","lightStrand")),arcstart=c(0,0),arcend=c((2*pi),(2*pi)),strand=c("heavy","light"),type="source",radius=radii[c("heavyStrand","lightStrand")],linetype=linetypes[c("heavyStrand","lightStrand")],linecol=colors[c("heavyStrand","lightStrand")],linewidth=widths[c("heavyStrand","lightStrand")])#
+	genes.df    <- data.frame(arcname=mtcSummary$features$gene,arcstart=NA,arcend=NA,strand=features.df$strand,type=features.df$key,radius=NA,linetype=NA,linecol=NA,linewidth=NA)#
+	genes.df$arcstart <- ((features.df$start/mtcSummary$ntLength)*(2*pi))  # [features.df$strand==1]#
+	genes.df$arcend   <- ((features.df$end/mtcSummary$ntLength)*(2*pi))    # [features.df$strand==1]#
+	genes.df$radius[genes.df$strand=="heavy"] <- radii["heavyStrand"]#
+	genes.df$radius[genes.df$strand=="light"] <- radii["lightStrand"]#
+	for(i in 1:length(unique(genes.df$type))){#
+		tempType=unique(genes.df$type)[i]#
+		### track linetypes#
+		if(any(names(linetypes)==tempType)){#
+			genes.df$linetype[genes.df$type==tempType] <- linetypes[names(linetypes)==tempType]#
+		} else {#
+			genes.df$linetype[genes.df$type==tempType] <- 1#
+		}#
+		### track colors#
+		if(any(names(colors)==tempType)){#
+			genes.df$linecol[genes.df$type==tempType] <- colors[names(colors)==tempType]#
+		} else {#
+			genes.df$linecol[genes.df$type==tempType] <- "gray"#
+		}#
+		### track widths#
+		if(any(names(widths)==tempType)){#
+			genes.df$linewidth[genes.df$type==tempType] <- widths[names(widths)==tempType]#
+		} else {#
+			genes.df$linewidth[genes.df$type==tempType] <- widths["CDS"]#
+		}#
+	}#
+	if(is.null(additionalDF)){#
+		allArcs.df <- rbind(strands.df,genes.df)#
+	} else {#
+		allArcs.df <- rbind(strands.df,genes.df,additionalDF)#
+	}#
+	allArcs.df2 <- allArcs.df#
+	allArcs.df2$text <- gsub("^.+Strand$","",allArcs.df$arcname)#
+	Hadj <- textadj["heavy"]#
+	Ladj <- textadj["light"]#
+	allArcs.df2$Xtext <- NA#
+	allArcs.df2$Ytext <- NA#
+	allArcs.df2$Xtext[allArcs.df2$"strand"=="heavy"] <- (allArcs.df2$radius[allArcs.df2$"strand"=="heavy"]*Hadj)*cos((((allArcs.df2$arcstart[allArcs.df2$"strand"=="heavy"]+allArcs.df2$arcend[allArcs.df2$"strand"=="heavy"])/2)*(-1)+(pi/2)))#
+	allArcs.df2$Ytext[allArcs.df2$"strand"=="heavy"] <- (allArcs.df2$radius[allArcs.df2$"strand"=="heavy"]*Hadj)*sin((((allArcs.df2$arcstart[allArcs.df2$"strand"=="heavy"]+allArcs.df2$arcend[allArcs.df2$"strand"=="heavy"])/2)*(-1)+(pi/2)))#
+	allArcs.df2$Xtext[allArcs.df2$"strand"=="light"] <- (allArcs.df2$radius[allArcs.df2$"strand"=="light"]*Ladj)*cos((((allArcs.df2$arcstart[allArcs.df2$"strand"=="light"]+allArcs.df2$arcend[allArcs.df2$"strand"=="light"])/2)*(-1)+(pi/2)))#
+	allArcs.df2$Ytext[allArcs.df2$"strand"=="light"] <- (allArcs.df2$radius[allArcs.df2$"strand"=="light"]*Ladj)*sin((((allArcs.df2$arcstart[allArcs.df2$"strand"=="light"]+allArcs.df2$arcend[allArcs.df2$"strand"=="light"])/2)*(-1)+(pi/2)))#
+	allArcs.df2$quad1or4  <- allArcs.df2$Xtext > 0#
+	allArcs.df2$textangle <- ((((allArcs.df2$arcstart+allArcs.df2$arcend)/2)*(-1)+(pi/2)))*(180/pi)#
+	allArcs.df2$textangle[!allArcs.df2$quad1or4] <- allArcs.df2$textangle[!allArcs.df2$quad1or4]+180#
+	allArcs.df2$texthjust <- "right"#
+	allArcs.df2$texthjust[!allArcs.df2$quad1or4 & allArcs.df2$radius==allArcs.df2$radius[allArcs.df2$arcname=="heavyStrand"]] <- "left"#
+	allArcs.df2$texthjust[allArcs.df2$quad1or4 & allArcs.df2$radius==allArcs.df2$radius[allArcs.df2$arcname=="lightStrand"]]  <- "left"#
+#
+	# outerBoundary           <- allArcs.df2[allArcs.df2$arcname=="lightStrand",]#
+	# outerBoundary$arcname   <- "outerBoundary"#
+	# outerBoundary$linecol   <- "white"#
+	# outerBoundary$linewidth <- 0#
+	# outerBoundary$radius    <- max(allArcs.df2$radius)*1.1#
+	outerBoundary <- data.frame(arcname="outerBoundary", arcstart=0, arcend=2*pi, strand=NA, type=NA, radius=max(allArcs.df2$radius)*zoomout, linetype=1, linecol="white", linewidth=0, text="", Xtext=0, Ytext=0, quad1or4=FALSE, textangle=0, texthjust=0)#
+	organism.df   <- data.frame(arcname="organism", arcstart=0, arcend=2*pi, strand=NA, type=NA, radius=max(allArcs.df2$radius)*(zoomout/2), linetype=1, linecol="white", linewidth=0, text=paste0(mtcSummary$organism,"\nmitochondrion"), Xtext=0, Ytext=0, quad1or4=FALSE, textangle=0, texthjust=0)#
+	allArcs.df3 <- rbind(allArcs.df2, outerBoundary,organism.df)#
+	allArcs.df4 <- allArcs.df3[order(allArcs.df3$radius),]#
+	rownames(allArcs.df4) <- 1:nrow(allArcs.df4)#
+	allArcs.df4$plotOrder <- 1:nrow(allArcs.df4)#
+	allArcs.df4$arcname   <- factor(allArcs.df4$arcname, levels = allArcs.df4$arcname[order(allArcs.df4$plotOrder)])#
+	res1 <- ggplot(allArcs.df4) + ggforce::geom_arc(aes(x0 = 0, y0 = 0, r=radius, start = arcstart, end=arcend, size=arcname, color=arcname, linetype=arcname)) + scale_linetype_manual(values=allArcs.df4$linetype,guide="none") + scale_color_manual(values=allArcs.df4$linecol,guide="none") + scale_size_manual(values=allArcs.df4$linewidth, guide="none") + geom_text(aes(x=Xtext,y=Ytext,label=text, angle=textangle, hjust=texthjust), size=2) + theme_void()#
+	res1#
+	res2 <- allArcs.df4#
+	res  <- list(organism=mtcSummary$organism,plot=res1,data=res2)#
+	res#
+}
+test <- plotGBmtc(pathGB="/Users/jeff/Downloads/sequence3.gb")
 library(REEs)
-getwd()
+library(Biofiles)
+library(biofiles)
+?product
+test <- plotGBmtc(pathGB="/Users/jeff/Downloads/sequence3.gb")
+library(ggplot2)
+test <- plotGBmtc(pathGB="/Users/jeff/Downloads/sequence3.gb")
+plot(test)
+test
+test <- summarizeGBmtc(pathGB="/Users/jeff/Downloads/sequence3.gb")
+test
+Trimeresurus.mtc.summary <- summarizeGBmtc(pathGB="/users/jeff/Documents/Trimeresurus-albilabris_mitochondrial-genome_NC_022820.gb")
+Trimeresurus.mtc.plot <- plotGBmtc(pathGB="/users/jeff/Documents/Trimeresurus-albilabris_mitochondrial-genome_NC_022820.gb")
+Trimeresurus.mtc.plot
+Trimeresurus.mtc.gb <- read.gb("/users/jeff/Documents/Trimeresurus-albilabris_mitochondrial-genome_NC_022820.gb")
+sequence(Trimeresurus.mtc.gb)
+getSequence(Trimeresurus.mtc.gb)
+Trimeresurus.mtc.sequence <- getSequence(Trimeresurus.mtc.gb)
+names(Trimeresurus.mtc.sequence) <- "Trimeresurus_albolabris"
+writeXStringSet(Trimeresurus.mtc.sequence,filepath="users/jeff/Documents/reference.fa")
+writeXStringSet(Trimeresurus.mtc.sequence,filepath="/users/jeff/Documents/reference.fa")
+?reverseComplement
+library(ape)
+Trimeresurus.mtc.summary
+Trimeresurus.mtc.summary$features
+genes <- Trimeresurus.mtc.summary$features
+genes$start[1]:genes$end[1]
+class(Trimeresurus.mtc.sequence)
+DNAString(Trimeresurus.mtc.sequence)
+as.DNAString(Trimeresurus.mtc.sequence)
+as.character(Trimeresurus.mtc.sequence)
+DNAString(as.character(Trimeresurus.mtc.sequence))
+DNAString(as.character(Trimeresurus.mtc.sequence))[genes$start[1]:genes$end[1]]
+i=1
+geneseq <- DNAString(as.character(Trimeresurus.mtc.sequence))[genes$start[i]:genes$end[i]]
+geneseq
+name(geneseq)
+names(geneseq)
+genes$gene
+names(geneseq) <- genes$gene[i]
+attributes(geneseq)
+geneseq <- DNAStringSet(DNAString(as.character(Trimeresurus.mtc.sequence))[genes$start[i]:genes$end[i]])
+geneseq
+names(geneseq) <- genes$gene[i]
+geneseq
+for(i in 1:nrow(genes)){#
+	geneseq <- DNAStringSet(DNAString(as.character(Trimeresurus.mtc.sequence))[genes$start[i]:genes$end[i]])#
+	names(geneseq) <- genes$gene[i]#
+	if(i==1){#
+		allgenes <- geneseq#
+	} else {#
+		allgenes <- c(allgenes,geneseq)#
+	}#
+}
+allgenes
+writeXStringSet(allgenes,"/users/jeff/Documents/mtgenes.fa")
+while (seeding == T){#
+		#Copy new reference to do recursively#
+		counter  <- counter+1#
+		prev.len <- new.len#
+		# Skips the first one [of???] since its already done.#
+		if (counter >= 2){#
+			#Pick out matching reads to mt Genomes#
+			system(sprintf("'%s' -Xmx8g ref='current_seed.fasta' in1='%s' in2='%s' vslow k=12 minid=%s outm1=t_read1.fq outm2=t_read2.fq",bbmapPATH,referencePATH,read1,read2,min.id),ignore.stderr = T)#
+			system(sprintf("'%s' -Xmx8g ref='current_seed.fasta' in='%s' vslow k=12 minid=%s outm=t_singleton.fq",bbmapPATH,referencePATH,reads.merged,min.id), ignore.stderr = T)#
+			# concatenates 't_read1.fq' and 'o_read1.fq' and appends to 'read1.fq'#
+			system("cat t_read1.fq o_read1.fq >> read1.fq")#
+			# concatenates 't_read2.fq' and 'o_read2.fq' and appends to 'read2.fq'#
+			system("cat t_read2.fq o_read2.fq >> read2.fq")#
+			# concatenates 't_singleton.fq' and 'o_singleton.fq' and appends to 'singleton.fq'#
+			system("cat t_singleton.fq o_singleton.fq >> singleton.fq")#
+			# removes current 't_read1.fq' 't_read2.fq' and 't_singleton.fq'#
+			system("rm t_read1.fq t_read2.fq t_singleton.fq")#
+		}#
+		# Run SPADES on sample.#
+		system(sprintf("'%s' --pe1-1 '%s/read1.fq' --pe1-2 '%s/read2.fq' --pe1-s '%s/singleton.fq' -o spades -k %s --careful -t 8 -m 8",spadesPATH,out.dir,out.dir,out.dir,k.val), ignore.stdout = T)#
+		#Checks to see if one kmer failed or not#
+		while (file.exists("spades/contigs.fasta") == F){#
+			#subtract Ks until it works#
+			system("rm -r spades")#
+			k <- k[-length(k)]#
+			if(length(k) == 0) { break }#
+			k.val  <- paste(k, collapse = ",")#
+			min.id <- "0.6"#
+			system(sprintf("'%s' --pe1-1 '%s/read1.fq' --pe1-2 '%s/read2.fq' --pe1-s '%s/singleton.fq' -o spades -k %s --careful -t 8 -m 8",spadesPATH,out.dir,out.dir,out.dir,k.val), ignore.stdout = T)#
+		}#end while#
+		# If the k-mers are all run out, therefore nothing can be assembled#
+		if (length(k) == 0) { #
+			paste("k-mer values all used up, cannot assemble!")#
+			system("rm read1.fq read2.fq singleton.fq t_read1.fq t_read2.fq t_singleton.fq o_read1.fq o_read2.fq o_singleton.fq")#
+			system("rm -r spades")#
+			seeding = F #
+		}# end if#
+#
+		# renames read1.fq and read2.fq to read1.fq and read2.fq#
+		if (counter == 1){#
+			system("mv read1.fq o_read1.fq")#
+			system("mv read2.fq o_read2.fq")#
+			system("mv singleton.fq o_singleton.fq")#
+		}#
+#
+		# copies contigs.fasta to current_seed.fasta#
+		system("cp spades/contigs.fasta current_seed.fasta")#
+		if (counter >= 2) {#
+			system("rm read1.fq read2.fq singleton.fq")#
+		}#
+		system("rm -r spades")#
+		reference <- "current_seed.fasta"#
+#
+		#Check size#
+		temp.count <- scan(file = "current_seed.fasta", what = "character")#
+		new.len    <- sum(nchar(temp.count[-grep(">", temp.count)]))#
+		no.contigs <- length(temp.count[grep(">", temp.count)])#
+		print(paste0("iteration ", counter, " complete!"))#
+		print(paste0("new length: ", new.len, ". Old length: ", prev.len))#
+		if (new.len == prev.len || counter == 20){#
+			seeding<-F #
+			system("rm o_read1.fq o_read2.fq o_singleton.fq")#
+			print(paste("mitogenome complete after ", counter, " iterations!", sep = ""))#
+			min.id <- "0.7"#
+		}#
+#
+		#If the file gets too large, its due to repeats#
+		if (new.len >= 23000){#
+			#runs cap3 to merge similar contigs (pull only clustered contigs out?)#
+			system(paste(cap3PATH," current_seed.fasta -z 1 -o 16 -e 11 -s 251", " > ","log.fasta.cap.txt", sep = "")) #
+			#Reads in results files#
+			temp.assembled <- scanFa(FaFile(paste("current_seed.fasta.cap.contigs", sep = "")))#
+			temp.singlets  <- scanFa(FaFile(paste("current_seed.fasta.cap.singlets", sep = "")))#
+			keep.singlets  <- temp.singlets[width(temp.singlets) >= 100]#
+			final.save     <- append(temp.assembled, keep.singlets)#
+			#Writes contigs for cap3#
+			write.loci <- as.list(as.character(final.save))#
+			write.fasta(sequences = write.loci, names = names(write.loci),"current_seed.fasta", nbchar = 1000000, as.string = T)#
+			#Get cap3 files and deletes#
+			cap.files  <- list.files(pattern = "", full.names = F, recursive = F)#
+			cap.remove <- cap.files[grep(pattern = paste("fasta.cap*.", sep =""), x = cap.files)]#
+			system(paste("rm ", paste(cap.remove, collapse = " ") ))#
+			min.id <- "0.95"#
+			#makes sure this doesnt go on forever and ever#
+			repeat.counter<-repeat.counter+1#
+			if (repeat.counter >= 5){ #
+				print(paste("repeat counter hit 5"))#
+				system("rm o_read1.fq o_read2.fq o_singleton.fq")#
+				seeding <- F #
+			}#
+		}#end length > 30,000 if#
+	}#end while
+get.mitogenome <- function(sampleName,read1,read2,reads.merged,referencePATH,geneFilePATH,out.dir,bbmapPATH="bbmap.sh'",cap3PATH="cap3",spadesPATH="spades.py"){#
+	reference <- basename(referencePATH)#
+	gene.file <- basename(geneFilePATH)#
+	#raw.dir   <- dirname(read1)#
+	dir.check.create(out.dir)#
+	dir.check.create(file.path(out.dir,"Species_mtGenomes"))#
+#
+	# Modify permissions to make sure that bbmap, cap3, and spades are executable#
+	#system(paste("chmod +x",bbmapPATH))#
+	#system(paste("chmod +x",cap3))#
+	#system(paste("chmod +x",spades.py))#
+#
+	#Options#
+	options(stringsAsFactors = FALSE)#
+	options(warn=2)#
+#
+	####################################################################
+	### Step 1: Gather read data and assemble mitochondrial genomes ####
+	####################################################################
+#
+	setwd(out.dir)#
+	#Pick out matching reads to mt Genomes. Output files will be in out.dir#
+	system(sprintf("'%s'  -Xmx8g ref='%s' in1='%s' in2='%s' vslow k=12 minid=0.7 outm1=read1.fq outm2=read2.fq",bbmapPATH,referencePATH,read1,read2),ignore.stderr = T)#
+	system(sprintf("'%s' -Xmx8g ref='%s' in='%s' vslow k=12 minid=0.7 outm=singleton.fq",bbmapPATH,referencePATH,reads.merged), ignore.stderr = T)#
+#
+	k     <- c(9,13,21,33,55,77,99,127)#
+	k.val <- paste(k, collapse = ",")#
+#
+	####################################################
+	#### Not really sure what all of this is about: ####
+	####################################################
+	# creates an empty file called "current_seed.fasta" in out.dir#
+	system("touch current_seed.fasta")#
+#
+	# Initial values for the while loop#
+	new.len        <- 0#
+	counter        <- 0#
+	repeat.counter <- 0#
+	seeding        <- T#
+	min.id         <- "0.7"#
+#
+	# Running the while loop#
+	while (seeding == T){#
+		#Copy new reference to do recursively#
+		counter  <- counter+1#
+		prev.len <- new.len#
+		# Skips the first one [of???] since its already done.#
+		if (counter >= 2){#
+			#Pick out matching reads to mt Genomes#
+			system(sprintf("'%s' -Xmx8g ref='current_seed.fasta' in1='%s' in2='%s' vslow k=12 minid=%s outm1=t_read1.fq outm2=t_read2.fq",bbmapPATH,referencePATH,read1,read2,min.id),ignore.stderr = T)#
+			system(sprintf("'%s' -Xmx8g ref='current_seed.fasta' in='%s' vslow k=12 minid=%s outm=t_singleton.fq",bbmapPATH,referencePATH,reads.merged,min.id), ignore.stderr = T)#
+			# concatenates 't_read1.fq' and 'o_read1.fq' and appends to 'read1.fq'#
+			system("cat t_read1.fq o_read1.fq >> read1.fq")#
+			# concatenates 't_read2.fq' and 'o_read2.fq' and appends to 'read2.fq'#
+			system("cat t_read2.fq o_read2.fq >> read2.fq")#
+			# concatenates 't_singleton.fq' and 'o_singleton.fq' and appends to 'singleton.fq'#
+			system("cat t_singleton.fq o_singleton.fq >> singleton.fq")#
+			# removes current 't_read1.fq' 't_read2.fq' and 't_singleton.fq'#
+			system("rm t_read1.fq t_read2.fq t_singleton.fq")#
+		}#
+		# Run SPADES on sample.#
+		system(sprintf("'%s' --pe1-1 '%s/read1.fq' --pe1-2 '%s/read2.fq' --pe1-s '%s/singleton.fq' -o spades -k %s --careful -t 8 -m 8",spadesPATH,out.dir,out.dir,out.dir,k.val), ignore.stdout = T)#
+		#Checks to see if one kmer failed or not#
+		while (file.exists("spades/contigs.fasta") == F){#
+			#subtract Ks until it works#
+			system("rm -r spades")#
+			k <- k[-length(k)]#
+			if(length(k) == 0) { break }#
+			k.val  <- paste(k, collapse = ",")#
+			min.id <- "0.6"#
+			system(sprintf("'%s' --pe1-1 '%s/read1.fq' --pe1-2 '%s/read2.fq' --pe1-s '%s/singleton.fq' -o spades -k %s --careful -t 8 -m 8",spadesPATH,out.dir,out.dir,out.dir,k.val), ignore.stdout = T)#
+		}#end while#
+		# If the k-mers are all run out, therefore nothing can be assembled#
+		if (length(k) == 0) { #
+			paste("k-mer values all used up, cannot assemble!")#
+			system("rm read1.fq read2.fq singleton.fq t_read1.fq t_read2.fq t_singleton.fq o_read1.fq o_read2.fq o_singleton.fq")#
+			system("rm -r spades")#
+			seeding = F #
+		}# end if#
+#
+		# renames read1.fq and read2.fq to read1.fq and read2.fq#
+		if (counter == 1){#
+			system("mv read1.fq o_read1.fq")#
+			system("mv read2.fq o_read2.fq")#
+			system("mv singleton.fq o_singleton.fq")#
+		}#
+#
+		# copies contigs.fasta to current_seed.fasta#
+		system("cp spades/contigs.fasta current_seed.fasta")#
+		if (counter >= 2) {#
+			system("rm read1.fq read2.fq singleton.fq")#
+		}#
+		system("rm -r spades")#
+		reference <- "current_seed.fasta"#
+#
+		#Check size#
+		temp.count <- scan(file = "current_seed.fasta", what = "character")#
+		new.len    <- sum(nchar(temp.count[-grep(">", temp.count)]))#
+		no.contigs <- length(temp.count[grep(">", temp.count)])#
+		print(paste0("iteration ", counter, " complete!"))#
+		print(paste0("new length: ", new.len, ". Old length: ", prev.len))#
+		if (new.len == prev.len || counter == 20){#
+			seeding<-F #
+			system("rm o_read1.fq o_read2.fq o_singleton.fq")#
+			print(paste("mitogenome complete after ", counter, " iterations!", sep = ""))#
+			min.id <- "0.7"#
+		}#
+#
+		#If the file gets too large, its due to repeats#
+		if (new.len >= 23000){#
+			#runs cap3 to merge similar contigs (pull only clustered contigs out?)#
+			system(paste(cap3PATH," current_seed.fasta -z 1 -o 16 -e 11 -s 251", " > ","log.fasta.cap.txt", sep = "")) #
+			#Reads in results files#
+			temp.assembled <- scanFa(FaFile(paste("current_seed.fasta.cap.contigs", sep = "")))#
+			temp.singlets  <- scanFa(FaFile(paste("current_seed.fasta.cap.singlets", sep = "")))#
+			keep.singlets  <- temp.singlets[width(temp.singlets) >= 100]#
+			final.save     <- append(temp.assembled, keep.singlets)#
+			#Writes contigs for cap3#
+			write.loci <- as.list(as.character(final.save))#
+			write.fasta(sequences = write.loci, names = names(write.loci),"current_seed.fasta", nbchar = 1000000, as.string = T)#
+			#Get cap3 files and deletes#
+			cap.files  <- list.files(pattern = "", full.names = F, recursive = F)#
+			cap.remove <- cap.files[grep(pattern = paste("fasta.cap*.", sep =""), x = cap.files)]#
+			system(paste("rm ", paste(cap.remove, collapse = " ") ))#
+			min.id <- "0.95"#
+			#makes sure this doesnt go on forever and ever#
+			repeat.counter<-repeat.counter+1#
+			if (repeat.counter >= 5){ #
+				print(paste("repeat counter hit 5"))#
+				system("rm o_read1.fq o_read2.fq o_singleton.fq")#
+				seeding <- F #
+			}#
+		}#end length > 30,000 if#
+	}#end while#
+	### Save finished genome#
+	# loads up fasta file#
+	contigs <- scanFa(FaFile("current_seed.fasta"))#
+	if(length(contigs) > 0){#
+		#Trys to merge contigs if there are more than 1#
+		if(length(contigs) >= 2){#
+			#runs cap3 to merge similar contigs (pull only clustered contigs out?)#
+			system(sprintf("'%s' current_seed.fasta -z 1 -o 16 -e 11 -s 251 > log.fasta.cap.txt",cap3PATH))#
+			#Reads in results files#
+			temp.assembled <- scanFa(FaFile(paste0("current_seed.fasta.cap.contigs")))#
+			temp.singlets  <- scanFa(FaFile(paste0("current_seed.fasta.cap.singlets")))#
+			keep.singlets  <- temp.singlets[width(temp.singlets) >= 100]#
+			contigs        <- append(temp.assembled, keep.singlets)#
+			#Get cap3 files and deletes#
+			cap.files  <- list.files(pattern = "", full.names = F, recursive = F)#
+			cap.remove <- cap.files[grep(pattern = paste("fasta.cap*.", sep =""), x = cap.files)]#
+			system(paste("rm ", paste(cap.remove, collapse = " ") ))#
+		}#end if#
+		if(sum(width(contigs)) <= 1000) { #
+			print("less than 1000bp, not enough data to extract")#
+			next #
+		}#
+		#Writes the full mitochondrial genome file#
+		system("rm current_seed.fasta")#
+		names(contigs)<- paste("sequence_", seq(1:length(contigs)), sep = "")#
+		write.loci    <- as.list(as.character(contigs))#
+		write.fasta(sequences = write.loci, names = names(write.loci),paste0("Species_mtGenomes/", sampleName, ".fa"), nbchar = 1000000, as.string = T)#
+	}#
+	system("rm -r ref")#
+}
 q("no")
