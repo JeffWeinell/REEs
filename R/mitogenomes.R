@@ -148,24 +148,22 @@ plotGBmtc <- function(pathGB, type="file", additionalDF=NULL, zoomout=1.1, radii
 # 
 # writeXStringSet(allgenes,"/users/jeff/Documents/mtgenes.fa")
 
-
-
 # '/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/Achalinus-spinalis_KU312258/Achalinus-spinalis_KU312258_singletons.fastq.gz'
 # '/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/Achalinus-spinalis_KU312258/Achalinus-spinalis_KU312258_READ2_unmerged.fastq.gz'
 # '/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/Achalinus-spinalis_KU312258/Achalinus-spinalis_KU312258_READ1_unmerged.fastq.gz'
 
-sampleName   <- "Cerberus-schneiderii_KU324534"
-read1        <- "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/Cerberus-schneiderii_KU324534/Cerberus-schneiderii_KU324534_READ1_unmerged.fastq.gz"
-read2        <- "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/Cerberus-schneiderii_KU324534/Cerberus-schneiderii_KU324534_READ2_unmerged.fastq.gz"
-reads.merged <- "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/Cerberus-schneiderii_KU324534/Cerberus-schneiderii_KU324534_singletons.fastq.gz"
-
-referencePATH <- "/panfs/pfs.local/home/j926w878/work/mitogenomes/reference.fa"
-geneFilePATH  <- "/panfs/pfs.local/home/j926w878/work/mitogenomes/mtgenes.fa"
-out.dir       <- "/panfs/pfs.local/home/j926w878/work/mitogenomes/"
-
-bbmapPATH  <- "/panfs/pfs.local/home/j926w878/programs/bbmap/bbmap.sh"
-cap3PATH   <- "/panfs/pfs.local/home/j926w878/programs/CAP3/cap3"
-spadesPATH <- "/panfs/pfs.local/home/j926w878/programs/SPAdes-3.12.0-Linux/bin/spades.py"
+# sampleName   <- "Cerberus-schneiderii_KU324534"
+# read1        <- "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/Cerberus-schneiderii_KU324534/Cerberus-schneiderii_KU324534_READ1_unmerged.fastq.gz"
+# read2        <- "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/Cerberus-schneiderii_KU324534/Cerberus-schneiderii_KU324534_READ2_unmerged.fastq.gz"
+# reads.merged <- "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/Cerberus-schneiderii_KU324534/Cerberus-schneiderii_KU324534_singletons.fastq.gz"
+# 
+# referencePATH <- "/panfs/pfs.local/home/j926w878/work/mitogenomes/reference.fa"
+# geneFilePATH  <- "/panfs/pfs.local/home/j926w878/work/mitogenomes/mtgenes.fa"
+# out.dir       <- "/panfs/pfs.local/home/j926w878/work/mitogenomes/"
+# 
+# bbmapPATH  <- "/panfs/pfs.local/home/j926w878/programs/bbmap/bbmap.sh"
+# cap3PATH   <- "/panfs/pfs.local/home/j926w878/programs/CAP3/cap3"
+# spadesPATH <- "/panfs/pfs.local/home/j926w878/programs/SPAdes-3.12.0-Linux/bin/spades.py"
 
 #' @title Get mitochondrial genome from reads
 #'
@@ -183,7 +181,7 @@ spadesPATH <- "/panfs/pfs.local/home/j926w878/programs/SPAdes-3.12.0-Linux/bin/s
 #' @param spadesPATH Path to spades python executable. Default "spades.py", in which case spades must be on your system path.
 #' @return DNAStringSet; mitogenome is written to out.dir
 #' @export get.mitogenome
-get.mitogenome <- function(sampleName,read1,read2,reads.merged,referencePATH,geneFilePATH,out.dir,bbmapPATH="bbmap.sh'",cap3PATH="cap3",spadesPATH="spades.py"){
+get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referencePATH,geneFilePATH,out.dir,bbmapPATH="bbmap.sh'",cap3PATH="cap3",spadesPATH="spades.py"){
 	reference <- basename(referencePATH)
 	gene.file <- basename(geneFilePATH)
 	#raw.dir   <- dirname(read1)
@@ -205,15 +203,17 @@ get.mitogenome <- function(sampleName,read1,read2,reads.merged,referencePATH,gen
 
 	setwd(out.dir)
 	#Pick out matching reads to mt Genomes. Output files will be in out.dir
-	system(sprintf("'%s'  -Xmx8g ref='%s' in1='%s' in2='%s' vslow k=12 minid=0.7 outm1=read1.fq outm2=read2.fq",bbmapPATH,referencePATH,read1,read2),ignore.stderr = T)
-	system(sprintf("'%s' -Xmx8g ref='%s' in='%s' vslow k=12 minid=0.7 outm=singleton.fq",bbmapPATH,referencePATH,reads.merged), ignore.stderr = T)
-
+	if(!is.null(read2)){
+		system(sprintf("'%s'  -Xmx8g ref='%s' in1='%s' in2='%s' vslow k=12 minid=0.7 outm1=read1.fq outm2=read2.fq",bbmapPATH,referencePATH,read1,read2),ignore.stderr = T)
+	} else {
+		system(sprintf("'%s'  -Xmx8g ref='%s' in='%s' vslow k=12 minid=0.7 outm=read1.fq",bbmapPATH,referencePATH,read1),ignore.stderr = T)
+	}
+	if(!is.null(reads.merged)){
+		system(sprintf("'%s' -Xmx8g ref='%s' in='%s' vslow k=12 minid=0.7 outm=singleton.fq",bbmapPATH,referencePATH,reads.merged), ignore.stderr = T)
+	}
 	k     <- c(9,13,21,33,55,77,99,127)
 	k.val <- paste(k, collapse = ",")
 
-	###################################################
-	#### Not really sure what all of this is about: ###
-	###################################################
 	# creates an empty file called "current_seed.fasta" in out.dir
 	system("touch current_seed.fasta")
 
@@ -232,19 +232,44 @@ get.mitogenome <- function(sampleName,read1,read2,reads.merged,referencePATH,gen
 		# Skips the first one [of???] since its already done.
 		if (counter >= 2){
 			#Pick out matching reads to mt Genomes
-			system(sprintf("'%s' -Xmx8g ref='current_seed.fasta' in1='%s' in2='%s' vslow k=12 minid=%s outm1=t_read1.fq outm2=t_read2.fq",bbmapPATH,referencePATH,read1,read2,min.id),ignore.stderr = T)
-			system(sprintf("'%s' -Xmx8g ref='current_seed.fasta' in='%s' vslow k=12 minid=%s outm=t_singleton.fq",bbmapPATH,referencePATH,reads.merged,min.id), ignore.stderr = T)
+			if(!is.null(read2)){
+				system(sprintf("'%s' -Xmx8g ref='current_seed.fasta' in1='%s' in2='%s' vslow k=12 minid=%s outm1=t_read1.fq outm2=t_read2.fq",bbmapPATH,referencePATH,read1,read2,min.id),ignore.stderr = T)
+			} else {
+				system(sprintf("'%s' -Xmx8g ref='current_seed.fasta' in='%s' vslow k=12 minid=%s outm=t_read1.fq",bbmapPATH,referencePATH,read1,min.id),ignore.stderr = T)
+			}
+			if(!is.null(reads.merged)){
+				system(sprintf("'%s' -Xmx8g ref='current_seed.fasta' in='%s' vslow k=12 minid=%s outm=t_singleton.fq",bbmapPATH,referencePATH,reads.merged,min.id), ignore.stderr = T)
+			}
 			# concatenates 't_read1.fq' and 'o_read1.fq' and appends to 'read1.fq'
 			system("cat t_read1.fq o_read1.fq >> read1.fq")
+			# removes current 't_read1.fq'
+			system("rm t_read1.fq")
 			# concatenates 't_read2.fq' and 'o_read2.fq' and appends to 'read2.fq'
-			system("cat t_read2.fq o_read2.fq >> read2.fq")
+			if(!is.null(read2)){
+				system("cat t_read2.fq o_read2.fq >> read2.fq")
+				# removes current 't_read2.fq'
+				system("rm t_read2.fq")
+			}
+			if(!is.null(reads.merged)){
 			# concatenates 't_singleton.fq' and 'o_singleton.fq' and appends to 'singleton.fq'
-			system("cat t_singleton.fq o_singleton.fq >> singleton.fq")
+				system("cat t_singleton.fq o_singleton.fq >> singleton.fq")
+				# removes current 't_singleton.fq'
+				system("rm t_singleton.fq")
+			}
 			# removes current 't_read1.fq' 't_read2.fq' and 't_singleton.fq'
-			system("rm t_read1.fq t_read2.fq t_singleton.fq")
+			#system("rm t_read1.fq t_read2.fq t_singleton.fq")
 		}
-		# Run SPADES on sample.
-		system(sprintf("'%s' --pe1-1 '%s/read1.fq' --pe1-2 '%s/read2.fq' --pe1-s '%s/singleton.fq' -o spades -k %s --careful -t 8 -m 8",spadesPATH,out.dir,out.dir,out.dir,k.val), ignore.stdout = T)
+		#####################
+		## Run SPADES on sample.
+		if((!is.null(read2)) & (!is.null(reads.merged))){
+			system(sprintf("'%s' --pe1-1 '%s/read1.fq' --pe1-2 '%s/read2.fq' --pe1-s '%s/singleton.fq' -o spades -k %s --careful -t 8 -m 8",spadesPATH,out.dir,out.dir,out.dir,k.val), ignore.stdout = T)
+		}
+		if((!is.null(read2)) & is.null(reads.merged)){
+			system(sprintf("'%s' --pe1-1 '%s/read1.fq' --pe1-2 '%s/read2.fq' -o spades -k %s --careful -t 8 -m 8",spadesPATH,out.dir,out.dir,out.dir,k.val), ignore.stdout = T)
+		}
+		if(is.null(read2) & is.null(reads.merged)){
+			system(sprintf("'%s' --s '%s/read1.fq' -o spades -k %s --careful -t 8 -m 8",spadesPATH,out.dir,out.dir,out.dir,k.val), ignore.stdout = T)
+		}
 		#Checks to see if one kmer failed or not
 		while (file.exists("spades/contigs.fasta") == F){
 			#subtract Ks until it works
@@ -253,12 +278,26 @@ get.mitogenome <- function(sampleName,read1,read2,reads.merged,referencePATH,gen
 			if(length(k) == 0) { break }
 			k.val  <- paste(k, collapse = ",")
 			min.id <- "0.6"
-			system(sprintf("'%s' --pe1-1 '%s/read1.fq' --pe1-2 '%s/read2.fq' --pe1-s '%s/singleton.fq' -o spades -k %s --careful -t 8 -m 8",spadesPATH,out.dir,out.dir,out.dir,k.val), ignore.stdout = T)
+			if((!is.null(read2)) & (!is.null(reads.merged))){
+				system(sprintf("'%s' --pe1-1 '%s/read1.fq' --pe1-2 '%s/read2.fq' --pe1-s '%s/singleton.fq' -o spades -k %s --careful -t 8 -m 8",spadesPATH,out.dir,out.dir,out.dir,k.val), ignore.stdout = T)
+			}
+			if((!is.null(read2)) & is.null(reads.merged)){
+				system(sprintf("'%s' --pe1-1 '%s/read1.fq' --pe1-2 '%s/read2.fq' -o spades -k %s --careful -t 8 -m 8",spadesPATH,out.dir,out.dir,out.dir,k.val), ignore.stdout = T)
+			}
+			if(is.null(read2) & is.null(reads.merged)){
+				system(sprintf("'%s' --s '%s/read1.fq' -o spades -k %s --careful -t 8 -m 8",spadesPATH,out.dir,out.dir,out.dir,k.val), ignore.stdout = T)
+			}
 		}#end while
 		# If the k-mers are all run out, therefore nothing can be assembled
 		if (length(k) == 0) { 
 			paste("k-mer values all used up, cannot assemble!")
-			system("rm read1.fq read2.fq singleton.fq t_read1.fq t_read2.fq t_singleton.fq o_read1.fq o_read2.fq o_singleton.fq")
+			system("rm read1.fq t_read1.fq o_read1.fq")
+			if(!is.null(read2)){
+				system("rm read2.fq t_read2.fq o_read2.fq")
+			}
+			if(!is.null(reads.merged)){
+				system("rm singleton.fq t_singleton.fq o_singleton.fq")
+			}
 			system("rm -r spades")
 			seeding = F 
 		}# end if
@@ -266,14 +305,23 @@ get.mitogenome <- function(sampleName,read1,read2,reads.merged,referencePATH,gen
 		# renames read1.fq and read2.fq to read1.fq and read2.fq
 		if (counter == 1){
 			system("mv read1.fq o_read1.fq")
-			system("mv read2.fq o_read2.fq")
-			system("mv singleton.fq o_singleton.fq")
+			if(!is.null(read2)){
+				system("mv read2.fq o_read2.fq")
+			}
+			if(!is.null(reads.merged)){
+				system("mv singleton.fq o_singleton.fq")
+			}
 		}
-
 		# copies contigs.fasta to current_seed.fasta
 		system("cp spades/contigs.fasta current_seed.fasta")
 		if (counter >= 2) {
-			system("rm read1.fq read2.fq singleton.fq")
+			system("rm read1.fq")
+			if(!is.null(read2)){
+				system("rm read2.fq")
+			}
+			if(!is.null(reads.merged)){
+				system("rm singleton.fq")
+			}
 		}
 		system("rm -r spades")
 		reference <- "current_seed.fasta"
@@ -286,11 +334,16 @@ get.mitogenome <- function(sampleName,read1,read2,reads.merged,referencePATH,gen
 		print(paste0("new length: ", new.len, ". Old length: ", prev.len))
 		if (new.len == prev.len || counter == 20){
 			seeding<-F 
-			system("rm o_read1.fq o_read2.fq o_singleton.fq")
+			system("rm o_read1.fq")
+			if(!is.null(read2)){
+				system("rm o_read2.fq")
+			}
+			if(!is.null(reads.merged)){
+				system("rm o_singleton.fq")
+			}
 			print(paste("mitogenome complete after ", counter, " iterations!", sep = ""))
 			min.id <- "0.7"
 		}
-
 		#If the file gets too large, its due to repeats
 		if (new.len >= 23000){
 			#runs cap3 to merge similar contigs (pull only clustered contigs out?)
@@ -315,7 +368,13 @@ get.mitogenome <- function(sampleName,read1,read2,reads.merged,referencePATH,gen
 			repeat.counter<-repeat.counter+1
 			if (repeat.counter >= 5){ 
 				print(paste("repeat counter hit 5"))
-				system("rm o_read1.fq o_read2.fq o_singleton.fq")
+				system("rm o_read1.fq")
+				if(!is.null(read2)){
+					system("rm o_read2.fq")
+				}
+				if(!is.null(reads.merged)){
+					system("rm o_singleton.fq")
+				}
 				seeding <- F 
 			}
 		}#end length > 30,000 if
