@@ -378,7 +378,7 @@ get.mitogenome <- function(sampleName,read1,read2,reads.merged,referencePATH,gen
 ## for (i in 1:length(spp.samples)){
 ## 
 ## 	#Load in the data
-## 	contigs<-scanFa(FaFile(paste("Species_mtGenomes/", spp.samples[i], ".fa", sep = "")))   # loads up fasta file
+## 	contigs<-readDNAStringSet(paste("Species_mtGenomes/", spp.samples[i], ".fa", sep = ""))   # loads up fasta file
 ## 
 ## 	#Matches samples to loci
 ## 	system(paste("mpirun pblat -threads=", threads, " Species_mtGenomes/", spp.samples[i], ".fa ",gene.file, " -tileSize=8 -minIdentity=60"," -noHead -out=pslx mt_to_genes.pslx", sep = ""), ignore.stdout = T)
