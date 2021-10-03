@@ -1,5 +1,3 @@
-# wget https://ftp.ncbi.nlm.nih.gov/refseq/release/mitochondrion/mitochondrion.1.1.genomic.fna.gz
-
 #' @title Summarize a GenBank file of mitochondrial genome as a table
 #'
 #' Creates a table summizing the annotations held in the GenBank flatefile. This function is used in the function plotGBmtc.
@@ -745,7 +743,7 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 ### END OF SCRIPT ###
 #####################
 
-
+## wget https://ftp.ncbi.nlm.nih.gov/refseq/release/mitochondrion/mitochondrion.1.1.genomic.fna.gz
 
 
 
