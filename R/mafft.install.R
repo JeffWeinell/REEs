@@ -81,11 +81,6 @@ initialize_REEs <- function(){
 	blast.install()
 	pblat.install()
 	# cap3.install()
-	# pblat.install() : wget -O 'icebert-pblat-e26bf6b.zip' 'https://osf.io/pu82t/download' --no-check-certificate
-	# unzip 'icebert-pblat-e26bf6b.zip'
-	# 
-	# mafft: wget "https://mafft.cbrc.jp/alignment/software/mafft-7.475-without-extensions-src.tgz"
-	# wget -O "mafft-7.475-without-extensions-src.tgz" "https://osf.io/qtdfr/download"
 }
 
 
@@ -107,14 +102,21 @@ pblat.install <- function(){
 	# download pblat source code
 	download.file(url=source.url,destfile=file.path(install.loc,sourcename))
 	# unzip the source file
-	system(sprintf("cd '%s' && unzip '%s'", install.loc, sourcename))
+	system(sprintf("cd '%s' && unzip '%s'", install.loc, sourcename), ignore.stdout = T)
 	# path to directory containing the makefile
 	core.dir <- file.path(install.loc,gsub(".zip$","",sourcename))
 	# install
-	system(sprintf("cd '%s' && make",core.dir))
+	system(sprintf("cd '%s' && make",core.dir), ignore.stdout = T)
 	# delete zipfile
 	system(sprintf("rm -R '%s/%s'",install.loc,sourcename))
 }
+
+# source.url="https://osf.io/fmdrb/" sourcename="cap3.linux.x86_64.tar"
+
+
+
+
+
 
 
 
