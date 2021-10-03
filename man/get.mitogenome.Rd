@@ -14,7 +14,8 @@ get.mitogenome(
   out.dir,
   bbmapPATH = "bbmap.sh'",
   cap3PATH = "cap3",
-  spadesPATH = "spades.py"
+  spadesPATH = "spades.py",
+  pblatPATH = "pblat"
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ get.mitogenome(
 \item{cap3PATH}{Path to cap3 executable. Default "cap3", in which case cap3 must be on your system path.}
 
 \item{spadesPATH}{Path to spades python executable. Default "spades.py", in which case spades must be on your system path.}
+
+\item{pblatPATH}{Path to pblat executable. Default "pblat", in which case pblat must be on your system path.}
 }
 \value{
 DNAStringSet; mitogenome is written to out.dir

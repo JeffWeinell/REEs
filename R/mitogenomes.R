@@ -179,9 +179,10 @@ plotGBmtc <- function(pathGB, type="file", additionalDF=NULL, zoomout=1.1, radii
 #' @param bbmapPATH Path to bbmap bash script. Default "bbmap.sh", in which case bbmap. must be on your system path.
 #' @param cap3PATH Path to cap3 executable. Default "cap3", in which case cap3 must be on your system path.
 #' @param spadesPATH Path to spades python executable. Default "spades.py", in which case spades must be on your system path.
+#' @param pblatPATH Path to pblat executable. Default "pblat", in which case pblat must be on your system path.
 #' @return DNAStringSet; mitogenome is written to out.dir
 #' @export get.mitogenome
-get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referencePATH,geneFilePATH,out.dir,bbmapPATH="bbmap.sh'",cap3PATH="cap3",spadesPATH="spades.py"){
+get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referencePATH,geneFilePATH,out.dir,bbmapPATH="bbmap.sh'",cap3PATH="cap3",spadesPATH="spades.py",pblatPATH="pblat"){
 	reference <- basename(referencePATH)
 	gene.file <- basename(geneFilePATH)
 	#raw.dir   <- dirname(read1)
@@ -412,12 +413,60 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 		names(contigs)<- paste("sequence_", seq(1:length(contigs)), sep = "")
 		#write.loci    <- as.list(as.character(contigs))
 		#write.fasta(sequences = write.loci, names = names(write.loci),paste0("Species_mtGenomes/", sampleName, ".fa"), nbchar = 1000000, as.string = T)
-		Biostrings::writeXStringSet(contigs,filepath=sprintf("%s/%s_mitogenome.fa",out.dir,sampleName))
+		Biostrings::writeXStringSet(contigs,filepath=sprintf("%s/%s_mitocontigs.fa",out.dir,sampleName))
 	}
 	system("rm -r ref")
+	system(sprintf("mpirun '%s' -threads=8 '%s' '%s' -tileSize=8 -minIdentity=60 -noHead -out=pslx '%s/mt_to_genes.pslx'" ,pblatPATH, sprintf("%s/%s_mitocontigs.fa",out.dir,sampleName), gene.file, out.dir))
+	setwd(out.dir)
+	temp.count<-scan(file = "mt_to_genes.pslx", what = "character")
+	if (length(temp.count) == 0){
+		print("No matching mitochondrial genes were found.")
+	} else {
+		match.data <- data.table::fread(file.path(out.dir,"mt_to_genes.pslx"), sep = "\t", header = F, stringsAsFactors = FALSE)
+		headers<-c("matches", "misMatches", "repMatches", "nCount", "qNumInsert", "qBaseInsert", "tNumInsert", "tBaseInsert", "strand", "qName", "qSize", "qStart", "qEnd", "tName", "tSize", "tStart", "tEnd", "blockCount", "blockSize", "qStarts", "tStarts", "qSeq", "tSeq")
+		setnames(match.data, headers)
+		loci.names <- unique(match.data$qName)
+		sep.loci   <- DNAStringSet()
+		for (j in 1:length(loci.names)){
+			#pulls out data that matches to multiple contigs
+			sub.data <- match.data[match.data$qName %in% loci.names[j],]
+			sub.data <- sub.data[sub.data$matches == max(sub.data$matches),][1]
+			if (sub.data$strand == "+"){
+				#Cuts the node apart and saves separately
+				sub.data$tStart<-sub.data$tStart-sub.data$qStart+1
+				#Fixes ends
+				sub.data$tEnd<-sub.data$tEnd+(sub.data$qSize-sub.data$qEnd)
+			} else {
+				sub.data$tStart<-sub.data$tStart-(sub.data$qSize-sub.data$qEnd)
+				#Fixes ends
+				sub.data$tEnd<-sub.data$tEnd+sub.data$qStart+1
+			}
+		
+			#If it ends up with a negative start
+			if (sub.data$tStart <= 0){
+				sub.data$tStart <- 1
+			}
+			#Fixes if the contig is smaller than the full target locus
+			if (sub.data$tEnd >= sub.data$tSize){
+				sub.data$tEnd <- sub.data$tSize
+			}
+			#Gets start and end
+			start.pos <- min(sub.data$tStart, sub.data$tEnd)
+			end.pos   <- max(sub.data$tStart, sub.data$tEnd)
+			  
+			temp.contig    <- contigs[names(contigs) == sub.data$tName]
+			new.seq        <- subseq(x = temp.contig, start = start.pos, end = end.pos)
+			names(new.seq) <- sub.data$qName
+			sep.loci       <- c(sep.loci, new.seq)
+		} #end j loop
+		#Writes the full mitochondrial genome file
+		Biostrings::writeXStringSet(sep.loci, filepath = sprintf("%s/%s_mitogenome.fa",out.dir,sampleName))
+		system(sprintf("rm '%s/mt_to_genes.pslx'",out.dir))
+	}
 }
 
 ## Gather all of the mitogenomes and put them in a directory called 'Species_mtGenomes'
+## pblatPath <- "/panfs/pfs.local/work/bi/bin/icebert-pblat-652d3b3/pblat"
 
 ## ###### Make steps 2–4 separate functions
 ## ###########################################################################
@@ -425,23 +474,19 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 ## ###########################################################################
 ## samples <- sampleName
 ## #PSLX headers
-## headers<-c("matches", "misMatches", "repMatches", "nCount", "qNumInsert", "qBaseInsert", "tNumInsert", "tBaseInsert", "strand", "qName", 
-##            "qSize", "qStart", "qEnd", "tName", "tSize", "tStart", "tEnd", "blockCount", "blockSize", "qStarts", "tStarts", "qSeq", "tSeq")
+## headers<-c("matches", "misMatches", "repMatches", "nCount", "qNumInsert", "qBaseInsert", "tNumInsert", "tBaseInsert", "strand", "qName", "qSize", "qStart", "qEnd", "tName", "tSize", "tStart", "tEnd", "blockCount", "blockSize", "qStarts", "tStarts", "qSeq", "tSeq")
 ## 
 ## #Creates new directory and enters this working directory
-## setwd(out.dir)
-## dir.create("Species_Loci")
-## spp.samples<-list.files("Species_mtGenomes/.")
-## spp.samples<-gsub(".fa$", "", spp.samples)
-## 
-## for (i in 1:length(spp.samples)){
+## #setwd(out.dir)
+## #dir.create("Species_Loci")
+## #spp.samples<-list.files("Species_mtGenomes/.")
+## #spp.samples<-gsub(".fa$", "", spp.samples)
 ## 
 ## 	#Load in the data
-## 	contigs<-readDNAStringSet(paste("Species_mtGenomes/", spp.samples[i], ".fa", sep = ""))   # loads up fasta file
 ## 
 ## 	#Matches samples to loci
-## 	system(paste("mpirun pblat -threads=", threads, " Species_mtGenomes/", spp.samples[i], ".fa ",gene.file, " -tileSize=8 -minIdentity=60"," -noHead -out=pslx mt_to_genes.pslx", sep = ""), ignore.stdout = T)
-## 	
+## 	#system(paste("mpirun pblat -threads=", threads, " Species_mtGenomes/", spp.samples[i], ".fa ",gene.file, " -tileSize=8 -minIdentity=60"," -noHead -out=pslx mt_to_genes.pslx", sep = ""), ignore.stdout = T)
+## 	sprintf("mpirun '%s' -threads=8 '%s' '%s' -tileSize=8 -minIdentity=60 -noHead -out=pslx mt_to_genes.pslx" ,pblatPath, samplePath, genesPath)
 ## 	#Need to load in transcriptome for each species and take the matching transcripts to the database
 ## 	temp.count<-scan(file = "mt_to_genes.pslx", what = "character")
 ## 	if (length(temp.count) == 0){
@@ -487,12 +532,10 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 ## 	}#end j loop
 ## 
 ## 	#Writes the full mitochondrial genome file
-## 	write.loci<-as.list(as.character(sep.loci))
-## 	write.fasta(sequences = write.loci, names = names(write.loci),paste("Species_Loci/", spp.samples[i], "_mito_genes.fa", sep = ""), nbchar = 1000000, as.string = T)
+## 	writeXStringSet(sequences = sep.loci, paste("Species_Loci/", spp.samples[i], "_mito_genes.fa", sep = ""), nbchar = 1000000, as.string = T)
 ## 
 ## 	system("rm mt_to_genes.pslx")
 ## 
-## }#end i loop
 ## 
 ## ############################################
 ## ### Step 3: Create mitogenome alignments ###
