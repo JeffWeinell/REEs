@@ -45,10 +45,10 @@ extensions2 <- c("phy.treefile")                                                
 
 
 alignment.files.short <- list.files(work.dir)
-alignment.files       <- paste(work.dir,"/",alignment.files.short,sep="")
+alignment.files       <- file.path(work.dir,alignment.files.short)
 
-if(length(specific.files)!=0){                                                      ###|if specific.files is not empty, this makes sure 
-	alignment.files <- alignment.files[alignment.files.short %in% specific.files]   ###|iqtree only runs on those specific files
+if(length(specific.files)!=0){                                                        ###|if specific.files is not empty, this makes sure 
+	alignment.files <- alignment.files[alignment.files.short %in% specific.files] ###|iqtree only runs on those specific files
 }
 
 for(i in 1:length(alignment.files)){
