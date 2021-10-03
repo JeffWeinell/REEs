@@ -10,7 +10,7 @@ maf2fasta(
   maf,
   outdir,
   samples = NULL,
-  minwidth = 40,
+  minwidth = 100,
   minsamples = 4,
   silent = F
 )
@@ -22,7 +22,7 @@ maf2fasta(
 
 \item{samples}{Names of samples to keep. Default NULL means all samples are kept.}
 
-\item{minwidth}{Number indicating the minimum alignment width to retain an alignment. Default 40.}
+\item{minwidth}{Number indicating the minimum alignment width to retain an alignment. Default 100.}
 
 \item{minsamples}{Number indicating the minimum number of individuals in an alignment to keep the alignment. Default 4.}
 
