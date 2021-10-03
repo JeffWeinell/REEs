@@ -1,3 +1,5 @@
+# wget https://ftp.ncbi.nlm.nih.gov/refseq/release/mitochondrion/mitochondrion.1.1.genomic.fna.gz
+
 #' @title Summarize a GenBank file of mitochondrial genome as a table
 #'
 #' Creates a table summizing the annotations held in the GenBank flatefile. This function is used in the function plotGBmtc.
@@ -186,7 +188,7 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 	gene.file <- basename(geneFilePATH)
 	#raw.dir   <- dirname(read1)
 	dir.check.create(out.dir)
-	dir.check.create(file.path(out.dir,"Species_mtGenomes"))
+	#dir.check.create(file.path(out.dir,"Species_mtGenomes"))
 
 	# Modify permissions to make sure that bbmap, cap3, and spades are executable
 	#system(paste("chmod +x",bbmapPATH))
@@ -229,7 +231,7 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 		#Copy new reference to do recursively
 		counter  <- counter+1
 		prev.len <- new.len
-		# Skips the first one [of???] since its already done.
+		# Skips the first iteration since its already done.
 		if (counter >= 2){
 			#Pick out matching reads to mt Genomes
 			if(!is.null(read2)){
@@ -251,13 +253,13 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 				system("rm t_read2.fq")
 			}
 			if(!is.null(reads.merged)){
-			# concatenates 't_singleton.fq' and 'o_singleton.fq' and appends to 'singleton.fq'
+				# concatenates 't_singleton.fq' and 'o_singleton.fq' and appends to 'singleton.fq'
 				system("cat t_singleton.fq o_singleton.fq >> singleton.fq")
 				# removes current 't_singleton.fq'
 				system("rm t_singleton.fq")
 			}
 			# removes current 't_read1.fq' 't_read2.fq' and 't_singleton.fq'
-			#system("rm t_read1.fq t_read2.fq t_singleton.fq")
+			# system("rm t_read1.fq t_read2.fq t_singleton.fq")
 		}
 		#####################
 		## Run SPADES on sample.
@@ -380,7 +382,7 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 		}#end length > 30,000 if
 	}#end while
 	
-	### Save finished genome
+	### Save finished mitogenome
 	# loads up fasta file
 	#contigs <- scanFa(FaFile("current_seed.fasta"))
 	contigs <- Biostrings::readDNAStringSet("current_seed.fasta")
@@ -412,12 +414,12 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 		names(contigs)<- paste("sequence_", seq(1:length(contigs)), sep = "")
 		#write.loci    <- as.list(as.character(contigs))
 		#write.fasta(sequences = write.loci, names = names(write.loci),paste0("Species_mtGenomes/", sampleName, ".fa"), nbchar = 1000000, as.string = T)
-		Biostrings::writeXStringSet(contigs,filepath=paste0("Species_mtGenomes/", sampleName, ".fa"))
+		Biostrings::writeXStringSet(contigs,filepath=sprintf("%s/%s_mitogenome.fa",out.dir,sampleName))
 	}
 	system("rm -r ref")
 }
 
-
+## Gather all of the mitogenomes and put them in a directory called 'Species_mtGenomes'
 
 ## ###### Make steps 2–4 separate functions
 ## ###########################################################################
