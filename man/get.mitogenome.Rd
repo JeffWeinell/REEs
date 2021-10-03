@@ -7,8 +7,8 @@
 get.mitogenome(
   sampleName,
   read1,
-  read2,
-  reads.merged,
+  read2 = NULL,
+  reads.merged = NULL,
   referencePATH,
   geneFilePATH,
   out.dir,
