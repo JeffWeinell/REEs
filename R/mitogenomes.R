@@ -120,7 +120,7 @@ plotGBmtc <- function(pathGB, type="file", additionalDF=NULL, zoomout=1.1, radii
 	rownames(allArcs.df4) <- 1:nrow(allArcs.df4)
 	allArcs.df4$plotOrder <- 1:nrow(allArcs.df4)
 	allArcs.df4$arcname   <- factor(allArcs.df4$arcname, levels = allArcs.df4$arcname[order(allArcs.df4$plotOrder)])
-	res1 <- ggplot(allArcs.df4) + ggforce::geom_arc(aes(x0 = 0, y0 = 0, r=radius, start = arcstart, end=arcend, size=arcname, color=arcname, linetype=arcname)) + scale_linetype_manual(values=allArcs.df4$linetype,guide="none") + scale_color_manual(values=allArcs.df4$linecol,guide="none") + scale_size_manual(values=allArcs.df4$linewidth, guide="none") + geom_text(aes(x=Xtext,y=Ytext,label=text, angle=textangle, hjust=texthjust), size=2) + theme_void()
+	res1 <- ggplot2::ggplot(allArcs.df4) + ggforce::geom_arc(ggplot2::aes(x0 = 0, y0 = 0, r=radius, start = arcstart, end=arcend, size=arcname, color=arcname, linetype=arcname)) + ggplot2::scale_linetype_manual(values=allArcs.df4$linetype,guide="none") + ggplot2::scale_color_manual(values=allArcs.df4$linecol,guide="none") + ggplot2::scale_size_manual(values=allArcs.df4$linewidth, guide="none") + ggplot2::geom_text(ggplot2::aes(x=Xtext,y=Ytext,label=text, angle=textangle, hjust=texthjust), size=2) + ggplot2::theme_void()
 	res1
 	res2 <- allArcs.df4
 	res  <- list(organism=mtcSummary$organism,plot=res1,data=res2)
