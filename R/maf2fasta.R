@@ -32,21 +32,18 @@ maf2fasta <- function(maf,outdir,samples=NULL,minwidth=100,minsamples=4,silent=F
 		} else {
 			mat.temp3 <- mat.temp2
 		}
-		if(nrow(mat.temp3)<minsamples){
-			next
-		}
 		dna.temp <- Biostrings::DNAStringSet(mat.temp3[,"Sequence"])
-		if(width(dna.temp)[1] >= minwidth){
-			names(dna.temp) <- sprintf("Alignment%s_%s_%s",i,mat.temp3[,"SampleName"],mat.temp3[,"SampleContig"])
-			Biostrings::writeXStringSet(dna.temp,file.path(outdir,paste0("alignment",i,".fa")))
+		names(dna.temp) <- sprintf("Alignment%s_%s_%s",i,mat.temp3[,"SampleName"],mat.temp3[,"SampleContig"])
+		if(any(width(dna.temp) >= minwidth)){
+			dna.temp <- dna.temp[which(width(dna.temp) >= minwidth)]
 		} else {
 			next
 		}
+		if(length(dna.temp) < minsamples){
+			next
+		}
+		Biostrings::writeXStringSet(dna.temp,file.path(outdir,paste0("alignment",i,".fa")))
 		print(i)
 	}
 }
-
-
-
-
 
