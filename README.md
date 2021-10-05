@@ -1035,8 +1035,8 @@ To processes sequence reads (assemble contigs for each sample) I followed the Fr
 For the second batch of 16 samples (I will also use these to re-process the first batch), I used the following bash scripts for pre-processing raw reads, assembling loci, and target matching loci:
 - [preprocessingReads.sh](PostSequencing/preprocessingReads.sh) uses fastp and bbmap to trim adapters, remove contaminant reads, remove duplicates, and merge mergeable read pairs.
 - [dipspades.sh](PostSequencing/dipspades.sh) uses dipspades.py from Spades version 3.12.0 (only this version works!)
-- **New step: RepeatMasker: masking low complexity contigs and repeat sequences**
-- **New step: Cactus: de reference-free novo alignment of SnakeCap data and NCBI snake genomes**
+- **New step: RepeatMasker**: masking low complexity contigs and repeat sequences**
+- **New step: Cactus**: de novo reference-free alignment of SnakeCap data and NCBI snake genomes**
 - [targetMatching.sh](PostSequencing/targetMatching.sh) uses blast+/2.9.0 to match contigs against a database of target sequences. 
 
 
