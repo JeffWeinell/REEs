@@ -1039,22 +1039,18 @@ For the second batch of 16 samples (I will also use these to re-process the firs
 
 Submitting a job to run RepeatMasker for each sample:
 ```
-module load R
-R
-
-procdir    <- "~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/"
-sampledirs <- list.dirs(procdir,recursive=F)
-sampledirs <- sampledirs[-grep("Thamnophis-sirtalis",sampledirs)] # ignores Thamnophis-sirtalis individuals
-shpath     <- "~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker.sh"
-# shpath   <- "~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker_rush.sh"
-for(i in 1:length(sampledirs)){
-	sampleName  <- basename(sampledirs[i])
-	inputSeq.i  <- list.files(sampledirs[i],pattern="_consensus-contigs-dipspades.fa$",full.name=T)
-	# outdir.i  <- file.path(sampledirs[i],"contigs_dd_repeatsmasked_rush")
-	outdir.i    <- file.path(sampledirs[i],"contigs_dd_repeatsmasked")
-	system(sprintf("sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=120:00:00 --partition=bi '%s' '%s' '%s'",shpath,inputSeq.i,outdir.i))
-}
-
+SHPATH="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker.sh"
+#SHPATH="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker_rush.sh"
+PROCDIR="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/"
+SAMPLEDIRS=$(echo $(ls $PROCDIR) | awk '{gsub("Thamnophis-sirtalis_GCF_001077635","")}1')
+for i in {1..35}; do
+	SAMPLENAMEi=$(echo $SAMPLEDIRS | awk -v i="$i" '{print $i}')
+	SAMPLEDIRi=$PROCDIR/$SAMPLENAMEi
+	SEQi=$(find $SAMPLEDIRi -maxdepth 1 -name *_consensus-contigs-dipspades.fa)
+	#OUTDIRi=$PROCDIR/$SAMPLENAMEi/contigs_dd_repeatsmasked_rush
+	OUTDIRi=$PROCDIR/$SAMPLENAMEi/contigs_dd_repeatsmasked
+	sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=120:00:00 --partition=bi $SHPATH $SEQi $OUTDIRi
+done
 ```
 
 
