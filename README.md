@@ -1035,10 +1035,31 @@ To processes sequence reads (assemble contigs for each sample) I followed the Fr
 For the second batch of 16 samples (I will also use these to re-process the first batch), I used the following bash scripts for pre-processing raw reads, assembling loci, and target matching loci:
 - [preprocessingReads.sh](PostSequencing/preprocessingReads.sh) uses fastp and bbmap to trim adapters, remove contaminant reads, remove duplicates, and merge mergeable read pairs.
 - [dipspades.sh](PostSequencing/dipspades.sh) uses dipspades.py from Spades version 3.12.0 (only this version works!)
-- **New step: RepeatMasker**: masking low complexity contigs and repeat sequences**
-- **New step: Cactus**: de novo reference-free alignment of SnakeCap data and NCBI snake genomes**
-- [targetMatching.sh](PostSequencing/targetMatching.sh) uses blast+/2.9.0 to match contigs against a database of target sequences. 
+- [repeatMasker.sh](PostSequencing/repeatMasker.sh) masks low complexity and repeat sequences with Ns 
 
+Submitting a job to run RepeatMasker for each sample:
+```
+module load R
+R
+
+procdir    <- "~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/"
+sampledirs <- list.dirs(procdir,recursive=F)
+sampledirs <- sampledirs[-grep("Thamnophis-sirtalis",sampledirs)] # ignores Thamnophis-sirtalis individuals
+shpath     <- "~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker.sh"
+# shpath   <- "~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker_rush.sh"
+for(i in 1:length(sampledirs)){
+	sampleName  <- basename(sampledirs[i])
+	inputSeq.i  <- list.files(sampledirs[i],pattern="_consensus-contigs-dipspades.fa$",full.name=T)
+	# outdir.i  <- file.path(sampledirs[i],"contigs_dd_repeatsmasked_rush")
+	outdir.i    <- file.path(sampledirs[i],"contigs_dd_repeatsmasked")
+	system(sprintf("sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=120:00:00 --partition=bi '%s' '%s' '%s'",shpath,inputSeq.i,outdir.i))
+}
+
+```
+
+
+- **New step: Cactus**: de novo reference-free alignment of SnakeCap data and NCBI snake genomes
+- [targetMatching.sh](PostSequencing/targetMatching.sh) uses blast+/2.9.0 to match contigs against a database of target sequences.
 
 - [04.sh](PostSequencing/04.sh) to run [04_Loci_alignment_23Sep2022_SnakeCap2.R](PostSequencing/04_Loci_alignment_23Sep2022_SnakeCap2.R), which uses the function ```REEs::lociAlignment04``` with arguments passed from ```04.sh```.
 
