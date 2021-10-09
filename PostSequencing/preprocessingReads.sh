@@ -65,7 +65,8 @@ cp $RAWREAD2 $NEWPATH2
 # Move into SAMPLEDIR
 cd $SAMPLEDIR
 
-# Use fastp to trim adaptors from copied raw reads. Currently fastp is the system path when using snakecap conda environment
+# Use fastp to trim adaptors and filter low quality reads from copied raw reads. Currently fastp is in the system path when using snakecap conda environment
+# A read is considered low quality if >40% of the bases have a phred quality score < Q15.
 fastp --in1 $NEWNAME'_READ1.fastq.gz' --in2 $NEWNAME'_READ2.fastq.gz' --out1 $NEWNAME'_READ1_fastp.fastq.gz' --out2 $NEWNAME'_READ2_fastp.fastq.gz' --length_required 30 --low_complexity_filter --complexity_threshold 30 --html adapter_trimming_fastp.html --json adapter_trimming_fastp.json --report_title $NEWNAME --thread 10
 echo $NEWNAME' trimming with fastp Complete!'
 
