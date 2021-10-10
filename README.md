@@ -1037,20 +1037,51 @@ For the second batch of 16 samples (I will also use these to re-process the firs
 - [dipspades.sh](PostSequencing/dipspades.sh) uses dipspades.py from Spades version 3.12.0 (only this version works!)
 - [repeatMasker.sh](PostSequencing/repeatMasker.sh) masks low complexity and repeat sequences with Ns 
 
-Submitting a job to run RepeatMasker for each sample:
+Submitting jobs to run RepeatMasker jobs:
 ```
-SHPATH="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker.sh"
-#SHPATH="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker_rush.sh"
-PROCDIR="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/"
+# SHPATH="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker.sh"
+# #SHPATH="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker_rush.sh"
+# PROCDIR="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/"
+# SAMPLEDIRS=$(echo $(ls $PROCDIR) | awk '{gsub("Thamnophis-sirtalis_GCF_001077635","")}1')
+# for i in {1..35}; do
+# 	SAMPLENAMEi=$(echo $SAMPLEDIRS | awk -v i="$i" '{print $i}')
+# 	SAMPLEDIRi=$PROCDIR/$SAMPLENAMEi
+# 	SEQi=$(find $SAMPLEDIRi -maxdepth 1 -name *_consensus-contigs-dipspades.fa)
+# 	#OUTDIRi=$PROCDIR/$SAMPLENAMEi/contigs_dd_repeatsmasked_rush
+# 	OUTDIRi=$PROCDIR/$SAMPLENAMEi/contigs_dd_repeatsmasked
+# 	sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=120:00:00 --partition=bi $SHPATH $SEQi $OUTDIRi
+# done
+
+### Use "seqkit split" to split sequences across multiple files, so that each file has no more than 5000 sequences.
+module load anaconda
+conda activate py36
+cd $HOME
+PROCDIR="/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/"
 SAMPLEDIRS=$(echo $(ls $PROCDIR) | awk '{gsub("Thamnophis-sirtalis_GCF_001077635","")}1')
 for i in {1..35}; do
 	SAMPLENAMEi=$(echo $SAMPLEDIRS | awk -v i="$i" '{print $i}')
 	SAMPLEDIRi=$PROCDIR/$SAMPLENAMEi
 	SEQi=$(find $SAMPLEDIRi -maxdepth 1 -name *_consensus-contigs-dipspades.fa)
-	#OUTDIRi=$PROCDIR/$SAMPLENAMEi/contigs_dd_repeatsmasked_rush
-	OUTDIRi=$PROCDIR/$SAMPLENAMEi/contigs_dd_repeatsmasked
-	sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=120:00:00 --partition=bi $SHPATH $SEQi $OUTDIRi
+	[ ! -d $SEQi'.split' ] && seqkit split $SEQi -s 5000
 done
+
+### Apply RepeatMasker to each set of sequences
+conda deactivate
+SHPATH="/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker.sh"
+SEQS=$(find $PROCDIR -name "*_consensus-contigs-dipspades.part_*.fa" | sort)
+OUTDIR="/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/contigs_repeatsmasked"
+[ ! -d $OUTDIR ] && mkdir $OUTDIR
+declare -i NUMSEQS=$(echo $SEQS | wc -w)
+for i in $(seq 1 $NUMSEQS); do
+	SEQi=$(echo $SEQS | awk -v i="$i" '{print $i}')
+	sbatch --nodes=1 --ntasks-per-node=1 --mem=200Gb --time=6:00:00 --partition=sixhour $SHPATH $SEQi $OUTDIR
+	#echo $SEQi
+done
+
+### Merge sets of repeat masked sequences by sample name
+
+# cat sample1.file1 sample1.file2 > sample1.masked.fa
+
 ```
 
 
