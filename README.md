@@ -1078,10 +1078,13 @@ for i in $(seq 1 $NUMSEQS); do
 	#echo $SEQi
 done
 
-### Merge sets of repeat masked sequences by sample name
-
-# cat sample1.file1 sample1.file2 > sample1.masked.fa
-
+### Once all RepeatMasker jobs are complete, merge sets of repeat masked sequences by sample name
+for i in $(seq 1 $NUMSAMPLES); do
+	SAMPLENAMEi=$(echo $SAMPLEDIRS | awk -v i="$i" '{print $i}')
+	SAMPLESEQS=$(find $OUTDIR -name $SAMPLENAMEi*fa.masked | sort)
+	OUTSEQi=$PROCDIR/$SAMPLENAMEi/$SAMPLENAMEi'_consensus-contigs-dipspades_masked.fa'
+	cat $SAMPLESEQS > $OUTSEQi
+done
 ```
 
 
