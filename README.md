@@ -1052,39 +1052,44 @@ Submitting jobs to run RepeatMasker jobs:
 # 	sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=120:00:00 --partition=bi $SHPATH $SEQi $OUTDIRi
 # done
 
-### Use "seqkit split" to split sequences across multiple files, so that each file has no more than 5000 sequences.
+### split sequences across multiple files
 module load anaconda
 conda activate py36
 cd $HOME
-PROCDIR="/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/"
+PROCDIR="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/"
 SAMPLEDIRS=$(echo $(ls $PROCDIR) | awk '{gsub("Thamnophis-sirtalis_GCF_001077635","")}1')
-for i in {1..35}; do
+declare -i NUMSAMPLES=$(echo $SAMPLEDIRS | wc -w)
+WORKDIR="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/contigs_repeatsmasked2"
+[ ! -d $WORKDIR ] && mkdir $WORKDIR
+for i in $(seq 2 $NUMSAMPLES); do
 	SAMPLENAMEi=$(echo $SAMPLEDIRS | awk -v i="$i" '{print $i}')
 	SAMPLEDIRi=$PROCDIR/$SAMPLENAMEi
 	SEQi=$(find $SAMPLEDIRi -maxdepth 1 -name *_consensus-contigs-dipspades.fa)
-	[ ! -d $SEQi'.split' ] && seqkit split $SEQi -s 5000
+	cp $SEQi $WORKDIR
+	TEMPSEQ=$WORKDIR/$(basename $SEQi)
+	[ ! -d $TEMPSEQ'.split' ] && seqkit split $TEMPSEQ -s 500
 done
 
 ### Apply RepeatMasker to each set of sequences
 conda deactivate
-SHPATH="/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker.sh"
-SEQS=$(find $PROCDIR -name "*_consensus-contigs-dipspades.part_*.fa" | sort)
-OUTDIR="/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/contigs_repeatsmasked"
+SHPATH="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker.sh"
+SEQS=$(find $WORKDIR -name "*_consensus-contigs-dipspades.part_*.fa" | sort)
+OUTDIR="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/contigs_repeatsmasked2"
 [ ! -d $OUTDIR ] && mkdir $OUTDIR
 declare -i NUMSEQS=$(echo $SEQS | wc -w)
 for i in $(seq 1 $NUMSEQS); do
 	SEQi=$(echo $SEQS | awk -v i="$i" '{print $i}')
-	sbatch --nodes=1 --ntasks-per-node=1 --mem=200Gb --time=6:00:00 --partition=sixhour $SHPATH $SEQi $OUTDIR
-	#echo $SEQi
+	sbatch --nodes=1 --ntasks-per-node=1 --mem=50Gb --time=2:00:00 --partition=sixhour $SHPATH $SEQi $OUTDIR
 done
 
-### Once all RepeatMasker jobs are complete, merge sets of repeat masked sequences by sample name
+### Merge sets of repeat masked sequences by sample name
 for i in $(seq 1 $NUMSAMPLES); do
 	SAMPLENAMEi=$(echo $SAMPLEDIRS | awk -v i="$i" '{print $i}')
 	SAMPLESEQS=$(find $OUTDIR -name $SAMPLENAMEi*fa.masked | sort)
 	OUTSEQi=$PROCDIR/$SAMPLENAMEi/$SAMPLENAMEi'_consensus-contigs-dipspades_masked.fa'
 	cat $SAMPLESEQS > $OUTSEQi
 done
+
 ```
 
 
