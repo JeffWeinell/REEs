@@ -1039,20 +1039,7 @@ For the second batch of 16 samples (I will also use these to re-process the firs
 
 Submitting jobs to run RepeatMasker jobs:
 ```
-# SHPATH="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker.sh"
-# #SHPATH="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker_rush.sh"
-# PROCDIR="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/"
-# SAMPLEDIRS=$(echo $(ls $PROCDIR) | awk '{gsub("Thamnophis-sirtalis_GCF_001077635","")}1')
-# for i in {1..35}; do
-# 	SAMPLENAMEi=$(echo $SAMPLEDIRS | awk -v i="$i" '{print $i}')
-# 	SAMPLEDIRi=$PROCDIR/$SAMPLENAMEi
-# 	SEQi=$(find $SAMPLEDIRi -maxdepth 1 -name *_consensus-contigs-dipspades.fa)
-# 	#OUTDIRi=$PROCDIR/$SAMPLENAMEi/contigs_dd_repeatsmasked_rush
-# 	OUTDIRi=$PROCDIR/$SAMPLENAMEi/contigs_dd_repeatsmasked
-# 	sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=120:00:00 --partition=bi $SHPATH $SEQi $OUTDIRi
-# done
-
-### split sequences across multiple files
+### split sequences across multiple files so that files have at most 500 sequences
 module load anaconda
 conda activate py36
 cd $HOME
@@ -1085,7 +1072,7 @@ done
 ### Merge sets of repeat masked sequences by sample name
 for i in $(seq 1 $NUMSAMPLES); do
 	SAMPLENAMEi=$(echo $SAMPLEDIRS | awk -v i="$i" '{print $i}')
-	SAMPLESEQS=$(find $OUTDIR -name $SAMPLENAMEi*fa.masked | sort)
+	SAMPLESEQS=$(find $WORKDIR -maxdepth 1 -name $SAMPLENAMEi*fa.masked | sort)
 	OUTSEQi=$PROCDIR/$SAMPLENAMEi/$SAMPLENAMEi'_consensus-contigs-dipspades_masked.fa'
 	cat $SAMPLESEQS > $OUTSEQi
 done
