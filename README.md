@@ -1046,7 +1046,7 @@ cd $HOME
 PROCDIR="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/"
 SAMPLEDIRS=$(echo $(ls $PROCDIR) | awk '{gsub("Thamnophis-sirtalis_GCF_001077635","")}1')
 declare -i NUMSAMPLES=$(echo $SAMPLEDIRS | wc -w)
-WORKDIR="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/contigs_repeatsmasked2"
+WORKDIR="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/contigs_repeatsmasked"
 [ ! -d $WORKDIR ] && mkdir $WORKDIR
 for i in $(seq 2 $NUMSAMPLES); do
 	SAMPLENAMEi=$(echo $SAMPLEDIRS | awk -v i="$i" '{print $i}')
@@ -1059,23 +1059,43 @@ done
 
 ### Apply RepeatMasker to each set of sequences
 conda deactivate
-SHPATH="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker.sh"
+SHPATH="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/RepeatMasker_slow.sh"
 SEQS=$(find $WORKDIR -name "*_consensus-contigs-dipspades.part_*.fa" | sort)
-OUTDIR="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/contigs_repeatsmasked2"
+OUTDIR="~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/contigs_repeatsmasked"
 [ ! -d $OUTDIR ] && mkdir $OUTDIR
 declare -i NUMSEQS=$(echo $SEQS | wc -w)
 for i in $(seq 1 $NUMSEQS); do
 	SEQi=$(echo $SEQS | awk -v i="$i" '{print $i}')
-	sbatch --nodes=1 --ntasks-per-node=1 --mem=50Gb --time=2:00:00 --partition=sixhour $SHPATH $SEQi $OUTDIR
+	sbatch --nodes=1 --ntasks-per-node=1 --mem=50Gb --time=6:00:00 --partition=sixhour $SHPATH $SEQi $OUTDIR
 done
 
 ### Merge sets of repeat masked sequences by sample name
 for i in $(seq 1 $NUMSAMPLES); do
 	SAMPLENAMEi=$(echo $SAMPLEDIRS | awk -v i="$i" '{print $i}')
 	SAMPLESEQS=$(find $WORKDIR -maxdepth 1 -name $SAMPLENAMEi*fa.masked | sort)
-	OUTSEQi=$PROCDIR/$SAMPLENAMEi/$SAMPLENAMEi'_consensus-contigs-dipspades_masked.fa'
+	OUTSEQi=$PROCDIR/$SAMPLENAMEi/$SAMPLENAMEi'_consensus-contigs-dipspades_masked-slow.fa'
 	cat $SAMPLESEQS > $OUTSEQi
 done
+
+### Trim masked ends and remove sequences with too few unmasked bases
+module load R
+R
+.libPaths("~/work/R-packages")
+library(REEs)
+# read in assembled contigs with repeats masked
+
+dna.masked <- Biostrings::readDNAStringSet("~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/Achalinus-spinalis_KU312258/Achalinus-spinalis_KU312258_consensus-contigs-dipspades_masked-slow.fa")
+# number of masked bases per sequence
+nMasked    <- Biostrings::letterFrequency(dna.masked,letters=c("N"))
+# number of nonmasked bases per sequence
+nNotmasked <- c(width(dna.masked)-nMasked)
+# filter sequences with fewer than 1000 nonmasked bases
+dna.valid  <- dna.masked[nNotmasked >=1000]
+# remove polyNs at ends
+dna.valid2 <- Biostrings::DNAStringSet(gsub("^N+","",dna.valid))
+dna.valid3 <- Biostrings::DNAStringSet(gsub("N+$","",dna.valid2))
+# write data
+Biostrings::writeXStringSet(dna.valid3,"~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/Achalinus-spinalis_KU312258/Achalinus-spinalis_KU312258_consensus-contigs-dipspades_masked-slow_min1000bpValid.fa")
 
 ```
 
