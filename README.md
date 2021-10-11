@@ -1082,20 +1082,29 @@ module load R
 R
 .libPaths("~/work/R-packages")
 library(REEs)
-# read in assembled contigs with repeats masked
-
-dna.masked <- Biostrings::readDNAStringSet("~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/Achalinus-spinalis_KU312258/Achalinus-spinalis_KU312258_consensus-contigs-dipspades_masked-slow.fa")
-# number of masked bases per sequence
-nMasked    <- Biostrings::letterFrequency(dna.masked,letters=c("N"))
-# number of nonmasked bases per sequence
-nNotmasked <- c(width(dna.masked)-nMasked)
-# filter sequences with fewer than 1000 nonmasked bases
-dna.valid  <- dna.masked[nNotmasked >=1000]
-# remove polyNs at ends
-dna.valid2 <- Biostrings::DNAStringSet(gsub("^N+","",dna.valid))
-dna.valid3 <- Biostrings::DNAStringSet(gsub("N+$","",dna.valid2))
-# write data
-Biostrings::writeXStringSet(dna.valid3,"~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/Achalinus-spinalis_KU312258/Achalinus-spinalis_KU312258_consensus-contigs-dipspades_masked-slow_min1000bpValid.fa")
+procdir        <- "~/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/"
+sampledirs     <- list.dirs(procdir,recursive=F)
+sampledirs     <- sampledirs[-grep("Thamnophis-sirtalis",sampledirs)]
+samples.masked <- list.files(procdir,pattern="_consensus-contigs-dipspades_masked-slow.fa",recursive=T,full.name=T)
+for(i in 1:length(samples.masked)){
+	# read in assembled contigs with repeats masked
+	dna.masked   <- Biostrings::readDNAStringSet(samples.masked[i])
+	freqs.mat    <- Biostrings::letterFrequency(dna.masked,letters=names(Biostrings::IUPAC_CODE_MAP))
+	# number of masked bases per sequence
+	nMasked      <- freqs.mat[,"N"]
+	# number of nonmasked bases per sequence
+	nNotmasked   <- c(width(dna.masked)-nMasked)
+	relfreqs.mat <- freqs.mat[,c("A","C","G","T")]/nNotmasked
+	# For each locus, whether or not any nucleotides account for less than 5% of ACGT nucleotides.
+	is.skewed <- sapply(X=1:nrow(relfreqs.mat),function(x){any(relfreqs.mat[x,] < 0.05) | any(is.na(relfreqs.mat[x,]))})
+	# keep sequences with at least 100 nonmasked bases and with is.skewed FALSE
+	dna.valid  <- dna.masked[nNotmasked >=100 & !is.skewed]
+	# remove polyNs at ends
+	dna.valid.trimmed <- Biostrings::DNAStringSet(gsub("N+$","",gsub("^N+","",dna.valid)))
+	# write data
+	outpath.i <- file.path(sampledirs[i],paste0(basename(sampledirs[i]),"_consensus-contigs-dipspades_masked-slow_min100bpValid.fa"))
+	Biostrings::writeXStringSet(dna.valid.trimmed,outpath.i)
+}
 
 ```
 
