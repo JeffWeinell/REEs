@@ -1115,7 +1115,16 @@ for(i in 1:length(samples.masked)){
 cactus.sh </path/to/input/seqFile> </path/to/output.HAL> [/path/to/jobstore] [/path/to/working/directory]
 ```
 
-- **Step 3 option 2:** [03.sh](PostSequencing/03.sh), which uses blast+/2.9.0 to match contigs against a database of target sequences. Then use [targetMatchingAssessment.sh](PostSequencing/targetMatchingAssessment.sh) to processes the output. These scripts are in progress.
+- **Step 3 option 2:** [03.sh](PostSequencing/03.sh), which uses blast+/2.9.0 to match contigs against a database of target sequences. Then use [targetMatchingAssessment.sh](PostSequencing/targetMatchingAssessment.sh), which calls the Rscript [targetMatchingAssessment.R](PostSequencing/targetMatchingAssessment.R), to processes the output.
+
+```
+### targetMatchingAssessment.sh
+# general usage: 
+targetMatchingAssessment.sh <seqs.fa> <HitTable> ["PatternTargetNames"]
+
+
+```
+
 
 <!-- [targetMatching.sh](PostSequencing/targetMatching.sh) uses blast+/2.9.0 to match contigs against a database of target sequences. -->
 
