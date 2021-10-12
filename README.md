@@ -1108,11 +1108,13 @@ for(i in 1:length(samples.masked)){
 
 ```
 
+- **Step 3 option 1:** [cactus.sh](PostSequencing/cactus.sh): de novo reference-free alignment of SnakeCap data and NCBI snake genomes.
 
-- **New step: Cactus**: de novo reference-free alignment of SnakeCap data and NCBI snake genomes
-- [targetMatching.sh](PostSequencing/targetMatching.sh) uses blast+/2.9.0 to match contigs against a database of target sequences.
+- **Step 3 option 2:** [03.sh](PostSequencing/03.sh), which uses blast+/2.9.0 to match contigs against a database of target sequences. Then use [targetMatchingAssessment.sh](PostSequencing/targetMatchingAssessment.sh) to processes the output. These scripts are in progress.
 
-- [04.sh](PostSequencing/04.sh) to run [04_Loci_alignment_23Sep2022_SnakeCap2.R](PostSequencing/04_Loci_alignment_23Sep2022_SnakeCap2.R), which uses the function ```REEs::lociAlignment04``` with arguments passed from ```04.sh```.
+<!-- [targetMatching.sh](PostSequencing/targetMatching.sh) uses blast+/2.9.0 to match contigs against a database of target sequences. -->
+
+- [04.sh](PostSequencing/04.sh) to run [04_Loci_alignment_23Sep2021_SnakeCap2.R](PostSequencing/04_Loci_alignment_23Sep2021_SnakeCap2.R), which uses the function ```REEs::lociAlignment04``` with arguments passed from ```04.sh```.
 
 Usage for the bash script '04.sh' is as follows:
 ```
