@@ -1019,8 +1019,8 @@ demuxbyname.sh in="HF10_N2_USPD16097067_HY25JBBXX_L4_1.fq" in2="HF10_N2_USPD1609
 <a name="ProcessingReads"></a>
 #### Processing sequence reads
 
-For the first batch of 16 samples:
-To processes sequence reads (assemble contigs for each sample) I followed the FrogCap pipeline (Hutter et al., 2019), which involved running the following R scripts:
+**Old method (2019):**
+These steps were used to process the first set of sequences in 2019. I followed the FrogCap pipeline (Hutter et al., 2019), which involved running the following R scripts:
 - [01_Pre_Process_Reads_Apr10.R](PostSequencing/01_Pre_Process_Reads_Apr10.R) uses fastp and bbmap to trim adapters and remove contaminant reads.
 - [02_Assemble_Spades_Apr18.R](PostSequencing/02_Assemble_Spades_Apr18.R) uses dipspades.py from Spades version 3.12.0 (must be this version!)
 - [03_Target-loci_matching_20Feb2020.R](PostSequencing/03_Target-loci_matching_20Feb2020.R) (= **03_Probe-Matching.R** of Hutter et al., 2019) Summary of results:[Sample-Assessment.tsv](Sample-Assessment.tsv)
@@ -1032,10 +1032,12 @@ To processes sequence reads (assemble contigs for each sample) I followed the Fr
 - [07-2_IQTREE_1May2019.R](PostSequencing/07-2_IQTREE_1May2019.R)
 - **Sort_Alignments_by_LocusType.R**
 
-For the second batch of 16 samples (I will also use these to re-process the first batch), I used the following bash scripts for pre-processing raw reads, assembling loci, and target matching loci:
-- [preprocessingReads.sh](PostSequencing/preprocessingReads.sh) uses fastp and bbmap to trim adapters, remove contaminant reads, remove duplicates, and merge mergeable read pairs.
-- [dipspades.sh](PostSequencing/dipspades.sh) uses dipspades.py from Spades version 3.12.0 (only this version works!)
-- [repeatMasker.sh](PostSequencing/repeatMasker.sh) masks low complexity and repeat sequences with Ns 
+**New methods (2021)**
+I used this new pipeline to re-process the 2019 samples and to process the 2021 samples.
+
+- **Step 1:** [preprocessingReads.sh](PostSequencing/preprocessingReads.sh) uses fastp and bbmap to trim adapters, remove contaminant reads, remove duplicates, and merge mergeable read pairs.
+- **Step 2a:** [dipspades.sh](PostSequencing/dipspades.sh) uses dipspades.py from Spades version 3.12.0 (only this version works!)
+- **Step 2b:** [repeatMasker.sh](PostSequencing/repeatMasker.sh) masks low complexity and repeat sequences with Ns 
 
 Submitting jobs to run RepeatMasker jobs:
 ```
@@ -1128,10 +1130,13 @@ Then...use the [Comparative Genomics Toolkit](https://github.com/ComparativeGeno
  - I used the script [targetMatchingAssessment.sh](PostSequencing/targetMatchingAssessment.sh), which calls the Rscript [targetMatchingAssessment.R](PostSequencing/targetMatchingAssessment.R), to processes the hit table. This script constructs an edge matrix from the query name and subject name columns of the hit table describing a graph of loci connected by hits. Graph subcomponents are identified unconnected groups of loci, and each group corresponds to a set of putatively homologous sequences. Each group is categorized as Single-target (includes one target), Multi-target (includes multiple targets), or Bycatch (includes no targets). For each Single and Multi-target groups the unaligned sequences are written to a fasta file. Bycatch groups that included more than 20 sequences/group were saved to a group-specific fasta file, whereas bycatch groups with less than 20 sequences were all saved to a single (multi-group) fasta file, with group assignment appended to each sequence name; this strategy was/is used to avoid creating a huge number of files.
 
 ```
-### targetMatchingAssessment.sh
+### Run '03.sh'
+# general usage
+03.sh </path/to/blastDB/directory> </path/to/input/seqFile> </path/output/hitTable> [eval {10}] [max hits per query-subject pair {1}] [wordsize {11}] [task {dc-megablast}]
+
+### Run 'targetMatchingAssessment.sh'
 # general usage: 
 targetMatchingAssessment.sh <seqs.fa> <HitTable> ["PatternTargetNames"]
-
 
 ```
 
