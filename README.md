@@ -1108,7 +1108,12 @@ for(i in 1:length(samples.masked)){
 
 ```
 
-- **Step 3 option 1:** [cactus.sh](PostSequencing/cactus.sh): de novo reference-free alignment of SnakeCap data and NCBI snake genomes.
+- **Step 3 option 1:** [cactus.sh](PostSequencing/cactus.sh): de novo reference-free alignment of SnakeCap data and NCBI snake genomes. The input file [seqFile](PostSequencing/seqFile_SnakeSamplesAndGenomes) has a newick format guide tree on the first line. Each of the other lines contains the name of a sample, followed by a space, and then the path to the sample's sequences that are to be aligned with sequences of the other individuals.  I used a partially resolved guide tree.
+
+```
+# usage for cactus.sh
+cactus.sh </path/to/input/seqFile> </path/to/output.HAL> [/path/to/jobstore] [/path/to/working/directory]
+```
 
 - **Step 3 option 2:** [03.sh](PostSequencing/03.sh), which uses blast+/2.9.0 to match contigs against a database of target sequences. Then use [targetMatchingAssessment.sh](PostSequencing/targetMatchingAssessment.sh) to processes the output. These scripts are in progress.
 
