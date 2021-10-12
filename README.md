@@ -1108,14 +1108,24 @@ for(i in 1:length(samples.masked)){
 
 ```
 
-- **Step 3 option 1:** [cactus.sh](PostSequencing/cactus.sh): de novo reference-free alignment of SnakeCap data and NCBI snake genomes. The input file [seqFile](PostSequencing/seqFile_SnakeSamplesAndGenomes.txt) has a newick format guide tree on the first line. Each of the other lines contains the name of a sample, followed by a space, and then the path to the sample's sequences that are to be aligned with sequences of the other individuals.  I used a partially resolved guide tree.
+- **Steps 3/4 (Option 1):** [cactus.sh](PostSequencing/cactus.sh): de novo reference-free alignment of SnakeCap data and NCBI snake genomes. The input file [seqFile](PostSequencing/seqFile_SnakeSamplesAndGenomes.txt) has a newick format guide tree on the first line. Each of the other lines contains the name of a sample, followed by a space, and then the path to the sample's sequences that are to be aligned with sequences of the other individuals.  I used a partially resolved guide tree.
 
 ```
-# usage for cactus.sh
+# Run cactus.sh
 cactus.sh </path/to/input/seqFile> </path/to/output.HAL> [/path/to/jobstore] [/path/to/working/directory]
+
+# Use the script 'hal2maf' (included with Cactus) to convert from HAL to MAF format.
+hal2maf <'input.hal'> <'output.maf'>
+
+# Use maf2fasta.sh to extract each MAF alignment black to a separate alignment file in fasta format.
+maf2fasta.sh <'input.maf'> <'/path/to/output/directory'>
 ```
 
-- **Step 3 option 2:** [03.sh](PostSequencing/03.sh), which uses blast+/2.9.0 to match contigs against a database of target sequences. Then use [targetMatchingAssessment.sh](PostSequencing/targetMatchingAssessment.sh), which calls the Rscript [targetMatchingAssessment.R](PostSequencing/targetMatchingAssessment.R), to processes the output.
+Then...use the [Comparative Genomics Toolkit](https://github.com/ComparativeGenomicsToolkit/Comparative-Annotation-Toolkit) to annotate assemblies?
+
+
+- **Steps 3/4 (Option 2; seems to work better):** Run [03.sh](PostSequencing/03.sh), which uses blast+/2.9.0 to query all sequences (= sequence capture contigs, NCBI genomes, and reference target sequences) against a blast database of the same sequences; i.e., query sequences = subject sequences. If the Blast database does not already exist, then it is created from the sequences referenced in the [seqFile](PostSequencing/seqFile_SnakeSamplesAndGenomes_blast.txt). The format of the seqFile is the same as that used for Cactus, except that a newick guide tree should not be included. The output of ```03.sh``` is a blast table (format 6). 
+ - I used the script [targetMatchingAssessment.sh](PostSequencing/targetMatchingAssessment.sh), which calls the Rscript [targetMatchingAssessment.R](PostSequencing/targetMatchingAssessment.R), to processes the hit table. This script constructs an edge matrix from the query name and subject name columns of the hit table describing a graph of loci connected by hits. Graph subcomponents are identified unconnected groups of loci, and each group corresponds to a set of putatively homologous sequences. Each group is categorized as Single-target (includes one target), Multi-target (includes multiple targets), or Bycatch (includes no targets). For each Single and Multi-target groups the unaligned sequences are written to a fasta file. Bycatch groups that included more than 20 sequences/group were saved to a group-specific fasta file, whereas bycatch groups with less than 20 sequences were all saved to a single (multi-group) fasta file, with group assignment appended to each sequence name; this strategy was/is used to avoid creating a huge number of files.
 
 ```
 ### targetMatchingAssessment.sh
@@ -1143,20 +1153,6 @@ for i in {1..3200}; do
 done
 ```
 
-- An alternative Step 4 uses the non-reference genome alignment program Cactus () to align sequence capture contigs for 35 species plus 30 snake genomes on NCBI. I used the bash script [cactus.sh]() to submit the Cactus job.
-
-```
-# Running Cactus
-module use ~/sw/modules
-module load cactus
-
-cactus jobStore './seqFile_Snakes.txt' './Snakes.HAL' --root sr --binariesMode local
-
-# Use the script 'hal2maf' (included with Cactus) to convert from HAL to MAF format.
-hal2maf ./Snakes.HAL' --refGenome <reference> './Snakes.HAL'
-```
-
-Then, will use the [Comparative Genomics Toolkit](https://github.com/ComparativeGenomicsToolkit/Comparative-Annotation-Toolkit) to annotate assemblies.
 
 <a name="DNA.Alignment"></a>
 #### DNA alignment
