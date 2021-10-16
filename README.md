@@ -1158,6 +1158,25 @@ for i in {1..3200}; do
 done
 ```
 
+**Mitogenomes**
+
+I used the bash script 'mitogenomes.sh', which calls the R script "mitogenomes_script.R", and uses the function REEs::get.mitogenome() to generate a fasta file with the mitogenome contigs of a sample.
+
+```
+# Path to 'mitogenomes.sh' bash script
+SHPATH="/panfs/pfs.local/home/j926w878/work/mitogenomes.sh"
+# Path to Processed_Samples directory
+PROCDIR="/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/Processed_Samples/"
+# Name of the sample to process
+SAMPLE="Calamaria-gervaisii_KU327406"
+# Path to merged and unmerged reads files
+R1=$PROCDIR"/"$SAMPLE"/"$SAMPLE"_READ1_unmerged.fastq.gz"
+R2=$PROCDIR"/"$SAMPLE"/"$SAMPLE"_READ2_unmerged.fastq.gz"
+RM=$PROCDIR"/"$SAMPLE"/"$SAMPLE"_singletons.fastq.gz"
+# submit job to cluster
+sbatch --nodes=1 --ntasks-per-node=10 --mem=100Gb --time=6:00:00 --partition=sixhour $SHPATH $R1 $R2 $RM
+```
+
 
 <a name="DNA.Alignment"></a>
 #### DNA alignment
