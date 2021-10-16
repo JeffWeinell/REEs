@@ -184,7 +184,7 @@ plotGBmtc <- function(pathGB, type="file", additionalDF=NULL, zoomout=1.1, radii
 #' @export get.mitogenome
 get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referencePATH,geneFilePATH,out.dir,bbmapPATH="bbmap.sh'",cap3PATH="cap3",spadesPATH="spades.py",pblatPATH="pblat"){
 	reference <- basename(referencePATH)
-	gene.file <- basename(geneFilePATH)
+	#gene.file <- basename(geneFilePATH)
 	#raw.dir   <- dirname(read1)
 	dir.check.create(out.dir)
 	#dir.check.create(file.path(out.dir,"Species_mtGenomes"))
@@ -418,7 +418,8 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 	system("rm -r ref")
 	#### PBLAT search for genes in mitocontigs
 	contigs <- Biostrings::readDNAStringSet(sprintf("%s/%s_mitocontigs.fa",out.dir,sampleName))
-	system(sprintf("mpirun '%s' -threads=8 '%s' '%s' -tileSize=8 -minIdentity=60 -noHead -out=pslx '%s/mt_to_genes.pslx'" ,pblatPATH, sprintf("%s/%s_mitocontigs.fa",out.dir,sampleName), gene.file, out.dir))
+	system(sprintf("mpirun '%s' -threads=8 '%s' '%s' -tileSize=8 -minIdentity=60 -noHead -out=pslx '%s/mt_to_genes.pslx'" ,pblatPATH, sprintf("%s/%s_mitocontigs.fa",out.dir,sampleName), geneFilePATH, out.dir))
+
 	setwd(out.dir)
 	temp.count <- scan(file = "mt_to_genes.pslx", what = "character")
 	if (length(temp.count) == 0){
