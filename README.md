@@ -28,7 +28,8 @@ Load R and then run the block of code below. Uncomment and modify the .libPaths(
 # Define where packages should be installed.
 # If you want to install or load packages from somewhere other than the default R library path, set .libPaths() to the directory to use. This must be set each time you start R.
 # .libPaths("/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv3.6")
-.libPaths("/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv4.0")
+# .libPaths("/panfs/pfs.local/scratch/bi/j926w878/scratch_v1/Rv4.0")
+.libPaths("/panfs/pfs.local/work/bi/j926w878/R-packages")
 
 # Install BiocManager package
 install.packages(pkgs="BiocManager",repos = "http://cran.us.r-project.org")
