@@ -182,6 +182,7 @@ plotGBmtc <- function(pathGB, type="file", additionalDF=NULL, zoomout=1.1, radii
 #' @param pblatPATH Path to pblat executable. Default "pblat", in which case pblat must be on your system path.
 #' @return DNAStringSet; mitogenome is written to out.dir
 #' @export get.mitogenome
+
 get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referencePATH,geneFilePATH,out.dir,bbmapPATH="bbmap.sh'",cap3PATH="cap3",spadesPATH="spades.py",pblatPATH="pblat"){
 	reference <- basename(referencePATH)
 	#gene.file <- basename(geneFilePATH)
@@ -242,23 +243,21 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 				system(sprintf("'%s' -Xmx8g ref='current_seed.fasta' in='%s' vslow k=12 minid=%s outm=t_singleton.fq",bbmapPATH,referencePATH,reads.merged,min.id), ignore.stderr = T)
 			}
 			# concatenates 't_read1.fq' and 'o_read1.fq' and appends to 'read1.fq'
-			system("cat t_read1.fq o_read1.fq >> read1.fq")
+			system(sprintf("cat '%s/t_read1.fq' '%s/o_read1.fq' >> '%s/read1.fq'",out.dir,out.dir,out.dir))
 			# removes current 't_read1.fq'
-			system("rm t_read1.fq")
+			invisible(file.remove(file.path(out.dir,"t_read1.fq")))
 			# concatenates 't_read2.fq' and 'o_read2.fq' and appends to 'read2.fq'
 			if(!is.null(read2)){
 				system("cat t_read2.fq o_read2.fq >> read2.fq")
 				# removes current 't_read2.fq'
-				system("rm t_read2.fq")
+				invisible(file.remove(file.path(out.dir,"t_read2.fq")))
 			}
 			if(!is.null(reads.merged)){
 				# concatenates 't_singleton.fq' and 'o_singleton.fq' and appends to 'singleton.fq'
 				system("cat t_singleton.fq o_singleton.fq >> singleton.fq")
 				# removes current 't_singleton.fq'
-				system("rm t_singleton.fq")
+				invisible(file.remove(file.path(out.dir,"t_singleton.fq")))
 			}
-			# removes current 't_read1.fq' 't_read2.fq' and 't_singleton.fq'
-			# system("rm t_read1.fq t_read2.fq t_singleton.fq")
 		}
 		#####################
 		## Run SPADES on sample.
@@ -272,9 +271,10 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 			system(sprintf("'%s' --s '%s/read1.fq' -o spades -k %s --careful -t 8 -m 8",spadesPATH,out.dir,out.dir,out.dir,k.val), ignore.stdout = T)
 		}
 		#Checks to see if one kmer failed or not
-		while (file.exists("spades/contigs.fasta") == F){
+		while (file.exists(file.path(out.dir,"spades/contigs.fasta")) == F){
 			#subtract Ks until it works
-			system("rm -r spades")
+			#system("rm -r spades")
+			invisible(unlink(file.path(out.dir,"spades"),recursive=T))
 			k <- k[-length(k)]
 			if(length(k) == 0) { break }
 			k.val  <- paste(k, collapse = ",")
@@ -292,25 +292,32 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 		# If the k-mers are all run out, therefore nothing can be assembled
 		if (length(k) == 0) { 
 			paste("k-mer values all used up, cannot assemble!")
-			system("rm read1.fq t_read1.fq o_read1.fq")
+			# system("rm read1.fq t_read1.fq o_read1.fq")
+			invisible(file.remove(file.path(out.dir,"read1.fq"),file.path(out.dir,"t_read1.fq"),file.path(out.dir,"o_read1.fq")))
+			
 			if(!is.null(read2)){
-				system("rm read2.fq t_read2.fq o_read2.fq")
+				# system("rm read2.fq t_read2.fq o_read2.fq")
+				invisible(file.remove(file.path(out.dir,"read2.fq"),file.path(out.dir,"t_read2.fq"),file.path(out.dir,"o_read2.fq")))
 			}
 			if(!is.null(reads.merged)){
-				system("rm singleton.fq t_singleton.fq o_singleton.fq")
+				#system("rm singleton.fq t_singleton.fq o_singleton.fq")
+				invisible(file.remove(file.path(out.dir,"singleton.fq"),file.path(out.dir,"t_singleton.fq"),file.path(out.dir,"o_singleton.fq")))
 			}
-			system("rm -r spades")
-			seeding = F 
+			#system("rm -r spades")
+			invisible(unlink(file.path(out.dir,"spades"),recursive=T))
+			seeding = F
 		}# end if
 
 		# renames read1.fq and read2.fq to read1.fq and read2.fq
 		if (counter == 1){
-			system("mv read1.fq o_read1.fq")
+			system(sprintf("mv '%s/read1.fq' '%s/o_read1.fq'",out.dir,out.dir))
 			if(!is.null(read2)){
-				system("mv read2.fq o_read2.fq")
+				#system("mv read2.fq o_read2.fq")
+				system(sprintf("mv '%s/read2.fq' '%s/o_read2.fq'",out.dir,out.dir))
 			}
 			if(!is.null(reads.merged)){
-				system("mv singleton.fq o_singleton.fq")
+				#system("mv singleton.fq o_singleton.fq")
+				system(sprintf("mv '%s/singleton.fq' '%s/o_singleton.fq'",out.dir,out.dir))
 			}
 		}
 		# copies contigs.fasta to current_seed.fasta
@@ -324,7 +331,8 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 				system("rm singleton.fq")
 			}
 		}
-		system("rm -r spades")
+		# system("rm -r spades")
+		invisible(unlink(file.path(out.dir,"spades"),recursive=T))
 		reference <- "current_seed.fasta"
 
 		#Check size
@@ -408,12 +416,12 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 			print("less than 1000bp, not enough data to extract")
 			next 
 		}
-		#Writes the full mitochondrial genome file
-		system("rm current_seed.fasta")
+		#Writes the mitochondrial genome file
 		names(contigs)<- paste("sequence_", seq(1:length(contigs)), sep = "")
 		#write.loci    <- as.list(as.character(contigs))
 		#write.fasta(sequences = write.loci, names = names(write.loci),paste0("Species_mtGenomes/", sampleName, ".fa"), nbchar = 1000000, as.string = T)
 		Biostrings::writeXStringSet(contigs,filepath=sprintf("%s/%s_mitocontigs.fa",out.dir,sampleName))
+		system("rm current_seed.fasta")
 	}
 	system("rm -r ref")
 	#### PBLAT search for genes in mitocontigs
@@ -467,333 +475,5 @@ get.mitogenome <- function(sampleName,read1,read2=NULL,reads.merged=NULL,referen
 		system(sprintf("rm '%s/mt_to_genes.pslx'",out.dir))
 	}
 }
-
-## Gather all of the mitogenomes and put them in a directory called 'Species_mtGenomes'
-## pblatPath <- "/panfs/pfs.local/work/bi/bin/icebert-pblat-652d3b3/pblat"
-
-## ###### Make steps 2–4 separate functions
-## ###########################################################################
-## ### Step 2: Assess completeness of the mitochondrial genome and annotate ##
-## ###########################################################################
-## samples <- sampleName
-## #PSLX headers
-## headers<-c("matches", "misMatches", "repMatches", "nCount", "qNumInsert", "qBaseInsert", "tNumInsert", "tBaseInsert", "strand", "qName", "qSize", "qStart", "qEnd", "tName", "tSize", "tStart", "tEnd", "blockCount", "blockSize", "qStarts", "tStarts", "qSeq", "tSeq")
-## 
-## #Creates new directory and enters this working directory
-## #setwd(out.dir)
-## #dir.create("Species_Loci")
-## #spp.samples<-list.files("Species_mtGenomes/.")
-## #spp.samples<-gsub(".fa$", "", spp.samples)
-## 
-## 	#Load in the data
-## 
-## 	#Matches samples to loci
-## 	#system(paste("mpirun pblat -threads=", threads, " Species_mtGenomes/", spp.samples[i], ".fa ",gene.file, " -tileSize=8 -minIdentity=60"," -noHead -out=pslx mt_to_genes.pslx", sep = ""), ignore.stdout = T)
-## 	sprintf("mpirun '%s' -threads=8 '%s' '%s' -tileSize=8 -minIdentity=60 -noHead -out=pslx mt_to_genes.pslx" ,pblatPath, samplePath, genesPath)
-## 	#Need to load in transcriptome for each species and take the matching transcripts to the database
-## 	temp.count<-scan(file = "mt_to_genes.pslx", what = "character")
-## 	if (length(temp.count) == 0){
-## 		print("No matching mitochondrial genes were found.")
-## 		next
-## 	}
-## 	match.data<-fread("mt_to_genes.pslx", sep = "\t", header = F, stringsAsFactors = FALSE)
-## 	setnames(match.data, headers)
-## 
-## 	loci.names<-unique(match.data$qName)
-## 	sep.loci<-DNAStringSet()
-## 	for (j in 1:length(loci.names)){
-## 		#pulls out data that matches to multiple contigs
-## 		sub.data <- match.data[match.data$qName %in% loci.names[j],]
-## 		sub.data <- sub.data[sub.data$matches == max(sub.data$matches),][1]
-## 		if (sub.data$strand == "+"){
-## 			#Cuts the node apart and saves separately
-## 			sub.data$tStart<-sub.data$tStart-sub.data$qStart+1
-## 			#Fixes ends
-## 			sub.data$tEnd<-sub.data$tEnd+(sub.data$qSize-sub.data$qEnd)
-## 		} else {
-## 			sub.data$tStart<-sub.data$tStart-(sub.data$qSize-sub.data$qEnd)
-## 			#Fixes ends
-## 			sub.data$tEnd<-sub.data$tEnd+sub.data$qStart+1
-## 		}
-## 
-## 		#If it ends up with a negative start
-## 		if (sub.data$tStart <= 0){
-## 			sub.data$tStart <- 1
-## 		}
-## 		#Fixes if the contig is smaller than the full target locus
-## 		if (sub.data$tEnd >= sub.data$tSize){
-## 			sub.data$tEnd <- sub.data$tSize
-## 		}
-## 		#Gets start and end
-## 		start.pos <- min(sub.data$tStart, sub.data$tEnd)
-## 		end.pos   <- max(sub.data$tStart, sub.data$tEnd)
-## 		  
-## 		temp.contig    <- contigs[names(contigs) == sub.data$tName]
-## 		new.seq        <- subseq(x = temp.contig, start = start.pos, end = end.pos)
-## 		names(new.seq) <- sub.data$qName
-## 		sep.loci       <- append(sep.loci, new.seq)
-## 	}#end j loop
-## 
-## 	#Writes the full mitochondrial genome file
-## 	writeXStringSet(sequences = sep.loci, paste("Species_Loci/", spp.samples[i], "_mito_genes.fa", sep = ""), nbchar = 1000000, as.string = T)
-## 
-## 	system("rm mt_to_genes.pslx")
-## 
-## 
-## ############################################
-## ### Step 3: Create mitogenome alignments ###
-## ############################################
-## 
-## # Alignment settings
-## secondary.structure  <- TRUE                          ### If true, runs mafft-qinsi on mt regions that have secondary structure. Takes structure into acct.
-## min.taxa             <- 3                             ### min number of individuals to keep an alignment
-## min.prop             <- "0.25"                        ### min coverage per individual. e.g., if set to "0.25", for a 100bp gene, needs 25 bp to keep.
-## min.len              <- "100"                         ### min length for trimming. Set to this value as you dont usually want to trim t-RNAs
-## trim.cds             <- FALSE                         ### defaults to no trimming for coding sequence. Usually destroys mtGenes
-## gblocks              <- FALSE                         ### If you want to use 
-## trimal               <- TRUE                          ### If you want to use
-## 
-## setwd(out.dir)
-## 
-## #Sets up the loci to align
-## ref.data      <- scanFa(FaFile(gene.file))
-## species.names <- list.files("Species_Loci/.", full.names = F)
-## species.names <- species.names[species.names != ""]
-## dir.create("mtGenes_Fastas")
-## dir.create("mtGenes_Aligned")
-## 
-## #Aligns each potential locus
-## 
-## for(i in 1:length(ref.data)){
-## 	#######################################################
-## 	### STEP 3.1: Gets the locus data from each species ###
-## 	#######################################################
-## 
-## 	#Gets all species data
-## 	final.gene<-DNAStringSet()
-## 	for (j in 1:length(species.names)){
-## 		#Looks for this gene in the species data
-## 		spp.data<-scanFa(FaFile(paste("Species_Loci/", species.names[j], sep = "")))   # loads up fasta file
-## 		spp.gene<-spp.data[names(spp.data) == names(ref.data)[i]]
-## 		#Skips if none
-## 		if (length(spp.gene) == 0){
-## 			next
-## 		}
-## 		#Renames
-## 		names(spp.gene)<-gsub("_mito_genes.fa", "", species.names[j])
-## 		final.gene<-append(final.gene, spp.gene)
-## 	}#end j loop
-##   
-##   ##############
-##   ### STEP 3.2: Sets up for alignment
-##   ##############
-##   #Checks for a minimum length
-##   final.gene<-final.gene[width(final.gene) >= width(ref.data)[i]*as.numeric(min.prop)]
-##   
-##   #Checks for minimum taxa number
-##   if (length(names(final.gene)) <= min.taxa){
-##     print(paste(names(ref.data)[i], " had too few taxa", sep = ""))
-##     next
-##   }
-##   
-##   #Adds reference locus
-##   final.gene<-append(final.gene, ref.data[i])
-##   names(final.gene)[length(final.gene)]<-"Nanorana_parkeri_genome"
-##   final.loci<-as.list(as.character(final.gene))
-##   
-##   #Saves to folder to run with mafft
-##   write.fasta(sequences = final.loci, names = names(final.loci), 
-##               paste("mtGenes_Fastas/", names(ref.data)[i], ".fa", sep = ""), nbchar = 1000000, as.string = T)
-##   
-##   #####################################
-##   ### STEP 3.3: Runs MAFFT to align ###
-##   #####################################
-##   
-##   mafft.cmd<-"mafft"
-##   if (names(ref.data)[i] == "12S_rRNA" || names(ref.data)[i] == "16S_rRNA"){
-##     if (secondary.structure == TRUE){ mafft.cmd<-"mafft-qinsi" } else { mafft.cmd<-"mafft" }
-##   }
-##   
-##   #Runs the mafft command 
-##   system(paste(mafft.cmd, " --localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123"," --thread ", threads, " ", "mtGenes_Fastas/", names(ref.data)[i], ".fa"," > ", "mtGenes_Fastas/", names(ref.data)[i], "_align.fa", sep = ""))
-##   
-##   alignment<-scanFa(FaFile(paste("mtGenes_Fastas/", names(ref.data)[i], "_align.fa", sep = "")))   # loads up fasta file
-##   
-##   #Reverses alignment back to correct orientation
-##   reversed<-names(alignment)[grep(pattern = "_R_", names(alignment))]
-##   if (length(reversed[grep(pattern = "Nanorana_parkeri_genome", reversed)]) == 1){ alignment<-reverseComplement(alignment) }
-##   
-##   #Renames sequences to get rid of _R_
-##   names(alignment)<-gsub(pattern = "_R_", replacement = "", x = names(alignment))
-##   new.align<-strsplit(as.character(alignment), "")
-##   mat.align<-lapply(new.align, tolower)
-##   m.align<-as.matrix(as.DNAbin(mat.align))
-##   
-##   #Filters out weirdly divergent sequences
-##   diff<-pairwise.inf.sites(as.character(m.align), "Nanorana_parkeri_genome")
-##   bad.seqs<-names(diff)[which(diff >= 0.45)]
-##   rem.align<-alignment[!names(alignment) %in% bad.seqs]
-##   
-##   # Moves onto next loop in there are no good sequences
-##   if (length(rem.align) <= as.numeric(min.taxa)){ 
-##     #Deletes old files
-##     system(paste("rm ", "mtGenes_Fastas/", names(ref.data)[i], "_align.fa", sep = ""))
-##     print(paste(names(ref.data)[i], " had too few taxa", sep = ""))
-##     next }
-##   
-##   ### realign if bad seqs removed
-##   if (length(bad.seqs) != 0  && width(ref.data)[i] >= 200){
-##     #Aligns using mafft  
-##     print(paste(names(ref.data)[i], " was realigned", sep = ""))
-##     
-##     #Saves to folder to run with mafft
-##     final.loci<-as.list(as.character(rem.align))
-##     
-##     #Saves to folder to run with mafft
-##     write.fasta(sequences = final.loci, names = names(final.loci),paste("mtGenes_Fastas/", names(ref.data)[i], ".fa", sep = ""), nbchar = 1000000, as.string = T)
-## 
-## 	system(paste(mafft.cmd, " --localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123"," --thread ", threads, " ", "mtGenes_Fastas/", names(ref.data)[i], ".fa"," > ", "mtGenes_Fastas/", names(ref.data)[i], "_align.fa", sep = ""))
-## 	alignment <- scanFa(FaFile(paste(out.dir, "/mtGenes_Fastas/", names(ref.data)[i], "_align.fa", sep = "")))   # loads up fasta file
-## 
-## 	#Reverses alignment back to correction orientation
-## 	reversed <- names(alignment)[grep(pattern = "_R_", names(alignment))]
-## 	if (length(reversed[grep(pattern = "Nanorana_parkeri_genome", reversed)]) == 1){
-## 		alignment<-reverseComplement(alignment)
-## 	}
-## 	
-## 	#Renames sequences to get rid of _R_
-## 	names(alignment) <- gsub(pattern = "_R_", replacement = "", x = names(alignment))
-## 
-##   } # end bad.seqs if
-##   
-##   #Removes the edge gaps
-##   ref.aligned<-as.character(alignment['Nanorana_parkeri_genome'])
-##   not.gaps<-str_locate_all(ref.aligned, pattern = "[^-]")[[1]][,1]
-##   ref.start<-min(not.gaps)
-##   ref.finish<-max(not.gaps)
-##   trim.align<-subseq(alignment, ref.start, ref.finish)
-## 
-##   #readies for saving
-##   write.temp<-strsplit(as.character(trim.align), "")
-##   aligned.set<-as.matrix(as.DNAbin(write.temp) )
-##   write.phy(aligned.set, file=paste("mtGenes_Aligned/", names(ref.data)[i], ".phy", sep = ""), interleave = F)
-##   
-## }#end i loop
-## 
-## ########################################################
-## ### Step 4: Create alignments and partition by codon ###
-## ########################################################
-## 
-## 
-## taxa.remove          <- c("Nanorana_parkeri_genome")  ### If you dont want to keep the reference or other taxa (only needed for step 4)
-## 
-## #Create directory and loci to trim
-## dir.create("mtGenes_Trimmed")
-## locus.names<-list.files("mtGenes_Aligned/.")
-## 
-## #So it doesn't trim the cds
-## if(trim.cds == FALSE){
-## 	no.trim <- locus.names[grep("CDS", locus.names)]
-## }
-## 
-## #Loops through each locus and does operations on them
-## for (i in 1:length(locus.names)){
-## 	
-## 	#############################
-## 	### STEP 4.1: Basic steps ###
-## 	#############################
-## 	
-## 	align <- readAAMultipleAlignment(file = paste("mtGenes_Aligned/", locus.names[i], sep =""), format = "phylip")  #Reads in files
-## 	
-## 	tax.names <- rownames(align)
-## 	if(length(!tax.names %in% taxa.remove)>0){
-## 		tax.names <- tax.names[!tax.names %in% taxa.remove]  ### names of taxa to keep
-## 	}
-## 	new.align     <- strsplit(as.character(align), "")
-## 	mat.align     <- lapply(new.align, tolower)
-## 	m.align       <- as.matrix(as.DNAbin(mat.align))
-## 	t.align       <- m.align[rownames(m.align) %in% tax.names,]
-## 	save.rownames <- rownames(t.align)
-## 	
-## 	if (ncol(align) <= as.numeric(min.len)){                                                            #| Removes short loci
-## 		write.phy(t.align, file= paste("mtGenes_Trimmed/", locus.names[i], sep = ""), interleave = F)   #| 
-## 		next
-## 	}
-## 
-## 	if (length(grep(locus.names[i], no.trim)) != 0) {                                                    #| So it doesnt trim the cds
-## 		write.phy(t.align, file= paste("mtGenes_Trimmed/", locus.names[i], sep = ""), interleave = F)    #|
-## 		next                                                                                             #| 
-## 	}
-## 	
-## 	t.loci      <- as.character(as.list(t.align))                                                      #| makes alignments with introns removed
-## 	w.loci      <- lapply(t.loci, toupper)                                                             #|
-## 	write.align <- lapply(w.loci, c2s)                                                                 #|
-## 	
-## 	input.file  <- paste("mtGenes_Trimmed/", gsub(pattern = "\\..*", "", locus.names[i]), ".fa", sep = "")         # defines output filename
-## 	write.fasta(sequences = write.align, names = names(write.align),input.file, nbchar = 1000000, as.string = T)   # writes no-intron alignment
-## 	
-## 	#########################
-## 	### STEP 4.2: GBLOCKS ###
-## 	#########################
-## 	if (gblocks == TRUE){
-## 		system(paste("Gblocks ", input.file, " -t=d -b1=50 -b2=50 -b5=h ", sep = ""))
-## 		system(paste("rm ", input.file, " ", input.file, "-gb.htm", sep = ""))
-## 		system(paste("mv ", input.file, "-gb ", input.file, sep = ""))
-## 	}
-## 	
-## 	########################
-## 	### STEP 4.3: TrimAI ###
-## 	########################
-## 	
-## 	if(trimal == TRUE){
-## 		#system(paste("trimal -in ", input.file, " -out ", input.file, "-tm ","-gt 0.75 -st 0.001 -cons 60 -resoverlap 0.75 -seqoverlap 50 -automated1", sep = ""))
-## 		system(paste("trimal -in ", input.file, " -out ", input.file, "-tm -automated1", sep = ""))
-## 		system(paste("rm ", input.file, sep = ""))
-## 		system(paste("mv ", input.file, "-tm ", input.file, sep = ""))
-## 	}
-## 	
-## 	###################################
-## 	### STEP 4.4: Save as .phy file ###
-## 	###################################
-## 	
-## 	locus.save.name<-gsub(pattern = ".fa", replacement = ".phy", x = input.file)
-## 	alignment<-scanFa(FaFile(input.file))   # loads up fasta file
-## 	
-## 	temp<-names(alignment)[is.na(names(alignment)) == T]
-## 	if (length(temp) > 0){ break }
-## 	
-## 	new.names<-c()
-## 	for (j in 1:length(names(alignment))){ 
-## 		new.names[j]<-save.rownames[grep(pattern = names(alignment)[j], x = save.rownames)]
-## 	}
-## 
-## 	names(alignment) <- new.names
-## 	
-## 	#removes loci with too few taxa
-## 	if (length(names(alignment)) <= as.numeric(min.taxa)){ 
-## 		system(paste("rm ", input.file, sep = ""))
-## 		print(paste(input.file, "deleted. Too few taxa after trimming."))
-## 		write.phy(t.align, file= paste("mtGenes_Trimmed/", locus.names[i], sep = ""), interleave = F)
-## 		next
-## 	}
-## 	
-## 	write.temp<-strsplit(as.character(alignment), "")
-## 	aligned.set<-as.matrix(as.DNAbin(write.temp) )
-## 	
-## 	#readies for saving
-## 	write.phy(aligned.set, file= locus.save.name, interleave = F)
-## 	system(paste("rm ", input.file, sep = ""))
-## }
-
-#####################
-### END OF SCRIPT ###
-#####################
-
-## wget https://ftp.ncbi.nlm.nih.gov/refseq/release/mitochondrion/mitochondrion.1.1.genomic.fna.gz
-
-
-
-
-
 
 
