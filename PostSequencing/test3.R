@@ -3,14 +3,18 @@ library(data.table)
 library(igraph)
 # Avoid loading Biostrings or REEs packages in this script. They use a lot of memory.
 
+# Description:
+# Reads in each pair of BLAST hit matrices (M1 & M2) in which M1 Query = M2 Subject, and M1 Subject = M2 Query; /
+# uses first to columns of M1 and M2 as edge matrices, and then merges and simplifies the pair of edge matrices into a single edge matrix for samples i and j.
+
 args       <- commandArgs(trailingOnly=TRUE)
-workdir    <- args[1]
+blastdbdir <- args[1]
 i.start    <- as.numeric(args[2])
 i.end      <- as.numeric(args[3])
 
-matchesDir  <- file.path(workdir,"matches")
-edgeMatsDir <- file.path(workdir,"edgeMats")
-groupsDir   <- file.path(workdir,"groups")
+matchesDir  <- file.path(blastdbdir,"matches")
+edgeMatsDir <- file.path(blastdbdir,"edgeMats")
+groupsDir   <- file.path(blastdbdir,"groups")
 
 print(sprintf("Preparing to construct edge matrix for VAR=%s-%s",i.start,i.end))
 
@@ -46,7 +50,7 @@ for(x in i.start:i.end){
 	hits.clusters      <- igraph::components(igraph::graph_from_edgelist(edgeMat, directed=F))
 	GroupMembership.df <- data.frame(sequence=names(hits.clusters$membership), group=unname(hits.clusters$membership))
 	outpath.groups     <- file.path(groupsDir,gsub("_EdgeMatrix","_groups",basename(outpath.edgeMat)))
-	write.table(GroupMembership.df, file=outpath.groups, col.names=F,row.names=F,sep="\t")
+	write.table(GroupMembership.df, file=outpath.groups, col.names=F,row.names=F,sep="\t",quote=F)
 	print(x)
 }
 
