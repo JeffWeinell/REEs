@@ -4,11 +4,11 @@ module load anaconda
 conda activate py36
 
 # Defaults shown in curly brackets
-# usage: sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=24:00:00 --partition=bi  "/panfs/pfs.local/home/j926w878/work/conda/03-temp.sh" </path/to/blastDB/directory> </path/to/input/seqFile> </path/output/hitTable> [eval {10}] [max hits per query-subject pair {1}] [wordsize {11}] [task {dc-megablast}]
-# sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=24:00:00 --partition=bi "/panfs/pfs.local/home/j926w878/work/conda/03-temp.sh" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/blast_database7" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/seqFile_test_blast.txt"
-# sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=24:00:00 --partition=bi "/panfs/pfs.local/home/j926w878/work/conda/03-temp.sh" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/blast_database8" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/seqFile_SnakeSamplesAndGenomes_blast.txt"
-# sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=24:00:00 --partition=bi "/panfs/pfs.local/home/j926w878/work/conda/03-temp.sh" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/blast_database9" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/seqFile_SnakeSamplesAndGenomes_blast.txt"
-# sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=24:00:00 --partition=bi "/panfs/pfs.local/home/j926w878/work/conda/03-temp.sh" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/blast_database10" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/seqFile_SnakeSamplesAndGenomes_blast.txt"
+# usage: sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=24:00:00 --partition=bi  "/panfs/pfs.local/home/j926w878/work/conda/snakecap/03-temp.sh" </path/to/blastDB/directory> </path/to/input/seqFile> </path/output/hitTable> [eval {10}] [max hits per query-subject pair {1}] [wordsize {11}] [task {dc-megablast}]
+# sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=24:00:00 --partition=bi "/panfs/pfs.local/home/j926w878/work/conda/snakecap/03-temp.sh" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/blast_database7" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/seqFile_test_blast.txt"
+# sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=24:00:00 --partition=bi "/panfs/pfs.local/home/j926w878/work/conda/snakecap/03-temp.sh" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/blast_database8" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/seqFile_SnakeSamplesAndGenomes_blast.txt"
+# sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=24:00:00 --partition=bi "/panfs/pfs.local/home/j926w878/work/conda/snakecap/03-temp.sh" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/blast_database9" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/seqFile_SnakeSamplesAndGenomes_blast.txt"
+# sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=24:00:00 --partition=bi "/panfs/pfs.local/home/j926w878/work/conda/snakecap/03-temp.sh" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/blast_database10" "/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/seqFile_SnakeSamplesAndGenomes_blast.txt"
 
 BLASTDBDIR=$1 # Path to directory where the blast database is located. This script assumes that a directory only contains one database and that the database is named 'blast_db'
 SEQFILE=$2
@@ -157,7 +157,7 @@ for i in $(seq 1 $NUMSAMPLES); do
       # MATCHES=$BLASTDBDIR'/Q'$QUERYi'_S'$SUBJECTj'_matches.txt'
       MATCHES=$MATCHESDIR'/Q'$QUERYi'_S'$SUBJECTj'_matches.txt'
       # In the future blast_ij.sh will need to be in the same directory as 03.sh
-      SHPATHij="/panfs/pfs.local/home/j926w878/scratch/scratch_v3/SequenceCapture/SnakeCap_AllSamples/blast_ij.sh"
+      SHPATHij="/panfs/pfs.local/home/j926w878/work/conda/snakecap/blast_ij.sh"
       # sbatch --nodes=1 --ntasks-per-node=4 --mem=100Gb --time=24:00:00 --partition=bi $SHPATHij $TASK $DBPATH $QUERYPATH $MATCHES $MAXHSPs $EVAL 6 10 $WORDSIZE $GAPOPEN $GAPEXTEND $REWARD $PENALTY $PERCIDENTITY
       sbatch --nodes=1 --ntasks-per-node=4 --time=6:00:00 --partition=sixhour $SHPATHij $DBPATH $QUERYPATH $MATCHES
     fi
