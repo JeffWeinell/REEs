@@ -11,7 +11,7 @@ plotAlignment <- function(alignment){
 	xvalsA    <- seq(from=1,to=(width.al+100),by=100)
 	xvalsB    <- rep(xvalsA,nsamples)
 	yvals     <- rep(c(1:nsamples),length(xvalsA))
-	plot(xvalsB,yvals,col="white",xlab="position",ylab="sample")
+	plot(xvalsB,yvals,col="white",xlab="position",ylab="sample",ylim = rev(range(yvals)))
 	for(i in 1:length(alignment)){
 		gapLocation   <- unique(unlist(stringr::str_locate_all(alignment[i],pattern="-")))
 		if(length(gapLocation)==0){
