@@ -116,22 +116,54 @@ if (any(ncols_gff==6)){
 gpar    <- GENESPACE::run_orthofinder(gsParam = gpar,overwrite=T)
 # run synteny to determine synteny among ortholog blocks
 gpar2   <- GENESPACE::synteny(gsParam = gpar, overwrite=T)
-# plot synteny
-ripdat  <- GENESPACE::plot_riparian(gpar2)
+## 
+
+## plot synteny
+ripdat  <- GENESPACE::plot_riparian(gpar2,invertTheseChrs=invert.dt)
+
+#### re-plot synteny with some modifications:
+# genome and chromosome names for chomosomes that should be inverted when plotting
+invert.dt <- data.table::data.table(genome=c(rep("thamnophis",3),rep("naja",8)),chromosome=c("4","2","5","m2","m3","5","7","m7","m9","m10","m11"))
+
 
 ########
-cp -R "/panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/genespace/Naja_Thamnophis2_Python/rawGenomes" "/panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/genespace/Naja_Thamnophis2/rawGenomes"
-rm -R "/panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/genespace/Naja_Thamnophis2/rawGenomes/Pbivittatus"
+# cp -R "/panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/genespace/Naja_Thamnophis2_Python/rawGenomes" "/panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/genespace/Naja_Thamnophis2/rawGenomes"
+# rm -R "/panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/genespace/Naja_Thamnophis2/rawGenomes/Pbivittatus"
 ########
 
 
+gffWithOgs.txt.gz
+runwd="/Users/jeff/Downloads/"
+gpar  <- GENESPACE::init_genespace(
+	genomeIDs=c("naja","thamnophis"),
+	speciesIDs=c("naja","thamnophis"),
+	versionIDs=c("naja","thamnophis"),
+	ploidy=rep(1,2),
+	diamondMode="fast",
+	orthofinderMethod="fast",
+	wd=runwd,
+	nCores=4,
+	minPepLen=50,
+	gffString="gff",
+	pepString="pep",
+	path2orthofinder="orthofinder",
+	path2mcscanx=NULL,
+	rawGenomeDir=file.path(runwd,"test"))
 
+#########################
 
+gpar=list()
+gpar$params$verbose <- T
+# gpar$genomes$genomeIDs <- c("naja","thamnophis")
+gpar$genomes$genomeIDs <- c("thamnophis","naja")
+gpar$genomes$outgroup <- NULL
+gpar$paths$results <- "/Users/jeff/Documents/GitHub/SnakeCap"
+gpar$params$nCores <- 4
 
+ripdat  <- GENESPACE::plot_riparian(gsParam=gpar, invertTheseChrs=invert.dt, returnSourceData = T)
+## The only two files that you need are "gffWithOgs.txt.gz" and "%s_%s_synHits.txt.gz"
 
-
-
-
+ripdat  <- GENESPACE::plot_riparian(gsParam=gpar, invertTheseChrs=invert.dt, returnSourceData = T, plotRegions = F, useOrder = F)
 
 
 
