@@ -1,316 +1,653 @@
-Combos
-data.frame(Combos)
-37250/2
+names(test["a"])
+names(test[["a"]])
+a=c(1:3);b=c(1:4);c=c(1:5)
+names(a) <- c("one","two","three")
+names(b) <- c("one","two","three","four")
+names(c) <- c("one","two","three","four","five")
+test <- list(a,b,c)
+names(test)
+test
+test <- list(a=a,b=b,c=c)
+test
+names(test)
+names(test[['a']])
+names(test[['b']])
+names(test[['b']])
+names(test[['c']])
+igraph::clusters
+expand.grid(1:3,1:3)
+COMBOS<-expand.grid(1:3,1:3)
+COMBOS[which(COMBOS[,1]>COMBOS[,2]),]
+as.matrix(#
+1 2#
+3 4#
+)
+infiles  <- unlist(strsplit('/panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/SnakeCap_AllSamples/blast_database11/groupAlignments_SeqCapAndTargetRef_max100Seqs/group1.fasta /panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/SnakeCap_AllSamples/blast_database11/groupAlignments_SeqCapAndTargetRef_max100Seqs/group2.fasta /panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/SnakeCap_AllSamples/blast_database11/groupAlignments_SeqCapAndTargetRef_max100Seqs/group3.fasta /panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/SnakeCap_AllSamples/blast_database11/groupAlignments_SeqCapAndTargetRef_max100Seqs/group4.fasta /panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/SnakeCap_AllSamples/blast_database11/groupAlignments_SeqCapAndTargetRef_max100Seqs/group5.fasta',split=' '))
+infiles
+A=c(1,3); B=c(12,14); C=c(2,4); D=c(13,15); E=c(5,10)
+dat=cbind(A,B,C,D,E)
+dat
+dat=rbind(A,B,C,D,E)
+dat
+data.frame(text="#
+A 1 3 #
+C 2 4 #
+E 5 10#
+B 12 14#
+D 13 15#
+")
+data.frame(text="#
+A 1 3 #
+C 2 4 #
+E 5 10#
+B 12 14#
+D 13 15#
+",stringsAsFactors=F)
+data.frame(text="#
+A 1 3 #
+C 2 4 #
+E 5 10#
+B 12 14#
+D 13 15#
+",stringsAsFactors=F,sep=" "")
+data.frame(text="#
+A 1 3 #
+C 2 4 #
+E 5 10#
+B 12 14#
+D 13 15#
+",stringsAsFactors=F,sep=" ")
 library(REEs)
-complexity <- function(x,w=1){#
-	if(class(x)=="DNAString"){#
-		x <- as.character(unlist(x))#
+is.overlap(A,B)
+A
+B
+is.overlap(dat[1,],dat[2,])
+is.overlap(dat[1,],dat[3,])
+if(is.overlap(dat[1,],dat[3,])) range(dat[c(1,3),])
+?merge()
+?merge
+mergedRange <- function(r1,r2){#
+	if(is.overlap(r1,r2)) {#
+		range(c(r1,r2))#
+	} else {#
+		NA#
 	}#
-	if(length(x)>1){#
-		stop("Sequences must supplied as a DNAString object or a length 1 DNAStringSet object")#
-	}#
-	if(class(x)=="DNAStringSet"){#
-		x <- as.list(x[1])[[1]]#
-	}#
-	tempseq <- unlist(strsplit(as.character(unlist(x)),split=""))#
-	res     <- length(which(sapply(1:(length(tempseq)-1),function(i){length(unique(tempseq[i:(i+w)]))!=1})))/(length(tempseq)-1)#
-	res#
 }
-complexity("TTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGT")
-complexityPlot <- function(dna,wsize=1){#
-	dna   <- DNAStringSet(dna)#
-	test1 <- wapply(x=dna, FUN=complexity, windowsize=10, windowshift=5)#
-	test2 <- wapply(x=dna, FUN=complexity, windowsize=200*wsize, windowshift=100*wsize)#
-	sim1  <- DNAStringSet(paste(sample(c("A","C","G","T"),size=width(dna),replace=T),collapse=""))#
-	test3 <- wapply(x=sim1, FUN=complexity, windowsize=200*wsize, windowshift=100*wsize)#
-	plot(seq(from=1,to=width(dna),length.out=length(test1)),test1,type="l",xlab="nucleotide position along sequence",ylab="DNA sequence complexity",sub="black and red = empirical; blue = random",ylim=c(0,1))#
-	lines(seq(from=1,to=width(dna),length.out=length(test2)),test2,col="red")#
-	lines(seq(from=1,to=width(sim1),length.out=length(test3)),test3,col="blue")#
+mergedRange(dat[1,],dat[3,])
+read.table(text="#
+A 1 3 #
+C 2 4 #
+E 5 10#
+B 12 14#
+D 13 15#
+",sep=" ")
+read.table(text="#
+A 1 3#
+C 2 4#
+E 5 10#
+B 12 14#
+D 13 15#
+",sep=" ")
+read.table(text="#
+A 1 3#
+C 2 4#
+E 5 10#
+B 12 14#
+D 13 15#
+",sep=" ",row.names=T,col.names=F)
+read.table(text="#
+A 1 3#
+C 2 4#
+E 5 10#
+B 12 14#
+D 13 15#
+",sep=" ",row.names=T,header=F)
+read.table(text="#
+A 1 3#
+C 2 4#
+E 5 10#
+B 12 14#
+D 13 15#
+",sep=" ",check.names=T,header=F)
+read.table(text="#
+A 1 3#
+C 2 4#
+E 5 10#
+B 12 14#
+D 13 15#
+",sep=" ",row.names=1,header=F)
+read.table(text="#
+A 1 3#
+C 2 4#
+E 5 10#
+B 12 14#
+D 13 15#
+",sep=" ",header=F,row.names=1)
+data <- read.table(text="#
+A 1 3#
+C 2 4#
+E 5 10#
+B 12 14#
+D 13 15#
+",sep=" ",header=F,row.names=1)
+data
+data2 <- data.frame(NA,nrow=nrow(data),ncol=ncol(data))
+data2
+data2 <- matrix(data=NA,nrow=nrow(data),ncol=ncol(data))
+data2
+data2[1,] <- data[1,]
+data2
+data <- as.matrix(read.table(text="#
+A 1 3#
+C 2 4#
+E 5 10#
+B 12 14#
+D 13 15#
+",sep=" ",header=F,row.names=1))
+data
+data2 <- matrix(NA,ncol=ncol(data),nrow=nrow(data))
+data2
+data2[1,] <- data[1,]
+data2
+rownames(data2)[1] <- rownames(data)[1]
+data2 <- list(); length(data2) <- nrow(data)
+data2
+names(data2)
+names(data2)[1]
+names(data2)[1] <- rownames(data)[1]
+data2
+data2[[1]] <- data[1,]
+data2
+set1 <- data[,1] > data[,2]
+set1
+set1 <- data[c(data[,1] > data[,2]),]
+set1
+set1 <- data[c(data[,1] < data[,2]),c(1,2)]#
+set2 <- data[c(data[,1] > data[,2]),c(2,1)]
+cbind(set1,set2)
+set1
+rbind(set1,set2)
+df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])
+df1
+sort(df1)
+order(df1[,1],df1[,2])
+df1[order(df1[,1],df1[,2]),]
+data <- as.matrix(read.table(text="#
+A 1 3#
+B 12 14#
+C 2 4#
+D 13 15#
+E 5 10#
+",sep=" ",header=F,row.names=1))
+data
+order(df1)
+order(df1,"shell")
+order(df1,method="shell")
+order(df1[],method="shell")
+order(df1,method="radix")
+order(df1[,1],method="radix")
+order(df1[,2],method="radix")
+order(df1[,c(1:ncol(df1))],method="radix")
+df1[,c(1:ncol(df1))]
+order(df1[,c(1:ncol(df1))],method="shell")
+order(df1[,1],df1[,2],method="shell")
+system(df1)
+system(sprintf("echo %s"),df1)
+system(sprintf("echo %s",df1),intern=T)
+text(df1)
+print(df1)
+system(print(df1))
+c(df1)
+paste(df1)
+paste(df1,recycle=T)
+system(sprintf("sort %s",df1))
+sprintf("sort %s",df1)
+write(df1)
+data <- as.matrix(read.table(text="#
+A 1 3#
+B 12 14#
+C 2 4#
+D 13 15#
+E 5 10#
+",sep=" ",header=F,row.names=1))
+# sorts values in rows such that column 1 values are less those in column 2#
+df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
+# sorts rows by first column and then by successive columns to break ties#
+df2 <- df1[do.call(order, as.list(df1)),]
+df2
+do.call(order, as.list(df1))
+data
+df1
+as.list(df1)
+as.list(df1)
+list(df1)
+length(df1)
+class(df1)
+data <- read.table(text="#
+A 1 3#
+B 12 14#
+C 2 4#
+D 13 15#
+E 5 10#
+",sep=" ",header=F,row.names=1)
+# sorts values in rows such that column 1 values are less those in column 2#
+df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
+# sorts rows by first column and then by successive columns to break ties#
+df2 <- df1[do.call(order, as.list(df1)),]
+df2
+res=matrix(df2)
+res
+res=matrix(ncol=df2)
+res=matrix(dim=dim(df2))
+res=matrix(nrow=nrow(df2),ncol=ncol(df2))
+res
+res=list(length=nrow(df2))
+res
+res=list(); length(res) <- nrow(df2)
+res
+names(res)[1] <- rownames(df2)[1]
+res
+res[[1]] <- df2[1,]
+res
+res=list(); length(res) <- nrow(df2)
+res
+res[[1]] <- df2[1,]
+res
+res=list(); length(res) <- nrow(df2)#
+names(res)[1] <- rownames(df2)[1]#
+res[[1]] <- df2[1,]
+mergedRange <- function(r1,r2){#
+	if(is.overlap(r1,r2)) {#
+		range(c(r1,r2))#
+	} else {#
+		r2#
+	}#
 }
-complexityPlot("TTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGT")
-wapply <- function(x,FUN,windowsize=NULL,windowshift=NULL,startbase=1,remainder=T,minwindowsize=2){#
-	if(class(x)=="DNAString"){#
-		x <- as.character(unlist(x))#
+mergedRange(df2[1,],df[2,])
+df2[1,]
+df[2,]
+mergedRange(df2[1,],df2[2,])
+i=2
+mergedRange(res[[(i-1)]],df2[i,])
+res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])
+res
+res=list(); length(res) <- nrow(df2)#
+names(res)[1] <- rownames(df2)[1]#
+res[[1]] <- unname(df2[1,])
+res
+unname(df2[1,])
+unname(df2[1,],force=T)
+df2[1,]
+dimnames(df2[1,])
+unname(df2[1,],force=T)
+test <- unname(df2[1,],force=T)
+test <- unname(df2,force=T)
+res1 <- df2[1,]#
+dimnames(res1) <- NULL#
+res[[1]] <- res1
+dimnames(res1)
+dimnames(res1) <- NILL
+dimnames(res1) <- NULL
+dimnames(res1) <- ""
+dimnames(res1) <- NA
+rownames(res1)
+rownames(res1) <- NULL
+res1 <- unname(df2[1,])#
+rownames(res1) <- NULL
+res1
+unname(c(df2[1,]))
+unname(unlist(df2[1,]))
+res[[1]] <- unname(unlist(df2[1,]))
+res
+res[[1]] <- unname(unlist(df2[1,]))
+res=list(); length(res) <- nrow(df2)#
+names(res)[1] <- rownames(df2)[1]#
+res[[1]] <- unname(unlist(df2[1,]))#
+for(2 in 1:nrow(df2)){#
+	res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
+	if(is.overlap(res[[(i-1)]],df2[i,])){#
+		names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]])#
+	} else {#
+		names(res)[[i]] <- rownames(df2)[i]#
 	}#
-	if(length(x)>1){#
-		stop("Sequences must supplied as a DNAString object or a length 1 DNAStringSet object")#
-	}#
-	if(class(x)=="DNAStringSet"){#
-		x <- as.list(x[1])[[1]]#
-	}#
-	tempseq       <- unlist(strsplit(as.character(unlist(x)),split=""))#
-	if(is.null(windowsize)){#
-		windowsize <- length(tempseq)#
-	}#
-	if(is.null(windowshift)){#
-		windowshift <- windowsize#
-	}#
-	window.starts <- seq(from=startbase,to=length(tempseq),by=windowshift)#
-	window.ends   <- window.starts+(windowsize-1)#
-	window.starts[!window.starts <= length(tempseq)] <- length(tempseq)#
-	window.ends[!window.ends <= length(tempseq)] <- length(tempseq)#
-	windows.mat   <- unique(cbind(window.starts,window.ends))#
-	if(!remainder){#
-		windows.mat <- windows.mat[((windows.mat[,2]-windows.mat[,1])+1)==windowsize,]#
-	}#
-	if(windowsize >= minwindowsize){#
-		windows.mat <- windows.mat[((windows.mat[,2]-windows.mat[,1])+1)>=minwindowsize,]#
-	}#
-	window.starts <- windows.mat[,1]#
-	window.ends   <- windows.mat[,2]#
-	funres <- list(); length(funres) <- length(window.starts)#
-	for(i in 1:length(window.starts)){#
-		windowseq <- DNAString(paste(tempseq[window.starts[i]:window.ends[i]],collapse=""))#
-		funres[[i]] <- FUN(windowseq)#
-	}#
-	classes <- lapply(funres, class)#
-	if(all(lengths(funres)==1) & length(unique(unlist(classes)))==1){#
-		funres <- unlist(funres)#
-	}#
-	funres#
 }
-complexityPlot("TTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGT")
-complexityPlot("GTCTCTGTCTCTGACTCTCTCTCTCTCTCCCTCCCTCCCTTCCTCTCTCAGTCTCTGCCTCTCTGTGTGTATGTCTCTGTCTCTGTCTCTCTATGTCTCTGTCTCTGTCTCTGACTCTCTCTCTCTCTCCCTCCCTCCCTTCCTCTCTCAGTCTCTGCCTCTCTGTGTGTATGTCTCTGTCTCTGTCTCTTATGTCTCT#
-GTCTCTGTCTCTGACTCTCTCTCTCTC")
-complexityPlot("GTCTCTGTCTCTGACTCTCTCTCTCTCTCCCTCCCTCCCTTCCTCTCTCAGTCTCTGCCTCTCTGTGTGTATGTCTCTGTCTCTGTCTCTCTATGTCTCTGTCTCTGTCTCTGACTCTCTCTCTCTCTCCCTCCCTCCCTTCCTCTCTCAGTCTCTGCCTCTCTGTGTGTATGTCTCTGTCTCTGTCTCTTATGTCTCTGTCTCTGTCTCTGACTCTCTCTCTCTC")
-complexity("GTCTCTGTCTCTGACTCTCTCTCTCTCTCCCTCCCTCCCTTCCTCTCTCAGTCTCTGCCTCTCTGTGTGTATGTCTCTGTCTCTGTCTCTCTATGTCTCTGTCTCTGTCTCTGACTCTCTCTCTCTCTCCCTCCCTCCCTTCCTCTCTCAGTCTCTGCCTCTCTGTGTGTATGTCTCTGTCTCTGTCTCTTATGTCTCTGTCTCTGTCTCTGACTCTCTCTCTCTC")
-nchar(complexity)
-13/15
-170/0.8666667
-196.1538/60
-12.7/4
-18625/10
-"TCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCT"
-letterFrequency("TCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCT")
-letterFrequency(DNAStringSet("TCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCT"))
-letterFrequency(DNAStringSet("TCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCTTCTCTTCTTCT"),letters=c("A","C","G","T"))
-letterFrequency(DNAStringSet("TCCTCCTTTCCTCCTCCTTTCCTCCTCCTTTCCTCCTCCTTTCCTCCTCCTTTCCTCCTCCTTTCCTCCTCCTTTCCTCCTCCTTTCCTCCTCCTTTCCTCCTCCTTTCCTCCTCCTTTCCTCCTCCTTTCCTCCTCC"),letters=c("A","C","G","T"))
-letterFrequency(DNAStringSet("GAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAG"),letters=c("A","C","G","T"))
-var(letterFrequency(DNAStringSet("GAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAG"),letters=c("A","C","G","T")))
-StDev(letterFrequency(DNAStringSet("GAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAG"),letters=c("A","C","G","T")))
-letterFrequency(DNAStringSet("GAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAG"),letters=c("A","C","G","T"))
-c(letterFrequency(DNAStringSet("GAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAG"),letters=c("A","C","G","T")))
-x=c(letterFrequency(DNAStringSet("GAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAG"),letters=c("A","C","G","T")))
-var(x=x)
-var(sample(x=c("A","C","G","T"),size=100,replace=T))
-sample(x=c("A","C","G","T"),size=100,replace=T)
-table(sample(x=c("A","C","G","T"),size=100,replace=T))
-c(table(sample(x=c("A","C","G","T"),size=100,replace=T)))
-var(c(table(sample(x=c("A","C","G","T"),size=100,replace=T))))
-var(c(table(sample(x=c("A","C","G","T"),size=1000,replace=T))))
-sd(c(table(sample(x=c("A","C","G","T"),size=1000,replace=T))))
-sd(c(table(sample(x=c("A","A","A","C","G","G","G","T"),size=1000,replace=T))))
-x=c(letterFrequency(DNAStringSet("GAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAGAAGAGGAAGAG"),letters=c("A","C","G","T")))
-x
-sd(x)
-IUPAC_CODE_MAP()
-IUPAC_CODE_MAP
-Biostrings::IUPAC_CODE_MAP
-freqs      <- Biostrings::letterFrequency(dna.masked,letters=names(Biostrings::IUPAC_CODE_MAP))
-test <- as.Phylo()
-"((Cyclocorus-lineatus-lineatus_KU335808,Hologerrhum-philippinum_KU330752,Myersophis-alpestris_KU308684,(Oxyrhabdium-cf-modestum_KU338101,Oxyrhabdium-leporinum_KU346583,Oxyrhabdium-modestum_KU310866),Levitonius-mirus_KU337269)sr);"
-matches <- read.table("/user/Jeff/Download/MaskedSamples_PlusTargets_matches_E1en10_hsp1_ws100.txt")
-matches <- read.table("/Users/jeff/Downloads/MaskedSamples_PlusTargets_matches_E1en10_hsp1_ws100.txt")
-matches
-matches <- fread("/Users/jeff/Downloads/MaskedSamples_PlusTargets_matches_E1en10_hsp1_ws100.txt")
-matches
-edgeMat <- read.table("/Users/jeff/Downloads/MaskedSamples_PlusTargets_matches_E1en10_hsp1_ws100.txt.EdgeMatrix")
-edgeMat <- fread("/Users/jeff/Downloads/MaskedSamples_PlusTargets_matches_E1en10_hsp1_ws100.txt.EdgeMatrix")
-hits.graph <- igraph::graph_from_edgelist(edgeMat,directed=F)
-dim(edgeMat)
-edgeMat <- as.matrix(fread("/Users/jeff/Downloads/MaskedSamples_PlusTargets_matches_E1en10_hsp1_ws100.txt.EdgeMatrix"))
-dim(edgeMat)
-edgeMat[1:5,]
-edgeMat <- as.matrix(fread("/Users/jeff/Downloads/MaskedSamples_PlusTargets_matches_E1en10_hsp1_ws100.txt.EdgeMatrix",header=F))
-edgeMat <- fread("/Users/jeff/Downloads/MaskedSamples_PlusTargets_matches_E1en10_hsp1_ws100.txt.EdgeMatrix",header=FALSE)
-edgeMat <- as.matrix(edgeMat)
-edgeMat[1:5,]
-hits.graph <- igraph::graph_from_edgelist(edgeMat,directed=F)
-plot(hits.graph)
-plot.igraph(hits.graph)
-igraph::plot.igraph(hits.graph)
-library(igraph)
-test <- plot.igraph(hits.graph)
-test <- plot.igraph(hits.graph,is_directed=F)
-its.graph <- igraph::graph_from_edgelist(edgeMat,directed=F)
-hits.graph <- igraph::graph_from_edgelist(edgeMat,directed=F)
-dim(hits.graph)
-hits.graph
-edgeMat[1:5,]
-edgeMat <- unname(edgeMat)
-edgeMat[1:5,]
-hits.graph <- igraph::graph_from_edgelist(edgeMat,directed=F)
-hits.graph
-el <- matrix( c("foo", "bar", "bar", "foobar"), nc = 2, byrow = TRUE)
-el
-class(el)
-class(edgeMat)
-format(edgeMat)
-mode(edgeMat[,1])
-mode(edgeMat[,2])
-mode(el[,1])
-mode(el[,2])
-el
-edgeMat[1:5,]
-graph_from_edgelist(el)
-graph_from_edgelist(edgeMat)
-test <- graph_from_edgelist(edgeMat)
-plot.igraph( graph_from_edgelist(el))
-plot.igraph(test)
-??file_path_sans_ext
-?get.mitogenome
-library(REEs)
-get.mitogenome
+i=2
+paste(rownames(df2)[i],names(res)[[i-1]])
+res=list(); length(res) <- nrow(df2)#
+names(res)[1] <- rownames(df2)[1]#
+res[[1]] <- unname(unlist(df2[1,]))
+i=2
+res
+res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])
+res
+if(TRUE){#
+		"yes"#
+	} else {#
+		"no"#
+	}
+is.overlap(res[[(i-1)]],df2[i,])
+names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]])
+res=list(); length(res) <- nrow(df2)#
+names(res)[1] <- rownames(df2)[1]#
+res[[1]] <- unname(unlist(df2[1,]))#
+for(2 in 1:nrow(df2)){#
+	res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
+	if(is.overlap(res[[(i-1)]],df2[i,])) {#
+		names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]])#
+	} else {#
+		names(res)[[i]] <- rownames(df2)[i]#
+	}#
+}
+res=list(); length(res) <- nrow(df2)#
+names(res)[1] <- rownames(df2)[1]#
+res[[1]] <- unname(unlist(df2[1,]))#
+for(i in 2:nrow(df2)){#
+	res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
+	if(is.overlap(res[[(i-1)]],df2[i,])) {#
+		names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]])#
+	} else {#
+		names(res)[[i]] <- rownames(df2)[i]#
+	}#
+}
+res
+res=list(); length(res) <- nrow(df2)#
+names(res)[1] <- rownames(df2)[1]#
+res[[1]] <- unname(unlist(df2[1,]))#
+for(i in 2:nrow(df2)){#
+	res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
+	if(is.overlap(res[[(i-1)]],df2[i,])) {#
+		names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]])#
+		res[[(i-1)]] <- NULL#
+	} else {#
+		names(res)[[i]] <- rownames(df2)[i]#
+	}#
+}
+res=list(); length(res) <- nrow(df2)#
+names(res)[1] <- rownames(df2)[1]#
+res[[1]] <- unname(unlist(df2[1,]))#
+for(i in 2:nrow(df2)){#
+	res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
+	if(is.overlap(res[[(i-1)]],df2[i,])) {#
+		names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]])#
+		res[[(i-1)]] <- NA#
+	} else {#
+		names(res)[[i]] <- rownames(df2)[i]#
+	}#
+}
+res
+lapply(res,is.na)
+lapply(res,function(x){all(is.na(x))})
+sapply(res,function(x){all(is.na(x))})
+intervalSets <- res[sapply(res,function(x){all(is.na(x))})]
+intervalSets
+intervalSets <- res[!sapply(res,function(x){all(is.na(x))})]
+intervalSets
+intervalSets <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])
+intervalSets
+cbind(rownames(intervalSets),intervalSets)
+colnames(intervalSets.mat) <- NULL
+intervalSets.mat <- cbind(rownames(intervalSets),intervalSets)#
+	colnames(intervalSets.mat) <- NULL
+intervalSets.mat
+dimnames(intervalSets.mat) <- NULL
+class(intervalSets.mat)
+intervalSets.mat <- as.matrix(cbind(rownames(intervalSets),intervalSets))
+intervalSets.mat
+dimnames(intervalSets.mat) <- NULL
+intervalSets.mat
+as.data.frame(intervalSets.mat)
+function(data){#
+	# sorts values in rows such that column 1 values are less those in column 2#
+	df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
+	# sorts rows by first column and then by successive columns to break ties#
+	df2 <- df1[do.call(order, as.list(df1)),]#
+	res=list(); length(res) <- nrow(df2)#
+	names(res)[1] <- rownames(df2)[1]#
+	res[[1]] <- unname(unlist(df2[1,]))#
+	for(i in 2:nrow(df2)){#
+		res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
+		if(is.overlap(res[[(i-1)]],df2[i,])) {#
+			names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]],sep=",")#
+			res[[(i-1)]] <- NA#
+		} else {#
+			names(res)[[i]] <- rownames(df2)[i]#
+		}#
+	}#
+	intervalSets     <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
+	result.df <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
+	result.df#
+}
+clusterIntervals <- function(data){#
+	# sorts values in rows such that column 1 values are less those in column 2#
+	df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
+	# sorts rows by first column and then by successive columns to break ties#
+	df2 <- df1[do.call(order, as.list(df1)),]#
+	res=list(); length(res) <- nrow(df2)#
+	names(res)[1] <- rownames(df2)[1]#
+	res[[1]] <- unname(unlist(df2[1,]))#
+	for(i in 2:nrow(df2)){#
+		res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
+		if(is.overlap(res[[(i-1)]],df2[i,])) {#
+			names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]],sep=",")#
+			res[[(i-1)]] <- NA#
+		} else {#
+			names(res)[[i]] <- rownames(df2)[i]#
+		}#
+	}#
+	intervalSets     <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
+	result.df <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
+	result.df#
+}
+clusterIntervals(data=data)
+clusterIntervals <- function(data){#
+	# sorts values in rows such that column 1 values are less those in column 2#
+	df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
+	# sorts rows by first column and then by successive columns to break ties#
+	df2 <- df1[do.call(order, as.list(df1)),]#
+	res=list(); length(res) <- nrow(df2)#
+	names(res)[1] <- rownames(df2)[1]#
+	res[[1]] <- unname(unlist(df2[1,]))#
+	for(i in 2:nrow(df2)){#
+		res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
+		if(is.overlap(res[[(i-1)]],df2[i,])) {#
+			names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]],sep=",")#
+			res[[(i-1)]] <- NA#
+		} else {#
+			names(res)[[i]] <- rownames(df2)[i]#
+		}#
+	}#
+	intervalSets        <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
+	result.df           <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
+	colnames(result.df) <- c("merged","start","end")#
+	result.df#
+}
+clusterIntervals(data=data)
+clusterIntervals <- function(data){#
+	# sorts values in rows such that column 1 values are less those in column 2#
+	df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
+	# sorts rows by first column and then by successive columns to break ties#
+	df2 <- df1[do.call(order, as.list(df1)),]#
+	res=list(); length(res) <- nrow(df2)#
+	names(res)[1] <- rownames(df2)[1]#
+	res[[1]] <- unname(unlist(df2[1,]))#
+	for(i in 2:nrow(df2)){#
+		res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
+		if(is.overlap(res[[(i-1)]],df2[i,])) {#
+			names(res)[[i]] <- paste(sort(rownames(df2)[i],names(res)[[i-1]]),sep=",")#
+			res[[(i-1)]] <- NA#
+		} else {#
+			names(res)[[i]] <- rownames(df2)[i]#
+		}#
+	}#
+	intervalSets        <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
+	result.df           <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
+	colnames(result.df) <- c("merged","start","end")#
+	result.df#
+}
+clusterIntervals(data=data)
+clusterIntervals <- function(data){#
+	# sorts values in rows such that column 1 values are less those in column 2#
+	df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
+	# sorts rows by first column and then by successive columns to break ties#
+	df2 <- df1[do.call(order, as.list(df1)),]#
+	res=list(); length(res) <- nrow(df2)#
+	names(res)[1] <- rownames(df2)[1]#
+	res[[1]] <- unname(unlist(df2[1,]))#
+	for(i in 2:nrow(df2)){#
+		res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
+		if(is.overlap(res[[(i-1)]],df2[i,])) {#
+			names(res)[[i]] <- paste(sort(c(rownames(df2)[i],names(res)[[i-1]])),sep=",")#
+			res[[(i-1)]] <- NA#
+		} else {#
+			names(res)[[i]] <- rownames(df2)[i]#
+		}#
+	}#
+	intervalSets        <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
+	result.df           <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
+	colnames(result.df) <- c("merged","start","end")#
+	result.df#
+}
+clusterIntervals(data=data)
+clusterIntervals <- function(data){#
+	# sorts values in rows such that column 1 values are less those in column 2#
+	df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
+	# sorts rows by first column and then by successive columns to break ties#
+	df2 <- df1[do.call(order, as.list(df1)),]#
+	res=list(); length(res) <- nrow(df2)#
+	names(res)[1] <- rownames(df2)[1]#
+	res[[1]] <- unname(unlist(df2[1,]))#
+	for(i in 2:nrow(df2)){#
+		res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
+		if(is.overlap(res[[(i-1)]],df2[i,])) {#
+			names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]],sep=",")#
+			res[[(i-1)]] <- NA#
+		} else {#
+			names(res)[[i]] <- rownames(df2)[i]#
+		}#
+	}#
+	intervalSets        <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
+	result.df           <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
+	colnames(result.df) <- c("merged","start","end")#
+	result.df#
+}
+clusterIntervals(data=data)
+mergedRange <- function(r1,r2,ifFALSE=NA){#
+	if(is.overlap(r1,r2)) {#
+		range(c(r1,r2))#
+	} else {#
+		if(all(is.na(ifFALSE))) {#
+			return(NA)#
+		}#
+		if(all(ifFALSE==1)) {#
+			return(r1)#
+		}#
+		if(all(ifFALSE==2)) {#
+			return(r2)#
+		}#
+		if(all(ifFALSE==12)) {#
+			return(list(r1,r2))#
+		}#
+#
+	}#
+}
+mergedRange(r1=c(1,5),r2=c(7,10))
+mergedRange(r1=c(1,5),r2=c(7,10),ifFALSE=1)
+mergedRange(r1=c(1,5),r2=c(7,10),ifFALSE=2)
+mergedRange(r1=c(1,5),r2=c(7,10),ifFALSE=12)
+mergedRange <- function(r1,r2,ifFALSE=NA){#
+	if(is.overlap(r1,r2)) {#
+		range(c(r1,r2))#
+	} else {#
+		if(all(is.na(ifFALSE))) {#
+			return(NA)#
+		}#
+		if(all(ifFALSE==1)) {#
+			return(r1)#
+		}#
+		if(all(ifFALSE==2)) {#
+			return(r2)#
+		}#
+		if(all(ifFALSE==12)) {#
+			return(list(r1,r2))#
+		}#
+#
+	}#
+}
+clusterIntervals <- function(data){#
+	# sorts values in rows such that column 1 values are less those in column 2#
+	df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
+	# sorts rows by first column and then by successive columns to break ties#
+	df2 <- df1[do.call(order, as.list(df1)),]#
+	res=list(); length(res) <- nrow(df2)#
+	names(res)[1] <- rownames(df2)[1]#
+	res[[1]] <- unname(unlist(df2[1,]))#
+	for(i in 2:nrow(df2)){#
+		res[[i]] <- mergedRange(res[[(i-1)]],df2[i,],ifFALSE=2)#
+		if(is.overlap(res[[(i-1)]],df2[i,])) {#
+			names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]],sep=",")#
+			res[[(i-1)]] <- NA#
+		} else {#
+			names(res)[[i]] <- rownames(df2)[i]#
+		}#
+	}#
+	intervalSets        <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
+	result.df           <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
+	colnames(result.df) <- c("merged","start","end")#
+	result.df#
+}
+data <- read.table(text="#
+A 1 3#
+B 12 14#
+C 2 4#
+D 13 15#
+E 5 10#
+",sep=" ",header=F,row.names=1)
+clusterIntervals(data)
 library(devtools)
+setwd("Documents/REEs")
+getwd()
 setwd("/Users/jeff/Documents/REEs")
 devtools::document()
-?file.remove
-library(Biostrings)
-reverseComplement(DNAString("TAATGGAAATAATCGGTCAAATTGGAAATATGTCTAACAAGCATTAAAGGATAGTACCTCTTAGGGAATATGCAGGACCATGGGCGGAGCTCCACCTGGACTAAATGCCTTCCCCGGTCGGGGCGACGGTAACGAGCATATATGGCTGTCAGGTGAAAGTTACAGAAAAAAAAAGGTACCAGGGGCGGATCAGGCAGGCTGATAAGAACATGAGGTGATATGTACCATATAAGGGGTGAGACGAAAGGCTTCTTTAAAAGTGAGGAATGAGGGATGGTTCCGGGCCATTAAGATGCACTTGAAAGAGTAACCAGCGGTCTTGGAAAGAGCATTAAAGGGAGGAGTTACAATAAATGGACGTGAGAAGCGGGACTGTATGCTTTCAGTGGAAGGATAGGGGGTTTCACGGGCTGTACTACATCAAGGGACACCACTTTGAACGGGATATTCATGATTATTAATAGTAGACAACCAGGTTACATGGAACGGTAGGGTAATGCGGGTACAAGTAGGATGTAACAACCCACTCTTTTTATACAAATAATTATAGTATAACTCCGGCTTGATAGGCGTGGGGCAAACCATTAATGTATGATTATACATAGTGAAATAAAGACTAAGAACCAAAAGGTACATAATAGTCGAATTCAGGAAAAACGGGTTTTTGGGGGGGGGAGAGGGGGGGACCTAGGAGAGTACTATTTTTTTACAAAAAGTAGTTTAAGTTAAAAATGCTAGTTTTGGGGGCTAGAGATGGAAGTTCTCTTTTTGATGCTCTAAGGGTTACCCAGCTTTGGTTTACAAGAACAATGCTTTAGAAGTTTAAGCTATTAGAGCAGGTATTATATGAGATTTTATTTTCTGTTCATCCCAGGATTGGGTTCATGATGAAAAATATAAAGTATAAAATTGAGGTTGTTTGGCCAATTAAGGTGAATGGCGGTTCGATTGGCTTTGTGGCTGTTCATGTGATCATAATAAAAGTGGCAATTAGTGTTCAAAATAATAGTTGTATTATTGGCCGGAAGGTCATAGATCGTACATGGGAGGTGTGGGTAAATGGTATTGAGAGTAGGATTAAGATTGACATAATTAGGGCTATT"))
-unlist(reverseComplement(DNAString("TAATGGAAATAATCGGTCAAATTGGAAATATGTCTAACAAGCATTAAAGGATAGTACCTCTTAGGGAATATGCAGGACCATGGGCGGAGCTCCACCTGGACTAAATGCCTTCCCCGGTCGGGGCGACGGTAACGAGCATATATGGCTGTCAGGTGAAAGTTACAGAAAAAAAAAGGTACCAGGGGCGGATCAGGCAGGCTGATAAGAACATGAGGTGATATGTACCATATAAGGGGTGAGACGAAAGGCTTCTTTAAAAGTGAGGAATGAGGGATGGTTCCGGGCCATTAAGATGCACTTGAAAGAGTAACCAGCGGTCTTGGAAAGAGCATTAAAGGGAGGAGTTACAATAAATGGACGTGAGAAGCGGGACTGTATGCTTTCAGTGGAAGGATAGGGGGTTTCACGGGCTGTACTACATCAAGGGACACCACTTTGAACGGGATATTCATGATTATTAATAGTAGACAACCAGGTTACATGGAACGGTAGGGTAATGCGGGTACAAGTAGGATGTAACAACCCACTCTTTTTATACAAATAATTATAGTATAACTCCGGCTTGATAGGCGTGGGGCAAACCATTAATGTATGATTATACATAGTGAAATAAAGACTAAGAACCAAAAGGTACATAATAGTCGAATTCAGGAAAAACGGGTTTTTGGGGGGGGGAGAGGGGGGGACCTAGGAGAGTACTATTTTTTTACAAAAAGTAGTTTAAGTTAAAAATGCTAGTTTTGGGGGCTAGAGATGGAAGTTCTCTTTTTGATGCTCTAAGGGTTACCCAGCTTTGGTTTACAAGAACAATGCTTTAGAAGTTTAAGCTATTAGAGCAGGTATTATATGAGATTTTATTTTCTGTTCATCCCAGGATTGGGTTCATGATGAAAAATATAAAGTATAAAATTGAGGTTGTTTGGCCAATTAAGGTGAATGGCGGTTCGATTGGCTTTGTGGCTGTTCATGTGATCATAATAAAAGTGGCAATTAGTGTTCAAAATAATAGTTGTATTATTGGCCGGAAGGTCATAGATCGTACATGGGAGGTGTGGGTAAATGGTATTGAGAGTAGGATTAAGATTGACATAATTAGGGCTATT")))
-as.character(reverseComplement(DNAString("TAATGGAAATAATCGGTCAAATTGGAAATATGTCTAACAAGCATTAAAGGATAGTACCTCTTAGGGAATATGCAGGACCATGGGCGGAGCTCCACCTGGACTAAATGCCTTCCCCGGTCGGGGCGACGGTAACGAGCATATATGGCTGTCAGGTGAAAGTTACAGAAAAAAAAAGGTACCAGGGGCGGATCAGGCAGGCTGATAAGAACATGAGGTGATATGTACCATATAAGGGGTGAGACGAAAGGCTTCTTTAAAAGTGAGGAATGAGGGATGGTTCCGGGCCATTAAGATGCACTTGAAAGAGTAACCAGCGGTCTTGGAAAGAGCATTAAAGGGAGGAGTTACAATAAATGGACGTGAGAAGCGGGACTGTATGCTTTCAGTGGAAGGATAGGGGGTTTCACGGGCTGTACTACATCAAGGGACACCACTTTGAACGGGATATTCATGATTATTAATAGTAGACAACCAGGTTACATGGAACGGTAGGGTAATGCGGGTACAAGTAGGATGTAACAACCCACTCTTTTTATACAAATAATTATAGTATAACTCCGGCTTGATAGGCGTGGGGCAAACCATTAATGTATGATTATACATAGTGAAATAAAGACTAAGAACCAAAAGGTACATAATAGTCGAATTCAGGAAAAACGGGTTTTTGGGGGGGGGAGAGGGGGGGACCTAGGAGAGTACTATTTTTTTACAAAAAGTAGTTTAAGTTAAAAATGCTAGTTTTGGGGGCTAGAGATGGAAGTTCTCTTTTTGATGCTCTAAGGGTTACCCAGCTTTGGTTTACAAGAACAATGCTTTAGAAGTTTAAGCTATTAGAGCAGGTATTATATGAGATTTTATTTTCTGTTCATCCCAGGATTGGGTTCATGATGAAAAATATAAAGTATAAAATTGAGGTTGTTTGGCCAATTAAGGTGAATGGCGGTTCGATTGGCTTTGTGGCTGTTCATGTGATCATAATAAAAGTGGCAATTAGTGTTCAAAATAATAGTTGTATTATTGGCCGGAAGGTCATAGATCGTACATGGGAGGTGTGGGTAAATGGTATTGAGAGTAGGATTAAGATTGACATAATTAGGGCTATT")))
-"TAATGGAAATAATCGGTCAAATTGGAAATATGTCTAACAAGCATTAAAGGATAGTACCTCTTAGGGAATATGCAGGACCATGGGCGGAGCTCCACCTGGACTAAATGCCTTCCCCGGTCGGGGCGACGGTAACGAGCATATATGGCTGTCAGGTGAAAGTTACAGAAAAAAAAAGGTACCAGGGGCGGATCAGGCAGGCTGATAAGAACATGAGGTGATATGTACCATATAAGGGGTGAGACGAAAGGCTTCTTTAAAAGTGAGGAATGAGGGATGGTTCCGGGCCATTAAGATGCACTTGAAAGAGTAACCAGCGGTCTTGGAAAGAGCATTAAAGGGAGGAGTTACAATAAATGGACGTGAGAAGCGGGACTGTATGCTTTCAGTGGAAGGATAGGGGGTTTCACGGGCTGTACTACATCAAGGGACACCACTTTGAACGGGATATTCATGATTATTAATAGTAGACAACCAGGTTACATGGAACGGTAGGGTAATGCGGGTACAAGTAGGATGTAACAACCCACTCTTTTTATACAAATAATTATAGTATAACTCCGGCTTGATAGGCGTGGGGCAAACCATTAATGTATGATTATACATAGTGAAATAAAGACTAAGAACCAAAAGGTACATAATAGTCGAATTCAGGAAAAACGGGTTTTTGGGGGGGGGAGAGGGGGGGACCTAGGAGAGTACTATTTTTTTACAAAAAGTAGTTTAAGTTAAAAATGCTAGTTTTGGGGGCTAGAGATGGAAGTTCTCTTTTTGATGCTCTAAGGGTTACCCAGCTTTGGTTTACAAGAACAATGCTTTAGAAGTTTAAGCTATTAGAGCAGGTATTATATGAGATTTTATTTTCTGTTCATCCCAGGATTGGGTTCATGATGAAAAATATAAAGTATAAAATTGAGGTTGTTTGGCCAATTAAGGTGAATGGCGGTTCGATTGGCTTTGTGGCTGTTCATGTGATCATAATAAAAGTGGCAATTAGTGTTCAAAATAATAGTTGTATTATTGGCCGGAAGGTCATAGATCGTACATGGGAGGTGTGGGTAAATGGTATTGAGAGTAGGATTAAGATTGACATAATTAGGGCTATT"
-as.character(reverseComplement(DNAString("AATAGCCCTAATTATGTCAATCTTAATCCTACTCTCAATACCATTTACCCACACCTCCCATGTACGATCTATGACCTTCCGGCCAATAATACAACTATTATTTTGAACACTAATTGCCACTTTTATTATGATCACATGAACAGCCACAAAGCCAATCGAACCGCCATTCACCTTAATTGGCCAAACAACCTCAATTTTATACTTTATATTTTTCATCATGA")))
-as.character(reverseComplement(DNAString("AATAGCCCTAATTATGTCAATCTTAATCCTACTCTCAATACCATTTACCCACACCTCCCATGTACGATCTATGACCTTCCGGCCAATAATACAACTATTATTTTGAACACTAATTGCCACTTTTATTATGATCACATGAACAGCCACAAAGCCAATCGAACCGCCATTCACCTTAATTGGCCAAACAACCTCAATTTTATACTTTATATTTTTCATCATGA")))
-paste(rep("N",1500),collapse="")
-as.character(reverseComplement(DNAString("AGTTAGAGGTGTTAAGGGCGTTTGTTGTGGCTGCAAATAGTATAACTGTAGAGGCCATTGTTTGAATTAGAAAGTATTTAGTTGCTGCTTCTGTTGCTCGAGGGTGATTTGATTTTGAAATAATTGGAGTTATTGATAGGGCGTTGATTTCTAGGCAAACTCATGTTATTAGTCAGTGTGTTGACATAGTAACGATAGTTGTGCTTAGGATGATGCTTATTGAAATTATAGTCCAAGATATTAGGTTAATTAGTAGGGGCCTAGTATGACATTTTCGGGGTATGGGCCCGATAGCTTATTTAGCTGACCCTACCGTAGAAGGTAGTATATTGGTAGTACTGAAAGTTTTGAGTTTTCAGGTCTGAGTTCGAGTCTTGGTCTTCTAATATTAAGGAGATGATTTGAACATCTGTTGTGAGGTTTTAAGCCTATTGCATGGCCGAGCTTTGCTACCTTAATTTAATATGAAAATATGGGTCAAAACTGTGAATGATAATAAAAATGACTATGTTTAGAGGGGGGGGAATTCGGCATTTGAATTCTCCTTTTGGGGAGAGAAGATGAATTTCGGGGGCTTTTTTAAGGATCCGAAAAAAATATACTAACATTTTTTTTTCCATGGGTATGCATGGTGATGTTGGTCTGCAAAAGCGCTTATTGTATAAGTGTCGGGCACGAATTGTGCCATTTAAATTTATTATTGTTTTATCGTATGTACGTAGTTTTAATTTTTAAAAATTAGGGCGTATAAAATGCTGTAAAAGCGACGATTTTATAATAAAAAAATAATGGAAATAATCGGTCAAATTGGAAATATGTCTAACAAGCATTAAAGGATAGTACCTCTTAGGGAATATGCAGGACCATGGGCGGAGCTCCACCTGGACTAAATGCCTTCCCCGGTCGGGGCGACGGTAACGAGCATATATGGCTGTCAGGTGAAAGTTACAGAAAAAAAAAGGTACCAGGGGCGGATCAGGCAGGCTGATAAGAACATGAGGTGATATGTACCATATAAGGGGTGAGACGAAAGGCTTCTTTAAAAGTGAGGAATGAGGGATGGTTCCGGGCCATTAAGATGCACTTGAAAGAGTAACCAGCGGTCTTGGAAAGAGCATTAAAGGGAGGAGTTACAATAAATGGACGTGAGAAGCGGGACTGTATGCTTTCAGTGGAAGGATAGGGGGTTTCACGGGCTGTACTACATCAAGGGACACCACTTTGAACGGGATATTCATGATTATTAATAGTAGACAACCAGGTTACATGGAACGGTAGGGTAATGCGGGTACAAGTAGGATGTAACAACCCACTCTTTTTATACAAATAATTATAGTATAACTCCGGCTTGATAGGCGTGGGGCAAACCATTAATGTATGATTATACATAGTGAAATAAAGACTAAGAACCAAAAGGTACATAATAGTCGAATTCAGGAAAAACGGGTTTTTGGGGGGGGGAGAGGGGGGGACCTAGGAGAGTACTATTTTTTTACAAAAAGTAGTTTAAGTTAAAAATGCTAGTTTTGGGGGCTAGAGATGGAAGTTCTCTTTTTGATGCTCTAAGGGTTACCCAGCTTTGGTTTACAAGAACAATGCTTTAGAAGTTTAAGCTATTAGAGCAGGTATTATATGAGATTTTATTTTCTGTTCATCCCAGGATTGGGTTCATGATGAAAAATATAAAGTATAAAATTGAGGTTGTTTGGCCAATTAAGGTGAATGGCGGTTCGATTGGCTTTGTGGCTGTTCATGTGATCATAATAAAAGTGGCAATTAGTGTTCAAAATAATAGTTGTATTATTGGCCGGAAGGTCATAGATCGTACATGGGAGGTGTGGGTAAATGGTATTGAGAGTAGGATTAAGATTGACATAATTAGGGCTATT"")))
-as.character(reverseComplement(DNAString("AGTTAGAGGTGTTAAGGGCGTTTGTTGTGGCTGCAAATAGTATAACTGTAGAGGCCATTGTTTGAATTAGAAAGTATTTAGTTGCTGCTTCTGTTGCTCGAGGGTGATTTGATTTTGAAATAATTGGAGTTATTGATAGGGCGTTGATTTCTAGGCAAACTCATGTTATTAGTCAGTGTGTTGACATAGTAACGATAGTTGTGCTTAGGATGATGCTTATTGAAATTATAGTCCAAGATATTAGGTTAATTAGTAGGGGCCTAGTATGACATTTTCGGGGTATGGGCCCGATAGCTTATTTAGCTGACCCTACCGTAGAAGGTAGTATATTGGTAGTACTGAAAGTTTTGAGTTTTCAGGTCTGAGTTCGAGTCTTGGTCTTCTAATATTAAGGAGATGATTTGAACATCTGTTGTGAGGTTTTAAGCCTATTGCATGGCCGAGCTTTGCTACCTTAATTTAATATGAAAATATGGGTCAAAACTGTGAATGATAATAAAAATGACTATGTTTAGAGGGGGGGGAATTCGGCATTTGAATTCTCCTTTTGGGGAGAGAAGATGAATTTCGGGGGCTTTTTTAAGGATCCGAAAAAAATATACTAACATTTTTTTTTCCATGGGTATGCATGGTGATGTTGGTCTGCAAAAGCGCTTATTGTATAAGTGTCGGGCACGAATTGTGCCATTTAAATTTATTATTGTTTTATCGTATGTACGTAGTTTTAATTTTTAAAAATTAGGGCGTATAAAATGCTGTAAAAGCGACGATTTTATAATAAAAAAATAATGGAAATAATCGGTCAAATTGGAAATATGTCTAACAAGCATTAAAGGATAGTACCTCTTAGGGAATATGCAGGACCATGGGCGGAGCTCCACCTGGACTAAATGCCTTCCCCGGTCGGGGCGACGGTAACGAGCATATATGGCTGTCAGGTGAAAGTTACAGAAAAAAAAAGGTACCAGGGGCGGATCAGGCAGGCTGATAAGAACATGAGGTGATATGTACCATATAAGGGGTGAGACGAAAGGCTTCTTTAAAAGTGAGGAATGAGGGATGGTTCCGGGCCATTAAGATGCACTTGAAAGAGTAACCAGCGGTCTTGGAAAGAGCATTAAAGGGAGGAGTTACAATAAATGGACGTGAGAAGCGGGACTGTATGCTTTCAGTGGAAGGATAGGGGGTTTCACGGGCTGTACTACATCAAGGGACACCACTTTGAACGGGATATTCATGATTATTAATAGTAGACAACCAGGTTACATGGAACGGTAGGGTAATGCGGGTACAAGTAGGATGTAACAACCCACTCTTTTTATACAAATAATTATAGTATAACTCCGGCTTGATAGGCGTGGGGCAAACCATTAATGTATGATTATACATAGTGAAATAAAGACTAAGAACCAAAAGGTACATAATAGTCGAATTCAGGAAAAACGGGTTTTTGGGGGGGGGAGAGGGGGGGACCTAGGAGAGTACTATTTTTTTACAAAAAGTAGTTTAAGTTAAAAATGCTAGTTTTGGGGGCTAGAGATGGAAGTTCTCTTTTTGATGCTCTAAGGGTTACCCAGCTTTGGTTTACAAGAACAATGCTTTAGAAGTTTAAGCTATTAGAGCAGGTATTATATGAGATTTTATTTTCTGTTCATCCCAGGATTGGGTTCATGATGAAAAATATAAAGTATAAAATTGAGGTTGTTTGGCCAATTAAGGTGAATGGCGGTTCGATTGGCTTTGTGGCTGTTCATGTGATCATAATAAAAGTGGCAATTAGTGTTCAAAATAATAGTTGTATTATTGGCCGGAAGGTCATAGATCGTACATGGGAGGTGTGGGTAAATGGTATTGAGAGTAGGATTAAGATTGACATAATTAGGGCTATT")))
-as.character(reverseComplement(DNAString("AATAGCCCTAATT")))
-as.character(reverseComplement(DNAString("AATTAGGGCTATT")))
-reverse("TGGTGTTGTGTAATTTGGTCT")
-reverseComplement("TCTGGTTTAATGTGTTGTGGT")
-reverseComplement(DNAString("TCTGGTTTAATGTGTTGTGGT"))
-Complement(DNAStringSet("ATTTCGTAACAAGAACATTTGGTTTC"))
-complement(DNAStringSet("ATTTCGTAACAAGAACATTTGGTTTC"))
-50000000/176600000
-workdir <- "/Users/jeff/Documents/SequenceCapture-GitHub/blastij"
-list.files(workdir)
-hits.temp <- fread("Qsample1_Ssample2_matches.txt")
-list.files(workdir,full.names=T)
-hits.temp <- fread("/Users/jeff/Documents/SequenceCapture-GitHub/blastij/Qsample1_Ssample2_matches.txt")
-hits.temp
-key <- fread("/Users/jeff/Documents/SequenceCapture-GitHub/blastij/allseqs_key.txt")
-key
-hits.temp2 <- hits.temp[,c(1:2)]
-hits.temp2
-test <- match(hits.temp2[,1],key[,2])
-test2 <- match(hits.temp2[,2],key[,2])
-hits.temp3 <- hits.temp2
-hits.temp3[,1] <- key[test,1]
-hits.temp3[,2] <- key[test2,1]
-dim(hits.temp3)
-hits.temp4[1:5,]
-hits.temp3[1:5,]
-hits.temp2[1,1]
-key[1,2]
-key <- fread("/Users/jeff/Documents/SequenceCapture-GitHub/blastij/allseqs_key.txt",header=F)
-key
-test <- match(hits.temp2[1,1],key[,2])
-test
-hits.temp2[1,1]
-test <- match(hits.temp2[1,1],key[1:5,2])
-test
-key[1:5,2]
-hits.temp2[1,1] %in% key[1:5,2]
-hits.temp2[1,1]
-as.character(hits.temp2[1,1]) %in% as.character(key[1:5,2])
-as.character(hits.temp2[1,1])
-as.character(key[1:5,2])
-as.character(unlist(key[1:5,2]))
-as.character(hits.temp2[1,1]) %in% as.character(unlist(key[1:5,2]))
-test <- match(unlist(hits.temp2[1,1]),unlist(key[,2]))
-test
-test <- match(unlist(hits.temp2[1:5,1]),unlist(key[,2]))
-test
-test <- match(unlist(hits.temp2[,1]),unlist(key[,2]))
-length(test)
-test[1:5]
-test2 <- match(unlist(hits.temp2[,2]),unlist(key[,2]))
-qNames <- key[match(unlist(hits.temp2[,1]),unlist(key[,2])),1]#
-sNames <- key[match(unlist(hits.temp2[,2]),unlist(key[,2])),1]
-qNames[1:5]
-matches.temp <- cbind(qNames,sNames)
-dim(matches.temp)
-qNamesOG <- gsub("_sliding.+","",qNames)
-qNamesOG <- gsub("_sliding.+","",unlist(qNames))
-qNamesOG[1:5]
-sNamesOG <- gsub("_sliding.+","",unlist(sNames))
-matchesOG <- unique(cbind(qNamesOG,sNamesOG))
-dim(matchesOG)
-dim(matches.temp)
-matchesOG[1:5,]
-test <- table(sNamesOG)
-any(test > 1)
-matchesOG2 <- distinct(cbind(qNamesOG,sNamesOG))
-test <- paste(qNamesOG, sNamesOG)
-test[1]
-length(unique(test))
-27582239-27577075
-??simplify
-igraph::as_data_frame
-igraph::simplify
-library(misc.wrappers)
-?combn()
-test=combn(paste0("sample",1:65)),2)
-paste0("sample",1:65)
-test=combn(paste0("sample",1:65),2)
-length(test)
-class(test)
-dim(test)
-test[1,]
-test[,1]
-test[,2]
-test[,3]
-test[,1:3]
-test=t(combn(paste0("sample",1:65),2))
-test[1:5,]
-nrow(test)
-test[2080,]
-test[2070,]
-test[65,]
-test[64,]
-test2 <- paste(test[,1],test[,2])
-length(test2)
-test2[1]
-test2[2]
-test2[3]
-test2 <- c(paste(test[,1],test[,2]),paste(test[,2],test[,1]))
-length(test2)
-length(unique(test2))
-test2 <- c(paste0("Q",test[,1],"_S",test[,2]),paste0("Q",test[,2],"_S",test[,1])) # Qsample1_Ssample3_matches.txt
-test2[1]
-test2 <- paste0(c(paste0("Q",test[,1],"_S",test[,2]),paste0("Q",test[,2],"_S",test[,1])),"_matches.txt") # Qsample1_Ssample3_matches.txt
-test2 <- sort(paste0(c(paste0("Q",test[,1],"_S",test[,2]),paste0("Q",test[,2],"_S",test[,1])),"_matches.txt"))
-test[]1
-test2[1]
-test2[2]
-?write.table
-x=1:10
-?split()
-split(x,f=c(1:3))
-split(x,f=c(1:3),drop=T)
-split(x,f=c(1:20),drop=T)
-split(x,f=c(1:10),drop=F)
-split(x,f=c(1:5),drop=F)
-split(x,f=c(1:4),drop=F)
-SuppressWarnings(split(x,f=c(1:4),drop=F))
-suppressWarnings(split(x,f=c(1:4),drop=F))
-set1 <- suppressWarnings(split(x,f=c(1:4),drop=F))
-set2 <- suppressWarnings(split(x,f=c(1:4),drop=F))
-set1
-set2
-set1 <- suppressWarnings(split(sample(x), f=c(1:4), drop=F))
-set1
-set2 <- suppressWarnings(split(sample(x), f=c(1:4), drop=F))
-set2
-D-A:B:F:G
-net1 <- graph_from_literal(D-A:B:F:G, A-C-F-A, B-E-G-B, A-B, F-G,#
-                  H-F:G, H-I-J)
-library(igraph)
-net1 <- graph_from_literal(D-A:B:F:G, A-C-F-A, B-E-G-B, A-B, F-G,#
-                  H-F:G, H-I-J)
-net1
-net2 <- graph_from_literal(D-A:F:Y, B-A-X-F-H-Z, F-Y)
-net2
-net1 %u% net2
-1708184528/(1e9)
+rm(list = c("clusterIntervals", "mergedRange"))
+devtools::document()
+clusterIntervals
+Rscript <(echo -e "#
+  is.overlap <- function(r1,r2){#
+    min(r1) <= max(r2) && min(r2) <= max(r1)#
+  }#
+  mergedRange <- function(r1,r2){#
+   if(is.overlap(r1,r2)) {#
+      range(c(r1,r2))#
+   } else {#
+      return(r2)#
+   }#
+  }#
+  clusterIntervals <- function(data){#
+   df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
+   df2 <- df1[do.call(order, as.list(df1)),]#
+   res=list(); length(res) <- nrow(df2)#
+   names(res)[1] <- rownames(df2)[1]#
+   res[[1]] <- unname(unlist(df2[1,]))#
+   for(i in 2:nrow(df2)){#
+      res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
+      if(is.overlap(res[[(i-1)]],df2[i,])) {#
+         names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]],sep=',')#
+         res[[(i-1)]] <- NA#
+      } else {#
+         names(res)[[i]] <- rownames(df2)[i]#
+      }#
+   }#
+   intervalSets        <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
+   result.df           <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
+   colnames(result.df) <- c('merged','start','end')#
+   result.df#
+  }#
+  dat <- read.table(text='$(echo "$DATi")',sep=' ',header=F,row.names=1)#
+  clusterIntervals(data=dat)[,1] \n ") | awk -F' ' 'NR>1{print $2,$3,$4}'
+as.integer(c("red","blue","green"))
+31*3089
+90000/500
+SUBJECTS_NAMES=unlist(strsplit('sample36_0000033883 sample36_0000033883',split=' '))
+SUBJECTS_NAMES
+aln=readDNAStringSet("/Users/jeff/Downloads/group106.fa") #; plotAlignment()
+plotAlignment(aln)
