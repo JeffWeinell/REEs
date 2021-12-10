@@ -253,7 +253,8 @@ make.partitioned.alignment  <- function(InputAlignmentFolder,output.dir,TargetCD
 			### Median pairwise p-distances for the AA alignment containing no missing or ambiguous data
 			if(!all(width(aa.alignment.mdt0)==0)){
 				distAA.mdt0        <- Biostrings::stringDist(aa.alignment.mdt0)
-				median.distAA.mdt0 <- apply(X=distAA.mdt0,MARGIN=1,FUN=median)/width(aa.alignment.mdt0[1])
+				#median.distAA.mdt0 <- apply(X=distAA.mdt0,MARGIN=1,FUN=median)/width(aa.alignment.mdt0[1])
+				median.distAA.mdt0 <- median(distAA.mdt0)/width(aa.alignment.mdt0[1])
 			} else {
 				distAA.mdt0        <- NA
 				median.distAA.mdt0 <- NA
