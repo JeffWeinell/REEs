@@ -138,6 +138,10 @@ make.partitioned.alignment  <- function(InputAlignmentFolder,output.dir,TargetCD
 		} else {
 			alignment_B <- NULL
 		}
+		### Use odseq package to remove outlier individuals from alignment, and then rerun mafft
+		outliers    <- odseq::odseq(DNAMultipleAlignment(alignment), threshold = 0.05, distance_metric = "affine", B = 1000)
+		alignment   <- REEs::mafft(Biostrings::DNAStringSet(x=gsub("-","",alignment[!outliers])), param="--auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet")
+		### "upstream.noncoding", "CDS", and "downstream.noncoding" regions by comparing to the CDS of the reference target
 		begin.exon       <- stringr::str_locate(string=alignment[1],pattern=as.character(subseq(reference.cds,start=1,end=1)))[1]
 		end.exon         <- REEs::str_locate_last(string=alignment[1],pattern=as.character(subseq(reference.cds,start=(width(reference.cds)-1),end=width(reference.cds))))
 		starts           <- c(1,begin.exon,begin.exon+1,begin.exon+2,end.exon+1)
