@@ -107,11 +107,11 @@ make.partitioned.alignment  <- function(InputAlignmentFolder,output.dir,TargetCD
 			final.locus          <- c(reference.cds,novel2)
 		}
 		# Skips locus if <4 sequences other than the reference CDS
-		if(FALSE) {
-			if(length(final.locus)<5){
-				next
-			}
-		}
+		#if(FALSE) {
+		#	if(length(final.locus)<5){
+		#		next
+		#	}
+		#}
 		alignment.names  <- names(final.locus)
 		if(!all(is.na(old.names))){
 			alignment.names  <- mgsub(old.names,new.names,alignment.names)
@@ -122,7 +122,7 @@ make.partitioned.alignment  <- function(InputAlignmentFolder,output.dir,TargetCD
 		alignment_A <- alignment
 		### Trim alignment to the maximum width region that includes at least one individual in 'trimto' at the first and last base
 		if(!is.null(trimto)){
-			alignment   <- REEs::trimTo(aln=alignment,nam=trimto)
+			alignment   <- trimTo(aln=alignment,nam=trimto)
 			alignment_B <- alignment
 			#if(!names(reference.cds) %in% trimto){
 			#	trimto <- c(names(reference.cds), trimto)
@@ -165,7 +165,7 @@ make.partitioned.alignment  <- function(InputAlignmentFolder,output.dir,TargetCD
 				# cds.alignment2      <- REEs::mafft(cds.alignment2,param="--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6")
 				cds.alignment2        <- REEs::mafft(cds.alignment2, param="--auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet")
 				if(!is.null(trimto)){
-					cds.alignment2    <- REEs::trimTo(aln=cds.alignment2,nam=trimto)
+					cds.alignment2    <- trimTo(aln=cds.alignment2,nam=trimto)
 				}
 				alignment_C           <- cds.alignment2
 			} else {
@@ -188,7 +188,7 @@ make.partitioned.alignment  <- function(InputAlignmentFolder,output.dir,TargetCD
 					# upstream.alignment2      <- REEs::mafft(upstream.alignment2,param="--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6")
 					upstream.alignment2        <- REEs::mafft(upstream.alignment2, param="--auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet")
 					if(!is.null(trimto)){
-						upstream.alignment2    <- REEs::trimTo(aln=upstream.alignment2,nam=trimto)
+						upstream.alignment2    <- trimTo(aln=upstream.alignment2,nam=trimto)
 					}
 					alignment_D <- upstream.alignment2
 				} else {
@@ -214,7 +214,7 @@ make.partitioned.alignment  <- function(InputAlignmentFolder,output.dir,TargetCD
 					#downstream.alignment2  <- REEs::mafft(downstream.alignment2, param="--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6")
 					downstream.alignment2   <- REEs::mafft(downstream.alignment2, param="--auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet")
 					if(!is.null(trimto)){
-						downstream.alignment2    <- REEs::trimTo(aln=downstream.alignment2,nam=trimto)
+						downstream.alignment2    <- trimTo(aln=downstream.alignment2,nam=trimto)
 					}
 					alignment_E <- downstream.alignment2
 				} else {
