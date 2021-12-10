@@ -1,653 +1,594 @@
-names(test["a"])
-names(test[["a"]])
-a=c(1:3);b=c(1:4);c=c(1:5)
-names(a) <- c("one","two","three")
-names(b) <- c("one","two","three","four")
-names(c) <- c("one","two","three","four","five")
-test <- list(a,b,c)
-names(test)
+plotAlignment(upstream.alignment2,colors="black")
+names(upstream.alignment2)[29]
+?str_locate_last
+?subseq
+firstbase_test   <- subseq(Biostrings::DNAStringSet(x=gsub("-","",alignment)),start=1,end=1)
+class(firstbase_test)
+firstbase_test
+as.character(firstbase_test)
+firstbase        <- as.character(subseq(Biostrings::DNAStringSet(x=gsub("-","",alignment)),start=1,end=1))
+firstbase
+lastbase        <- as.character(subseq(rev(Biostrings::DNAStringSet(x=gsub("-","",alignment))),start=1,end=1))
+lastbase
+?rev
+test <- rev(Biostrings::DNAStringSet(x=gsub("-","",alignment)))
 test
-test <- list(a=a,b=b,c=c)
 test
-names(test)
-names(test[['a']])
-names(test[['b']])
-names(test[['b']])
-names(test[['c']])
-igraph::clusters
-expand.grid(1:3,1:3)
-COMBOS<-expand.grid(1:3,1:3)
-COMBOS[which(COMBOS[,1]>COMBOS[,2]),]
-as.matrix(#
-1 2#
-3 4#
-)
-infiles  <- unlist(strsplit('/panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/SnakeCap_AllSamples/blast_database11/groupAlignments_SeqCapAndTargetRef_max100Seqs/group1.fasta /panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/SnakeCap_AllSamples/blast_database11/groupAlignments_SeqCapAndTargetRef_max100Seqs/group2.fasta /panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/SnakeCap_AllSamples/blast_database11/groupAlignments_SeqCapAndTargetRef_max100Seqs/group3.fasta /panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/SnakeCap_AllSamples/blast_database11/groupAlignments_SeqCapAndTargetRef_max100Seqs/group4.fasta /panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/SnakeCap_AllSamples/blast_database11/groupAlignments_SeqCapAndTargetRef_max100Seqs/group5.fasta',split=' '))
-infiles
-A=c(1,3); B=c(12,14); C=c(2,4); D=c(13,15); E=c(5,10)
-dat=cbind(A,B,C,D,E)
-dat
-dat=rbind(A,B,C,D,E)
-dat
-data.frame(text="#
-A 1 3 #
-C 2 4 #
-E 5 10#
-B 12 14#
-D 13 15#
-")
-data.frame(text="#
-A 1 3 #
-C 2 4 #
-E 5 10#
-B 12 14#
-D 13 15#
-",stringsAsFactors=F)
-data.frame(text="#
-A 1 3 #
-C 2 4 #
-E 5 10#
-B 12 14#
-D 13 15#
-",stringsAsFactors=F,sep=" "")
-data.frame(text="#
-A 1 3 #
-C 2 4 #
-E 5 10#
-B 12 14#
-D 13 15#
-",stringsAsFactors=F,sep=" ")
-library(REEs)
-is.overlap(A,B)
-A
-B
-is.overlap(dat[1,],dat[2,])
-is.overlap(dat[1,],dat[3,])
-if(is.overlap(dat[1,],dat[3,])) range(dat[c(1,3),])
-?merge()
-?merge
-mergedRange <- function(r1,r2){#
-	if(is.overlap(r1,r2)) {#
-		range(c(r1,r2))#
-	} else {#
-		NA#
-	}#
-}
-mergedRange(dat[1,],dat[3,])
-read.table(text="#
-A 1 3 #
-C 2 4 #
-E 5 10#
-B 12 14#
-D 13 15#
-",sep=" ")
-read.table(text="#
-A 1 3#
-C 2 4#
-E 5 10#
-B 12 14#
-D 13 15#
-",sep=" ")
-read.table(text="#
-A 1 3#
-C 2 4#
-E 5 10#
-B 12 14#
-D 13 15#
-",sep=" ",row.names=T,col.names=F)
-read.table(text="#
-A 1 3#
-C 2 4#
-E 5 10#
-B 12 14#
-D 13 15#
-",sep=" ",row.names=T,header=F)
-read.table(text="#
-A 1 3#
-C 2 4#
-E 5 10#
-B 12 14#
-D 13 15#
-",sep=" ",check.names=T,header=F)
-read.table(text="#
-A 1 3#
-C 2 4#
-E 5 10#
-B 12 14#
-D 13 15#
-",sep=" ",row.names=1,header=F)
-read.table(text="#
-A 1 3#
-C 2 4#
-E 5 10#
-B 12 14#
-D 13 15#
-",sep=" ",header=F,row.names=1)
-data <- read.table(text="#
-A 1 3#
-C 2 4#
-E 5 10#
-B 12 14#
-D 13 15#
-",sep=" ",header=F,row.names=1)
-data
-data2 <- data.frame(NA,nrow=nrow(data),ncol=ncol(data))
-data2
-data2 <- matrix(data=NA,nrow=nrow(data),ncol=ncol(data))
-data2
-data2[1,] <- data[1,]
-data2
-data <- as.matrix(read.table(text="#
-A 1 3#
-C 2 4#
-E 5 10#
-B 12 14#
-D 13 15#
-",sep=" ",header=F,row.names=1))
-data
-data2 <- matrix(NA,ncol=ncol(data),nrow=nrow(data))
-data2
-data2[1,] <- data[1,]
-data2
-rownames(data2)[1] <- rownames(data)[1]
-data2 <- list(); length(data2) <- nrow(data)
-data2
-names(data2)
-names(data2)[1]
-names(data2)[1] <- rownames(data)[1]
-data2
-data2[[1]] <- data[1,]
-data2
-set1 <- data[,1] > data[,2]
-set1
-set1 <- data[c(data[,1] > data[,2]),]
-set1
-set1 <- data[c(data[,1] < data[,2]),c(1,2)]#
-set2 <- data[c(data[,1] > data[,2]),c(2,1)]
-cbind(set1,set2)
-set1
-rbind(set1,set2)
-df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])
-df1
-sort(df1)
-order(df1[,1],df1[,2])
-df1[order(df1[,1],df1[,2]),]
-data <- as.matrix(read.table(text="#
-A 1 3#
-B 12 14#
-C 2 4#
-D 13 15#
-E 5 10#
-",sep=" ",header=F,row.names=1))
-data
-order(df1)
-order(df1,"shell")
-order(df1,method="shell")
-order(df1[],method="shell")
-order(df1,method="radix")
-order(df1[,1],method="radix")
-order(df1[,2],method="radix")
-order(df1[,c(1:ncol(df1))],method="radix")
-df1[,c(1:ncol(df1))]
-order(df1[,c(1:ncol(df1))],method="shell")
-order(df1[,1],df1[,2],method="shell")
-system(df1)
-system(sprintf("echo %s"),df1)
-system(sprintf("echo %s",df1),intern=T)
-text(df1)
-print(df1)
-system(print(df1))
-c(df1)
-paste(df1)
-paste(df1,recycle=T)
-system(sprintf("sort %s",df1))
-sprintf("sort %s",df1)
-write(df1)
-data <- as.matrix(read.table(text="#
-A 1 3#
-B 12 14#
-C 2 4#
-D 13 15#
-E 5 10#
-",sep=" ",header=F,row.names=1))
-# sorts values in rows such that column 1 values are less those in column 2#
-df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
-# sorts rows by first column and then by successive columns to break ties#
-df2 <- df1[do.call(order, as.list(df1)),]
-df2
-do.call(order, as.list(df1))
-data
-df1
-as.list(df1)
-as.list(df1)
-list(df1)
-length(df1)
-class(df1)
-data <- read.table(text="#
-A 1 3#
-B 12 14#
-C 2 4#
-D 13 15#
-E 5 10#
-",sep=" ",header=F,row.names=1)
-# sorts values in rows such that column 1 values are less those in column 2#
-df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
-# sorts rows by first column and then by successive columns to break ties#
-df2 <- df1[do.call(order, as.list(df1)),]
-df2
-res=matrix(df2)
-res
-res=matrix(ncol=df2)
-res=matrix(dim=dim(df2))
-res=matrix(nrow=nrow(df2),ncol=ncol(df2))
-res
-res=list(length=nrow(df2))
-res
-res=list(); length(res) <- nrow(df2)
-res
-names(res)[1] <- rownames(df2)[1]
-res
-res[[1]] <- df2[1,]
-res
-res=list(); length(res) <- nrow(df2)
-res
-res[[1]] <- df2[1,]
-res
-res=list(); length(res) <- nrow(df2)#
-names(res)[1] <- rownames(df2)[1]#
-res[[1]] <- df2[1,]
-mergedRange <- function(r1,r2){#
-	if(is.overlap(r1,r2)) {#
-		range(c(r1,r2))#
-	} else {#
-		r2#
-	}#
-}
-mergedRange(df2[1,],df[2,])
-df2[1,]
-df[2,]
-mergedRange(df2[1,],df2[2,])
-i=2
-mergedRange(res[[(i-1)]],df2[i,])
-res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])
-res
-res=list(); length(res) <- nrow(df2)#
-names(res)[1] <- rownames(df2)[1]#
-res[[1]] <- unname(df2[1,])
-res
-unname(df2[1,])
-unname(df2[1,],force=T)
-df2[1,]
-dimnames(df2[1,])
-unname(df2[1,],force=T)
-test <- unname(df2[1,],force=T)
-test <- unname(df2,force=T)
-res1 <- df2[1,]#
-dimnames(res1) <- NULL#
-res[[1]] <- res1
-dimnames(res1)
-dimnames(res1) <- NILL
-dimnames(res1) <- NULL
-dimnames(res1) <- ""
-dimnames(res1) <- NA
-rownames(res1)
-rownames(res1) <- NULL
-res1 <- unname(df2[1,])#
-rownames(res1) <- NULL
-res1
-unname(c(df2[1,]))
-unname(unlist(df2[1,]))
-res[[1]] <- unname(unlist(df2[1,]))
-res
-res[[1]] <- unname(unlist(df2[1,]))
-res=list(); length(res) <- nrow(df2)#
-names(res)[1] <- rownames(df2)[1]#
-res[[1]] <- unname(unlist(df2[1,]))#
-for(2 in 1:nrow(df2)){#
-	res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
-	if(is.overlap(res[[(i-1)]],df2[i,])){#
-		names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]])#
-	} else {#
-		names(res)[[i]] <- rownames(df2)[i]#
-	}#
-}
-i=2
-paste(rownames(df2)[i],names(res)[[i-1]])
-res=list(); length(res) <- nrow(df2)#
-names(res)[1] <- rownames(df2)[1]#
-res[[1]] <- unname(unlist(df2[1,]))
-i=2
-res
-res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])
-res
-if(TRUE){#
-		"yes"#
-	} else {#
-		"no"#
-	}
-is.overlap(res[[(i-1)]],df2[i,])
-names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]])
-res=list(); length(res) <- nrow(df2)#
-names(res)[1] <- rownames(df2)[1]#
-res[[1]] <- unname(unlist(df2[1,]))#
-for(2 in 1:nrow(df2)){#
-	res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
-	if(is.overlap(res[[(i-1)]],df2[i,])) {#
-		names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]])#
-	} else {#
-		names(res)[[i]] <- rownames(df2)[i]#
-	}#
-}
-res=list(); length(res) <- nrow(df2)#
-names(res)[1] <- rownames(df2)[1]#
-res[[1]] <- unname(unlist(df2[1,]))#
-for(i in 2:nrow(df2)){#
-	res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
-	if(is.overlap(res[[(i-1)]],df2[i,])) {#
-		names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]])#
-	} else {#
-		names(res)[[i]] <- rownames(df2)[i]#
-	}#
-}
-res
-res=list(); length(res) <- nrow(df2)#
-names(res)[1] <- rownames(df2)[1]#
-res[[1]] <- unname(unlist(df2[1,]))#
-for(i in 2:nrow(df2)){#
-	res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
-	if(is.overlap(res[[(i-1)]],df2[i,])) {#
-		names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]])#
-		res[[(i-1)]] <- NULL#
-	} else {#
-		names(res)[[i]] <- rownames(df2)[i]#
-	}#
-}
-res=list(); length(res) <- nrow(df2)#
-names(res)[1] <- rownames(df2)[1]#
-res[[1]] <- unname(unlist(df2[1,]))#
-for(i in 2:nrow(df2)){#
-	res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
-	if(is.overlap(res[[(i-1)]],df2[i,])) {#
-		names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]])#
-		res[[(i-1)]] <- NA#
-	} else {#
-		names(res)[[i]] <- rownames(df2)[i]#
-	}#
-}
-res
-lapply(res,is.na)
-lapply(res,function(x){all(is.na(x))})
-sapply(res,function(x){all(is.na(x))})
-intervalSets <- res[sapply(res,function(x){all(is.na(x))})]
-intervalSets
-intervalSets <- res[!sapply(res,function(x){all(is.na(x))})]
-intervalSets
-intervalSets <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])
-intervalSets
-cbind(rownames(intervalSets),intervalSets)
-colnames(intervalSets.mat) <- NULL
-intervalSets.mat <- cbind(rownames(intervalSets),intervalSets)#
-	colnames(intervalSets.mat) <- NULL
-intervalSets.mat
-dimnames(intervalSets.mat) <- NULL
-class(intervalSets.mat)
-intervalSets.mat <- as.matrix(cbind(rownames(intervalSets),intervalSets))
-intervalSets.mat
-dimnames(intervalSets.mat) <- NULL
-intervalSets.mat
-as.data.frame(intervalSets.mat)
-function(data){#
-	# sorts values in rows such that column 1 values are less those in column 2#
-	df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
-	# sorts rows by first column and then by successive columns to break ties#
-	df2 <- df1[do.call(order, as.list(df1)),]#
-	res=list(); length(res) <- nrow(df2)#
-	names(res)[1] <- rownames(df2)[1]#
-	res[[1]] <- unname(unlist(df2[1,]))#
-	for(i in 2:nrow(df2)){#
-		res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
-		if(is.overlap(res[[(i-1)]],df2[i,])) {#
-			names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]],sep=",")#
-			res[[(i-1)]] <- NA#
-		} else {#
-			names(res)[[i]] <- rownames(df2)[i]#
+test <- reverse(Biostrings::DNAStringSet(x=gsub("-","",alignment)))
+test
+lastbase         <- as.character(subseq(Biostrings::reverse(Biostrings::DNAStringSet(x=gsub("-","",alignment))),start=1,end=1))
+firstbases_pos   <- sapply(1:length(alignment),function(x){stringr::str_locate(string=alignment[x],pattern=firstbase[x])[1]})
+length(firstbases_pos)
+firstbases_pos
+plotAlignment(alignment,colors="black")
+lastbases_pos    <- sapply(1:length(alignment),function(x){REEs::str_locate_last(string=alignment[x],pattern=lastbase[x])})
+lastbases_pos
+firstbases_pos
+firstbase
+allsampleskey   <- read.csv("/Users/jeff/Documents/GitHub/SnakeCap/allsamples_key.txt",sep="\t",header=F)
+head(allsampleskey)
+allsampleskey$V2[allsampleskey$V3=="SeqCap"]
+trimto=allsampleskey$V2[allsampleskey$V3=="SeqCap"]
+trimto
+!is.null(trim.to)
+!is.null(trimto)
+intersect(trimto,names(alignment))
+length(intersect(trimto,names(alignment)))>0
+firstbases_pos[names(alignment) %in% trimto]
+min(firstbases_pos[names(alignment) %in% trimto])
+max(lastbases_pos[names(alignment) %in% trimto])
+lastbases_pos[names(alignment) %in% trimto]
+reference.cds
+names(reference.cds)
+trimto <- c(trimto,names(reference.cds))
+trimto
+trimto <- c(names(reference.cds),trimto)
+trimto
+trimto=allsampleskey$V2[allsampleskey$V3=="SeqCap"]
+trimto <- c(names(reference.cds),trimto)
+trimto
+!names(reference.cds) %in% trimto
+if(!is.null(trimto)){#
+			if(!names(reference.cds) %in% trimto){#
+				trimto <- c(names(reference.cds), trimto)#
+			}#
+			if(length(intersect(trimto, names(alignment)))>0){#
+				firstbase        <- as.character(subseq(Biostrings::DNAStringSet(x=gsub("-","",alignment)),start=1,end=1))#
+				lastbase         <- as.character(subseq(Biostrings::reverse(Biostrings::DNAStringSet(x=gsub("-","",alignment))),start=1,end=1))#
+				firstbases_pos   <- sapply(1:length(alignment),function(x){stringr::str_locate(string=alignment[x],pattern=firstbase[x])[1]})#
+				lastbases_pos    <- sapply(1:length(alignment),function(x){REEs::str_locate_last(string=alignment[x],pattern=lastbase[x])})#
+				alignment        <- subseq(alignment,start=min(firstbases_pos[names(alignment) %in% trimto]),end=max(lastbases_pos[names(alignment) %in% trimto]))#
+			}#
+		}
+plotAlignment(alignment,colors="black")
+plotAlignment(final.locus)
+names(final.locus)
+final.locus
+final.locus["Ahaetulla-prasina_KU323364"]
+gsub("^N+","",final.locus["Ahaetulla-prasina_KU323364"])
+gsub("^N+","",as.character(final.locus["Ahaetulla-prasina_KU323364"]))
+final.locus
+i
+print(i)#
+		locus.name.temp   <- shared.names[i]#
+		bait.species.temp <- bait.species.table$Species[which(bait.species.table$Bait==locus.name.temp)]#
+		### un-aligning sequences in the "novel" alignment#
+		#novel             <- Biostrings::readDNAMultipleAlignment(input.alignment.filenames[which(input.alignment.shortnames==locus.name.temp)],format="phylip")#
+		novel             <- Biostrings::readDNAMultipleAlignment(input.alignment.filenames[which(input.alignment.shortnames==locus.name.temp)])#
+		novel2            <- Biostrings::DNAStringSet(x=gsub("-|\\?","",novel))
+plotAlignment(novel2)
+novel2[11]
+novel2[10]
+novel2[12]
+if(ref.type=="DNA"){#
+			reference.cds        <- TargetDNA_CDS.regions[which(targetCDS.names==locus.name.temp)]#
+			names(reference.cds) <- paste(bait.species.temp,names(reference.cds),sep="_")#
+			final.locus          <- c(reference.cds,novel2)#
 		}#
-	}#
-	intervalSets     <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
-	result.df <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
-	result.df#
-}
-clusterIntervals <- function(data){#
-	# sorts values in rows such that column 1 values are less those in column 2#
-	df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
-	# sorts rows by first column and then by successive columns to break ties#
-	df2 <- df1[do.call(order, as.list(df1)),]#
-	res=list(); length(res) <- nrow(df2)#
-	names(res)[1] <- rownames(df2)[1]#
-	res[[1]] <- unname(unlist(df2[1,]))#
-	for(i in 2:nrow(df2)){#
-		res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
-		if(is.overlap(res[[(i-1)]],df2[i,])) {#
-			names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]],sep=",")#
-			res[[(i-1)]] <- NA#
-		} else {#
-			names(res)[[i]] <- rownames(df2)[i]#
+		# Skips locus if <4 sequences other than the reference CDS#
+		if(FALSE) {#
+			if(length(final.locus)<5){#
+				next#
+			}#
 		}#
-	}#
-	intervalSets     <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
-	result.df <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
-	result.df#
-}
-clusterIntervals(data=data)
-clusterIntervals <- function(data){#
-	# sorts values in rows such that column 1 values are less those in column 2#
-	df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
-	# sorts rows by first column and then by successive columns to break ties#
-	df2 <- df1[do.call(order, as.list(df1)),]#
-	res=list(); length(res) <- nrow(df2)#
-	names(res)[1] <- rownames(df2)[1]#
-	res[[1]] <- unname(unlist(df2[1,]))#
-	for(i in 2:nrow(df2)){#
-		res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
-		if(is.overlap(res[[(i-1)]],df2[i,])) {#
-			names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]],sep=",")#
-			res[[(i-1)]] <- NA#
-		} else {#
-			names(res)[[i]] <- rownames(df2)[i]#
-		}#
-	}#
-	intervalSets        <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
-	result.df           <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
-	colnames(result.df) <- c("merged","start","end")#
-	result.df#
-}
-clusterIntervals(data=data)
-clusterIntervals <- function(data){#
-	# sorts values in rows such that column 1 values are less those in column 2#
-	df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
-	# sorts rows by first column and then by successive columns to break ties#
-	df2 <- df1[do.call(order, as.list(df1)),]#
-	res=list(); length(res) <- nrow(df2)#
-	names(res)[1] <- rownames(df2)[1]#
-	res[[1]] <- unname(unlist(df2[1,]))#
-	for(i in 2:nrow(df2)){#
-		res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
-		if(is.overlap(res[[(i-1)]],df2[i,])) {#
-			names(res)[[i]] <- paste(sort(rownames(df2)[i],names(res)[[i-1]]),sep=",")#
-			res[[(i-1)]] <- NA#
-		} else {#
-			names(res)[[i]] <- rownames(df2)[i]#
-		}#
-	}#
-	intervalSets        <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
-	result.df           <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
-	colnames(result.df) <- c("merged","start","end")#
-	result.df#
-}
-clusterIntervals(data=data)
-clusterIntervals <- function(data){#
-	# sorts values in rows such that column 1 values are less those in column 2#
-	df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
-	# sorts rows by first column and then by successive columns to break ties#
-	df2 <- df1[do.call(order, as.list(df1)),]#
-	res=list(); length(res) <- nrow(df2)#
-	names(res)[1] <- rownames(df2)[1]#
-	res[[1]] <- unname(unlist(df2[1,]))#
-	for(i in 2:nrow(df2)){#
-		res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
-		if(is.overlap(res[[(i-1)]],df2[i,])) {#
-			names(res)[[i]] <- paste(sort(c(rownames(df2)[i],names(res)[[i-1]])),sep=",")#
-			res[[(i-1)]] <- NA#
-		} else {#
-			names(res)[[i]] <- rownames(df2)[i]#
-		}#
-	}#
-	intervalSets        <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
-	result.df           <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
-	colnames(result.df) <- c("merged","start","end")#
-	result.df#
-}
-clusterIntervals(data=data)
-clusterIntervals <- function(data){#
-	# sorts values in rows such that column 1 values are less those in column 2#
-	df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
-	# sorts rows by first column and then by successive columns to break ties#
-	df2 <- df1[do.call(order, as.list(df1)),]#
-	res=list(); length(res) <- nrow(df2)#
-	names(res)[1] <- rownames(df2)[1]#
-	res[[1]] <- unname(unlist(df2[1,]))#
-	for(i in 2:nrow(df2)){#
-		res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
-		if(is.overlap(res[[(i-1)]],df2[i,])) {#
-			names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]],sep=",")#
-			res[[(i-1)]] <- NA#
-		} else {#
-			names(res)[[i]] <- rownames(df2)[i]#
-		}#
-	}#
-	intervalSets        <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
-	result.df           <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
-	colnames(result.df) <- c("merged","start","end")#
-	result.df#
-}
-clusterIntervals(data=data)
-mergedRange <- function(r1,r2,ifFALSE=NA){#
-	if(is.overlap(r1,r2)) {#
-		range(c(r1,r2))#
-	} else {#
-		if(all(is.na(ifFALSE))) {#
-			return(NA)#
-		}#
-		if(all(ifFALSE==1)) {#
-			return(r1)#
-		}#
-		if(all(ifFALSE==2)) {#
-			return(r2)#
-		}#
-		if(all(ifFALSE==12)) {#
-			return(list(r1,r2))#
-		}#
-#
-	}#
-}
-mergedRange(r1=c(1,5),r2=c(7,10))
-mergedRange(r1=c(1,5),r2=c(7,10),ifFALSE=1)
-mergedRange(r1=c(1,5),r2=c(7,10),ifFALSE=2)
-mergedRange(r1=c(1,5),r2=c(7,10),ifFALSE=12)
-mergedRange <- function(r1,r2,ifFALSE=NA){#
-	if(is.overlap(r1,r2)) {#
-		range(c(r1,r2))#
-	} else {#
-		if(all(is.na(ifFALSE))) {#
-			return(NA)#
-		}#
-		if(all(ifFALSE==1)) {#
-			return(r1)#
-		}#
-		if(all(ifFALSE==2)) {#
-			return(r2)#
-		}#
-		if(all(ifFALSE==12)) {#
-			return(list(r1,r2))#
-		}#
-#
-	}#
-}
-clusterIntervals <- function(data){#
-	# sorts values in rows such that column 1 values are less those in column 2#
-	df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
-	# sorts rows by first column and then by successive columns to break ties#
-	df2 <- df1[do.call(order, as.list(df1)),]#
-	res=list(); length(res) <- nrow(df2)#
-	names(res)[1] <- rownames(df2)[1]#
-	res[[1]] <- unname(unlist(df2[1,]))#
-	for(i in 2:nrow(df2)){#
-		res[[i]] <- mergedRange(res[[(i-1)]],df2[i,],ifFALSE=2)#
-		if(is.overlap(res[[(i-1)]],df2[i,])) {#
-			names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]],sep=",")#
-			res[[(i-1)]] <- NA#
-		} else {#
-			names(res)[[i]] <- rownames(df2)[i]#
-		}#
-	}#
-	intervalSets        <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
-	result.df           <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
-	colnames(result.df) <- c("merged","start","end")#
-	result.df#
-}
-data <- read.table(text="#
-A 1 3#
-B 12 14#
-C 2 4#
-D 13 15#
-E 5 10#
-",sep=" ",header=F,row.names=1)
-clusterIntervals(data)
+		alignment.names  <- names(final.locus)#
+		if(!all(is.na(old.names))){#
+			alignment.names  <- mgsub(old.names,new.names,alignment.names)#
+		}
+alignment        <- REEs::mafft(final.locus, param="--auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet")
 library(devtools)
-setwd("Documents/REEs")
-getwd()
+devtools::document()
 setwd("/Users/jeff/Documents/REEs")
 devtools::document()
-rm(list = c("clusterIntervals", "mergedRange"))
+rm(mafft())
+rm(make.partitioned.alignment())
+rm(make.partitioned.alignment)
+rm("mafft")
+rm("make.partitioned.alignment")
+rm("mergedRange")
+rm("plotAlignment")
 devtools::document()
-clusterIntervals
-Rscript <(echo -e "#
-  is.overlap <- function(r1,r2){#
-    min(r1) <= max(r2) && min(r2) <= max(r1)#
-  }#
-  mergedRange <- function(r1,r2){#
-   if(is.overlap(r1,r2)) {#
-      range(c(r1,r2))#
-   } else {#
-      return(r2)#
-   }#
-  }#
-  clusterIntervals <- function(data){#
-   df1 <- rbind(data[c(data[,1] < data[,2]),c(1,2)],data[c(data[,1] > data[,2]),c(2,1)])#
-   df2 <- df1[do.call(order, as.list(df1)),]#
-   res=list(); length(res) <- nrow(df2)#
-   names(res)[1] <- rownames(df2)[1]#
-   res[[1]] <- unname(unlist(df2[1,]))#
-   for(i in 2:nrow(df2)){#
-      res[[i]] <- mergedRange(res[[(i-1)]],df2[i,])#
-      if(is.overlap(res[[(i-1)]],df2[i,])) {#
-         names(res)[[i]] <- paste(rownames(df2)[i],names(res)[[i-1]],sep=',')#
-         res[[(i-1)]] <- NA#
-      } else {#
-         names(res)[[i]] <- rownames(df2)[i]#
-      }#
-   }#
-   intervalSets        <- do.call(rbind,res[!sapply(res,function(x){all(is.na(x))})])#
-   result.df           <- as.data.frame(unname(as.matrix(cbind(rownames(intervalSets),intervalSets))))#
-   colnames(result.df) <- c('merged','start','end')#
-   result.df#
-  }#
-  dat <- read.table(text='$(echo "$DATi")',sep=' ',header=F,row.names=1)#
-  clusterIntervals(data=dat)[,1] \n ") | awk -F' ' 'NR>1{print $2,$3,$4}'
-as.integer(c("red","blue","green"))
-31*3089
-90000/500
-SUBJECTS_NAMES=unlist(strsplit('sample36_0000033883 sample36_0000033883',split=' '))
-SUBJECTS_NAMES
-aln=readDNAStringSet("/Users/jeff/Downloads/group106.fa") #; plotAlignment()
-plotAlignment(aln)
+library(BiocManager)
+BiocManager::install("JeffWeinell/REEs",update=FALSE, version="3.12",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="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")
+BiocManager::install("JeffWeinell/REEs",update=FALSE,dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="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")
+library(REEs)
+mafft.install()
+blast.install()
+InputAlignmentFolder  <- "/Users/jeff/Documents/SequenceCapture/alignments_WENames"#
+output.dir            <- "/Users/jeff/Documents/SequenceCapture/partitionedAlignments"#
+TargetCDS.path        <- "/Users/jeff/Documents/GitHub/SnakeCap/PostSequencing/Partitioned-Alignments/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa"#
+bait.species.filename <- "/Users/jeff/Documents/GitHub/SnakeCap/PostSequencing/Partitioned-Alignments/bait_species_table.txt"#
+ref.type="DNA"#
+old.names=NA#
+new.names=NA#
+drop.reference=F#
+ith.locus.start=1#
+# ith.locus.end="all"#
+locus.names.omit=NULL#
+AA.pdist.drop.thresh=0.5#
+ith.locus.end=1
+allsampleskey   <- read.csv("/Users/jeff/Documents/GitHub/SnakeCap/allsamples_key.txt",sep="\t",header=F)#
+trimto=allsampleskey$V2[allsampleskey$V3=="SeqCap"]
+dir1  <- file.path(output.dir,"All_parts/alignmentFiles/")#
+	dir2  <- file.path(output.dir,"All_parts/partitionFiles/")#
+	dir3  <- file.path(output.dir,"CDS_only/alignmentFiles/")#
+	dir4  <- file.path(output.dir,"CDS_only/partitionFiles/")#
+	dir5  <- file.path(output.dir,"Upstream_noncoding/alignmentFiles/")#
+	dir6  <- file.path(output.dir,"Downstream_noncoding/alignmentFiles/")#
+	dir7  <- file.path(output.dir,"All_noncoding/alignmentFiles/")#
+	dir8  <- file.path(output.dir,"All_noncoding/partitionFiles/")#
+	dir9  <- file.path(output.dir,"CDS_FirstCodonPosition/alignmentFiles/")#
+	dir10 <- file.path(output.dir,"CDS_SecondCodonPosition/alignmentFiles/")#
+	dir11 <- file.path(output.dir,"CDS_ThirdCodonPosition/alignmentFiles/")#
+	dir12 <- file.path(output.dir,"AminoAcids/alignmentFiles/")#
+#
+	subdirectories  <- c(dir1,dir2,dir3,dir4,dir5,dir6,dir7,dir8,dir9,dir10,dir11,dir12)#
+	makeDirectories <- lapply(X=subdirectories,FUN=dir.check.create)  ### need to assign an object to avoid printing results of lapply #
+	### Reads in files ####
+	TargetDNA_CDS.regions       <- Biostrings::readDNAStringSet(TargetCDS.path,format="fasta")#
+	### reads the table specifying which species the probes were designed from for each locus #
+	bait.species.table          <- data.table::fread(bait.species.filename)#
+#
+	name.string.start           <- (str_locate_X(strings=names(TargetDNA_CDS.regions),pattern="_",X=3)+1)#
+	name.string.end             <- (str_locate_X(strings=names(TargetDNA_CDS.regions),pattern="_",X=4)-1)#
+	targetCDS.names             <- substring(names(TargetDNA_CDS.regions),first=name.string.start,last=name.string.end) ### target loci names of each sequence in TargetDNA_CDS.regions#
+	input.alignment.filenames   <- gtools::mixedsort(list.files(InputAlignmentFolder,full.names=T))#
+	### Next line assumes that files are named according to WeinelEntry names#
+	input.alignment.shortnames  <- gsub(".phy|.fa|.fasta","",basename(input.alignment.filenames))#
+#
+	### Names of loci that have been aligned and that have a CDS region included in TargetDNA_CDS.regions#
+	shared.names                <- Reduce(intersect, list(input.alignment.shortnames,targetCDS.names))#
+	### names of loci to ignore#
+	if(!is.null(locus.names.omit)){#
+		shared.names  <- setdiff(shared.names,locus.names.omit)#
+	}#
+	if(file.exists(file.path(output.dir,"partitioned_alignments_made.txt"))){#
+		alignments.made <- utils::read.table(file=file.path(output.dir,"partitioned_alignments_made.txt"), header=T, colClasses="character")#
+	} else {#
+		alignments.made <- matrix(data="no", nrow=length(shared.names), ncol=9)#
+		rownames(alignments.made)   <- shared.names#
+		colnames(alignments.made)   <- c("all.data","CDS","5'NC","3'NC","Noncoding","AA","FirstCodon","SecondCodon","ThirdCodon")#
+	}#
+	if(ith.locus.end=="all"){#
+		last.locus.process          <- length(shared.names)#
+	} else {#
+		last.locus.process          <- ith.locus.end#
+	}
+i=1
+print(i)#
+		locus.name.temp   <- shared.names[i]#
+		bait.species.temp <- bait.species.table$Species[which(bait.species.table$Bait==locus.name.temp)]#
+		### un-aligning sequences in the "novel" alignment#
+		novel             <- Biostrings::readDNAMultipleAlignment(input.alignment.filenames[which(input.alignment.shortnames==locus.name.temp)])#
+		novel2            <- Biostrings::DNAStringSet(x=gsub("-|\\?","",novel))#
+		if(ref.type=="DNA"){#
+			reference.cds        <- TargetDNA_CDS.regions[which(targetCDS.names==locus.name.temp)]#
+			names(reference.cds) <- paste(bait.species.temp,names(reference.cds),sep="_")#
+			final.locus          <- c(reference.cds,novel2)#
+		}#
+		# Skips locus if <4 sequences other than the reference CDS#
+		if(FALSE) {#
+			if(length(final.locus)<5){#
+				next#
+			}#
+		}#
+		alignment.names  <- names(final.locus)#
+		if(!all(is.na(old.names))){#
+			alignment.names  <- mgsub(old.names,new.names,alignment.names)#
+		}
+alignment.names[1]
+alignment.names[2]
+alignment        <- REEs::mafft(final.locus, param="--auto --adjustdirection --nwildcard --op 3 --ep 0.123")
+plotAlignment(alignment)
+plotAlignment(alignment,title=paste(locus.name.temp," initial alignment; mafft param: --auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet"))
+plotAlignment(alignment,title=paste(locus.name.temp," initial alignment; mafft param: --auto --adjustdirection --nwildcard --op 3 --ep 0.123"))
+plotAlignment(alignment,title=paste(locus.name.temp,"initial alignment; mafft param: --auto --adjustdirection --nwildcard --op 3 --ep 0.123"))
+trimto
+if(!is.null(trimto)){#
+			if(!names(reference.cds) %in% trimto){#
+				trimto <- c(names(reference.cds), trimto)#
+			}#
+			if(length(intersect(trimto, names(alignment)))>0){#
+				firstbase        <- as.character(subseq(Biostrings::DNAStringSet(x=gsub("-","",alignment)),start=1,end=1))#
+				lastbase         <- as.character(subseq(Biostrings::reverse(Biostrings::DNAStringSet(x=gsub("-","",alignment))),start=1,end=1))#
+				firstbases_pos   <- sapply(1:length(alignment),function(x){stringr::str_locate(string=alignment[x],pattern=firstbase[x])[1]})#
+				lastbases_pos    <- sapply(1:length(alignment),function(x){REEs::str_locate_last(string=alignment[x],pattern=lastbase[x])})#
+				alignment        <- subseq(alignment,start=min(firstbases_pos[names(alignment) %in% trimto]),end=max(lastbases_pos[names(alignment) %in% trimto]))#
+				alignment_B      <- alignment#
+			}#
+		} else {#
+			alignment_B <- NULL#
+		}
+plotAlignment(alignment_B)
+begin.exon       <- stringr::str_locate(string=alignment[1],pattern=as.character(subseq(reference.cds,start=1,end=1)))[1]
+begin.exon
+end.exon         <- REEs::str_locate_last(string=alignment[1],pattern=as.character(subseq(reference.cds,start=(width(reference.cds)-1),end=width(reference.cds))))
+end.exon
+starts           <- c(1,begin.exon,begin.exon+1,begin.exon+2,end.exon+1)#
+		ends             <- c(begin.exon-1,end.exon,end.exon,end.exon,width(alignment[1]))#
+		widths           <- ends-(starts-1)#
+		extra.text       <- c("","\\3","\\3","\\3","")#
+		ranges           <- cbind(starts,ends,widths,extra.text)#
+		rownames(ranges) <- c("upstream.noncoding","CDS.1","CDS.2","CDS.3","downstream.noncoding")#
+		partition.groups        <- c(widths[1]>0,all(widths[2:4]>0),widths[5]>0)        ### logical vector indicating if upstream noncoding, CDS, and downstream noncoding data are present#
+		names(partition.groups) <- c("upstream.noncoding","CDS","downstream.noncoding")
+partition.groups[2]
+if(drop.reference==T){#
+					cds.alignment     <- Biostrings::subseq(x=alignment,start=begin.exon,end=end.exon)[-1]#
+				} else {#
+					cds.alignment     <- Biostrings::subseq(x=alignment,start=begin.exon,end=end.exon)#
+			}#
+			### specifies individuals with no data in the region#
+			drop.nodata               <- stringr::str_count(cds.alignment,"-") == width(cds.alignment)
+length(which(!drop.nodata))>3
+cds.alignment         <- cds.alignment[!drop.nodata]#
+				cds.alignment2        <- Biostrings::DNAStringSet(x=gsub("-","",cds.alignment))#
+				# cds.alignment2      <- REEs::mafft(cds.alignment2,param="--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6")
+cds.alignment2        <- REEs::mafft(cds.alignment2,param="--auto --adjustdirection --nwildcard --op 3 --ep 0.123 ")
+alignment_C           <- cds.alignment2
+plotAlignment(alignment_C)
+names(alignment_C)[38]
+grep("Pantherophis",names(alignment_C))
+grep("Pantherophis",names(alignment_C),value=T)
+trimTo <- function(aln,nam){#
+		if(length(intersect(nam, names(aln)))>0){#
+			firstbase        <- as.character(subseq(Biostrings::DNAStringSet(x=gsub("-","",aln)),start=1,end=1))#
+			lastbase         <- as.character(subseq(Biostrings::reverse(Biostrings::DNAStringSet(x=gsub("-","",aln))),start=1,end=1))#
+			firstbases_pos   <- sapply(1:length(aln),function(x){stringr::str_locate(string=aln[x],pattern=firstbase[x])[1]})#
+			lastbases_pos    <- sapply(1:length(aln),function(x){REEs::str_locate_last(string=aln[x],pattern=lastbase[x])})#
+			aln_out        <- subseq(aln,start=min(firstbases_pos[names(aln) %in% nam]),end=max(lastbases_pos[names(aln) %in% nam]))#
+		} else {#
+			aln_out <- NA#
+		}#
+		aln_out#
+	}
+test <- trimTo(aln=alignment_A,nam=trimto)
+alignment_A
+alignment_A <- alignment
+test <- trimTo(aln=alignment_A,nam=trimto)
+plotAlignment(test)
+plotAlignment(cds.alignment2))
+plotAlignment(cds.alignment2)
+if(!is.null(trimto)){#
+					cds.alignment2    <- REEs::trimTo(aln=cds.alignment2,nam=trimto)#
+				}
+if(!is.null(trimto)){#
+					cds.alignment2    <- trimTo(aln=cds.alignment2,nam=trimto)#
+				}
+plotAlignment(cds.alignment2)
+partition.groups[1]
+begin.exon!=1
+if(drop.reference==T){#
+					upstream.alignment    <- Biostrings::subseq(x=alignment,start=1,end=(begin.exon-1))[-1]#
+				} else {#
+					upstream.alignment    <- Biostrings::subseq(x=alignment,start=1,end=(begin.exon-1))#
+				}#
+				drop.nodata               <- stringr::str_count(upstream.alignment,"-") == width(upstream.alignment)
+length(which(!drop.nodata))>3
+upstream.alignment         <- upstream.alignment[!drop.nodata]#
+					upstream.alignment2        <- Biostrings::DNAStringSet(x=gsub("-","",upstream.alignment))
+upstream.alignment2        <- REEs::mafft(upstream.alignment2, param="--auto --adjustdirection --nwildcard --op 3 --ep 0.123")
+plotAlignment(upstream.alignment2)
+if(!is.null(trimto)){#
+						upstream.alignment2    <- REEs::trimTo(aln=upstream.alignment2,nam=trimto)#
+					}
+if(!is.null(trimto)){#
+						upstream.alignment2    <- trimTo(aln=upstream.alignment2,nam=trimto)#
+					}
+plotAlignment(upstream.alignment2)
+alignment_D <- upstream.alignment2
+partition.groups[3]
+end.exon!=width(alignment[1])
+if(drop.reference==T){#
+					downstream.alignment    <- Biostrings::subseq(x=alignment,start=(end.exon+1),end=width(alignment[1]))[-1]#
+				} else {#
+					downstream.alignment    <- Biostrings::subseq(x=alignment,start=(end.exon+1),end=width(alignment[1]))#
+				}				#
+				drop.nodata                 <- stringr::str_count(downstream.alignment,"-") == width(downstream.alignment)#
+				### Skips downstream noncoding alignment if 3 or less individuals
+length(which(!drop.nodata))>3
+downstream.alignment    <- downstream.alignment[!drop.nodata]
+length(downstream.alignment)#
+					downstream.alignment2   <- Biostrings::DNAStringSet(x=gsub("-","",downstream.alignment))#
+					#downstream.alignment2  <- REEs::mafft(downstream.alignment2, param="--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6")
+downstream.alignment2   <- REEs::mafft(downstream.alignment2, param="--auto --adjustdirection --nwildcard --op 3 --ep 0.123 ")
+plotAlignment(downstream.alignment2)
+if(!is.null(trimto)){#
+						downstream.alignment2    <- REEs::trimTo(aln=downstream.alignment2,nam=trimto)#
+					}
+if(!is.null(trimto)){#
+						downstream.alignment2    <- trimTo(aln=downstream.alignment2,nam=trimto)#
+					}
+plotAlignment(downstream.alignment2)
+alignment_E <- downstream.alignment2
+partition.groups[2]
+cds.temp2   <- cds.alignment2#
+			p1 <- which(is.wholenumber(c(0:(width(cds.temp2[1])-1))/3)) ### numerical vector of first codon position sites#
+			p2 <- intersect((p1+1),c(2:width(cds.temp2[1])))            ### numerical vector of second codon position sites#
+			p3 <- intersect((p2+1),c(3:width(cds.temp2[1])))            ### numerical vector of third codon position sites
+p1
+cds.temp3 <- Biostrings::subseq(cds.temp2,start=min(p1),end=max(p3))
+cds.temp4 <- Biostrings::DNAStringSet(x=gsub("-","",cds.temp3))   ### unaligns sequences (after removing gaps) so that the sequences can be translated
+aa.temp             <- suppressWarnings(Biostrings::translate(cds.temp4,if.fuzzy.codon="solve",no.init.codon=T))
+aa.temp
+aa.alignment.temp   <- REEs::mafft(aa.temp, param="--auto --adjustdirection --nwildcard --op 3 --ep 0.123")
+plotAlignment()
+plotAlignment(aa.alignment.temp,colors="black")
+aa.alignment.temp2  <- filter.alignment(aa.alignment.temp)
+aa.alignment.mdt0   <- filter.alignment(aa.alignment.temp,mdt=0)
+distAA.mdt1          <- Biostrings::stringDist(aa.alignment.temp2)#
+			distAA.mdt0          <- Biostrings::stringDist(aa.alignment.mdt0)
+aa.alignment.mdt0
+aa.alignment.temp2
+width(aa.alignment.mdt0)
+all(width(aa.alignment.mdt0)==0)
+class(distAA.mdt1)
+dim(distAA.mdt1)
+distAA.mdt1         <- Biostrings::stringDist(aa.alignment.temp2)#
+			median.distAA.mdt1   <- apply(X=distAA.mdt1,MARGIN=1,FUN=median)/width(aa.alignment.temp2[1])#
+			### Median pairwise p-distances for the AA alignment containing no missing or ambiguous data#
+			if(!all(width(aa.alignment.mdt0)==0)){#
+				distAA.mdt0        <- Biostrings::stringDist(aa.alignment.mdt0)#
+				median.distAA.mdt0 <- apply(X=distAA.mdt0,MARGIN=1,FUN=median)/width(aa.alignment.mdt0[1])#
+			} else {#
+				distAA.mdt0        <- NA#
+				median.distAA.mdt0 <- NA#
+			}
+distAA.mdt1
+median(distAA.mdt1)
+test <- as.matrix(distAA.mdt1)
+class(distAA.mdt1)
+str(distAA.mdt1)
+attributes(distAA.mdt1)
+distAA.mdt1$Upper
+distAA.mdt1[[1]]
+distAA.mdt1[1]
+dim(distAA.mdt1)
+nrow(distAA.mdt1)
+as.numeric(distAA.mdt1)
+median(distAA.mdt1)
+median(as.numeric(distAA.mdt1))
+distAA.mdt1         <- Biostrings::stringDist(aa.alignment.temp2,upper=T)
+median(distAA.mdt1)
+dim(distAA.mdt1)
+str(distAA.mdt1)
+AA.pdist.drop.thresh
+aa.alignment.mdt0
+!!length(toDrop)
+median.distAA.mdt0
+median.distAA.mdt0 > AA.pdist.drop.thresh
+which(median.distAA.mdt0 > AA.pdist.drop.thresh)
+toDrop <- which(median.distAA.mdt0 > AA.pdist.drop.thresh)
+!!length(toDrop)
+toDrop <- which(median.distAA.mdt0 > AA.pdist.drop.thresh) ### individuals with median p-distance greater than AA.pdist.drop.thresh should be dropped#
+			if(!!length(toDrop)){                                      ###| creates a character vector containing the names of individuals#
+				toDrop.names    <- names(median.distAA.mdt0)[toDrop]   ###| that should be dropped from the alignment because they are highly#
+			} else {                                                   ###| diverged from most other individuals#
+				toDrop.names <- NULL                                   ###|#
+			}                                                          ###|#
+			if(!!length(toDrop)){                                          ###| Drops individuals with unusually high amount of AA divergence unless all individuals dropped#
+				if(length(toDrop)==length(aa.alignment.temp2)){#
+					next#
+				}#
+				aa.alignment.temp3 <- aa.alignment.temp2[-toDrop]                    ###| sites-unfiltered AA alignment with highly diverged individuals removed#
+				aa.alignment.temp3 <- Biostrings::AAStringSet(x=gsub("-","",aa.alignment.temp3)) ###|#
+				names.aa.temp3     <- names(aa.alignment.temp3)                      ###|#
+				### rerun alignment algorithm#
+				# aa.alignment.temp3 <- REEs::mafft(aa.alignment.temp3,param="--localpair --maxiterate 1000 --adjustdirection --quiet --op 3 --ep 0.123 --thread 6")#
+				aa.alignment.temp3 <- REEs::mafft(aa.alignment.temp3,param="--auto --adjustdirection --nwildcard --quiet")#
+			} else {                                               ###| if no individuals needed to be removed, then aa.alignment.temp3 is the same as aa.alignment.temp2#
+				aa.alignment.temp3 <- aa.alignment.temp2           ###|#
+			}                                                      ###|
+aa.alignment.temp3
+!length(aa.alignment.temp3)
+alignments.made[i,6] <- "yes"#
+			Biostrings::writeXStringSet(x = aa.alignment.temp3, filepath=paste0(dir12,locus.name.temp,".fa"), append=FALSE,compress=FALSE, compression_level=NA, format="fasta")
+dir12
+if(!!length(toDrop)){                          #|Drops individuals with unusually high amount of AA divergence#
+				cds.temp5 <- cds.temp2[-toDrop]            #|The difference between cds.temp5 and cds.temp6 is that cds.temp6#
+				cds.temp6 <- cds.temp3[-toDrop]            #|may have dropped one or two bases from the CDS region to ensure that#
+				cds.temp7 <- filter.alignment(cds.temp5)   #|the region sequence length is a multiple of three (i.e., a sequence#
+			} else {                                       #|of codons)#
+				cds.temp5 <- cds.temp2                     #|cds.temp7 removes columns with only missing data if they exist#
+				cds.temp6 <- cds.temp3                     #|#
+				cds.temp7 <- filter.alignment(cds.temp5)   #|#
+			}                                              #|
+?filter.alignment
+length(cds.temp6)<2
+cds.temp6
+cds.p1 <- filter.alignment(cds.temp5,keep.specific=p1) ### makes an alignment containing only first codon position sites (nodata sites dropped)#
+			cds.p2 <- filter.alignment(cds.temp5,keep.specific=p2) ### makes an alignment containing only second codon position sites (nodata sites dropped)#
+			cds.p3 <- filter.alignment(cds.temp5,keep.specific=p3) ### makes an alignment containing only third codon position sites (nodata sites dropped)
+aa.alignment.temp3
+aa.alignment.temp3 <- aa.alignment.temp2           ###|
+alignments.made[i,6] <- "yes"#
+			Biostrings::writeXStringSet(x = aa.alignment.temp3, filepath=paste0(dir12,locus.name.temp,".fa"), append=FALSE,compress=FALSE, compression_level=NA, format="fasta")
+if(!!length(toDrop)){                          #|Drops individuals with unusually high amount of AA divergence#
+				cds.temp5 <- cds.temp2[-toDrop]            #|The difference between cds.temp5 and cds.temp6 is that cds.temp6#
+				cds.temp6 <- cds.temp3[-toDrop]            #|may have dropped one or two bases from the CDS region to ensure that#
+				cds.temp7 <- filter.alignment(cds.temp5)   #|the region sequence length is a multiple of three (i.e., a sequence#
+			} else {                                       #|of codons)#
+				cds.temp5 <- cds.temp2                     #|cds.temp7 removes columns with only missing data if they exist#
+				cds.temp6 <- cds.temp3                     #|#
+				cds.temp7 <- filter.alignment(cds.temp5)   #|#
+			}                                              #|#
+			if(length(cds.temp6)<2){#
+				next#
+			}
+cds.p1 <- filter.alignment(cds.temp5,keep.specific=p1) ### makes an alignment containing only first codon position sites (nodata sites dropped)#
+			cds.p2 <- filter.alignment(cds.temp5,keep.specific=p2) ### makes an alignment containing only second codon position sites (nodata sites dropped)#
+			cds.p3 <- filter.alignment(cds.temp5,keep.specific=p3) ### makes an alignment containing only third codon position sites (nodata sites dropped)
+alignments.made[i,7:9] <- "yes"
+Biostrings::writeXStringSet(x = cds.p1, file=paste0(dir9,locus.name.temp,".fa"))#
+			Biostrings::writeXStringSet(x = cds.p2, file=paste0(dir10,locus.name.temp,".fa"))#
+			Biostrings::writeXStringSet(x = cds.p3, file=paste0(dir11,locus.name.temp,".fa"))
+cds.temp7
+cds.p1.v2 <- filter.alignment(cds.temp7,keep.specific=p1)  ###|Like cds.p1,cds.p2,cds.p3, except that missing data columns#
+			cds.p2.v2 <- filter.alignment(cds.temp7,keep.specific=p2)  ###|were removed prior to extracting first, second, and third codon#
+			cds.p3.v2 <- filter.alignment(cds.temp7,keep.specific=p3)  ###|positions
+all(cds.p1==cds.p1.v2) & all(cds.p2==cds.p2.v2) & all(cds.p3==cds.p3.v2)
+length(cds.temp7)>3
+Biostrings::writeXStringSet(x= cds.temp7,file=paste0(dir3,locus.name.temp,".fa"))
+alignments.made[i,2]  <- "yes"#
+					cds.starts            <- c(1:3)#
+					cds.ends              <- rep(width(cds.temp7[1]),3)#
+					cds.ranges            <- cbind(cds.starts,cds.ends)
+cds.partition.line    <- NULL
+nrow(cds.ranges)
+for(j in 1:nrow(cds.ranges)){#
+						cds.partition.line[j] <- paste0("DNA, ", rownames(cds.ranges)[j]," = ",cds.ranges[j,1],"-",cds.ranges[j,2],"\\3")#
+					}
+write(cds.partition.line,file=paste0(dir4,locus.name.temp,"_parts.txt"))
+partition.groups[1]
+!!length(toDrop.names)
+upstream.alignment3 <- filter.alignment(upstream.alignment2)
+length(upstream.alignment3)>3
+if(length(upstream.alignment3)>3){#
+				#ape::write.dna(x = upstream.alignment3,file=paste0(dir5,locus.name.temp,".phy"),format="sequential",append=F,nbcol=1,colw=100000000)#
+				Biostrings::writeXStringSet(x = upstream.alignment3,file=paste0(dir5,locus.name.temp,".fa"))#
+				alignments.made[i,3]  <- "yes"#
+			} else {#
+				partition.groups[1] <- F#
+			}
+partition.groups[3]
+!!length(toDrop.names)
+partition.groups[1] & partition.groups[3]
+upstream.dataTable          <- data.table::data.table(as.matrix(upstream.alignment3),keep.rownames = TRUE)#
+			downstream.dataTable        <- data.table::data.table(as.matrix(downstream.alignment3),keep.rownames = TRUE)
+upstream.alignment3
+Biostrings::writeXStringSet(x = downstream.alignment3,file=paste0(dir6,locus.name.temp,".fa"))
+if(partition.groups[3]){#
+			if(!!length(toDrop.names)){#
+				if(any(toDrop.names %in% names(downstream.alignment2))){#
+					toDrop.names.downstream <- toDrop.names[toDrop.names %in% names(downstream.alignment2)]#
+					downstream.alignment3   <- downstream.alignment2[-match(toDrop.names.downstream,names(downstream.alignment2))]#
+					downstream.alignment3   <- filter.alignment(downstream.alignment3)#
+				} else {#
+					downstream.alignment3   <- filter.alignment(downstream.alignment2)#
+				}#
+			}	else {#
+				downstream.alignment3 <- filter.alignment(downstream.alignment2)#
+			}#
+			if(length(downstream.alignment3)>3){#
+				#ape::write.dna(x = downstream.alignment3,file=paste0(dir6,locus.name.temp,".phy"),format="sequential",append=F,nbcol=1,colw=100000000)#
+				Biostrings::writeXStringSet(x = downstream.alignment3,file=paste0(dir6,locus.name.temp,".fa"))#
+				alignments.made[i,4]  <- "yes"#
+			} else {#
+				partition.groups[3] <- F#
+			}#
+		}
+if(partition.groups[1] & partition.groups[3]){#
+			upstream.dataTable          <- data.table::data.table(as.matrix(upstream.alignment3),keep.rownames = TRUE)#
+			downstream.dataTable        <- data.table::data.table(as.matrix(downstream.alignment3),keep.rownames = TRUE)#
+			noncoding.alignment3        <- merge(upstream.dataTable, downstream.dataTable, by="rn", all=TRUE)#
+			noncoding.alignment3        <- REEs::na.replace(noncoding.alignment3,"-")#
+			rn.temp                     <- noncoding.alignment3$rn#
+			noncoding.alignment3        <- apply(noncoding.alignment3[ ,!"rn"], 1, paste, collapse="")#
+			noncoding.alignment3        <- Biostrings::DNAStringSet(noncoding.alignment3)#
+			names(noncoding.alignment3) <- rn.temp#
+			#ape::write.dna(x = noncoding.alignment3,file=paste0(dir7,locus.name.temp,".phy"),format="sequential",append=F,nbcol=1,colw=100000000)#
+			Biostrings::writeXStringSet(x = noncoding.alignment3,file=paste0(dir7,locus.name.temp,".fa"))#
+			### updates the alignments.made matrix#
+			alignments.made[i,5]      <- "yes"#
+			### preparing to write the partition file for the locus#
+			noncoding.ranges          <- matrix(nrow=2,ncol=2)#
+			noncoding.ranges[1,1]     <- 1#
+			noncoding.ranges[1,2]     <- width(upstream.alignment3)[1]#
+			noncoding.ranges[2,1]     <- (noncoding.ranges[1,2]+1)#
+			noncoding.ranges[2,2]     <- width(noncoding.alignment3)[1]#
+			noncoding.partition.line  <- NULL#
+			for(j in 1:2){#
+				noncoding.partition.line[j] <- paste0("DNA, ", rownames(noncoding.ranges)[j]," = ",noncoding.ranges[j,1],"-",noncoding.ranges[j,2])#
+			}#
+			write(noncoding.partition.line,file=paste0(dir8,locus.name.temp,"_parts.txt"))#
+		}
+all(partition.groups)
+if(all(partition.groups)){#
+			if(partition.groups[1]){#
+				upstream.dataTable.all    <- data.table::data.table(as.matrix(upstream.alignment3),keep.rownames = TRUE)#
+			} else {#
+				upstream.dataTable.all    <- NULL#
+			}#
+			if(partition.groups[2]){#
+				cds.datatable.all         <- data.table::data.table(as.matrix(cds.temp7),keep.rownames = TRUE)#
+			} else {#
+				cds.datatable.all         <- NULL#
+			}#
+			if(partition.groups[3]){#
+				downstream.dataTable.all  <- data.table::data.table(as.matrix(downstream.alignment3),keep.rownames = TRUE)#
+			} else {#
+				downstream.dataTable.all  <- NULL#
+			}#
+			dat.list         <- list(upstream.dataTable.all,cds.datatable.all,downstream.dataTable.all)#
+			dat              <- dat.list[[which(partition.groups)[1]]]#
+			ranges2      <- matrix(nrow=5,ncol=3)#
+			ranges2[,3]  <- c(1,2,2,2,3)#
+			ranges2[which(partition.groups)[1],1] <- 1#
+			ranges2[which(partition.groups)[1],2] <- ncol(dat)#
+			row.index             <- 1#
+			if(length(which(partition.groups)>1)){#
+				for(k in which(partition.groups)[-1]){#
+					row.index <- row.index+1#
+					dat       <- merge(dat, dat.list[[k]],by="rn", all=TRUE)#
+					ranges2[k,1] <- (ranges2[which(partition.groups)[row.index-1],2]+1)#
+					ranges2[k,2] <- ncol(dat)#
+				}#
+			}#
+			all.alignment2        <- REEs::na.replace(dat,"-")#
+			rn.temp               <- all.alignment2$rn#
+			all.alignment2        <- apply(all.alignment2[ ,!"rn"], 1, paste, collapse="")#
+			all.alignment2        <- Biostrings::DNAStringSet(all.alignment2)#
+			names(all.alignment2) <- rn.temp#
+			if(!all(is.na(ranges2[2,c(1,2)]))){#
+				ranges2[3,1]      <- ranges2[2,1]+1#
+				ranges2[4,1]      <- ranges2[2,1]+2#
+				ranges2[c(3:4),2] <- ranges2[2,2]#
+			}#
+			extra.text2       <- c("","\\3","\\3","\\3","")#
+			ranges3           <- cbind(ranges2,extra.text2)#
+			rownames(ranges3) <- c("upstream.noncoding","CDS.1","CDS.2","CDS.3","downstream.noncoding")#
+			ranges3           <- ranges3[c(1,2,2,2,3) %in% which(partition.groups),]#
+			#ape::write.dna(x= all.alignment2,file=paste0(dir1,locus.name.temp,".phy"),format="sequential",append=F,nbcol=1,colw=100000000)#
+			Biostrings::writeXStringSet(x= all.alignment2,file=paste0(dir1,locus.name.temp,".fa"))#
+			### updates the alignments.made matrix#
+			alignments.made[i,1]  <- "yes"#
+			### preparing to write the partition file#
+			partition.line        <- NULL#
+			for(j in 1:nrow(ranges3)){#
+				partition.line[j] <- paste("DNA, ", rownames(ranges3)[j]," = ",ranges3[j,1],"-",ranges3[j,2],ranges3[j,4],sep="")#
+			}#
+			write(partition.line,file=paste0(dir2,locus.name.temp,"_parts.txt"))#
+		}
+write.table(x=alignments.made,file=paste0(output.dir,"partitioned_alignments_made.txt"))
+output.dir
+dim(alignments.made)
+paste0(output.dir,"partitioned_alignments_made.txt")
+file.path(output.dir,"partitioned_alignments_made.txt")
+write.table(x=alignments.made,file=file.path(output.dir,"partitioned_alignments_made.txt"))
+write.table(x=alignments.made,file=file.path(output.dir,"partitioned_alignments_made.txt"),sep="\t",quote=F)
+head(alignments.made)
+devtools::document()
+setwd("..")
+devtools::document()
+setwd("REEs")
+devtools::document()
