@@ -2,7 +2,9 @@
 % Please edit documentation in R/make.partitioned.alignment.R
 \name{make.partitioned.alignment}
 \alias{make.partitioned.alignment}
-\title{Make Partitioned Alignments}
+\title{Make Partitioned Alignments
+
+Given an input DNA alignment and a reference CDS sequence for the locus in the input alignment, this function generates up to nine output alignments, including three partitioned DNA alignments, five DNA alignments containing a subset of the input DNA sites, and one amino acid alignment for the CDS region(s) of the input alignment.}
 \usage{
 make.partitioned.alignment(
   InputAlignmentFolder,
@@ -10,6 +12,7 @@ make.partitioned.alignment(
   TargetCDS.path,
   bait.species.filename,
   ref.type = "DNA",
+  mafft.params = " --auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet ",
   old.names = NA,
   new.names = NA,
   drop.reference = F,
@@ -31,6 +34,8 @@ make.partitioned.alignment(
 I will update this function to remove the need for this argument. Write now this table is just used for renaming the reference sequence.}
 
 \item{ref.type}{Indicates that the input alignments are DNA sequences (default is "DNA").}
+
+\item{mafft.params}{Character string with parameters passed to MAFFT. Default is " --auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet "}
 
 \item{old.names}{Character vector of old sample names that should be changed to those defined in new.names parameter (default is NA, meaning don't change names).}
 
@@ -61,5 +66,7 @@ Writes up to nine different fasta-formatted sequence alignments for each input D
 (9) Alignment containing the amino acid sequence for the translated CDS region.
 }
 \description{
+Make Partitioned Alignments
+
 Given an input DNA alignment and a reference CDS sequence for the locus in the input alignment, this function generates up to nine output alignments, including three partitioned DNA alignments, five DNA alignments containing a subset of the input DNA sites, and one amino acid alignment for the CDS region(s) of the input alignment.
 }
