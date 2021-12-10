@@ -437,10 +437,12 @@ make.partitioned.alignment  <- function(InputAlignmentFolder,output.dir,TargetCD
 			dat.list         <- list(upstream.dataTable.all,cds.datatable.all,downstream.dataTable.all)
 			dat              <- dat.list[[which(partition.groups)[1]]]
 			
-			ranges2      <- matrix(nrow=5,ncol=3)
-			ranges2[,3]  <- c(1,2,2,2,3)
+	#		ranges2      <- matrix(nrow=5,ncol=3)
+	#		ranges2[,3]  <- c(1,2,2,2,3)
+			ranges2      <- matrix(nrow=3,ncol=3)
+			ranges2[,3]  <- c(1,2,3)
 			ranges2[which(partition.groups)[1],1] <- 1
-			ranges2[which(partition.groups)[1],2] <- ncol(dat)
+			ranges2[which(partition.groups)[1],2] <- (ncol(dat)-1)
 			
 			row.index             <- 1
 			
@@ -449,8 +451,7 @@ make.partitioned.alignment  <- function(InputAlignmentFolder,output.dir,TargetCD
 					row.index <- row.index+1
 					dat       <- merge(dat, dat.list[[k]],by="rn", all=TRUE)
 					ranges2[k,1] <- (ranges2[which(partition.groups)[row.index-1],2]+1)
-					ranges2[k,2] <- ncol(dat)
-					
+					ranges2[k,2] <- (ncol(dat)-1)
 				}
 			}
 			all.alignment2        <- REEs::na.replace(dat,"-")
@@ -458,13 +459,13 @@ make.partitioned.alignment  <- function(InputAlignmentFolder,output.dir,TargetCD
 			all.alignment2        <- apply(all.alignment2[ ,!"rn"], 1, paste, collapse="")
 			all.alignment2        <- Biostrings::DNAStringSet(all.alignment2)
 			names(all.alignment2) <- rn.temp
-			
 			if(!all(is.na(ranges2[2,c(1,2)]))){
-				ranges2[3,1]      <- ranges2[2,1]+1
-				ranges2[4,1]      <- ranges2[2,1]+2
-				ranges2[c(3:4),2] <- ranges2[2,2]
+				ranges2           <- rbind(ranges2[1:2,],c((ranges2[2,1]+1),(ranges2[2,2]),2),c((ranges2[2,1]+2),(ranges2[2,2]),2),ranges2[3,])
+				# ranges2           <- rbind(ranges2[1:2,],c(NA,NA,2),c(NA,NA,2),ranges2[3,])
+				# ranges2[3,1]      <- ranges2[2,1]+1
+				# ranges2[4,1]      <- ranges2[2,1]+2
+				# ranges2[c(3:4),2] <- ranges2[2,2]
 			}
-			
 			extra.text2       <- c("","\\3","\\3","\\3","")
 			ranges3           <- cbind(ranges2,extra.text2)
 			rownames(ranges3) <- c("upstream.noncoding","CDS.1","CDS.2","CDS.3","downstream.noncoding")
@@ -474,10 +475,11 @@ make.partitioned.alignment  <- function(InputAlignmentFolder,output.dir,TargetCD
 			### updates the alignments.made matrix
 			alignments.made[i,1]  <- "yes"
 			### preparing to write the partition file
-			partition.line        <- NULL
-			for(j in 1:nrow(ranges3)){
-				partition.line[j] <- paste("DNA, ", rownames(ranges3)[j]," = ",ranges3[j,1],"-",ranges3[j,2],ranges3[j,4],sep="")
-			}
+			#partition.line        <- NULL
+			#for(j in 1:nrow(ranges3)){
+			#	partition.line[j] <- paste("DNA, ", rownames(ranges3)[j]," = ",ranges3[j,1],"-",ranges3[j,2],ranges3[j,4],sep="")
+			#}
+			partition.line <- paste0("DNA, ", rownames(ranges3)," = ",ranges3[,1],"-",ranges3[,2],ranges3[,4])
 			write(partition.line,file=paste0(dir2,locus.name.temp,"_parts.txt"))
 		}
 		#### Writes table summarizing which alignments were written
