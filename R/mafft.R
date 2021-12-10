@@ -36,7 +36,7 @@ mafft <- function(x, param="--auto",mafft.path="auto",return.as="XStringSet") {
 	#### Prepare the path to the executables. Jeff Weinell added this to avoid using the .findExecutable function.
 	if(mafft.path=="auto"){
 		### Path to "/blast-mafft/mafft" directory in REEs library
-		REEs.mafft.dir <- paste0(find.package("REEs"),"/blast-mafft/mafft")
+		REEs.mafft.dir <- file.path(find.package("REEs"),"blast-mafft","mafft")
 		### Path to directory containing the mafft executable
 		mafft.dir.path <- list.dirs(REEs.mafft.dir)[grep("bin$",list.dirs(REEs.mafft.dir))]
 		### Path to the MAFFT executable
@@ -66,8 +66,8 @@ mafft <- function(x, param="--auto",mafft.path="auto",return.as="XStringSet") {
 	#Change working directory
 	setwd(wd)
 	### Define name to use for the mafft input and output files
-	infile   <- paste(temp_file, ".in", sep="")
-	outfile  <- paste(temp_file, ".aln", sep="")
+	infile   <- paste0(temp_file, ".in")
+	outfile  <- paste0(temp_file, ".aln")
 	### Check that input data is the correct format. Stop and print a warning if not.
 	if(!class(x) %in% c("RNAStringSet","DNAStringSet","AAStringSet")){
 		stop("Unknown sequence type!")
@@ -75,29 +75,46 @@ mafft <- function(x, param="--auto",mafft.path="auto",return.as="XStringSet") {
 	### Write the unaligned sequence data to a temporary file.
 	Biostrings::writeXStringSet(x, infile, append=FALSE, format="fasta")
 	### Run MAFFT
-	system(paste(mafft.exe.path,param,"--clustalout",infile,">",outfile))
+#	system(paste(mafft.exe.path,param,"--clustalout",infile,">",outfile))
+	system(sprintf("'%s' %s '%s' > '%s' ",mafft.exe.path,param,infile,outfile))
 	### Read the output of mafft
+	
 	if(is(x, "RNAStringSet")){
-	   result <- Biostrings::readRNAMultipleAlignment(outfile, format="clustal")
+	   #result <- Biostrings::readRNAMultipleAlignment(outfile, format="clustal")
+	   result <- Biostrings::readRNAStringSet(file.path(wd,outfile))
 	}
 	if(is(x, "DNAStringSet")){
-	   result <- Biostrings::readDNAMultipleAlignment(outfile, format="clustal")
+	   #result <- Biostrings::readDNAMultipleAlignment(outfile, format="clustal")
+	   result <- Biostrings::readDNAStringSet(file.path(wd,outfile))
 	}
 	if(is(x, "AAStringSet")){
-	   result <- Biostrings::readAAMultipleAlignment(outfile, format="clustal")
+	   #result <- Biostrings::readAAMultipleAlignment(outfile, format="clustal")
+	   result <- Biostrings::readAAStringSet(file.path(wd,outfile))
 	}
+	
 	if(!(return.as %in% c("XStringSet", "MultipleAlignment"))){
 		stop("return.as must be equal to 'XStringSet' or 'MultipleAlignment'")
 	} else {
-		if(return.as=="XStringSet"){
-			if(is(x, "RNAStringSet")){
-			   result <- Biostrings::RNAStringSet(result)
+		#if(return.as=="XStringSet"){
+		#	if(is(x, "RNAStringSet")){
+		#	   result <- Biostrings::RNAStringSet(result)
+		#	}
+		#	if(is(x, "DNAStringSet")){
+		#		result <- Biostrings::DNAStringSet(result)
+		#	}
+		#	if(is(x, "AAStringSet")){
+		#		result <- Biostrings::AAStringSet(result)
+		#	}
+		#}
+		if(return.as=="MultipleAlignment"){
+			if(is(x, "RNAMultipleAlignment")){
+			   result <- Biostrings::RNAMultipleAlignment(result)
 			}
-			if(is(x, "DNAStringSet")){
-				result <- Biostrings::DNAStringSet(result)
+			if(is(x, "readDNAMultipleAlignment")){
+				result <- Biostrings::readDNAMultipleAlignment(result)
 			}
-			if(is(x, "AAStringSet")){
-				result <- Biostrings::AAStringSet(result)
+			if(is(x, "readAAMultipleAlignment")){
+				result <- Biostrings::readAAMultipleAlignment(result)
 			}
 		}
 	}

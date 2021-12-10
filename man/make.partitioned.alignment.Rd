@@ -16,11 +16,12 @@ make.partitioned.alignment(
   ith.locus.start = 1,
   ith.locus.end = "all",
   locus.names.omit = NULL,
-  AA.pdist.drop.thresh = 0.5
+  AA.pdist.drop.thresh = 0.5,
+  trimto = NULL
 )
 }
 \arguments{
-\item{InputAlignmentFolder}{Folder containing phylip-formatted input DNA alignments.}
+\item{InputAlignmentFolder}{Folder containing fasta-formatted input DNA alignments.}
 
 \item{output.dir}{Where to save alignments (alignments for each type of data will be in different subdirectory)}
 
@@ -44,9 +45,11 @@ I will update this function to remove the need for this argument. Write now this
 \item{locus.names.omit}{Names of loci to skip (default is NULL).}
 
 \item{AA.pdist.drop.thresh}{Maximum mean pairwise p-distance for AA sequence of an individual (translated from CDS regions of input DNA sequences) to keep the individual in AA or CDS-containing DNA alignments.}
+
+\item{trimto}{Optional character string with names of sequences in input alignments whose combined range should be used to trim the alignments. Default is NULL.}
 }
 \value{
-Writes up to nine different phylip-formatted sequence alignments for each input DNA alignment in InputAlignmentFolder, and partition files partitioned alignments. The nine output alignment types are:
+Writes up to nine different fasta-formatted sequence alignments for each input DNA alignment in InputAlignmentFolder, and partition files partitioned alignments. The nine output alignment types are:
 (1) Partitioned version of the input DNA alignment. The alignment is partitioned into (if present): upstream noncoding DNA, each codon position (within CDS regions), and downstream noncoding DNA.
 (2) Alignment containing only the CDS regions, which are partitioned by codon position.
 (3) Alignment containing only the upstream noncoding DNA.

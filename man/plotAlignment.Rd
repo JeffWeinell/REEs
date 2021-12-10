@@ -4,10 +4,16 @@
 \alias{plotAlignment}
 \title{Plot Alignment}
 \usage{
-plotAlignment(alignment)
+plotAlignment(alignment, title = "", colors = "standard")
 }
 \arguments{
 \item{alignment}{Input DNA alignment of class DNAStringSet.}
+
+\item{title}{Character string to use for the title. Default is no title.}
+
+\item{colors}{Character vector with colors to use for 17 recognized characters in DNA alignments. If a single value is supplied, all non-gap characters are plotted with the sample supplied color.
+Default colors "standard" = c(A="red", C="blue", G="yellow", T="green", M="darkgray", R="darkgray", W="darkgray", S="darkgray", Y="darkgray", K="darkgray", V="darkgray", H="darkgray", D="darkgray", B="darkgray", N="darkgray", '-'="white", '?'="white")
+Note: "-" and "?" characters cannot be changed from background plot color.}
 }
 \value{
 An object containing the plot that is drawn in the plotting window of R.

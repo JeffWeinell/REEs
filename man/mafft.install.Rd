@@ -14,4 +14,5 @@ NULL. MAFFT is installed to install.loc
 }
 \description{
 This function installs MAFFT from source to the REEs directory or a user-specified location.
+This code only works if you Command Line Developer Tools installed.
 }

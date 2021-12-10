@@ -1,6 +1,7 @@
 #' Install MAFFT
 #' 
 #' This function installs MAFFT from source to the REEs directory or a user-specified location.
+#' This code only works if you Command Line Developer Tools installed.
 #' 
 #' @param install.loc Path where MAFFT should be installed, or "auto" (Default), which installs MAFFT to blast-mafft subdirectory of REEs directory, or "PATH", which installs to "/usr/local" if it is writeable.
 #' @return NULL. MAFFT is installed to install.loc
@@ -9,7 +10,7 @@ mafft.install <- function(install.loc="auto",source=F){
 	### This is MAFFT version 7.475 (without extensions)
 	source.url        <- "https://mafft.cbrc.jp/alignment/software/mafft-7.475-without-extensions-src.tgz"
 	### Backup URL to use if the primary URL becomes unavailable: "https://osf.io/qtdfr/download"
-	sourcename <- "mafft-7.475-without-extensions-src.tgz"
+	sourcename <- basename(source.url) # "mafft-7.475-without-extensions-src.tgz"
 	if(install.loc=="PATH"){
 		install.loc       <- "/usr/local"
 		if(is.writeable!=0){
@@ -29,10 +30,10 @@ mafft.install <- function(install.loc="auto",source=F){
 		}
 	} else {
 		if(install.loc=="auto"){
-			install.loc       <- paste0(find.package("REEs"),"/blast-mafft/mafft")
+			install.loc       <- file.path(find.package("REEs"),"blast-mafft","mafft")
 			#dir.check.create(install.loc)
 			dir.check.create(install.loc)
-			bindir <- paste0(install.loc,"/bin")
+			bindir <- file.path(install.loc,"bin")
 			# dir.check.create(bindir)
 			dir.check.create(bindir)
 		}
@@ -60,7 +61,7 @@ mafft.install <- function(install.loc="auto",source=F){
 		lines.makefile.new[3] <- paste0("BINDIR = ",bindir)
 		### write the new lines to Makefile
 		writeLines(lines.makefile.new,paste0(list.dirs(install.loc)[grep("core$",list.dirs(install.loc))],"/Makefile"))
-		### Compile and install.
+		### Compile and install. These lines require command line developer tools to be installed.
 		system(paste("cd",core.dir,"&& make clean"))
 		system(paste("cd",core.dir,"&& make"))
 		system(paste("cd",core.dir,"&& make install"))
