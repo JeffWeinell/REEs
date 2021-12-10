@@ -7,7 +7,7 @@
 Given an input DNA alignment and a reference CDS sequence for the locus in the input alignment, this function generates up to nine output alignments, including three partitioned DNA alignments, five DNA alignments containing a subset of the input DNA sites, and one amino acid alignment for the CDS region(s) of the input alignment.}
 \usage{
 make.partitioned.alignment(
-  InputAlignmentFolder,
+  input.path,
   output.dir,
   TargetCDS.path,
   bait.species.filename,
@@ -24,7 +24,7 @@ make.partitioned.alignment(
 )
 }
 \arguments{
-\item{InputAlignmentFolder}{Folder containing fasta-formatted input DNA alignments.}
+\item{input.path}{Folder containing fasta-formatted input DNA alignments.}
 
 \item{output.dir}{Where to save alignments (alignments for each type of data will be in different subdirectory)}
 
@@ -43,9 +43,9 @@ I will update this function to remove the need for this argument. Write now this
 
 \item{drop.reference}{Whether or not to include the reference sequence (from which baits were designed for a particular locus) in the alignment written to file (default is FALSE).}
 
-\item{ith.locus.start}{First locus in InputAlignmentFolder to process (default is 1).}
+\item{ith.locus.start}{First locus in input.path to process (default is 1).}
 
-\item{ith.locus.end}{Last locus in InputAlignmentFolder to process (default is "all", when means process until no more loci to process).}
+\item{ith.locus.end}{Last locus in input.path to process (default is "all", when means process until no more loci to process).}
 
 \item{locus.names.omit}{Names of loci to skip (default is NULL).}
 
@@ -54,7 +54,7 @@ I will update this function to remove the need for this argument. Write now this
 \item{trimto}{Optional character string with names of sequences in input alignments whose combined range should be used to trim the alignments. Default is NULL.}
 }
 \value{
-Writes up to nine different fasta-formatted sequence alignments for each input DNA alignment in InputAlignmentFolder, and partition files partitioned alignments. The nine output alignment types are:
+NULL; writes up to nine different fasta-formatted sequence alignments for each input DNA alignment in input.path, and partition files partitioned alignments. The nine output alignment types are:
 (1) Partitioned version of the input DNA alignment. The alignment is partitioned into (if present): upstream noncoding DNA, each codon position (within CDS regions), and downstream noncoding DNA.
 (2) Alignment containing only the CDS regions, which are partitioned by codon position.
 (3) Alignment containing only the upstream noncoding DNA.
