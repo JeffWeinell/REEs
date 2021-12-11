@@ -2,7 +2,9 @@
 % Please edit documentation in R/filter.md.R
 \name{filter.md}
 \alias{filter.md}
-\title{Test Missing Data}
+\title{Test Missing Data
+
+Test if a character vector contains. This function is used internally in the the filter.alignment function.}
 \usage{
 filter.md(alignment.site, missing.data.threshold, type, ambiguous = F)
 }
@@ -19,5 +21,7 @@ filter.md(alignment.site, missing.data.threshold, type, ambiguous = F)
 Returns TRUE if no missing data, or if the fraction of missing data is less than the value of missing.data.threshold argument; otherwise returns FALSE.
 }
 \description{
+Test Missing Data
+
 Test if a character vector contains. This function is used internally in the the filter.alignment function.
 }

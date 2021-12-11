@@ -2,7 +2,10 @@
 % Please edit documentation in R/bma.R
 \name{s2v}
 \alias{s2v}
-\title{Character String to Character Vector}
+\title{Character String to Character Vector
+
+Split all characters in a character string into a vector of single characters.
+The is lightly modified version (internal syntax only) of the function s2c function in the package seqinr.}
 \usage{
 s2v(string)
 }
@@ -10,9 +13,11 @@ s2v(string)
 \item{string}{One character string.}
 }
 \value{
-A character vector with the ith entry equal to the ith character in the input string. If length(string) is not zero or if string contains non-characters, this function returns a warning and NA.
+A character vector with the ith entry equal to the ith character in the input string. If length(string) is not one or if string contains non-characters, this function returns a warning and NA.
 }
 \description{
+Character String to Character Vector
+
 Split all characters in a character string into a vector of single characters.
 The is lightly modified version (internal syntax only) of the function s2c function in the package seqinr.
 }

@@ -1,4 +1,4 @@
-#' IUPAC nucleotide symbols
+#' @title IUPAC nucleotide symbols
 #' 
 #' This function returns the IUPAC symbol for a nucleotide sequence, for instance c("c", "c", "g") is coded by "s",
 #' which is useful for describing ambiguous or consensus nucleotide sequences.
@@ -35,7 +35,7 @@ bma <- function (nucl, warn.non.IUPAC = TRUE, type = c("DNA", "RNA")){
 	return(names(iupac)[idx])
 }
 
-#' Expansion of IUPAC nucleotide symbols
+#' @title Expansion of IUPAC nucleotide symbols
 #' 
 #' This function returns the list of nucleotide matching a given IUPAC nucleotide symbol, for instance c("c", "g") for "s".
 #' The function is a slightly modified version (internal syntax only) of the function amb in the package seqinr.
@@ -77,12 +77,13 @@ amb <- function (base, forceToLower = TRUE, checkBase = TRUE, IUPAC = REEs::s2v(
 	return(REEs::s2v(names(bases[which(bases %in% base)])))
 }
 
-#' Character String to Character Vector
+#' @title Character String to Character Vector
 #' 
 #' Split all characters in a character string into a vector of single characters.
 #' The is lightly modified version (internal syntax only) of the function s2c function in the package seqinr.
 #' @param string One character string.
-#' @return A character vector with the ith entry equal to the ith character in the input string. If length(string) is not zero or if string contains non-characters, this function returns a warning and NA.
+#' @return A character vector with the ith entry equal to the ith character in the input string. If length(string) is not one or if string contains non-characters, this function returns a warning and NA.
+#' @export s2v
 s2v <- function(string){
 	if((!is(string,"character")) | (length(string)!=1)){
 		warning("string must but a character vector of length 1, returning NA")

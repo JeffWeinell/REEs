@@ -10,8 +10,7 @@ make.partitioned.alignment(
   input.path,
   output.dir,
   TargetCDS.path,
-  bait.species.filename,
-  ref.type = "DNA",
+  steps = "1111111",
   mafft.params = " --auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet ",
   old.names = NA,
   new.names = NA,
@@ -30,10 +29,7 @@ make.partitioned.alignment(
 
 \item{TargetCDS.path}{Full path to the fasta file containing only the CDS sequences of target loci (from which probes were designed). Sequence names must have the following format: "GeneName_TargetCDS_of_TargetLocusName_AnyAdditionalIformation", where GeneName and TargetLocusName are replaced with the actual names, and AnyAdditionalIformation can be a string of any characters}
 
-\item{bait.species.filename}{Full path to the file containing a two column table in which the first column contains name of locus and the second column contains name of species that the probes for that locus were designed from. This is needed so that the the function knows which genome to use as a reference.
-I will update this function to remove the need for this argument. Write now this table is just used for renaming the reference sequence.}
-
-\item{ref.type}{Indicates that the input alignments are DNA sequences (default is "DNA").}
+\item{steps}{Character string with nine character, each 0 or 1, indicating which steps of the function to do (1) or skip (0). Used for debugging.}
 
 \item{mafft.params}{Character string with parameters passed to MAFFT. Default is " --auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet "}
 
@@ -52,6 +48,8 @@ I will update this function to remove the need for this argument. Write now this
 \item{AA.pdist.drop.thresh}{Maximum mean pairwise p-distance for AA sequence of an individual (translated from CDS regions of input DNA sequences) to keep the individual in AA or CDS-containing DNA alignments.}
 
 \item{trimto}{Optional character string with names of sequences in input alignments whose combined range should be used to trim the alignments. Default is NULL.}
+
+\item{ref.type}{Indicates that the input alignments are DNA sequences (default is "DNA").}
 }
 \value{
 NULL; writes up to nine different fasta-formatted sequence alignments for each input DNA alignment in input.path, and partition files partitioned alignments. The nine output alignment types are:

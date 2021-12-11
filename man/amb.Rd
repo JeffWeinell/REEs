@@ -2,7 +2,10 @@
 % Please edit documentation in R/bma.R
 \name{amb}
 \alias{amb}
-\title{Expansion of IUPAC nucleotide symbols}
+\title{Expansion of IUPAC nucleotide symbols
+
+This function returns the list of nucleotide matching a given IUPAC nucleotide symbol, for instance c("c", "g") for "s".
+The function is a slightly modified version (internal syntax only) of the function amb in the package seqinr.}
 \usage{
 amb(
   base,
@@ -27,6 +30,8 @@ amb(
 When base is missing, the list of IUPAC symbols is returned, otherwise a vector with expanded symbols.
 }
 \description{
+Expansion of IUPAC nucleotide symbols
+
 This function returns the list of nucleotide matching a given IUPAC nucleotide symbol, for instance c("c", "g") for "s".
 The function is a slightly modified version (internal syntax only) of the function amb in the package seqinr.
 }

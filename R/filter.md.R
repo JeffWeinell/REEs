@@ -1,4 +1,4 @@
-#' Test Missing Data
+#' @title Test Missing Data
 #'
 #' Test if a character vector contains. This function is used internally in the the filter.alignment function.
 #'

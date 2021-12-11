@@ -1,76 +1,227 @@
-unlist(res)
-i=1
-for(i in 1:N){#
-	if(i==1) {#
-		res[[i]] <- median((1):xser[i])#
-	} else {#
-		res[[i]] <- median((x0+1):xser[i])#
-	}#
-}
-unlist(res)
-distAA.mdt0        <- Biostrings::stringDist(aa.alignment.mdt0, upper=T,diag=T)
-class(distAA.mdt0)
-length(distAA.mdt0)
-54*54
-(54*54)/2
-(54*53)/2
-test <- matrix(data=NA,nrow=54,ncol=54)
-lower.tri(test) <- as.numeric(distAA.mdt0)
-test <- matrix(data=NA,nrow=54,ncol=54)
-dim(test)
-length(lower.tri(test) )
-class(lower.tri(test))
-test[lower.tri(test)] <- as.numeric(distAA.mdt0)
-test[1:5,1:5]
-distAA.mdt0        <- Biostrings::stringDist(aa.alignment.mdt0, upper=T,diag=T)#
-				distAA.mdt0.mat    <- matrix(nrow=length(aa.alignment.mdt0), ncol=length(aa.alignment.mdt0))#
-				distAA.mdt0.mat[lower.tri(distAA.mdt0.mat)] <- as.numeric(distAA.mdt0)
-dim(distAA.mdt0.mat)
-library(triangle)
-colnames(distAA.mdt0.mat) <- rownames(distAA.mdt0.mat) <- labels(aa.alignment.mdt0)
-test[1:5,1:5]
-distAA.mdt0.mat[1:5,1:5]
-distAA.mdt0.mat[upper.tri(distAA.mdt0.mat)] <- t(distAA.mdt0.mat)[upper.tri(distAA.mdt0.mat)]
-distAA.mdt0.mat[1:5,1:5]
-unname(distAA.mdt0.mat)[1:5,1:5]
-distAA.mdt0        <- Biostrings::stringDist(aa.alignment.mdt0, upper=T,diag=T)#
-				# Move distance data to a matrix#
-				distAA.mdt0.mat    <- matrix(nrow=length(aa.alignment.mdt0), ncol=length(aa.alignment.mdt0))#
-				distAA.mdt0.mat[lower.tri(distAA.mdt0.mat)] <- as.numeric(distAA.mdt0)#
-				# reflect lower triangle to make symmetric, then add row labels#
-				distAA.mdt0.mat[upper.tri(distAA.mdt0.mat)] <- t(distAA.mdt0.mat)[upper.tri(distAA.mdt0.mat)]#
-				rownames(distAA.mdt0.mat) <- labels(aa.alignment.mdt0)#
-				# median for each row#
-				median.distAA.mdt0 <- apply(distAA.mdt0.mat,1,median)
-median.distAA.mdt0
-median.distAA.mdt0 <- apply(distAA.mdt0.mat,1,median,na.rm=T)
-median.distAA.mdt0
-median.distAA.mdt0 <- apply(distAA.mdt0.mat,1,median,na.rm=T)/width(aa.alignment.mdt0[1])
-median.distAA.mdt0
-toDrop <- which(median.distAA.mdt0 > AA.pdist.drop.thresh)
-AA.pdist.drop.thresh=0.5
-toDrop <- which(median.distAA.mdt0 > AA.pdist.drop.thresh)
-toDrop
-devtools(document)
-devtools::document()
-BiocManager::install("JeffWeinell/REEs",update=FALSE, dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="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")
-TargetCDS.path="/Users/jeff/Documents/GitHub/SnakeCap/PostSequencing/Partitioned-Alignments/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa"; TARG_CDS <- Biostrings::readDNAStringSet(TargetCDS.path,format="fasta")
-length(TARG_CDS)
-names(TARG_CDS)[1:10]
-test <- do.call(rbind,strsplit(names(TARG_CDS),split="_"))
-test <- strsplit(names(TARG_CDS),split="_")
-range(lengths(test))
-length(which(lengths(test)==5))
-names(TARG_CDS)[which(lengths(test)==5)][1:10]
-names(TARG_CDS)[which(lengths(test)==10)][1:10]
-names(TARG_CDS)[which(lengths(test)==10)]
-targetCDS.names   <- gsub("_.*","",gsub(".*_TargetCDS_of_","",names(TargetDNA_CDS.regions)))
-targetCDS.names[1:10]
-length(targetCDS.names)
-targetCDS.names[1970:1983]
-input.path <- "/Users/jeff/Documents/SequenceCapture/partitionedAlignments"
-output.dir <- "/Users/jeff/Documents/SequenceCapture/partitionedAlignments"
-input.path <- "/Users/jeff/Documents/SequenceCapture/alignments_WENames"
+library(Biostrings)
+aln <- DNAMultiplAlignment(dna)
+aln <- DNAMultipleAlignment(dna)
+aln
+aln["group1019"]
+aln["group1019",]
+aln[1,]
+rownames(aln)
+aln["group1019_consensus_supergroup235",]
+aln[1]
+grep("^*",aln)
+grep("^*",aln[1])
+grep("^*",aln[[1]])
+grep("^*",dna[1])
+library(stringr)
+as.character(dna[1])
+str_locate("^-+",as.character(dna[1]))
+str_locate("-",as.character(dna[1]))
+str_locate(as.character(dna[1]),"-")
+str_locate(as.character(dna[1]),"-+")
+str_locate_all(as.character(dna[1]),"-+")
+str_locate_all(as.character(dna[1]),"![-+]")
+str_locate_all(dna[1],"-+")
+invert_match(str_locate_all(dna[1],"-+"))
+invert_match(unlist(str_locate_all(dna[1],"-+")))
+invert_match()
+?invert_match()
+str_locate_all(dna[1],"-+")[[1]]
+invert_match(str_locate_all(dna[1],"-+")[[1]])
+unlist(str_locate_all(dna[1],"-+"))
+str_locate(dna[1],"-+")
+str_locate(dna[1],"+")
+str_locate(dna[1],"-")
+str_locate_all(dna[1],"-+")
+range(str_locate_all(dna[1],"-+"))
+str_locate_all(dna[1],"-+")[[1]]
+apply(str_locate_all(dna[1],"-+")[[1]],1,FUN=seq(x[1],x[2]))
+apply(str_locate_all(dna[1],"-+")[[1]],1,FUN=function(x){seq(x[1],x[2]))})
+apply(str_locate_all(dna[1],"-+")[[1]],1,FUN=function(x){seq(x[1],x[2])})
+str_locate_all(dna[1],"-+")[[1]]
+head(str_locate_all(dna[1],"-+")[[1]])
+head(str_locate_all(dna[1],"-+")[[1]],1)
+grep("-",dna[1])
+grep("-",dna[[1]])
+str_locate_all(dna[1],"[A-Z].+[A-Z]")[[1]]
+range(str_locate_all(dna[1:2],"[A-Z].+[A-Z]")[[1]])
+Sys.Date()-1
+plotAlignment(readDNAStringSet("/Users/jeff/Downloads/supergroup235.fasta_temp3")
+)
+plotAlignment(readDNAStringSet("/Users/jeff/Downloads/supergroup235.fasta_temp4")
+)
+mafft()
+mafft
+plotAlignment(readDNAStringSet("/Users/jeff/Downloads/supergroup7.fasta")
+plotAlignment(readDNAStringSet("/Users/jeff/Downloads/supergroup7.fasta"))
+Sys.Date()-3
+library(gtools)
+?mixedsort()
+plotAlignment(readDNAStringSet("/Users/jeff/Downloads/supergroup7.fasta"))
+plotAlignment(readDNAStringSet("/Users/jeff/Downloads/supergroup3.fasta"))
+plotAlignment(readDNAStringSet("/Users/jeff/Downloads/supergroup7.fasta"))
+complement("TCTGGTGGGTTTGGTTCTGTTTACAAGGCAACTTACCATGGAGCTACAGTGGCTGTAAAACAAGTGAAGAGATGCAGTAAAAACCATTTGGCATCACGGCAAAGCTTCTGGGCAGAACTAAATGTAGCACGTCTTGACCATAACAATGTGGTGCACATAGTAGCTGCTAGCACATGTACCCCTACTAGTCAGGATAGTTTGGGTACCATAATTATGGAATATGCAGGTAATTGCACTCTACATCATGTCATCTATGGGACTGGTTATTTAACAGGAAATAACGATGGCCTTAAATGTGACCATGGGCTTTTGACTACAGCTCAGGCTGTCATTTACTCCTGTGATATTGTGGCAGGGTTAATGTTTCTCCATTCTCAGTCAATTGTGCATCTGGATTTAAAACCTGCTAACATATTCATCACAGAACATAATGTTTGTAAGATTGGAGACTTTGGGTGCTCCCAAAAGCTAGATGACAGCGAATCTTCAGGACATCTTTGTCATCAAGGGGGAACATACACACATCGTGCTCCTGAACTTCTTAAAGGTGAGAAAATC")
+complement("T,C,T,G)
+complement(c("T","C","T","G"))
+reverseComplement()
+reverseComplement("TCTGGTGGGTTTGGTTCTGTTTACAAGGCAACTTACCATGGAGCTACAGTGGCTGTAAAACAAGTGAAGAGATGCAGTAAAAACCATTTGGCATCACGGCAAAGCTTCTGGGCAGAACTAAATGTAGCACGTCTTGACCATAACAATGTGGTGCACATAGTAGCTGCTAGCACATGTACCCCTACTAGTCAGGATAGTTTGGGTACCATAATTATGGAATATGCAGGTAATTGCACTCTACATCATGTCATCTATGGGACTGGTTATTTAACAGGAAATAACGATGGCCTTAAATGTGACCATGGGCTTTTGACTACAGCTCAGGCTGTCATTTACTCCTGTGATATTGTGGCAGGGTTAATGTTTCTCCATTCTCAGTCAATTGTGCATCTGGATTTAAAACCTGCTAACATATTCATCACAGAACATAATGTTTGTAAGATTGGAGACTTTGGGTGCTCCCAAAAGCTAGATGACAGCGAATCTTCAGGACATCTTTGTCATCAAGGGGGAACATACACACATCGTGCTCCTGAACTTCTTAAAGGTGAGAAAATC")
+reverseComplement(DNAStringSet("TCTGGTGGGTTTGGTTCTGTTTACAAGGCAACTTACCATGGAGCTACAGTGGCTGTAAAACAAGTGAAGAGATGCAGTAAAAACCATTTGGCATCACGGCAAAGCTTCTGGGCAGAACTAAATGTAGCACGTCTTGACCATAACAATGTGGTGCACATAGTAGCTGCTAGCACATGTACCCCTACTAGTCAGGATAGTTTGGGTACCATAATTATGGAATATGCAGGTAATTGCACTCTACATCATGTCATCTATGGGACTGGTTATTTAACAGGAAATAACGATGGCCTTAAATGTGACCATGGGCTTTTGACTACAGCTCAGGCTGTCATTTACTCCTGTGATATTGTGGCAGGGTTAATGTTTCTCCATTCTCAGTCAATTGTGCATCTGGATTTAAAACCTGCTAACATATTCATCACAGAACATAATGTTTGTAAGATTGGAGACTTTGGGTGCTCCCAAAAGCTAGATGACAGCGAATCTTCAGGACATCTTTGTCATCAAGGGGGAACATACACACATCGTGCTCCTGAACTTCTTAAAGGTGAGAAAATC"))
+as.character(reverseComplement(DNAStringSet("TCTGGTGGGTTTGGTTCTGTTTACAAGGCAACTTACCATGGAGCTACAGTGGCTGTAAAACAAGTGAAGAGATGCAGTAAAAACCATTTGGCATCACGGCAAAGCTTCTGGGCAGAACTAAATGTAGCACGTCTTGACCATAACAATGTGGTGCACATAGTAGCTGCTAGCACATGTACCCCTACTAGTCAGGATAGTTTGGGTACCATAATTATGGAATATGCAGGTAATTGCACTCTACATCATGTCATCTATGGGACTGGTTATTTAACAGGAAATAACGATGGCCTTAAATGTGACCATGGGCTTTTGACTACAGCTCAGGCTGTCATTTACTCCTGTGATATTGTGGCAGGGTTAATGTTTCTCCATTCTCAGTCAATTGTGCATCTGGATTTAAAACCTGCTAACATATTCATCACAGAACATAATGTTTGTAAGATTGGAGACTTTGGGTGCTCCCAAAAGCTAGATGACAGCGAATCTTCAGGACATCTTTGTCATCAAGGGGGAACATACACACATCGTGCTCCTGAACTTCTTAAAGGTGAGAAAATC")))
+9*20
+library(ape)
+test=read.tree(file="test.trees")
+test=read.tree(file="/Users/jeff/Documents/test.trees")
+plot(test[1])
+plot(test[[1]])
+plot(test[[2]])
+plot(test[[1]])
+plot(test[2])
+test=read.tree(file="/Users/jeff/Documents/test.trees")
+plot(test)
+plot(test[[2]])
+plot(test[[1]])
+plot(test[[3]])
+class(test)
+names(test)
+test=read.tree(file="/Users/jeff/Documents/test.trees")
+names(test)
+plot(test[[2]])
+plot(test[[1]])
+plot(test[[3]])
+10000/100
+12000/250
+8300/100
+8300/25
+test=read.tree(file="/Users/jeff/Downloads/supergroups_genetrees_ShortNames_iqtree.trees")
+plot(test[[1]])
+(73494.58-30)/83819.03
+(73494.58)/83819.03
+(73494.58-(33+29))/83819.03
+(73494.58-(100))/83819.03
+(73494.58-(1000))/83819.03
+38+32
+q("no")
+library(remotes)
+remotes::install_github("jtlovell/GENESPACE")
+library(GENESPACE)
+?parse_ncbi()
+length(2408:29976)
+37118-34275
+316187-311622
+?write.table()
+AA=strsplit("MDPLLEQVEKDLGIAHSQLLLRGSHVVALVPLKWLVSLKERGVLPVLCPQPEGLSEMEVHACLQHSVQKLPTGWTRVEIHGLQKLWLRYQLTTSANAQKEPTGAPETLHEFMLRVASQNCQNLWNQAHRSYVQRYYPAPAPASVQALEGLRAALQKLYCCPLVPVGRTPSGSSPAKGEDTAGHGTPHFSSILQADALLESSDVLYLVFPYVQYSLRDLITFSPAKLMNSHAKLLFILFQVLLAMQACHEVGLACGIVSLEDVAVDEKLCAWLRVPLQGYEQLGREEAGEGGAVAAASSTPEQGSPEGQGPRGPAAAEGAGALPDLGDLVLDWVHGRLSNLDYLMHLNHLAGRRPRDPNYHPVLPWVMDFTTRGGQFRDLRKSKFRLNKGDKQLDFTYEMTKQAFVVGGSGLSGEQPHVPHHISDVLSDITYYVYTARRTPKAVLCAHVRSQWEPNEYPANLERMQAWTPDECIPEFYLDPTIFKSIHPDMPDLEVPPWYGSCEEFIAAHRALLESPEVSRDLHHWIDLTFGYKLLGKEAVKEKNVCLHLVDNHTHLTSYGVVQLFDQPHPRRLVGATLLPAEAPLSTRPFIPTVQETRVLETPKWSQAAGGPVIDVATCENRFGLSMEEEVEQGAEALESAPVPGRGSEPPPAQAPSFPLDSRPLGWRTKAPAPLLQGEGAEEKLVLPEGHKLLQALEELEKLDVFLLKAVHGVVGWLEQPPMRLPVALSDLFQRDMQVLGVLVGEILFAPKLRTSKPTASLRERFQAVRRLCWLHPKEVPPPLQHLLEVLLQLTDPDPQLLREEEEEGSRGPQLFAYKPVWQGLPPPCPSQLLSPYSGVLPFPAYFPALHRFILTYLSQEAGDEGQGRELVFQLWQQLDGVLSGITPEGLEILLPFILALLSEQRTAVHAAWYLFEPIARALGPKNTNKYLLKLLVGAYESPRGLPGRFYLYTDSFVAQLVARLGLQPFLAHLLPHILQVLGGAEGSFQEESKALLLSTAEEDGEESG
+RSSPASRSFGEEPKGDAGLELVNYMSGISLHDQAYPPESEELPNGLYLAEALSLGQLNDKGGAAEGLLGEDPQDKATGLQCLGGSQDPKHSEEEEEEEEEEEDGEEGRKEAALVAEEPVLSGAAGHSAEPTLAEEDGQTEAEESRQELLDQDVDKEQSILLDTACKMVWWLSAKLGPTTACRYVARNLLRLLASCYLGASRQQFVAGAEEAGPPSTGNLEQGRPVAGDVVSEPVLTCLVHIAHLYGEPVLTYLYLPYISYLVAPGGGTAASRLNSRKEAGLLAAMTLGQKIVVHLSDSTLMDILPRISQEVLLPLLGFLTSPILSFPSGVQGRVVLCLKTIRLMVLVCSRIGPEMAQQHLRDTLRSFFESFSSLPSESGQPPSPDPSALLEFQKVFGPEMAYVAFVRFSCLLGDAFHTIVPNHASVRQLASLHLEQASPLSERQAATGPGRPPLEQEALGAEPTSAPPEDPRSGTFGGVLVGNRIQVSSEAQQELPGGAGGGLCPKLVGQEGEMLKQELRPSTRLLLGNWLAYWQYEIGVGQHEAPFHFHQIKLQSFVGHGGAIKCLAPLSGEDFFLSGSKDKTVRLWPLYNRGDGSHEAKPRLTYDRHKKSVFYVGLLEGPQHVVSCDGTIHIWDAPTGSGLRSFEVLDSKAPITALCPMPAPYGSISIASADSVLRFIDHRKPGWQQEFRLASGPNAGLIRCLAVSPSGRSVAAGFSSGFMVLLDTRTGLIQKAWSAHEGDILQVKATEGNVLVSSSSDHSLTVWKDLEPKPLQVYKSASEPVHTFDLYGHEVVAGTVANRISVYAFQGPSAPGPTKLSSENFRGTLTSLALLPTKCHLLLGSDNGTVRLLA",split="")
+AA
+AA=unlist(strsplit("MDPLLEQVEKDLGIAHSQLLLRGSHVVALVPLKWLVSLKERGVLPVLCPQPEGLSEMEVHACLQHSVQKLPTGWTRVEIHGLQKLWLRYQLTTSANAQKEPTGAPETLHEFMLRVASQNCQNLWNQAHRSYVQRYYPAPAPASVQALEGLRAALQKLYCCPLVPVGRTPSGSSPAKGEDTAGHGTPHFSSILQADALLESSDVLYLVFPYVQYSLRDLITFSPAKLMNSHAKLLFILFQVLLAMQACHEVGLACGIVSLEDVAVDEKLCAWLRVPLQGYEQLGREEAGEGGAVAAASSTPEQGSPEGQGPRGPAAAEGAGALPDLGDLVLDWVHGRLSNLDYLMHLNHLAGRRPRDPNYHPVLPWVMDFTTRGGQFRDLRKSKFRLNKGDKQLDFTYEMTKQAFVVGGSGLSGEQPHVPHHISDVLSDITYYVYTARRTPKAVLCAHVRSQWEPNEYPANLERMQAWTPDECIPEFYLDPTIFKSIHPDMPDLEVPPWYGSCEEFIAAHRALLESPEVSRDLHHWIDLTFGYKLLGKEAVKEKNVCLHLVDNHTHLTSYGVVQLFDQPHPRRLVGATLLPAEAPLSTRPFIPTVQETRVLETPKWSQAAGGPVIDVATCENRFGLSMEEEVEQGAEALESAPVPGRGSEPPPAQAPSFPLDSRPLGWRTKAPAPLLQGEGAEEKLVLPEGHKLLQALEELEKLDVFLLKAVHGVVGWLEQPPMRLPVALSDLFQRDMQVLGVLVGEILFAPKLRTSKPTASLRERFQAVRRLCWLHPKEVPPPLQHLLEVLLQLTDPDPQLLREEEEEGSRGPQLFAYKPVWQGLPPPCPSQLLSPYSGVLPFPAYFPALHRFILTYLSQEAGDEGQGRELVFQLWQQLDGVLSGITPEGLEILLPFILALLSEQRTAVHAAWYLFEPIARALGPKNTNKYLLKLLVGAYESPRGLPGRFYLYTDSFVAQLVARLGLQPFLAHLLPHILQVLGGAEGSFQEESKALLLSTAE
+EDGEESGRSSPASRSFGEEPKGDAGLELVNYMSGISLHDQAYPPESEELPNGLYLAEALSLGQLNDKGGAAEGLLGEDPQDKATGLQCLGGSQDPKHSEEEEEEEEEEEDGEEGRKEAALVAEEPVLSGAAGHSAEPTLAEEDGQTEAEESRQELLDQDVDKEQSILLDTACKMVWWLSAKLGPTTACRYVARNLLRLLASCYLGASRQQFVAGAEEAGPPSTGNLEQGRPVAGDVVSEPVLTCLVHIAHLYGEPVLTYLYLPYISYLVAPGGGTAASRLNSRKEAGLLAAMTLGQKIVVHLSDSTLMDILPRISQEVLLPLLGFLTSPILSFPSGVQGRVVLCLKTIRLMVLVCSRIGPEMAQQHLRDTLRSFFESFSSLPSESGQPPSPDPSALLEFQKVFGPEMAYVAFVRFSCLLGDAFHTIVPNHASVRQLASLHLEQASPLSERQAATGPGRPPLEQEALGAEPTSAPPEDPRSGTFGGVLVGNRIQVSSEAQQELPGGAGGGLCPKLVGQEGEMLKQELRPSTRLLLGNWLAYWQYEIGVGQHEAPFHFHQIKLQSFVGHGGAIKCLAPLSGEDFFLSGSKDKTVRLWPLYNRGDGSHEAKPRLTYDRHKKSVFYVGLLEGPQHVVSCDGTIHIWDAPTGSGLRSFEVLDSKAPITALCPMPAPYGSISIASADSVLRFIDHRKPGWQQEFRLASGPNAGLIRCLAVSPSGRSVAAGFSSGFMVLLDTRTGLIQKAWSAHEGDILQVKATEGNVLVSSSSDHSLTVWKDLEPKPLQVYKSASEPVHTFDLYGHEVVAGTVANRISVYAFQGPSAPGPTKLSSENFRGTLTSLALLPTKCHLLLGSDNGTVRLLA",split=""))
+AA
+paste(sample(AA,size=334,replace=T),collapse="")
+GENE1_AA=paste(sample(AA,size=334,replace=T),collapse="")
+GENE1_AA=paste(c("M",sample(AA,size=334,replace=T),collapse=""))
+GENE1_AA
+GENE1_AA=paste(c("M",sample(AA,size=334,replace=T)),collapse="")
+GENE1_AA
+GENE1_AA_2=unlist(strsplit(GENE1_AA,split=""))
+GENE1_AA_2
+sample(2:length(GENE1_AA_2),10)
+sample(2:nchar(GENE1_AA),10)
+unlist(strsplit(GENE1_AA,split=""))[sample(2:nchar(GENE1_AA),10)]
+GENE1_AA_2=unlist(strsplit(GENE1_AA,split=""))
+GENE1_AA_2[sample(2:nchar(GENE1_AA),10)] <- sample(AA,10,replace=F)
+GENE1_AA_2
+AA_gene1_2=unlist(strsplit(AA_gene1,split="")); AA_gene1_2[sample(2:nchar(AA_gene1),10)] <- sample(AA,10,replace=F); AA_gene1_2<-paste(AA_gene1_2,collapse="")
+a=c('one two')
+a
+a = strsplit(c('A4GNT AAAS AACS AAED1 AAMP AANAT AAR2 AARS2 ABAT ABCA2 ABCA5 ABCB1 ABCB10 ABCB5 ABCB7 ABCC1 ABCC10 ABCC2 ABCD4 ABCE1'),split=' ')
+a
+a = unlist(strsplit(c('A4GNT AAAS AACS AAED1 AAMP AANAT AAR2 AARS2 ABAT ABCA2 ABCA5 ABCB1 ABCB10 ABCB5 ABCB7 ABCC1 ABCC10 ABCC2 ABCD4 ABCE1'),split=' '))
+a
+b = unlist(strsplit(c('CCDC59 NWD2 LOC106537407 LOC106537408 LTA4H LOC106537411 NEDD1 GABRA5 ELK3 ELK3 CDK17 CDK17 LOC106537417 GABRA5 LOC106537417 TMPO TMPO TMPO TMPO TMPO TMPO TMPO TMPO SLC25A3 IKBIP LOC106537421 IKBIP LOC106537426 CLDN12 CLDN12 CLDN12 CLDN12 CLDN12 CLDN12 ZBTB5 CLDN12 CLDN12 GTPBP10 LOC106537431 PIEZO2 ZBTB5 ZBTB5 COMTD1 COMTD1 MRPS36 MRPS36 SERINC5 MRPL38 LOC106537448 LOC106537449 GRHPR TRIM47 TRIM47 TRIM65 UNK UNK UNK GALK1 SAP30BP CCDC59 ZCCHC7 SAP30BP SMIM5 SAMD8 VDAC2 FDPS LOC106537463 LOC106537465 LOC106537466 PAX5 LOC106537469 LOC106537471 PYGO2 LOC106537476 LOC106537477 TRIB1 SYF2 TMEM50A LOC106537482 LOC106537482 TLE4 TLE4 TLE4 TLE4 TLE4 ERCC4 SOCS6 LOC106537487 HSD17B3 FANCC NUBP2 NUBP2 NUBP2 NUBP2 NUBP2 LRRC2 LRRC2 TES LRRC2 LRRC2'),split=' '))
+b
+match(a,b)
+match(b,a)
+intersect(a,b)
+GENESPACE::synteny
+annotate_gff
+GENESPACE::annotate_gff
+library(GENESPACE)
+gff_ogs <- read_gff("/Users/jeff/Downloads/gffWithOgs.txt.gz")
+gff_ogs <- fread("/Users/jeff/Downloads/gffWithOgs.txt.gz")
+dim(gff_ogs)
+gff_ogs[1:5,]
+gff_ogs[39860:39865,]
+length(unique(gff_ogs$arraID))
+length(unique(gff_ogs$arrayID))
+unique(gff_ogs$arrayID)[1]
+unique(gff_ogs$arrayID)[2]
+unique(gff_ogs$arrayID)[3]
+unique(gff_ogs$arrayID)[4]
+test <- (gff_ogs$nbp/gff_ogs$pepLen)
+test[1]
+test[2]
+range(test)
+length(gff_ogs$ord)
+length(unique(gff_ogs$ord))
+length(unique(gff_ogs$globOG))
+length(unique(gff_ogs$og))
+length(gff_ogs$og)
+range(table(gff_ogs$og))
+length(which(table(gff_ogs$og)==90))
+which(table(gff_ogs$og)==90)
+which(gff_ogs$og==20770)
+gff_ogs[which(gff_ogs$og==20770),]
+length(unique(gff_ogs$globOG))
+length(which(gff_ogs$globOG=="OG0000001"))
+length(which(gff_ogs$globOG=="OG0000002"))
+length(which(gff_ogs$globOG=="OG0000003"))
+range(table(gff_ogs$globOG))
+which(table(gff_ogs$globOG)==179)
+gff_ogs[which(gff_ogs$globOG =="OG0000000"),]
+gff_ogs[which(gff_ogs$globOG =="OG0000000"),"genome"]
+gff_ogs[which(gff_ogs$globOG =="OG0000000"),]$genome
+6622-2289
+REEs::blast
+0.0000000001
+rep(0,50)
+paste(rep(0,50),collapse="")
+0.00000000000000000000000000000000000000000000000001
+list(248147:25963048,411250:25486189,25495437:25963048)
+25963048-248147
+25963048-25486189
+411250-248147
+25486189-16797511
+16797511<=25486189 && 16799040>=411250
+65^2
+median(c(1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,4,4,4,4,6,7,7,7,9,10,10,11,11,12,13,14,15,17,23,23,32,33,34,37,42,54,54,60,67,71,72,73,74,75,128,135,159,177,179,201,250,378))
+median(c(1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,4,4,4,4,6,7,7,7,9,10,10,11,11,12,13,14,15,17,23,23,32,33,34,37,42,54,54,60,67,71,72,73,74,75,135,159,177,179,201,250,378))
+sum(c(1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,4,4,4,4,6,7,7,7,9,10,10,11,11,12,13,14,15,17,23,23,32,33,34,37,42,54,54,60,67,71,72,73,74,75,135,159,177,179,201,250,378))
+2225
+2225+128
+2267-2225
+sum(3, 1, 3, 1,44,11,5,3,2,2,4)
+paste(rep(0,40),collapse="")
+253169210-253169532
+253169210-253169426
+253169210-253169798
+253169210-253167860
+253169210-253169532
+798*0.6*0.49
+368760884-368848691
+0.0000000000000000000000000000000000000001
+library(REEs)
+input.path <- "/Users/jeff/Documents/SequenceCapture/alignments_WENames"#
+output.dir <- "/Users/jeff/Documents/SequenceCapture/partitionedAlignments"#
+TargetCDS.path <- "/Users/jeff/Documents/GitHub/SnakeCap/PostSequencing/Partitioned-Alignments/Weinell_TargetLoci_Snakes_Final_targetCDS_v4.fa"#
+bait.species.filename <- NA#
+ref.type="DNA"#
+mafft.params=" --auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet "#
+old.names=NA#
+new.names=NA#
+drop.reference=F#
+ith.locus.start=1#
+ith.locus.end="all"#
+locus.names.omit=NULL#
+AA.pdist.drop.thresh=0.5#
+trimto=NULL
 dir1  <- file.path(output.dir,"All_parts/alignmentFiles/")#
 	dir2  <- file.path(output.dir,"All_parts/partitionFiles/")#
 	dir3  <- file.path(output.dir,"CDS_only/alignmentFiles/")#
@@ -86,201 +237,70 @@ dir1  <- file.path(output.dir,"All_parts/alignmentFiles/")#
 #
 	subdirectories  <- c(dir1,dir2,dir3,dir4,dir5,dir6,dir7,dir8,dir9,dir10,dir11,dir12)#
 	makeDirectories <- lapply(X=subdirectories,FUN=dir.check.create)
-library(REEs)
-file.exists(input.path)
-input.path
-dir.exists()
-system(sprintf(" [ -f '%s' ] ",input.path))
-system(sprintf(" [ -f '%s' ] && echo FALSE",input.path))
-!system(sprintf(" [ -f '%s' ] ",input.path))
-system(sprintf(" [ ! -f '%s' ] && exit 1 ",input.path))
-!system(sprintf(" [ ! -f '%s' ] && exit 1 ",input.path))
-dir.exists(input.path)
-file.exists(input.path) && !dir.exists(input.path)
-dir.exists(input.path)
-input.alignment.filenames <- gtools::mixedsort(list.files(input.path,full.names=T))
-input.alignment.filenames
-ith.locus.start
-input.alignment.filenames <- input.alignment.filenames [grep("WeinellEntry27.fa", input.alignment.filenames)]
-input.alignment.filenames
-ith.locus.start <- 1#
-		ith.locus.end   <- 1
-TargetDNA_CDS.regions       <- Biostrings::readDNAStringSet(TargetCDS.path,format="fasta")#
-	### Read the table specifying which species the probes were designed from for each locus #
-	bait.species.table          <- data.table::fread(bait.species.filename)
+if(dir.exists(input.path)){#
+		input.alignment.filenames <- gtools::mixedsort(list.files(input.path,full.names=T))#
+	} else {#
+		input.alignment.filenames <- input.path#
+		ith.locus.start <- 1#
+		ith.locus.end   <- 1#
+	}#
+	### Read fasta file with DNA for the CDS regions of target references#
+	TargetDNA_CDS.regions       <- Biostrings::readDNAStringSet(TargetCDS.path,format="fasta")#
+	### Read the table specifying which species the probes were designed from for each locus
 targetCDS.names   <- gsub("_.*","",gsub(".*_TargetCDS_of_","",names(TargetDNA_CDS.regions)))
+length(targetCDS.names)
+length(unique(targetCDS.names))
+test <- grep("^WeinellEntry[0-9]+$", targetCDS.names)
+length(test)
 input.alignment.shortnames  <- gsub(".phy|.fa|.fasta","",basename(input.alignment.filenames))
-input.alignment.shortnames
 shared.names                <- Reduce(intersect, list(input.alignment.shortnames,targetCDS.names))
-length(shared.names)
-shared.names
-locus.names.omit=NULL
-!is.null(locus.names.omit)
-file.exists(file.path(output.dir,"partitioned_alignments_made.txt"))
-alignments.made <- utils::read.table(file=file.path(output.dir,"partitioned_alignments_made.txt"), header=T, colClasses="character")
-dim(alignments.made)
-alignments.made[1:10,]
+if(!is.null(locus.names.omit)){#
+		shared.names  <- setdiff(shared.names,locus.names.omit)#
+	}#
+	if(file.exists(file.path(output.dir,"partitioned_alignments_made.txt"))){#
+		alignments.made <- utils::read.table(file=file.path(output.dir,"partitioned_alignments_made.txt"), header=T, colClasses="character")#
+	} else {#
+		alignments.made <- matrix(data="no", nrow=length(shared.names), ncol=9)#
+		rownames(alignments.made)   <- shared.names#
+		colnames(alignments.made)   <- c("all.data","CDS","5'NC","3'NC","Noncoding","AA","FirstCodon","SecondCodon","ThirdCodon")#
+	}#
+	if(ith.locus.end=="all"){#
+		last.locus.process          <- length(shared.names)#
+	} else {#
+		last.locus.process          <- ith.locus.end#
+	}
+last.locus.process
+ith.locus.end
 i=1
 print(i)#
 		locus.name.temp   <- shared.names[i]#
 		print(locus.name.temp)
-head(bait.species.table)
-bait.species.temp <- bait.species.table$Species[bait.species.table$Bait==locus.name.temp]
-length(bait.species.temp)
-bait.species.temp
 FILEPATHi <- input.alignment.filenames[input.alignment.shortnames==locus.name.temp]
 FILEPATHi
 novel            <- REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-|\\?","",Biostrings::readDNAMultipleAlignment(FILEPATHi))))
+str_locate_all <- stringr::str_locate_all
+novel            <- REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-|\\?","",Biostrings::readDNAMultipleAlignment(FILEPATHi))))
 novel
-ref.type<-"DNA"
-targetCDS.names[1]
-locus.name.temp
-grep(paste0("_",locus.name.temp,"_"))
-paste0("_",locus.name.temp,"_")
-grep(paste0("_",locus.name.temp,"_"),names(TargetDNA_CDS.regions))
+ref.type=="DNA"
 reference.cds <- TargetDNA_CDS.regions[grep(paste0("_",locus.name.temp,"_"),names(TargetDNA_CDS.regions))]
 reference.cds
 names(reference.cds)
-bait.species.temp
-paste(bait.species.temp,names(reference.cds),sep="_")
-bait.species.temp[1:10,]
-bait.species.table[1:10,]
-dim(bait.species.table)
-length(TargetDNA_CDS.regions)
-length(targetCDS.names)
-bait.species.table[1:10,]
-test <- bait.species.table$Species[match(gsub("_.*","_",gsub(".*_TargetCDS_of_","_",names(TargetDNA_CDS.regions))),bait.species.table$Bait)]
-length(test)
-test[1:10]
-unlist(bait.species.table$Species)[match(gsub("_.*","_",gsub(".*_TargetCDS_of_","_",names(TargetDNA_CDS.regions))),unlist(bait.species.table$Bait))]
-bait.species.table$Species[1]
-WE_targnames <- gsub("_.*","_",gsub(".*_TargetCDS_of_","_",names(TargetDNA_CDS.regions)))
-length(WE_targnames)
-WE_targnames[1]
-names(TargetDNA_CDS.regions)[1]
-gsub(".*_TargetCDS_of_","_",names(TargetDNA_CDS.regions))[1]
-WE_targnames <- gsub("_.*","_",gsub(".*_TargetCDS_of_","",names(TargetDNA_CDS.regions)))
-WE_targnames[1]
-WE_targnames <- paste0("_",gsub("_.*","_",gsub(".*_TargetCDS_of_","",names(TargetDNA_CDS.regions))))
-WE_targnames[1]
-WE_baitnames[1]
-WE_baitnames <- unlist(bait.species.table$Bait)
-WE_baitnames[1]
-WE_targnames <- gsub("_.*","",gsub(".*_TargetCDS_of_","",names(TargetDNA_CDS.regions)))
-WE_targnames[1]
-targs_species <- unlist(bait.species.table$Species)[match(WE_targnames,WE_baitnames)]
-targs_species[1:10]
-targs_species <- gsub("_","-",unlist(bait.species.table$Species)[match(WE_targnames,WE_baitnames)])
-targs_species[1:10]
-newnames_targs <- paste(targs_species,WE_targnames,"_")
-newnames_targs[1:10]
-newnames_targs <- paste(targs_species,names(TargetDNA_CDS.regions),"_")
-newnames_targs[1:10]
-newnames_targs <- paste(targs_species,names(TargetDNA_CDS.regions),sep="_")
-newnames_targs[1:10]
-names(TargetDNA_CDS.regions) <- newnames_targs
-class(TargetDNA_CDS.regions)
-TargetDNA_CDS.regions
-TargetDNA_CDS.regions[1]
-names(TargetDNA_CDS.regions)[1:5-]
-names(TargetDNA_CDS.regions)[1:50]
-names(TargetDNA_CDS.regions)[1900:1983]
-length(names(TargetDNA_CDS.regions))
-any(is.na(bait.species.table$Species))
-grep("WeinellEntry5179-",bait.species.table$Baits)
-grep("WeinellEntry5179-",bait.species.table)
-grep(".*WeinellEntry5179-.*",bait.species.table)
-grep(".*WeinellEntry5179-.*",bait.species.table[,1])
-grep(".*WeinellEntry5179-.*",unlist(bait.species.table[,1]))
-grep(".*WeinellEntry5179-.*",as.character(bait.species.table[,1]))
-as.character(bait.species.table[,1])[1]
-match(WeinellEntry5179,bait.species.table[,1])
-match("WeinellEntry5179",bait.species.table$Baits)
-"WeinellEntry5179" %in% bait.species.table$Baits
-unique(unlist(bait.species.table$Species))
-match("WeinellEntry5179",unlist(bait.species.table$Baits))
-grep("WeinellEntry5179",unlist(bait.species.table$Baits))
-length(unlist(bait.species.table$Baits))
-colnames(bait.species.table)
-match("WeinellEntry5179",WE_baitnames)
-bait.species.table[match("WeinellEntry5179",WE_baitnames),]
-length(unique(targs_species))
-unique(targs_species)
-WE_targnames   <- gsub("[_-].*","",gsub(".*_TargetCDS_of_","",names(TargetDNA_CDS.regions)))
-"WeinellEntry5179" %in% WE_targnames
-which(WE_targnames=="WeinellEntry5179")
-WE_baitnames   <- unlist(bait.species.table$Bait)
-targs_species  <- gsub("_","-",unlist(bait.species.table$Species)[match(WE_targnames,WE_baitnames)])
-newnames_targs <- paste(targs_species,names(TargetDNA_CDS.regions),sep="_")
-unique(targs_species)
-which(is.na(targs_species)
-which(is.na(targs_species))
-names(TargetDNA_CDS.regions)[which(is.na(targs_species))]
-test <- grep("WeinellEntry[0-9]+[-]_",names(TargetDNA_CDS.regions))
-length(test)
-test <- grep("WeinellEntry[0-9]+[-][ab]_",names(TargetDNA_CDS.regions))
-length(test)
-test
-test <- names(TargetDNA_CDS.regions)[grep("WeinellEntry5179",names(TargetDNA_CDS.regions))]
-test
-test <- names(TargetDNA_CDS.regions)[grep("_WeinellEntry[0-9]+_",names(TargetDNA_CDS.regions))]
-length(test)
-length(names(TargetDNA_CDS.regions))
-1983-1978
-test <- names(TargetDNA_CDS.regions)[grep("_WeinellEntry[0-9]+_",names(TargetDNA_CDS.regions),invert=T)]
-length(test)
-test
-"WeinellEntry5385" %in% WE_baitnames
-which(WE_baitnames=="WeinellEntry5385")
-TargetCDS.path="/Users/jeff/Documents/GitHub/SnakeCap/PostSequencing/Partitioned-Alignments/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa"#
-bait.species.filename="/Users/jeff/Documents/GitHub/SnakeCap/PostSequencing/Partitioned-Alignments/bait_species_table.txt"
-TargetCDS  <- readDNAStringSet(TargetCDS.path)
-length(names(TargetCDS))
-WE_targnames   <- gsub("[_-].*","",gsub(".*_TargetCDS_of_","",names(TargetCDS)))
-length(WE_targnames)
-length(unique(WE_targnames))
-bait.species.table <- as.matrix(read.table(bait.species.filename,sep="\t",header=T))
-head(bait.species.table)
-test <- grep("^WeinellEntry[0-9]+$", WE_targnames)
-length(test)
-test <- grep("^WeinellEntry[0-9]+$", WE_targnames,invert=T)
-test
-WE_targnames[test]
-TargetCDS.path="/Users/jeff/Documents/GitHub/SnakeCap/PostSequencing/Partitioned-Alignments/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa"
-TargetCDS <- readDNAStringSet(TargetCDS.path)
-WE_targnames   <- gsub("_.*","",gsub(".*_TargetCDS_of_","",names(TargetCDS)))
-test <- grep("^WeinellEntry[0-9]+$", WE_targnames,invert=T)
-length(test)
-grep("WeinellEntry508b",names(TargetCDS))
-names(TargetCDS)[grep("WeinellEntry508b",names(TargetCDS))]
-test <- grep("^WeinellEntry[0-9]+$", WE_targnames,invert=T)
-TargetCDS.path="/Users/jeff/Documents/GitHub/SnakeCap/PostSequencing/Partitioned-Alignments/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa"
-TargetCDS <- readDNAStringSet(TargetCDS.path)
-WE_targnames   <- gsub("_.*","",gsub(".*_TargetCDS_of_","",names(TargetCDS)))
-grep("^WeinellEntry[0-9]+$", WE_targnames,invert=T)
-TargetCDS.path="/Users/jeff/Documents/GitHub/SnakeCap/PostSequencing/Partitioned-Alignments/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa"
-TargetCDS <- readDNAStringSet(TargetCDS.path)
-WE_targnames   <- gsub("_.*","",gsub(".*_TargetCDS_of_","",names(TargetCDS)))
-grep("^WeinellEntry[0-9]+$", WE_targnames,invert=T)
-targs_species <- bait.species.table[match(WE_targnames,bait.species.table[1,]),2]
-unique(targs_species)
-head(bait.species.table)
-WE_targnames[1:10]
-all(WE_targnames %in% bait.species.table[,1])
-rows <- match(WE_targnames,bait.species.table[,1])
-any(is.na(rows))
-length(rows)
-any(is.na(bait.species.table[,2]))
-targs_species <- bait.species.table[rows,2]
-length(targs_species)
-targs_species[1:10]
-unique(targs_species)
-names(TargetCDS)[1:10]
-WE_targnames[1:10]
-newnames_targs <- paste(targs_species,names(TargetCDS),sep="_")
-newnames_targs[1:10]
-TargetCDS_v2 <- TargetCDS
-names(TargetCDS_v2) <- newnames_targs
-class(TargetCDS_v2)
-TargetCDS_v2
-writeXStringSet(TargetCDS_v2,"/Users/jeff/Documents/GitHub/SnakeCap/PostSequencing/Partitioned-Alignments/Weinell_TargetLoci_Snakes_Final_targetCDS_v4.fa")
+final.locus          <- c(reference.cds,novel)
+final.locus
+names(final.locus)
+alignment.names  <- names(final.locus)
+if(!all(is.na(old.names))){#
+			alignment.names  <- mgsub(old.names,new.names,alignment.names)#
+		}
+print("Beginning MAFFT run 1/7")#
+		alignment   <- REEs::mafft(REEs::trimXN(final.locus), param=mafft.params)#
+		alignment_A <- alignment
+devtools::document()
+library(devtools)
+setwd("/Users/jeff/Documents/REEs")
+devtools::document()
+BiocManager::install("JeffWeinell/REEs",update=FALSE, dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="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")
+library(REEs)
+mafft.install()
+allsampleskey   <- read.csv("/Users/jeff/Documents/GitHub/SnakeCap/allsamples_key.txt",sep="\t",header=F)
+make.partitioned.alignment(input.path="/Users/jeff/Documents/SequenceCapture/alignments_WENames",output.dir="/Users/jeff/Documents/SequenceCapture/partitionedAlignments",TargetCDS.path="/Users/jeff/Documents/GitHub/SnakeCap/PostSequencing/Partitioned-Alignments/Weinell_TargetLoci_Snakes_Final_targetCDS_v4.fa",bait.species.filename=NA,trimto=allsampleskey$V2[allsampleskey$V3=="SeqCap"])
