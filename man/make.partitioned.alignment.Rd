@@ -10,7 +10,7 @@ make.partitioned.alignment(
   input.path,
   output.dir,
   TargetCDS.path,
-  steps = "1111111",
+  steps = "000000000000",
   mafft.params = " --auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet ",
   old.names = NA,
   new.names = NA,
@@ -29,7 +29,7 @@ make.partitioned.alignment(
 
 \item{TargetCDS.path}{Full path to the fasta file containing only the CDS sequences of target loci (from which probes were designed). Sequence names must have the following format: "GeneName_TargetCDS_of_TargetLocusName_AnyAdditionalIformation", where GeneName and TargetLocusName are replaced with the actual names, and AnyAdditionalIformation can be a string of any characters}
 
-\item{steps}{Character string with nine character, each 0 or 1, indicating which steps of the function to do (1) or skip (0). Used for debugging.}
+\item{steps}{Character string with twelve characters, each 0 or 1, indicating which steps of the function to do (0) or skip (1). Used for debugging.}
 
 \item{mafft.params}{Character string with parameters passed to MAFFT. Default is " --auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet "}
 

@@ -142,7 +142,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 				sprintf("%s outlier sequences removed",length(outliers))
 				print("Beginning MAFFT run 2/7")
 				alignment <- REEs::mafft(REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-","",alignment[!outliers]))), param=mafft.params)
-				plot2     <- REEs::plotAlignment(alignment_B,title=paste(locus.name.temp,"MAFFT run 2"))
+				plot2     <- REEs::plotAlignment(alignment, title=paste(locus.name.temp,"MAFFT run 2"))
 			} else {
 				print("No outlier sequences, skippng MAFFT run 2/7")
 			}
@@ -546,7 +546,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 			print("Saving table summarizing which alignments were written")
 			write.table(x=alignments.made,file=file.path(output.dir,"partitioned_alignments_made.txt"),sep="\t",quote=F)
 		}
-		RESULTSi <- list(ALIGNMENTSi,PARTSIi)
+		RESULTSi <- list(ALIGNMENTSi,PARTSi)
 	} # End i for loop
 	print("Done")
 	# Returns a list with alignments and partitions of the last locus
