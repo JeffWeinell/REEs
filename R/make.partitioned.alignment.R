@@ -50,25 +50,24 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,bai
 	### Input files ###
 	###################
 	### Input fasta file(s) with sequences, each with DNA sequences for a locus
-	if(file.exists(input.path)){
+	if(dir.exists(input.path)){
+		input.alignment.filenames <- gtools::mixedsort(list.files(input.path,full.names=T))
+	} else {
 		input.alignment.filenames <- input.path
 		ith.locus.start <- 1
-		ith.locus.end <- 1
-	} else {
-		input.alignment.filenames <- gtools::mixedsort(list.files(input.path,full.names=T))
+		ith.locus.end   <- 1
 	}
-	
 	### Read fasta file with DNA for the CDS regions of target references
 	TargetDNA_CDS.regions       <- Biostrings::readDNAStringSet(TargetCDS.path,format="fasta")
 	### Read the table specifying which species the probes were designed from for each locus 
 	bait.species.table          <- data.table::fread(bait.species.filename)
 	
 	### Extracting the names of target reference sequences from the names used in the file TargetDNA_CDS.regions
-	name.string.start           <- (str_locate_X(strings=names(TargetDNA_CDS.regions),pattern="_",X=3)+1)
-	name.string.end             <- (str_locate_X(strings=names(TargetDNA_CDS.regions),pattern="_",X=4)-1)
+#	name.string.start           <- (str_locate_X(strings=names(TargetDNA_CDS.regions),pattern="_",X=3)+1)
+#	name.string.end             <- (str_locate_X(strings=names(TargetDNA_CDS.regions),pattern="_",X=4)-1)
 	# target loci names of each sequence in TargetDNA_CDS.regions
-	targetCDS.names             <- substring(names(TargetDNA_CDS.regions),first=name.string.start,last=name.string.end)
-	
+#	targetCDS.names   <- substring(names(TargetDNA_CDS.regions),first=name.string.start,last=name.string.end)
+	targetCDS.names   <- gsub("_.*","",gsub(".*_TargetCDS_of_","",names(TargetDNA_CDS.regions)))
 
 	### Next line assumes that files are named according to WeinelEntry names
 	input.alignment.shortnames  <- gsub(".phy|.fa|.fasta","",basename(input.alignment.filenames))
@@ -79,7 +78,6 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,bai
 	if(!is.null(locus.names.omit)){
 		shared.names  <- setdiff(shared.names,locus.names.omit)
 	}
-	
 	if(file.exists(file.path(output.dir,"partitioned_alignments_made.txt"))){
 		alignments.made <- utils::read.table(file=file.path(output.dir,"partitioned_alignments_made.txt"), header=T, colClasses="character")
 	} else {
@@ -100,11 +98,12 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,bai
 		locus.name.temp   <- shared.names[i]
 		print(locus.name.temp)
 		bait.species.temp <- bait.species.table$Species[bait.species.table$Bait==locus.name.temp]
-		input.alignment.filenames[input.alignment.shortnames==locus.name.temp]
+		FILEPATHi <- input.alignment.filenames[input.alignment.shortnames==locus.name.temp]
 		### un-aligning sequences in the "novel" alignment
 		novel            <- REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-|\\?","",Biostrings::readDNAMultipleAlignment(FILEPATHi))))
 		if(ref.type=="DNA"){
-			reference.cds        <- TargetDNA_CDS.regions[which(targetCDS.names==locus.name.temp)]
+			#reference.cds        <- TargetDNA_CDS.regions[which(targetCDS.names==locus.name.temp)]
+			reference.cds <- TargetDNA_CDS.regions[grep(paste0("_",locus.name.temp,"_"),names(TargetDNA_CDS.regions))]
 			names(reference.cds) <- paste(bait.species.temp,names(reference.cds),sep="_")
 			final.locus          <- c(reference.cds,novel)
 		}
