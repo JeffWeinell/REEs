@@ -60,7 +60,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,bai
 	### Read fasta file with DNA for the CDS regions of target references
 	TargetDNA_CDS.regions       <- Biostrings::readDNAStringSet(TargetCDS.path,format="fasta")
 	### Read the table specifying which species the probes were designed from for each locus 
-	bait.species.table          <- data.table::fread(bait.species.filename)
+#	bait.species.table          <- data.table::fread(bait.species.filename)
 	
 	### Extracting the names of target reference sequences from the names used in the file TargetDNA_CDS.regions
 #	name.string.start           <- (str_locate_X(strings=names(TargetDNA_CDS.regions),pattern="_",X=3)+1)
@@ -97,14 +97,14 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,bai
 		print(i)
 		locus.name.temp   <- shared.names[i]
 		print(locus.name.temp)
-		bait.species.temp <- bait.species.table$Species[bait.species.table$Bait==locus.name.temp]
+#		bait.species.temp <- bait.species.table$Species[bait.species.table$Bait==locus.name.temp]
 		FILEPATHi <- input.alignment.filenames[input.alignment.shortnames==locus.name.temp]
 		### un-aligning sequences in the "novel" alignment
 		novel            <- REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-|\\?","",Biostrings::readDNAMultipleAlignment(FILEPATHi))))
 		if(ref.type=="DNA"){
 			#reference.cds        <- TargetDNA_CDS.regions[which(targetCDS.names==locus.name.temp)]
 			reference.cds <- TargetDNA_CDS.regions[grep(paste0("_",locus.name.temp,"_"),names(TargetDNA_CDS.regions))]
-			names(reference.cds) <- paste(bait.species.temp,names(reference.cds),sep="_")
+			#names(reference.cds) <- paste(bait.species.temp, names(reference.cds),sep="_")
 			final.locus          <- c(reference.cds,novel)
 		}
 		# Skips locus if <4 sequences other than the reference CDS
@@ -522,7 +522,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,bai
 #' @return XStringSet object with same class as object supplied to 'xstrings', with leading and trailing polyNs/polyXs removed or replaced depending on the value supplied to 'repl'
 #' @export trimXN
 trimXN <- function(xstrings,repl=''){
-	pos   <- str_locate_all(xstrings,"^[N,-]+|[N,-]+$|^[X,-]+|[X,-]+$")
+	pos   <- stringr::str_locate_all(xstrings,"^[N,-]+|[N,-]+$|^[X,-]+|[X,-]+$")
 	if(all(!lengths(pos))){
 		return(xstrings)
 	}
@@ -533,7 +533,7 @@ trimXN <- function(xstrings,repl=''){
 	pos2    <- lapply(1:length(pos),function(i){cbind(pos[[i]],repl=apply(pos[[i]],1,function(x){paste(rep(repl,length(x[1]:x[2])),collapse="")}))})
 	for(i in which(lengths(pos)>0)){
 		for(j in 1:nrow(pos[[i]])){
-			str_sub(strings[i],pos[[i]][j,1],pos[[i]][j,2]) <- pos2[[i]][j,3]
+			stringr::str_sub(strings[i],pos[[i]][j,1],pos[[i]][j,2]) <- pos2[[i]][j,3]
 		}
 	}
 	as(strings,class(xstrings))
