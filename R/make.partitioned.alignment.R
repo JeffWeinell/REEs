@@ -6,7 +6,7 @@
 #' @param output.dir Where to save alignments (alignments for each type of data will be in different subdirectory)
 #' @param TargetCDS.path Full path to the fasta file containing only the CDS sequences of target loci (from which probes were designed). Sequence names must have the following format: "GeneName_TargetCDS_of_TargetLocusName_AnyAdditionalIformation", where GeneName and TargetLocusName are replaced with the actual names, and AnyAdditionalIformation can be a string of any characters
 ##' @param ref.type Indicates that the input alignments are DNA sequences (default is "DNA").
-#' @param steps Character string with nine character, each 0 or 1, indicating which steps of the function to do (1) or skip (0). Used for debugging.
+#' @param steps Character string with twelve characters, each 0 or 1, indicating which steps of the function to do (0) or skip (1). Used for debugging.
 #' @param mafft.params Character string with parameters passed to MAFFT. Default is " --auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet "
 #' @param old.names Character vector of old sample names that should be changed to those defined in new.names parameter (default is NA, meaning don't change names).
 #' @param new.names Character vector of new sample names to use instead of corresponding name in old.names vector (default is NA, meaning don't change names).
@@ -27,7 +27,7 @@
 #' (8) Alignment containing only the third codon positions of CDS regions.
 #' (9) Alignment containing the amino acid sequence for the translated CDS region.
 #' @export make.partitioned.alignment
-make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,steps="1111111",mafft.params=" --auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet ",old.names=NA,new.names=NA,drop.reference=F,ith.locus.start=1,ith.locus.end="all",locus.names.omit=NULL,AA.pdist.drop.thresh=0.5,trimto=NULL){
+make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,steps="000000000000",mafft.params=" --auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet ",old.names=NA,new.names=NA,drop.reference=F,ith.locus.start=1,ith.locus.end="all",locus.names.omit=NULL,AA.pdist.drop.thresh=0.5,trimto=NULL){
 	
 	### makes necessary output subdirectories if they dont exist ###
 	dir1  <- file.path(output.dir,"All_parts/alignmentFiles/")
