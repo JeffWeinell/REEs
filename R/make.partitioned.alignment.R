@@ -94,7 +94,6 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 		last.locus.process          <- ith.locus.end
 	}
 	for(i in ith.locus.start:last.locus.process){
-		
 		ALIGNMENTSi <- list(); length(ALIGNMENTSi) <- 9
 		PARTSi <- ALIGNMENTSi
 		#if(is.wholenumber(i/50)){
@@ -103,14 +102,17 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 		print(i)
 		locus.name.temp   <- shared.names[i]
 		print(locus.name.temp)
-#		bait.species.temp <- bait.species.table$Species[bait.species.table$Bait==locus.name.temp]
 		FILEPATHi         <- input.alignment.filenames[input.alignment.shortnames==locus.name.temp]
-		### un-aligning sequences in the "novel" alignment
+		### reading and unaligning input seqs
 		novel             <- REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-|\\?","",Biostrings::readDNAMultipleAlignment(FILEPATHi))))
-		#reference.cds    <- TargetDNA_CDS.regions[which(targetCDS.names==locus.name.temp)]
 		reference.cds     <- TargetDNA_CDS.regions[grep(paste0("_",locus.name.temp,"_"),names(TargetDNA_CDS.regions))]
-		#names(reference.cds) <- paste(bait.species.temp, names(reference.cds),sep="_")
-		SEQSi       <- c(reference.cds, novel)
+		### Skip locus if 
+		if(length(reference.cds)>1){
+			print(sprintf("Multiple CDS regions for locus %s, skipping this locus", locus.name.temp))
+			RESULTSi=NULL
+			next
+		}
+		SEQSi             <- c(reference.cds, novel)
 		# Skips locus if <4 sequences other than the reference CDS
 		# if(FALSE) {
 		#	if(length(SEQSi)<5){
@@ -135,16 +137,16 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 				alignment_B <- NULL
 			}
 		}
-		plot1 <- REEs::plotAlignment(alignment_B,title=paste(locus.name.temp,"alignment_B"))
+		# plot1 <- REEs::plotAlignment(alignment_B,title=paste(locus.name.temp,"alignment_B"))
 		### Use odseq package to remove outlier individuals from alignment, and then rerun mafft
 		# print("Removing outlier individuals")
 		outliers         <- odseq::odseq(DNAMultipleAlignment(alignment), threshold = 0.05, distance_metric = "affine", B = 1000)
 		if(!steps[2]){
 			if(!!length(outliers)) {
-				sprintf("%s outlier sequences removed",length(outliers))
+				print(sprintf("%s outlier sequences removed",length(outliers)))
 				print("Beginning MAFFT run 2/7")
 				alignment <- REEs::mafft(REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-","",alignment[!outliers]))), param=mafft.params2)
-				plot2     <- REEs::plotAlignment(alignment, title=paste(locus.name.temp,"MAFFT run 2"))
+				#plot2     <- REEs::plotAlignment(alignment, title=paste(locus.name.temp,"MAFFT run 2"))
 			} else {
 				print("No outlier sequences, skippng MAFFT run 2/7")
 			}
@@ -293,7 +295,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 				}
 				print("Removing sequences with median percent pairwise distances (protein alignment) > 'A.pdist.drop.thresh' ")
 				toDrop <- which(median.distAA.mdt0 > AA.pdist.drop.thresh) ###| individuals with median p-distance greater than AA.pdist.drop.thresh should be dropped
-				sprintf("%s individuals removed from alignments",length(toDrop))
+				print(sprintf("%s individuals removed from alignments",length(toDrop)))
 				if(!!length(toDrop)){                                      ###| creates a character vector containing the names of individuals
 					toDrop.names    <- names(median.distAA.mdt0)[toDrop]   ###| that should be dropped from the alignment because they are highly
 				} else {                                                   ###| diverged from most other individuals
