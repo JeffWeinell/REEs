@@ -47,6 +47,8 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 	makeDirectories <- lapply(X=subdirectories,FUN=dir.check.create)
 	
 	steps <- as.numeric(REEs::s2v(steps))
+	mafft.params2 <- gsub("--adjustdirection"," ",mafft.params)
+	
 	###################
 	### Input files ###
 	###################
@@ -141,7 +143,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 			if(!!length(outliers)) {
 				sprintf("%s outlier sequences removed",length(outliers))
 				print("Beginning MAFFT run 2/7")
-				alignment <- REEs::mafft(REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-","",alignment[!outliers]))), param=mafft.params)
+				alignment <- REEs::mafft(REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-","",alignment[!outliers]))), param=mafft.params2)
 				plot2     <- REEs::plotAlignment(alignment, title=paste(locus.name.temp,"MAFFT run 2"))
 			} else {
 				print("No outlier sequences, skippng MAFFT run 2/7")
@@ -174,7 +176,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 				if(length(which(!drop.nodata))>3){
 					cds.alignment         <- cds.alignment[!drop.nodata]
 					print("Beginning MAFFT run 3/7")
-					cds.alignment2        <- REEs::mafft(REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-","", cds.alignment))), param=mafft.params)
+					cds.alignment2        <- REEs::mafft(REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-","", cds.alignment))), param=mafft.params2)
 					if(!is.null(trimto)){
 						cds.alignment2    <- REEs::trimTo(aln=cds.alignment2, nam=trimto)
 					}
@@ -202,7 +204,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 					if(length(which(!drop.nodata))>3){
 						upstream.alignment         <- upstream.alignment[!drop.nodata]
 						print("Beginning MAFFT run 4/7")
-						upstream.alignment2        <- REEs::mafft(REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-","",upstream.alignment))), param=mafft.params)
+						upstream.alignment2        <- REEs::mafft(REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-","",upstream.alignment))), param=mafft.params2)
 						if(!is.null(trimto)){
 							upstream.alignment2    <- REEs::trimTo(aln=upstream.alignment2, nam=trimto)
 						}
@@ -229,7 +231,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 						downstream.alignment    <- downstream.alignment[!drop.nodata]
 						length(downstream.alignment)
 						print("Beginning MAFFT run 5/7")
-						downstream.alignment2   <- REEs::mafft(REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-","",downstream.alignment))), param=mafft.params)
+						downstream.alignment2   <- REEs::mafft(REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-","",downstream.alignment))), param=mafft.params2)
 						if(!is.null(trimto)){
 							downstream.alignment2    <- REEs::trimTo(aln=downstream.alignment2,nam=trimto)
 						}
@@ -259,7 +261,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 				print("Translating CDS region")
 				aa.temp             <- REEs::trimXN(suppressWarnings(Biostrings::translate(cds.temp4, if.fuzzy.codon="solve",no.init.codon=T)))
 				print("Beginning MAFFT run 6/7")
-				aa.alignment.temp   <- REEs::mafft(aa.temp, param=mafft.params)
+				aa.alignment.temp   <- REEs::mafft(aa.temp, param=mafft.params2)
 				# Nothing filtered by default
 				aa.alignment.temp2  <- REEs::filter.alignment(aa.alignment.temp)
 				# This alignment has no missing or ambiguous data. This alignment is used for calculating median pairwise p-distances, but is not the alignment written to file.
@@ -306,7 +308,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 					names.aa.temp3     <- names(aa.alignment.temp3)                      ###|
 					### rerun alignment algorithm
 					print("Beginning MAFFT run 7/7")
-					aa.alignment.temp3 <- REEs::mafft(REEs::trimXN(aa.alignment.temp3), param = mafft.params)
+					aa.alignment.temp3 <- REEs::mafft(REEs::trimXN(aa.alignment.temp3), param = mafft.params2)
 				} else {                                               ###| if no individuals needed to be removed, then aa.alignment.temp3 is the same as aa.alignment.temp2
 					aa.alignment.temp3 <- aa.alignment.temp2           ###|
 				}                                                      ###|

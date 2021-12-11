@@ -12,7 +12,8 @@
 plotAlignment <- function(alignment,title="",colors="standard"){
 	nsamples  <- length(alignment)
 	width.al  <- width(alignment[1])
-	xvalsA    <- seq(from=1,to=(width.al+100),by=100)
+	#xvalsA    <- seq(from=1,to=(width.al+100),by=100)
+	xvalsA    <- seq(from=1,to=(width.al),by=1)
 	xvalsB    <- rep(xvalsA,nsamples)
 	yvals     <- rep(c(1:nsamples),length(xvalsA))
 	CHARS=paste0(c(names(IUPAC_CODE_MAP),"-","\\?"),"+")
@@ -42,6 +43,8 @@ plotAlignment <- function(alignment,title="",colors="standard"){
 	segments.mat  <- as.matrix(segments.df[,1:4])
 	segments.cols <- as.matrix(segments.df[,6],drop=T)
 	mat.plot      <- segments.mat[(segments.df[,"char"] %in% names(CHARS_COLS)[1:17]),]
+	mat.plot[,1]  <- (mat.plot[,1])-0.5
+	mat.plot[,2]  <- (mat.plot[,2])+0.5
 	mat.plot.cols <- segments.cols[(segments.df[,"char"] %in% names(CHARS_COLS)[1:17])]
 	plot(range(xvalsB),range(yvals),col="white",main=title,xlab="position",ylab="sample",ylim = rev(range(yvals)))
 	rug(x = 1:nsamples, ticksize = -0.01, side = 2,quiet=T)
