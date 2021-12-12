@@ -109,7 +109,6 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 		### Skip locus if 
 		if(length(reference.cds)>1){
 			print(sprintf("Multiple CDS regions for locus %s, skipping this locus", locus.name.temp))
-			RESULTSi=NULL
 			next
 		}
 		SEQSi             <- c(reference.cds, novel)
@@ -140,7 +139,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 		# plot1 <- REEs::plotAlignment(alignment_B,title=paste(locus.name.temp,"alignment_B"))
 		### Use odseq package to remove outlier individuals from alignment, and then rerun mafft
 		# print("Removing outlier individuals")
-		outliers         <- odseq::odseq(DNAMultipleAlignment(alignment), threshold = 0.05, distance_metric = "affine", B = 1000)
+		outliers         <- odseq::odseq(DNAMultipleAlignment(alignment), threshold = 0.01, distance_metric = "affine", B = 1000)
 		if(!steps[2]){
 			if(!!length(outliers)) {
 				print(sprintf("%s outlier sequences removed",length(outliers)))
@@ -550,10 +549,11 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 			print("Saving table summarizing which alignments were written")
 			write.table(x=alignments.made,file=file.path(output.dir,"partitioned_alignments_made.txt"),sep="\t",quote=F)
 		}
-		RESULTSi <- list(ALIGNMENTSi,PARTSi)
+		
 	} # End i for loop
 	print("Done")
 	# Returns a list with alignments and partitions of the last locus
+	RESULTSi <- list(ALIGNMENTSi,PARTSi)
 	RESULTSi
 }
 #' @examples
@@ -640,8 +640,4 @@ trimTo <- function(aln, nam){
 #' [1]    20  -----ACGTACGTAC-ACTG  Seq1
 #' [2]    20  ACGTAACGTACGTAC-AC--  Seq2
 #' [3]    20  CGTACA--TACGTAC-ACTG  Seq3
-
-
-
-
 
