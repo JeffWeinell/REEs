@@ -145,8 +145,8 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 		# print("Removing outlier individuals")
 		outliers         <- odseq::odseq(DNAMultipleAlignment(alignment), threshold = 0.01, distance_metric = "affine", B = 1000)
 		if(!steps[2]){
-			if(!!length(outliers)) {
-				print(sprintf("%s outlier sequences removed",length(outliers)))
+			if(!!length(which(outliers))) {
+				print(sprintf("%s outlier sequences removed",length(which(outliers))))
 				print("Beginning MAFFT run 2/7")
 				alignment <- REEs::mafft(REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-","",alignment[!outliers]))), param=mafft.params2)
 				#plot2     <- REEs::plotAlignment(alignment, title=paste(locus.name.temp,"MAFFT run 2"))
