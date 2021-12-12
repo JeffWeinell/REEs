@@ -15,7 +15,7 @@
 #' @param ith.locus.end Last locus in input.path to process (default is "all", when means process until no more loci to process).
 #' @param locus.names.omit Names of loci to skip (default is NULL).
 #' @param AA.pdist.drop.thresh Maximum mean pairwise p-distance for AA sequence of an individual (translated from CDS regions of input DNA sequences) to keep the individual in AA or CDS-containing DNA alignments.
-#' @param trimto Optional character string with names of sequences in input alignments whose combined range should be used to trim the alignments. Default is NULL.
+#' @param trimto Optional character string with names of sequences whose combined range should be used to trim the alignments. Default is NULL.
 #' @return NULL; writes up to nine different fasta-formatted sequence alignments for each input DNA alignment in input.path, and partition files partitioned alignments. The nine output alignment types are:
 #' (1) Partitioned version of the input DNA alignment. The alignment is partitioned into (if present): upstream noncoding DNA, each codon position (within CDS regions), and downstream noncoding DNA.
 #' (2) Alignment containing only the CDS regions, which are partitioned by codon position.
@@ -54,9 +54,9 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 	###################
 	### Input fasta file(s) with sequences, each with DNA sequences for a locus
 	if(dir.exists(input.path)){
-		input.alignment.filenames <- gtools::mixedsort(list.files(input.path,full.names=T))
+		input.seqs.filenames <- gtools::mixedsort(list.files(input.path,full.names=T))
 	} else {
-		input.alignment.filenames <- input.path
+		input.seqs.filenames <- input.path
 		ith.locus.start <- 1
 		ith.locus.end   <- 1
 	}
@@ -73,16 +73,19 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 	targetCDS.names   <- gsub("_.*","",gsub(".*_TargetCDS_of_","",names(TargetDNA_CDS.regions)))
 
 	### Next line assumes that files are named according to WeinelEntry names
-	input.alignment.shortnames  <- gsub(".phy|.fa|.fasta","",basename(input.alignment.filenames))
+	input.seqs.shortnames  <- gsub(".phy|.fa|.fasta","",basename(input.seqs.filenames))
 
-	### Names of loci that have been aligned and that have a CDS region included in TargetDNA_CDS.regions
-	shared.names                <- Reduce(intersect, list(input.alignment.shortnames,targetCDS.names))
+	### Names of loci that have a CDS region included in TargetDNA_CDS.regions
+	shared.names                <- Reduce(intersect, list(input.seqs.shortnames,targetCDS.names))
 	### names of loci to ignore
 	if(!is.null(locus.names.omit)){
 		shared.names  <- setdiff(shared.names,locus.names.omit)
 	}
 	if(file.exists(file.path(output.dir,"partitioned_alignments_made.txt"))){
 		alignments.made <- utils::read.table(file=file.path(output.dir,"partitioned_alignments_made.txt"), header=T, colClasses="character")
+		if(!!length(setdiff(shared.names, rownames(alignments.made)))){
+			alignments.made <- rbind(alignments.made,matrix(data="no",nrow=length(setdiff(shared.names, rownames(alignments.made))),ncol=9,dimnames=list(setdiff(shared.names, rownames(alignments.made)))))
+		}
 	} else {
 		alignments.made <- matrix(data="no", nrow=length(shared.names), ncol=9)
 		rownames(alignments.made)   <- shared.names
@@ -102,7 +105,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 		print(i)
 		locus.name.temp   <- shared.names[i]
 		print(locus.name.temp)
-		FILEPATHi         <- input.alignment.filenames[input.alignment.shortnames==locus.name.temp]
+		FILEPATHi         <- input.seqs.filenames[input.seqs.shortnames==locus.name.temp]
 		### reading and unaligning input seqs
 		novel             <- REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-|\\?","",Biostrings::readDNAMultipleAlignment(FILEPATHi))))
 		reference.cds     <- TargetDNA_CDS.regions[grep(paste0("_",locus.name.temp,"_"),names(TargetDNA_CDS.regions))]
@@ -292,7 +295,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 					distAA.mdt0        <- NA
 					median.distAA.mdt0 <- NA
 				}
-				print("Removing sequences with median percent pairwise distances (protein alignment) > 'A.pdist.drop.thresh' ")
+				print(sprintf("Removing sequences with median percent pairwise distance > %s in protein alignment", AA.pdist.drop.thresh))
 				toDrop <- which(median.distAA.mdt0 > AA.pdist.drop.thresh) ###| individuals with median p-distance greater than AA.pdist.drop.thresh should be dropped
 				print(sprintf("%s individuals removed from alignments",length(toDrop)))
 				if(!!length(toDrop)){                                      ###| creates a character vector containing the names of individuals
@@ -320,7 +323,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 			if(!steps[7]){
 				print("Saving protein alignment")
 				#### Writes target AA-only alignment
-				alignments.made[i,6] <- "yes"
+				alignments.made[locus.name.temp,6] <- "yes"
 				Biostrings::writeXStringSet(x = aa.alignment.temp3, filepath=paste0(dir12,locus.name.temp,".fa"), append=FALSE,compress=FALSE, compression_level=NA, format="fasta")
 				ALIGNMENTSi[[6]]=aa.alignment.temp3
 				
@@ -343,7 +346,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 				cds.p3 <- REEs::filter.alignment(cds.temp5,keep.specific=p3) ### alignment containing only third codon position sites (nodata sites dropped)
 				
 				print("Writing the first, second, and third codon position alignments to file")
-				alignments.made[i,7:9] <- "yes"
+				alignments.made[locus.name.temp,7:9] <- "yes"
 				Biostrings::writeXStringSet(x = cds.p1, file=paste0(dir9,locus.name.temp,".fa"))
 				Biostrings::writeXStringSet(x = cds.p2, file=paste0(dir10,locus.name.temp,".fa"))
 				Biostrings::writeXStringSet(x = cds.p3, file=paste0(dir11,locus.name.temp,".fa"))
@@ -370,7 +373,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 					if(length(cds.temp7)>3){
 						#ape::write.dna(x= cds.temp7,file=paste0(dir3,locus.name.temp,".phy"),format="sequential",append=F,nbcol=1,colw=100000000)
 						Biostrings::writeXStringSet(x= cds.temp7,file=paste0(dir3,locus.name.temp,".fa"))
-						alignments.made[i,2]  <- "yes"
+						alignments.made[locus.name.temp,2]  <- "yes"
 						ALIGNMENTSi[[2]]=cds.temp7
 						cds.starts            <- c(1:3)
 						cds.ends              <- rep(width(cds.temp7[1]),3)
@@ -410,7 +413,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 					#ape::write.dna(x = upstream.alignment3,file=paste0(dir5,locus.name.temp,".phy"),format="sequential",append=F,nbcol=1,colw=100000000)
 					print("Saving upstream non-coding DNA alignment")
 					Biostrings::writeXStringSet(x = upstream.alignment3,file=paste0(dir5,locus.name.temp,".fa"))
-					alignments.made[i,3]  <- "yes"
+					alignments.made[locus.name.temp,3]  <- "yes"
 					ALIGNMENTSi[[3]]=upstream.alignment3
 				} else {
 					partition.groups[1] <- F
@@ -435,7 +438,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 					#ape::write.dna(x = downstream.alignment3,file=paste0(dir6,locus.name.temp,".phy"),format="sequential",append=F,nbcol=1,colw=100000000)
 					print("Saving downstream non-coding DNA alignment")
 					Biostrings::writeXStringSet(x = downstream.alignment3,file=paste0(dir6,locus.name.temp,".fa"))
-					alignments.made[i,4]  <- "yes"
+					alignments.made[locus.name.temp,4]  <- "yes"
 					ALIGNMENTSi[[4]]=downstream.alignment3
 				} else {
 					partition.groups[3] <- F
@@ -457,7 +460,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 				print("Saving alignment with upstream and downstream non-coding DNA concatenated")
 				Biostrings::writeXStringSet(x = noncoding.alignment3,file=paste0(dir7,locus.name.temp,".fa"))
 				### updates the alignments.made matrix
-				alignments.made[i,5]      <- "yes"
+				alignments.made[locus.name.temp,5]      <- "yes"
 				ALIGNMENTSi[[5]]=noncoding.alignment3
 				### preparing to write the partition file for the locus
 				noncoding.ranges          <- matrix(nrow=2,ncol=2)
@@ -532,7 +535,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 				print("Saving the all-DNA-data alignment")
 				Biostrings::writeXStringSet(x= all.alignment2,file=paste0(dir1,locus.name.temp,".fa"))
 				### updates the alignments.made matrix
-				alignments.made[i,1]  <- "yes"
+				alignments.made[locus.name.temp,1]  <- "yes"
 				ALIGNMENTSi[[1]]=all.alignment2
 				### preparing to write the partition file
 				#partition.line        <- NULL
@@ -560,9 +563,8 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 #' input.alignments.directory <- "~/Immune/unpartitioned/"
 #' output.directory           <- "~/Immune/partitioned/"
 #' target.loci                <- "~/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa"
-#' input.baits.table          <- "~/bait_species_table.txt"
 #'
-#' make.partitioned.alignment(input.path=input.alignments.directory, output.dir=output.directory, TargetCDS.path=target.loci, bait.species.filename=input.baits.table)
+#' make.partitioned.alignment(input.path=input.alignments.directory, output.dir=output.directory, TargetCDS.path=target.loci)
 
 #' @title trimXN
 #' 

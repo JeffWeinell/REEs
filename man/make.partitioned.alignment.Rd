@@ -47,7 +47,7 @@ make.partitioned.alignment(
 
 \item{AA.pdist.drop.thresh}{Maximum mean pairwise p-distance for AA sequence of an individual (translated from CDS regions of input DNA sequences) to keep the individual in AA or CDS-containing DNA alignments.}
 
-\item{trimto}{Optional character string with names of sequences in input alignments whose combined range should be used to trim the alignments. Default is NULL.}
+\item{trimto}{Optional character string with names of sequences whose combined range should be used to trim the alignments. Default is NULL.}
 
 \item{ref.type}{Indicates that the input alignments are DNA sequences (default is "DNA").}
 }

@@ -25,7 +25,6 @@ Remove or replace 5' and 3' polyNs and polyXs
 input.alignments.directory <- "~/Immune/unpartitioned/"
 output.directory           <- "~/Immune/partitioned/"
 target.loci                <- "~/Weinell_TargetLoci_Snakes_Final_targetCDS_v3.fa"
-input.baits.table          <- "~/bait_species_table.txt"
 
-make.partitioned.alignment(input.path=input.alignments.directory, output.dir=output.directory, TargetCDS.path=target.loci, bait.species.filename=input.baits.table)
+make.partitioned.alignment(input.path=input.alignments.directory, output.dir=output.directory, TargetCDS.path=target.loci)
 }
