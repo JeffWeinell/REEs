@@ -270,41 +270,60 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 				# Nothing filtered by default
 				aa.alignment.temp2  <- REEs::filter.alignment(aa.alignment.temp)
 				# This alignment has no missing or ambiguous data. This alignment is used for calculating median pairwise p-distances, but is not the alignment written to file.
-				aa.alignment.mdt0   <- REEs::filter.alignment(aa.alignment.temp, mdt=0)
+		##		aa.alignment.mdt0   <- REEs::filter.alignment(aa.alignment.temp, mdt=0)
 				print("Calculating median pairwise distances for each individual in the protein alignment")
 				### Median pairwise distances for the AA alignment that can contain any amount of missing or ambiguous data. This info not currently used.
-				if(FALSE) {
-					distAA.mdt1         <- Biostrings::stringDist(aa.alignment.temp2, upper=T,diag=T)
+				if(TRUE) {
+				##	distAA.mdt1          <- Biostrings::stringDist(aa.alignment.temp2, upper=T,diag=T)
+					distAA.mdt1          <- Biostrings::stringDist(aa.alignment.temp2, method="substitutionMatrix",substitutionMatrix=REEs::submat("AA"), upper=T,diag=T)
+					distAA.mdt1.mat      <- matrix(nrow=length(aa.alignment.temp2), ncol=length(aa.alignment.temp2))
+					distAA.mdt1.mat[lower.tri(distAA.mdt1.mat)] <- as.numeric(distAA.mdt1)
+					distAA.mdt1.mat[upper.tri(distAA.mdt1.mat)] <- t(distAA.mdt1.mat)[upper.tri(distAA.mdt1.mat)]
+					rownames(distAA.mdt1.mat) <- labels(aa.alignment.temp2)
+					### Number of AAs comparable between sequences
+					distAA.mdt1_compared <- Biostrings::stringDist(aa.alignment.temp2, method="substitutionMatrix",substitutionMatrix=REEs::submat("AA_comparable"), upper=T,diag=T)
+					distAA.mdt1_compared.mat  <- matrix(nrow=length(aa.alignment.temp2), ncol=length(aa.alignment.temp2))
+					distAA.mdt1_compared.mat[lower.tri(distAA.mdt1_compared.mat)] <- as.numeric(distAA.mdt1_compared)
+					distAA.mdt1_compared.mat[upper.tri(distAA.mdt1_compared.mat)] <- t(distAA.mdt1_compared.mat)[upper.tri(distAA.mdt1_compared.mat)]
+					rownames(distAA.mdt1_compared.mat) <- labels(aa.alignment.temp2)
+					### fraction pairwise differences = number of differences/number of comparisons
+					median.distAA.mdt1   <- apply(X=(distAA.mdt1.mat/distAA.mdt1_compared.mat),MARGIN=1,FUN=median,na.rm=T)
+					#median.distAA.mdt1  <- apply(distAA.mdt1,1,median,na.rm=T)/width(aa.alignment.temp2[1])
 					#median.distAA.mdt1  <- apply(X=distAA.mdt1,MARGIN=1,FUN=median)/width(aa.alignment.temp2[1])
 				}
 				### Median pairwise p-distances for the AA alignment containing no missing or ambiguous data
-				if(!all(width(aa.alignment.mdt0)==0)){
-					distAA.mdt0        <- Biostrings::stringDist(aa.alignment.mdt0, upper=T,diag=T)
-					# Move distance data to a matrix
-					distAA.mdt0.mat    <- matrix(nrow=length(aa.alignment.mdt0), ncol=length(aa.alignment.mdt0))
-					distAA.mdt0.mat[lower.tri(distAA.mdt0.mat)] <- as.numeric(distAA.mdt0)
-					# reflect lower triangle to make symmetric, then add row labels
-					distAA.mdt0.mat[upper.tri(distAA.mdt0.mat)] <- t(distAA.mdt0.mat)[upper.tri(distAA.mdt0.mat)]
-					rownames(distAA.mdt0.mat) <- labels(aa.alignment.mdt0)
-					# median percent distance for each individual
-					median.distAA.mdt0 <- apply(distAA.mdt0.mat,1,median,na.rm=T)/width(aa.alignment.mdt0[1])
-					# median percent pairwise distance for each sample
-					# colnames(distAA.mdt0.mat) <- rownames(distAA.mdt0.mat) <- labels(aa.alignment.mdt0)
-					# median.distAA.mdt0 <- apply(X=distAA.mdt0,MARGIN=1,FUN=median)/width(aa.alignment.mdt0[1])
-					# median.distAA.mdt0 <- median(distAA.mdt0)/width(aa.alignment.mdt0[1])
-				} else {
-					distAA.mdt0        <- NA
-					median.distAA.mdt0 <- NA
+				if(FALSE){
+					if(!all(width(aa.alignment.mdt0)==0)){
+						distAA.mdt0        <- Biostrings::stringDist(aa.alignment.mdt0, upper=T,diag=T)
+						# Move distance data to a matrix
+						distAA.mdt0.mat    <- matrix(nrow=length(aa.alignment.mdt0), ncol=length(aa.alignment.mdt0))
+						distAA.mdt0.mat[lower.tri(distAA.mdt0.mat)] <- as.numeric(distAA.mdt0)
+						# reflect lower triangle to make symmetric, then add row labels
+						distAA.mdt0.mat[upper.tri(distAA.mdt0.mat)] <- t(distAA.mdt0.mat)[upper.tri(distAA.mdt0.mat)]
+						rownames(distAA.mdt0.mat) <- labels(aa.alignment.mdt0)
+						# median percent distance for each individual
+						median.distAA.mdt0 <- apply(distAA.mdt0.mat,1,median,na.rm=T)/width(aa.alignment.mdt0[1])
+						# median percent pairwise distance for each sample
+						# colnames(distAA.mdt0.mat) <- rownames(distAA.mdt0.mat) <- labels(aa.alignment.mdt0)
+						# median.distAA.mdt0 <- apply(X=distAA.mdt0,MARGIN=1,FUN=median)/width(aa.alignment.mdt0[1])
+						# median.distAA.mdt0 <- median(distAA.mdt0)/width(aa.alignment.mdt0[1])
+					} else {
+						distAA.mdt0        <- NA
+						median.distAA.mdt0 <- NA
+					}
 				}
 				print(sprintf("Removing sequences with median percent pairwise distance > %s in protein alignment", AA.pdist.drop.thresh))
-				toDrop <- which(median.distAA.mdt0 > AA.pdist.drop.thresh) ###| individuals with median p-distance greater than AA.pdist.drop.thresh should be dropped
-				print(sprintf("%s individuals removed from alignments",length(toDrop)))
+			#	toDrop <- which(median.distAA.mdt0 > AA.pdist.drop.thresh) ###| individuals with median p-distance greater than AA.pdist.drop.thresh should be dropped
+				toDrop <- which(median.distAA.mdt1 > AA.pdist.drop.thresh)
+				print(sprintf("%s individuals removed from alignments", length(toDrop)))
 				if(!!length(toDrop)){                                      ###| creates a character vector containing the names of individuals
-					toDrop.names    <- names(median.distAA.mdt0)[toDrop]   ###| that should be dropped from the alignment because they are highly
+			#		toDrop.names    <- names(median.distAA.mdt0)[toDrop]   ###| that should be dropped from the alignment because they are highly
+					toDrop.names    <- names(median.distAA.mdt1)[toDrop]   ###| that should be dropped from the alignment because they are highly
 				} else {                                                   ###| diverged from most other individuals
 					toDrop.names <- NULL                                   ###|
 				}                                                          ###|
-				if(!!length(toDrop)){                                      ###| Drops individuals with unusually high amount of AA divergence unless all individuals dropped
+				### Drops individuals with unusually high amount of AA divergence unless all individuals dropped
+				if(!!length(toDrop)){
 					if(length(toDrop)==length(aa.alignment.temp2)){
 						next
 					}
@@ -644,3 +663,42 @@ trimTo <- function(aln, nam){
 #' [2]    20  ACGTAACGTACGTAC-AC--  Seq2
 #' [3]    20  CGTACA--TACGTAC-ACTG  Seq3
 
+
+#' @title submat
+#' 
+#' Return a substitution matrix for AA or DNA sequences to be used with the Biostrings::stringDist function.
+#' Ambiguous nucleotides or amino acids are treated as missing data and are ignored.
+#' 
+#' @param type One of: "DNA","AA", "DNA_comparable", "AA_comparable"
+#' @return XStringSet object with same class as object supplied to 'xstrings', with leading and trailing polyNs/polyXs removed or replaced depending on the value supplied to 'repl'
+#' @export submat
+submat <- function(type="DNA") {
+	if(type=="DNA"){
+		CODE_MAP <- c(names(IUPAC_CODE_MAP),"-")
+		submat <- matrix(data=(-1),nrow=16,ncol=16,dimnames=list(CODE_MAP,CODE_MAP))
+		submat[!(lower.tri(submat) | upper.tri(submat))] <- 0
+		submat[5:16,] <- submat[,5:16] <- 0
+		return(submat)
+	}
+	if(type=="AA"){
+		CODE_MAP <- c(names(AMINO_ACID_CODE),"-")
+		submat <- matrix(data=(-1),nrow=27,ncol=27,dimnames=list(CODE_MAP,CODE_MAP))
+		submat[!(lower.tri(submat) | upper.tri(submat))] <- 0
+		submat[26:27,] <- submat[,26:27] <- 0
+		return(submat)
+	}
+	if(type=="DNA_comparable"){
+		CODE_MAP <- c(names(IUPAC_CODE_MAP),"-")
+		submat <- matrix(data=(-1),nrow=16,ncol=16,dimnames=list(CODE_MAP,CODE_MAP))
+		#submat[!(lower.tri(submat) | upper.tri(submat))] <- 0
+		submat[5:16,] <- submat[,5:16] <- 0
+		return(submat)
+	}
+	if(type=="AA_comparable"){
+		CODE_MAP <- c(names(AMINO_ACID_CODE),"-")
+		submat <- matrix(data=(-1),nrow=27,ncol=27,dimnames=list(CODE_MAP,CODE_MAP))
+		#submat[!(lower.tri(submat) | upper.tri(submat))] <- 0
+		submat[26:27,] <- submat[,26:27] <- 0
+		return(submat)
+	}
+}
