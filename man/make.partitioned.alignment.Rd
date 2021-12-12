@@ -18,6 +18,7 @@ make.partitioned.alignment(
   ith.locus.start = 1,
   ith.locus.end = "all",
   locus.names.omit = NULL,
+  remove.outliers = FALSE,
   AA.pdist.drop.thresh = 0.5,
   trimto = NULL
 )
@@ -44,6 +45,8 @@ make.partitioned.alignment(
 \item{ith.locus.end}{Last locus in input.path to process (default is "all", when means process until no more loci to process).}
 
 \item{locus.names.omit}{Names of loci to skip (default is NULL).}
+
+\item{remove.outliers}{Logical indivating if odseq::odseq should be used to detect and remove outlier sequences. Default FALSE.}
 
 \item{AA.pdist.drop.thresh}{Maximum mean pairwise p-distance for AA sequence of an individual (translated from CDS regions of input DNA sequences) to keep the individual in AA or CDS-containing DNA alignments.}
 

@@ -14,6 +14,7 @@
 #' @param ith.locus.start First locus in input.path to process (default is 1).
 #' @param ith.locus.end Last locus in input.path to process (default is "all", when means process until no more loci to process).
 #' @param locus.names.omit Names of loci to skip (default is NULL).
+#' @param remove.outliers Logical indivating if odseq::odseq should be used to detect and remove outlier sequences. Default FALSE.
 #' @param AA.pdist.drop.thresh Maximum mean pairwise p-distance for AA sequence of an individual (translated from CDS regions of input DNA sequences) to keep the individual in AA or CDS-containing DNA alignments.
 #' @param trimto Optional character string with names of sequences whose combined range should be used to trim the alignments. Default is NULL.
 #' @return NULL; writes up to nine different fasta-formatted sequence alignments for each input DNA alignment in input.path, and partition files partitioned alignments. The nine output alignment types are:
@@ -27,7 +28,7 @@
 #' (8) Alignment containing only the third codon positions of CDS regions.
 #' (9) Alignment containing the amino acid sequence for the translated CDS region.
 #' @export make.partitioned.alignment
-make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,steps="000000000000",mafft.params=" --auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet ",old.names=NA,new.names=NA,drop.reference=F,ith.locus.start=1,ith.locus.end="all",locus.names.omit=NULL,AA.pdist.drop.thresh=0.5,trimto=NULL){
+make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,steps="000000000000",mafft.params=" --auto --adjustdirection --nwildcard --op 3 --ep 0.123 --quiet ",old.names=NA,new.names=NA,drop.reference=F,ith.locus.start=1,ith.locus.end="all",locus.names.omit=NULL,remove.outliers=FALSE,AA.pdist.drop.thresh=0.5,trimto=NULL){
 	
 	### makes necessary output subdirectories if they dont exist ###
 	dir1  <- file.path(output.dir,"All_parts/alignmentFiles/")
@@ -143,15 +144,19 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 		# plot1 <- REEs::plotAlignment(alignment_B,title=paste(locus.name.temp,"alignment_B"))
 		### Use odseq package to remove outlier individuals from alignment, and then rerun mafft
 		# print("Removing outlier individuals")
-		outliers         <- odseq::odseq(DNAMultipleAlignment(alignment), threshold = 0.01, distance_metric = "affine", B = 1000)
-		if(!steps[2]){
-			if(!!length(which(outliers))) {
-				print(sprintf("%s outlier sequences removed",length(which(outliers))))
-				print("Beginning MAFFT run 2/7")
-				alignment <- REEs::mafft(REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-","",alignment[!outliers]))), param=mafft.params2)
-				#plot2     <- REEs::plotAlignment(alignment, title=paste(locus.name.temp,"MAFFT run 2"))
+		if(remove.outliers){
+			outliers         <- odseq::odseq(DNAMultipleAlignment(alignment), threshold = 0.01, distance_metric = "affine", B = 1000)
+			if(!steps[2]){
+				if(!!length(which(outliers))) {
+					print(sprintf("%s outlier sequences removed",length(which(outliers))))
+					print("Beginning MAFFT run 2/7")
+					alignment <- REEs::mafft(REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-","",alignment[!outliers]))), param=mafft.params2)
+					#plot2     <- REEs::plotAlignment(alignment, title=paste(locus.name.temp,"MAFFT run 2"))
+				} else {
+					print("No outlier sequences, skippng MAFFT run 2/7")
+				}
 			} else {
-				print("No outlier sequences, skippng MAFFT run 2/7")
+				print("skipping odseq outlier detection and MAFFT run 2/7")
 			}
 		}
 		### Define "upstream.noncoding", "CDS", and "downstream.noncoding" regions by comparing to the CDS of the reference target
