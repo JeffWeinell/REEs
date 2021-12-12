@@ -84,7 +84,8 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 	if(file.exists(file.path(output.dir,"partitioned_alignments_made.txt"))){
 		alignments.made <- utils::read.table(file=file.path(output.dir,"partitioned_alignments_made.txt"), header=T, colClasses="character")
 		if(!!length(setdiff(shared.names, rownames(alignments.made)))){
-			alignments.made <- rbind(alignments.made,matrix(data="no",nrow=length(setdiff(shared.names, rownames(alignments.made))),ncol=9,dimnames=list(setdiff(shared.names, rownames(alignments.made)))))
+			newrows <- matrix(data="no",nrow=length(setdiff(shared.names, rownames(alignments.made))),ncol=9,dimnames=list(setdiff(shared.names, rownames(alignments.made)),colnames(alignments.made)))
+			alignments.made <- rbind(alignments.made,newrows)
 		}
 	} else {
 		alignments.made <- matrix(data="no", nrow=length(shared.names), ncol=9)
