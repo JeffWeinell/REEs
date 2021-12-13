@@ -155,9 +155,9 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 				} else {
 					print("No outlier sequences, skippng MAFFT run 2/7")
 				}
-			} else {
-				print("skipping odseq outlier detection and MAFFT run 2/7")
 			}
+		} else {
+			print("skipping odseq outlier detection and MAFFT run 2/7")
 		}
 		### Define "upstream.noncoding", "CDS", and "downstream.noncoding" regions by comparing to the CDS of the reference target
 		begin.exon       <- stringr::str_locate(string=alignment[1],pattern=as.character(subseq(reference.cds,start=1,end=1)))[1]

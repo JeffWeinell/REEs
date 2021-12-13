@@ -16,12 +16,17 @@ plotAlignment <- function(alignment,title="",colors="standard"){
 	xvalsA    <- seq(from=1,to=(width.al),by=1)
 	xvalsB    <- rep(xvalsA,nsamples)
 	yvals     <- rep(c(1:nsamples),length(xvalsA))
-	CHARS=paste0(c(names(IUPAC_CODE_MAP),"-","\\?"),"+")
-	# CHARS_COLS=c(A="#FF7878",C="#7878FF",G="#FBE702",T="#00FF00",M="gray", R="gray", W="gray", S="gray", Y="gray", K="gray", V="gray", H="gray", D="gray", B="gray", N="darkgray", '-'="white", '?'="white")
-	CHARS_COLS=c(A="red",C="blue",G="yellow",T="green",M="darkgray", R="darkgray", W="darkgray", S="darkgray", Y="darkgray", K="darkgray", V="darkgray", H="darkgray", D="darkgray", B="darkgray", N="darkgray", '-'="white", '?'="white")
+	if(class(alignment)=="DNAStringSet"){
+		CHARS=paste0(c(names(IUPAC_CODE_MAP),"-","\\?"),"+")
+		CHARS_COLS=c(A="red",C="blue",G="yellow",T="green",M="darkgray", R="darkgray", W="darkgray", S="darkgray", Y="darkgray", K="darkgray", V="darkgray", H="darkgray", D="darkgray", B="darkgray", N="darkgray", '-'="white", '?'="white")
+	}
+	if(class(alignment)=="AAStringSet"){
+		CHARS=paste0(c(names(AMINO_ACID_CODE),"-","\\?"),"+")
+		CHARS_COLS <- c(D="red",E="red",C="yellow",M="yellow",U="yellow",K="blue",O="blue",R="blue",S="orange",T="orange",F="darkblue",Y="darkblue",N="cyan",Q="cyan",G="lightgray",L="green",V="green",I="green",A="lightgray",W="pink",H="paleblue",P="flesh",B="gray",J="gray",Z="gray",X="darkgray", '-'="white", '?'="white")
+	}
 	if(all(colors!="standard")){
 		if(length(colors)==1 && is.null(names(colors))){
-			CHARS_COLS[1:15] <- colors
+			CHARS_COLS[1:(length(CHARS_COLS)-2)] <- colors
 		} else {
 			CHARS_COLS[(names(CHARS_COLS) %in% names(colors))]  <- colors
 			CHARS_COLS[!(names(CHARS_COLS) %in% names(colors))] <- "white"
@@ -42,10 +47,10 @@ plotAlignment <- function(alignment,title="",colors="standard"){
 	segments.df   <- do.call(rbind,segments.list)
 	segments.mat  <- as.matrix(segments.df[,1:4])
 	segments.cols <- as.matrix(segments.df[,6],drop=T)
-	mat.plot      <- segments.mat[(segments.df[,"char"] %in% names(CHARS_COLS)[1:17]),]
+	mat.plot      <- segments.mat[(segments.df[,"char"] %in% names(CHARS_COLS)),]
 	mat.plot[,1]  <- (mat.plot[,1])-0.5
 	mat.plot[,2]  <- (mat.plot[,2])+0.5
-	mat.plot.cols <- segments.cols[(segments.df[,"char"] %in% names(CHARS_COLS)[1:17])]
+	mat.plot.cols <- segments.cols[(segments.df[,"char"] %in% names(CHARS_COLS))]
 	plot(range(xvalsB),range(yvals),col="white",main=title,xlab="position",ylab="sample",ylim = rev(range(yvals)))
 	rug(x = 1:nsamples, ticksize = -0.01, side = 2,quiet=T)
 	segments(x0=mat.plot[,"x0"],x1=mat.plot[,"x1"],y0=mat.plot[,"y0"],y1=mat.plot[,"y1"],col=mat.plot.cols,lwd=2,lend="butt")
