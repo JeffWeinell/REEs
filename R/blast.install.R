@@ -1,6 +1,7 @@
 #' Install NCBI BLAST+
 #' 
 #' This function installs BLAST to one of several default directories or to user-specified directory.
+#' REQUIRES wget
 #' 
 #' @param install.loc Path to directory where source files should be downloaded and blast should be installed. Default is to install blast in a directory called called blast-mafft, which is in the REEs package directory.
 #' @param source Whether or not blast should be built and installed from source. Default is FALSE, in which case the function installs from either linux, windows, or macOS tarball depending on the result of Sys.info()
@@ -8,9 +9,10 @@
 #' @export blast.install
 blast.install <- function(install.loc="auto",source=F){
 	if(install.loc=="auto"){
-			install.loc       <- paste0(find.package("REEs"),"/blast-mafft/blast")
-			#dir.check.create(install.loc)
-			dir.create(install.loc,recursive=T)
+			install.loc <- file.path(find.package("REEs"),"blast-mafft","blast")
+			REEs.loc    <- find.package("REEs")
+			dir.check.create(file.path(REEs.loc,"blast-mafft"))
+			dir.check.create(install.loc)
 	} else {
 		is.writeable <- file.access(install.loc,mode=2)
 		if(is.writeable!=0){
@@ -52,9 +54,12 @@ blast.install <- function(install.loc="auto",source=F){
 		}
 		if(Sys.info()["sysname"]=="Darwin"){
 			# download tarball
-			download.file(url=macOS.url,destfile=paste0(download.dir,"/",basename(macOS.url)),method="wget")
+			system(sprintf("cd '%s' && wget '%s' ",download.dir,macOS.url))
+			#download.file(url=macOS.url,destfile=file.path(download.dir,basename(macOS.url)),method="wget")
+			#system(sprintf("wget %s %s",macOS.url,file.path(download.dir,basename(macOS.url))))
 			# move to directory where tarball was downloaded and then unpack it
-			system(paste("cd",paste0("'",download.dir,"'"),"&& tar -xzvf",paste0("'",basename(macOS.url),"'")))
+			#system(paste("cd",paste0("'",download.dir,"'"),"&& tar -xzvf",paste0("'",basename(macOS.url),"'")))
+			system(sprintf("cd '%s' && tar -xzvf '%s' ",download.dir,basename(macOS.url)))
 			# delete tarball
 			system(paste("rm -R",paste0(download.dir,"/",basename(macOS.url))))
 		}

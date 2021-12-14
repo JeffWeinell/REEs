@@ -16,4 +16,5 @@ NULL. BLAST is installed to install.loc be installed to
 }
 \description{
 This function installs BLAST to one of several default directories or to user-specified directory.
+REQUIRES wget
 }
