@@ -109,7 +109,7 @@ make.partitioned.alignment  <- function(input.path,output.dir,TargetCDS.path,ste
 		print(locus.name.temp)
 		FILEPATHi         <- input.seqs.filenames[input.seqs.shortnames==locus.name.temp]
 		### reading and unaligning input seqs
-		novel             <- REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-|\\?","",Biostrings::readDNAMultipleAlignment(FILEPATHi))))
+		novel             <- REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-|\\?","",Biostrings::readDNAStringSet(FILEPATHi))))
 		reference.cds     <- TargetDNA_CDS.regions[grep(paste0("_",locus.name.temp,"_"),names(TargetDNA_CDS.regions))]
 		### Skip locus if 
 		if(length(reference.cds)>1){
