@@ -60,14 +60,14 @@ conda activate orthofinder
 R
 .libPaths("/panfs/pfs.local/home/j926w878/work/R-packages")
 library(GENESPACE)
-runwd <-"/panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/genespace/Naja_Thamnophis2/"
+runwd <-"/panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/genespace/Naja_Thamnophis_Boa/"
 gpar  <- GENESPACE::init_genespace(
 	#genomeIDs=c("Nnaja","Tsirtalis","Telegans","Pbivittatus"),
 	#speciesIDs=c("Nnaja","Tsirtalis","Telegans","Pbivittatus"),
 	#versionIDs=c("Nnaja","Tsirtalis","Telegans","Pbivittatus"),
-	genomeIDs=c("Nnaja","Tsirtalis","Telegans"),
-	speciesIDs=c("Nnaja","Tsirtalis","Telegans"),
-	versionIDs=c("Nnaja","Tsirtalis","Telegans"),
+	genomeIDs=c("naja","thamnophis","boa"),
+	speciesIDs=c("naja","thamnophis","boa"),
+	versionIDs=c("naja","thamnophis","boa"),
 	ploidy=rep(1,3),
 	diamondMode="fast",
 	orthofinderMethod="fast",
@@ -116,15 +116,17 @@ if (any(ncols_gff==6)){
 gpar    <- GENESPACE::run_orthofinder(gsParam = gpar,overwrite=T)
 # run synteny to determine synteny among ortholog blocks
 gpar2   <- GENESPACE::synteny(gsParam = gpar, overwrite=T)
-## 
-
 ## plot synteny
-ripdat  <- GENESPACE::plot_riparian(gpar2,invertTheseChrs=invert.dt)
+ripdat  <- GENESPACE::plot_riparian(gpar2)
 
 #### re-plot synteny with some modifications:
 # genome and chromosome names for chomosomes that should be inverted when plotting
-invert.dt <- data.table::data.table(genome=c(rep("thamnophis",3),rep("naja",8)),chromosome=c("4","2","5","m2","m3","5","7","m7","m9","m10","m11"))
-
+invert.dt <- data.table::data.table(genome=c(rep("thamnophis",3),rep("naja",8)),chr=c("4","2","5","m2","m3","5","7","m7","m9","m10","m11"))
+# invert.dt <- data.table::data.table(genome=c("thamnophis"),chr=c("4"))
+## plot synteny
+ripdat  <- GENESPACE::plot_riparian(gpar2,invertTheseChrs=invert.dt,refGenome="naja") 
+# dev.off("Naja_Thamnophis_Boa_genespace_v4.pdf")
+dev.off("/panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/genespace/Naja_Thamnophis_Boa/Naja_Thamnophis_Boa_genespace_v4.pdf")
 
 ########
 # cp -R "/panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/genespace/Naja_Thamnophis2_Python/rawGenomes" "/panfs/pfs.local/home/j926w878/scratch/scratch_v4/SequenceCapture/genespace/Naja_Thamnophis2/rawGenomes"
