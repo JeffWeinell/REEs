@@ -1,325 +1,104 @@
-match(c("upstream","CDS.","downstream+"),parts.mat[,2])
-match(c("upstream","CDS.","downstream*"),parts.mat[,2])
-grep(c("upstream","CDS.","downstream*"),parts.mat[,2])
-?nmatch
-?pmatch
-charmatch(c("", "ab", "ab"), c("abc", "ab"))
-charmatch(c("", "ab", "ab"), c("abc", "ab","ab"))
-charmatch(c("", "ab", "ab"), c("abc", "ab","abx"))
-charmatch(c("", "ab", "ab"), c("abc", "ab","ab"))
-pmatch(c("upstream","CDS","downstream"),parts.mat[,2],duplicates.ok=T)
-pmatch(c("upstream","CDS","downstream"),parts.mat[,2],duplicates.ok=TRUE)
-pmatch(c("upstream","CDS","downstream"),parts.mat[,2],dup=TRUE)
-startsWith(parts.mat[,2],"CDS")
-match(startsWith(parts.mat[,2],"CDS"))
-match(TRUE,startsWith(parts.mat[,2],"CDS"))
-startsWith(parts.mat[,2],"CDS") %>% match TRUE
-match(TRUE,startsWith(parts.mat[,2],"CDS"))
-match(TRUE,startsWith(parts.mat[,2],"CDS"))
-parts.strings <- readLines("/Users/jeff/Documents/SequenceCapture/partitionedAlignments/All_parts/partitionFiles/WeinellEntry16_parts.txt")#
-parts.mat     <- do.call(rbind,strsplit(REEs::mgsub(c("[-=]|,","[ ]+","[.][1-3]|[\\]3"),c(" "," ",""), parts.strings),split=" "))
-parts.mat
-match(c("upstream.noncoding","CDS","downstream.noncoding"),parts.mat[,2])
-parts.mat2    <- parts.mat[match(c("upstream.noncoding","CDS","downstream.noncoding"),parts.mat[,2]),]
-parts.mat2
-parts.mat2[3,4]
-parts.mat2[,3:4]
-parts.mat3 <- parts.mat2[,3:4]
-rownames(parts.mat3) <- parts.mat2[,2]
-parts.mat3
-mode(parts.mat3) <- "numeric"
-parts.mat3
-segments(x0=parts.mat3["CDS",1],y0=0,x1=parts.mat3["CDS",2],col="green")
-segments(x0=parts.mat3["CDS",1],y0=-1,x1=parts.mat3["CDS",2],col="green")
-rect(xleft=parts.mat3["CDS",1],ybottom=0,xright=parts.mat3["CDS",2],ytop=43,col="lightgray")
-rect(xleft=parts.mat3["CDS",1],ybottom=0,xright=parts.mat3["CDS",2],ytop=43,col="lightgray",lwd=0)
-rect(xleft=parts.mat3["CDS",1],ybottom=0,xright=parts.mat3["CDS",2],ytop=43,col="lightgray",lwd=0,density=10)
-?rect
-rect(xleft=parts.mat3["CDS",1],ybottom=0,xright=parts.mat3["CDS",2],ytop=43,col="lightgray",border=NA)
-rect(xleft=parts.mat3["CDS",1],ybottom=0,xright=parts.mat3["CDS",2],ytop=45,col="lightgray",border=NA,alpha=0.3)
-rect(xleft=parts.mat3["CDS",1],ybottom=0,xright=parts.mat3["CDS",2],ytop=45,col=rgb(211,211,211,alpha=0.5),border=NA,alpha=0.3)
-rect(xleft=parts.mat3["CDS",1],ybottom=0,xright=parts.mat3["CDS",2],ytop=45,col=rgb(211,211,211,alpha=0.5),border=NA)
-211/255
-rect(xleft=parts.mat3["CDS",1],ybottom=0,xright=parts.mat3["CDS",2],ytop=45,col=rgb(0.8,0.8,0.8,alpha=0.5),border=NA)
-i=2; plotAlignment(alns[[i]],title=names(alns)[i])
-rect(xleft=parts.mat3["CDS",1],ybottom=0,xright=parts.mat3["CDS",2],ytop=45,col=rgb(0.8,0.8,0.8,alpha=0.5),border=NA)
-i=2; plotAlignment(alns[[i]],title=names(alns)[i])
-rect(xleft=parts.mat3["CDS",1],ybottom=0,xright=parts.mat3["CDS",2],ytop=45,col=rgb(0.8,0.8,0.8,alpha=0.2),border=NA)
-rect(xleft=parts.mat3["CDS",1],ybottom=0,xright=parts.mat3["CDS",2],ytop=45,col=rgb(0.8,0.8,0.8,alpha=0.1),border=NA)
-i=2; plotAlignment(alns[[i]],title=names(alns)[i])
-rect(xleft=parts.mat3["CDS",1],ybottom=0,xright=parts.mat3["CDS",2],ytop=45,col=rgb(0.8,0.8,0.8,alpha=0.1),border=NA)
-i=2; plotAlignment(alns[[i]],title=names(alns)[i])
-rect(xleft=parts.mat3["CDS",1],ybottom=0,xright=parts.mat3["CDS",2],ytop=45,col=rgb(0.8,0.8,0.8,alpha=0.3),border=NA)
-alnpath   <- file.path(OUTDIR,"All_parts","alignmentFiles",paste0(locus,".fa"))
-alnpath
-partspath <- file.path(OUTDIR,"All_parts","partitionFiles",paste0(locus,"_parts.txt"))
-locus="WeinellEntry16"#
-alnpath   <- file.path(OUTDIR,"All_parts","alignmentFiles",paste0(locus,".fa"))#
-partspath <- file.path(OUTDIR,"All_parts","partitionFiles",paste0(locus,"_parts.txt"))
-alnpath
-partspath
-aln           <- readDNAStringSet(alnpath)
-parts.strings <- readLines(partspath)#
-parts.mat     <- do.call(rbind,strsplit(REEs::mgsub(c("[-=]|,","[ ]+","[.][1-3]|[\\]3"),c(" "," ",""), parts.strings),split=" "))#
-parts.mat2    <- parts.mat[match(c("upstream.noncoding","CDS","downstream.noncoding"),parts.mat[,2]),]
-parts.mat2
-plotAlignment(aln,title=paste(locus,"all parts"))
-plotAlignment(readDNAStringSet("/Users/jeff/Downloads/WeinellEntry17.fa"))
-readDNAStringSet("/Users/jeff/Downloads/WeinellEntry17.fa")
-alignment <- readDNAStringSet("/Users/jeff/Downloads/WeinellEntry17.fa"); odseq::odseq(DNAMultipleAlignment(alignment), threshold = 0.01, distance_metric = "affine", B = 1000)
-alignment <- readDNAStringSet("/Users/jeff/Downloads/WeinellEntry17.fa"); outliers <- odseq::odseq(DNAMultipleAlignment(alignment), threshold = 0.01, distance_metric = "affine", B = 1000)
-length(outliers)
-length(which(outliers))
-!!length(outliers)
-!!length(c(F,F,F))
-!!length(which(c(F,F,F)))
-BiocManager::install("JeffWeinell/REEs",update=FALSE, dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="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")
-library(REEs) ; mafft.install()
-max(floor((40)/2),1)
-alignment <- readDNAStringSet("/Users/jeff/Downloads/WeinellEntry17.fa"); outliers <- odseq::odseq(DNAMultipleAlignment(alignment), threshold = 0.01, distance_metric = "affine", B = 1000)
-alignment <- readDNAStringSet("/Users/jeff/Downloads/WeinellEntry18.fa"); outliers <- odseq::odseq(DNAMultipleAlignment(alignment), threshold = 0.01, distance_metric = "affine", B = 1000)
-outliers
-plotAlignment(readDNAStringSet("/Users/jeff/Downloads/WeinellEntry18.fa"))
-aa.alignment.temp2 <- readAAStringSet("/Users/jeff/Downloads/WeinellEntry17.fa")
-aa.alignment.temp2
-aa.alignment.mdt0   <- REEs::filter.alignment(aa.alignment.temp, mdt=0)
-aa.alignment.temp <- readAAStringSet("/Users/jeff/Downloads/WeinellEntry17.fa")
-aa.alignment.temp2  <- REEs::filter.alignment(aa.alignment.temp)
-aa.alignment.temp2
-aa.alignment.mdt0   <- REEs::filter.alignment(aa.alignment.temp, mdt=0)
-aa.alignment.mdt0
-distAA.mdt1         <- Biostrings::stringDist(aa.alignment.temp2, upper=T,diag=T)
-distAA.mdt1.mat    <- matrix(nrow=length(aa.alignment.temp2), ncol=length(aa.alignment.temp2))#
-					distAA.mdt1.mat[lower.tri(distAA.mdt1.mat)] <- as.numeric(distAA.mdt1)
-distAA.mdt1.mat[upper.tri(distAA.mdt1.mat)] <- t(distAA.mdt1.mat)[upper.tri(distAA.mdt1.mat)]
-distAA.mdt1.mat
-rownames(distAA.mdt1.mat) <- labels(aa.alignment.temp2)
-median.distAA.mdt1 <- apply(distAA.mdt1,1,median,na.rm=T)/width(aa.alignment.temp2[1])
-median.distAA.mdt1
-toDrop <- which(median.distAA.mdt1 > 0.5)
-toDrop
-which(NA > 0.5)
-which(c(median.distAA.mdt1,NA) > 0.5)
-unique(which(c(median.distAA.mdt1,NA) > 0.5))
-which(unique(c(median.distAA.mdt1,NA)) > 0.5)
-which(c(median.distAA.mdt1,NA) > 0.5)
-Biostrings::stringDist(DNAStringSet(c("ACGTACGT","ACGTACG-")))
-Biostrings::stringDist(DNAStringSet(c("ACGTACGT","ACGTACG?")))
-Biostrings::stringDist(DNAStringSet(c("ACGTACGT","ACGTACGN")))
-Biostrings::stringDist(DNAStringSet(c("ACGTACGT","ACGTACG")))
-Biostrings::stringDist(DNAStringSet(c("ACGTACGT","ACGTACG0")))
-Biostrings::stringDist(DNAStringSet(c("ACGTACGT","ACGTACG-")))
-outliers <- odseq::odseq(AAMultipleAlignment(aa.alignment.temp2), threshold = 0.01, distance_metric = "affine", B = 1000)
-which(outliers)
-names(which(c(median.distAA.mdt1,NA) > 0.5))
-c(!names(which(c(median.distAA.mdt1,NA) > 0.5)) %in% which(outliers), !which(outliers) %in% names(which(c(median.distAA.mdt1,NA) > 0.5)))
-names(which(c(median.distAA.mdt1,NA) > 0.5)) %in% which(outliers)
-c(!names(which(c(median.distAA.mdt1,NA) > 0.5)) %in% names(which(outliers)), !names(which(outliers)) %in% names(which(c(median.distAA.mdt1,NA) > 0.5)))
-names(which(outliers)) %in% names(which(c(median.distAA.mdt1,NA) > 0.5))
-names(which(outliers))
-names(which(c(median.distAA.mdt1,NA) > 0.5))
-names(which(outliers)) %in% names(which(c(median.distAA.mdt1,NA) > 0.5))
-setdiff(names(which(outliers)) , names(which(c(median.distAA.mdt1,NA) > 0.5)))
-names(aa.alignment.temp2)[which(outliers)]
-names(aa.alignment.temp2)[which(outliers)] %in% names(which(c(median.distAA.mdt1,NA) > 0.5))
-!names(aa.alignment.temp2)[names(aa.alignment.temp2)[which(outliers)] %in% names(which(c(median.distAA.mdt1,NA) > 0.5))]
-setdiff(names(aa.alignment.temp2)[which(outliers)], names(which(c(median.distAA.mdt1,NA) > 0.5)))
-setdiff(names(aa.alignment.temp2)[which(outliers)], names(which(c(median.distAA.mdt1,NA) > 0.5))),setdiff(names(which(c(median.distAA.mdt1,NA) > 0.5)),names(aa.alignment.temp2)[which(outliers)])
-setdiff(names(which(c(median.distAA.mdt1,NA) > 0.5)),names(aa.alignment.temp2)[which(outliers)])
-c(setdiff(names(aa.alignment.temp2)[which(outliers)], names(which(c(median.distAA.mdt1,NA) > 0.5))),setdiff(names(which(c(median.distAA.mdt1,NA) > 0.5)),names(aa.alignment.temp2)[which(outliers)]))
-?stringDist()
-data(srPhiX174)
-srPhiX174[1:4]
-SolexaQuality(quPhiX174[1:4])
-?SolexaQuality
-submat <- matrix(nrow=4,ncol=4,dimnames=list(c("A","C","G","T"),c("A","C","G","T")))
-submat
-submat <- matrix(nrow=4,ncol=4,dimnames=list(c("A","C","G","T","-","N"),c("A","C","G","T","-","N")))
-submat <- matrix(data=1,nrow=6,ncol=6,dimnames=list(c("A","C","G","T","-","N"),c("A","C","G","T","-","N")))
-submat
-submat[diag(submat)] < 0
-submat[diag(submat)] <- 0
-submat
-diag(submat)
-lower.tri(submat)
-lower.tri(submat) && upper.tri(submat)
-lower.tri(submat) | upper.tri(submat)
-!lower.tri(submat) | upper.tri(submat)
-!(lower.tri(submat) | upper.tri(submat))
-submat <- matrix(data=1,nrow=6,ncol=6,dimnames=list(c("A","C","G","T","-","N"),c("A","C","G","T","-","N")))#
-		submat[!(lower.tri(submat) | upper.tri(submat))] <- 0
-submat
-submat[c("N","-"),] <- 0
-submat
-submat[,c("N","-")] <- 0
-submat
-IUPAC_CODE_MAP
-names(IUPAC_CODE_MAP)
-length(names(IUPAC_CODE_MAP))
-CODE_MAP <- c(names(IUPAC_CODE_MAP),"-")
-CODE_MAP
-CODE_MAP <- c(names(IUPAC_CODE_MAP),"-")#
-		submat <- matrix(data=1,nrow=16,ncol=16,dimnames=list(CODE_MAP,CODE_MAP))
-submat
-submat[!(lower.tri(submat) | upper.tri(submat))] <- 0
-submat[5:16,] <- submat[,5:16] <- 0
-submat
-AMINO_ACID_CODE
-CODE_MAP <- c(names(AMINO_ACID_CODE),"-")
-CODE_MAP
-length(CODE_MAP)
-submat <- function(type="DNA") {#
-	if(type=="DNA"){#
-		CODE_MAP <- c(names(IUPAC_CODE_MAP),"-")#
-		submat <- matrix(data=1,nrow=16,ncol=16,dimnames=list(CODE_MAP,CODE_MAP))#
-		submat[!(lower.tri(submat) | upper.tri(submat))] <- 0#
-		submat[5:16,] <- submat[,5:16] <- 0#
-		return(submat)#
-	}#
-	if(type=="AA"){#
-		CODE_MAP <- c(names(AMINO_ACID_CODE),"-")#
-		submat <- matrix(data=1,nrow=27,ncol=27,dimnames=list(CODE_MAP,CODE_MAP))#
-		submat[!(lower.tri(submat) | upper.tri(submat))] <- 0#
-		submat[26:27,] <- submat[,26:27] <- 0#
-		return(submat)#
-	}#
-}
-submat(type="DNA")
-submat(type="AA")
-test1 <- DNAStringSet(c("GTTATTATACCGTCAAGGACTGTGTGACTATTGAC","GGTGGTTATTATACCGTCAAGGACTGTGTGACTAT","TACCGTCAAGGACTGTGTGACTATTGACGTCCTTC","GTACGCCGGGCAATAATGTTTATGTTGGTTTCATG"))
-test2 <- DNAStringSet(c("------ATACCGTCAAGGACTGTGTGACTATTGAC","GGTGGTTATTATACCGTCAAGGACTGTGTGANNNN","TACCGTCAAGGACTGTGTGACTATTGACGTCCTTC","GTACGCCGGGCAATAATGTTTATGTTGGTTTCATG"))
-stringDist(test1,method="substitutionMatrix", substitutionMatrix=submat("DNA"))
-width(test1)
-res <- stringDist(test1,method="substitutionMatrix", substitutionMatrix=submat("DNA"))
-res
-sum(res)
-stringDist(test1)
-test1
-test1 <- DNAStringSet(c("GTTATTATACCGTCAAGGACTGTGTGACTATTGAC","GTTATTATACCGTCAAGGACTGTGTGACTATTGAC","GTTATTATACCGTCAAGGACTGTGTGACTATTGAC","GTTATTATACCGTCAAGGACTGTGTGACTATTGAC"))
-stringDist(test1)
-stringDist(test1,method="substitutionMatrix", substitutionMatrix=submat("DNA"))
-submat <- function(type="DNA") {#
-	if(type=="DNA"){#
-		CODE_MAP <- c(names(IUPAC_CODE_MAP),"-")#
-		submat <- matrix(data=(-1),nrow=16,ncol=16,dimnames=list(CODE_MAP,CODE_MAP))#
-		submat[!(lower.tri(submat) | upper.tri(submat))] <- 0#
-		submat[5:16,] <- submat[,5:16] <- 0#
-		return(submat)#
-	}#
-	if(type=="AA"){#
-		CODE_MAP <- c(names(AMINO_ACID_CODE),"-")#
-		submat <- matrix(data=1,nrow=27,ncol=27,dimnames=list(CODE_MAP,CODE_MAP))#
-		submat[!(lower.tri(submat) | upper.tri(submat))] <- 0#
-		submat[26:27,] <- submat[,26:27] <- 0#
-		return(submat)#
-	}#
-}
-stringDist(test1,method="substitutionMatrix", substitutionMatrix=submat("DNA"))
-test2 <- DNAStringSet(c("CTTATTATACCGTCAAGGACTGTGTGACTATTGAC","GTTATTATACCGTCAAGGACTGTGTGACTATTGAC","GTTATTATACCGTCAAGGACTGTGTGACTATTGAC","GTTATTATACCGTCAAGGACTGTGTGACTATTGAC"))
-stringDist(test2,method="substitutionMatrix", substitutionMatrix=submat("DNA"))
-test3 <- DNAStringSet(c("C-TATTATACCGTCAAGGACTGTGTGACTATTGAC","GTTATTATACCGTCAAGGACTGTGTGACTATTGAC","GTTATTATACCGTCAAGGACTGTGTGACTATTGAC","GTTATTATACCGTCAAGGACTGTGTGACTATTGAC"))
-stringDist(test3,method="substitutionMatrix", substitutionMatrix=submat("DNA"))
-submat <- function(type="DNA") {#
-	if(type=="DNA"){#
-		CODE_MAP <- c(names(IUPAC_CODE_MAP),"-")#
-		submat <- matrix(data=(-1),nrow=16,ncol=16,dimnames=list(CODE_MAP,CODE_MAP))#
-		submat[!(lower.tri(submat) | upper.tri(submat))] <- 0#
-		submat[5:16,] <- submat[,5:16] <- 0#
-		return(submat)#
-	}#
-	if(type=="AA"){#
-		CODE_MAP <- c(names(AMINO_ACID_CODE),"-")#
-		submat <- matrix(data=(-1),nrow=27,ncol=27,dimnames=list(CODE_MAP,CODE_MAP))#
-		submat[!(lower.tri(submat) | upper.tri(submat))] <- 0#
-		submat[26:27,] <- submat[,26:27] <- 0#
-		return(submat)#
-	}#
-}
-aa.alignment.temp2
-distAA.mdt1         <- Biostrings::stringDist(aa.alignment.temp2, method="substitutionMatrix",substitutionMatrix=submat("AA"), upper=T,diag=T)
-distAA.mdt1.mat    <- matrix(nrow=length(aa.alignment.temp2), ncol=length(aa.alignment.temp2))#
-					distAA.mdt1.mat[lower.tri(distAA.mdt1.mat)] <- as.numeric(distAA.mdt1)#
-					distAA.mdt1.mat[upper.tri(distAA.mdt1.mat)] <- t(distAA.mdt1.mat)[upper.tri(distAA.mdt1.mat)]#
-					rownames(distAA.mdt1.mat) <- labels(aa.alignment.temp2)
-median.distAA.mdt1   <- apply(distAA.mdt1,1,median,na.rm=T)/width(aa.alignment.temp2[1])
-median.distAA.mdt1
-density(median.distAA.mdt1)
-plot(density(median.distAA.mdt1))
-AA.pdist.drop.thresh <- 30
-AA.pdist.drop.thresh <- 0.3
-toDrop <- which(median.distAA.mdt1 > AA.pdist.drop.thresh)
-toDrop
-CODE_MAP <- c(names(IUPAC_CODE_MAP),"-")#
-		submat <- matrix(data=(-1),nrow=16,ncol=16,dimnames=list(CODE_MAP,CODE_MAP))#
-		#submat[!(lower.tri(submat) | upper.tri(submat))] <- 0#
-		submat[5:16,] <- submat[,5:16] <- 0
-submat
-CODE_MAP <- c(names(AMINO_ACID_CODE),"-")#
-		submat <- matrix(data=(-1),nrow=27,ncol=27,dimnames=list(CODE_MAP,CODE_MAP))#
-		#submat[!(lower.tri(submat) | upper.tri(submat))] <- 0#
-		submat[26:27,] <- submat[,26:27] <- 0#
-		return(submat)
-submat
-submat <- function(type="DNA") {#
-	if(type=="DNA"){#
-		CODE_MAP <- c(names(IUPAC_CODE_MAP),"-")#
-		submat <- matrix(data=(-1),nrow=16,ncol=16,dimnames=list(CODE_MAP,CODE_MAP))#
-		submat[!(lower.tri(submat) | upper.tri(submat))] <- 0#
-		submat[5:16,] <- submat[,5:16] <- 0#
-		return(submat)#
-	}#
-	if(type=="AA"){#
-		CODE_MAP <- c(names(AMINO_ACID_CODE),"-")#
-		submat <- matrix(data=(-1),nrow=27,ncol=27,dimnames=list(CODE_MAP,CODE_MAP))#
-		submat[!(lower.tri(submat) | upper.tri(submat))] <- 0#
-		submat[26:27,] <- submat[,26:27] <- 0#
-		return(submat)#
-	}#
-	if(type=="DNA_comparable"){#
-		CODE_MAP <- c(names(IUPAC_CODE_MAP),"-")#
-		submat <- matrix(data=(-1),nrow=16,ncol=16,dimnames=list(CODE_MAP,CODE_MAP))#
-		#submat[!(lower.tri(submat) | upper.tri(submat))] <- 0#
-		submat[5:16,] <- submat[,5:16] <- 0#
-		return(submat)#
-	}#
-	if(type=="AA_comparable"){#
-		CODE_MAP <- c(names(AMINO_ACID_CODE),"-")#
-		submat <- matrix(data=(-1),nrow=27,ncol=27,dimnames=list(CODE_MAP,CODE_MAP))#
-		#submat[!(lower.tri(submat) | upper.tri(submat))] <- 0#
-		submat[26:27,] <- submat[,26:27] <- 0#
-		return(submat)#
-	}#
-}
-distAA.mdt1_compared <- Biostrings::stringDist(aa.alignment.temp2, method="substitutionMatrix",substitutionMatrix=submat("AA_comparable"), upper=T,diag=T)
-distAA.mdt1          <- Biostrings::stringDist(aa.alignment.temp2, method="substitutionMatrix",substitutionMatrix=submat("AA"), upper=T,diag=T)#
-					distAA.mdt1.mat      <- matrix(nrow=length(aa.alignment.temp2), ncol=length(aa.alignment.temp2))#
-					distAA.mdt1.mat[lower.tri(distAA.mdt1.mat)] <- as.numeric(distAA.mdt1)#
-					distAA.mdt1.mat[upper.tri(distAA.mdt1.mat)] <- t(distAA.mdt1.mat)[upper.tri(distAA.mdt1.mat)]#
-					rownames(distAA.mdt1.mat) <- labels(aa.alignment.temp2)
-distAA.mdt1_compared <- Biostrings::stringDist(aa.alignment.temp2, method="substitutionMatrix",substitutionMatrix=submat("AA_comparable"), upper=T,diag=T)#
-					distAA.mdt1_compared.mat  <- matrix(nrow=length(aa.alignment.temp2), ncol=length(aa.alignment.temp2))#
-					distAA.mdt1_compared.mat[lower.tri(distAA.mdt1_compared.mat)] <- as.numeric(distAA.mdt1_compared)#
-					distAA.mdt1_compared.mat[upper.tri(distAA.mdt1_compared.mat)] <- t(distAA.mdt1_compared.mat)[upper.tri(distAA.mdt1_compared.mat)]#
-					rownames(distAA.mdt1_compared.mat) <- labels(aa.alignment.temp2)
-distAA.mdt1.mat
-distAA.mdt1_compared.mat
-(distAA.mdt1.mat/distAA.mdt1_compared.mat)
-median.distAA.mdt1   <- apply((distAA.mdt1.mat/distAA.mdt1_compared.mat),median,na.rm=T)
-median.distAA.mdt1   <- apply(X=(distAA.mdt1.mat/distAA.mdt1_compared.mat),1,FUN=median,na.rm=T)
-median.distAA.mdt1
-density(median.distAA.mdt1)
-plot(density(median.distAA.mdt1))
-AA.pdist.drop.thresh
-toDrop <- which(median.distAA.mdt1 > AA.pdist.drop.thresh)
-toDrop
-AA.pdist.drop.thresh=50
-toDrop <- which(median.distAA.mdt1 > AA.pdist.drop.thresh)
-toDrop
-AA.pdist.drop.thresh=0.5
-toDrop <- which(median.distAA.mdt1 > AA.pdist.drop.thresh)
-toDrop
-devtools::document()
-rm(list = c("submat"))
+AA=strsplit("MDPLLEQVEKDLGIAHSQLLLRGSHVVALVPLKWLVSLKERGVLPVLCPQPEGLSEMEVHACLQHSVQKLPTGWTRVEIHGLQKLWLRYQLTTSANAQKEPTGAPETLHEFMLRVASQNCQNLWNQAHRSYVQRYYPAPAPASVQALEGLRAALQKLYCCPLVPVGRTPSGSSPAKGEDTAGHGTPHFSSILQADALLESSDVLYLVFPYVQYSLRDLITFSPAKLMNSHAKLLFILFQVLLAMQACHEVGLACGIVSLEDVAVDEKLCAWLRVPLQGYEQLGREEAGEGGAVAAASSTPEQGSPEGQGPRGPAAAEGAGALPDLGDLVLDWVHGRLSNLDYLMHLNHLAGRRPRDPNYHPVLPWVMDFTTRGGQFRDLRKSKFRLNKGDKQLDFTYEMTKQAFVVGGSGLSGEQPHVPHHISDVLSDITYYVYTARRTPKAVLCAHVRSQWEPNEYPANLERMQAWTPDECIPEFYLDPTIFKSIHPDMPDLEVPPWYGSCEEFIAAHRALLESPEVSRDLHHWIDLTFGYKLLGKEAVKEKNVCLHLVDNHTHLTSYGVVQLFDQPHPRRLVGATLLPAEAPLSTRPFIPTVQETRVLETPKWSQAAGGPVIDVATCENRFGLSMEEEVEQGAEALESAPVPGRGSEPPPAQAPSFPLDSRPLGWRTKAPAPLLQGEGAEEKLVLPEGHKLLQALEELEKLDVFLLKAVHGVVGWLEQPPMRLPVALSDLFQRDMQVLGVLVGEILFAPKLRTSKPTASLRERFQAVRRLCWLHPKEVPPPLQHLLEVLLQLTDPDPQLLREEEEEGSRGPQLFAYKPVWQGLPPPCPSQLLSPYSGVLPFPAYFPALHRFILTYLSQEAGDEGQGRELVFQLWQQLDGVLSGITPEGLEILLPFILALLSEQRTAVHAAWYLFEPIARALGPKNTNKYLLKLLVGAYESPRGLPGRFYLYTDSFVAQLVARLGLQPFLAHLLPHILQVLGGAEGSFQEESKALLLSTAEEDGEESG
+RSSPASRSFGEEPKGDAGLELVNYMSGISLHDQAYPPESEELPNGLYLAEALSLGQLNDKGGAAEGLLGEDPQDKATGLQCLGGSQDPKHSEEEEEEEEEEEDGEEGRKEAALVAEEPVLSGAAGHSAEPTLAEEDGQTEAEESRQELLDQDVDKEQSILLDTACKMVWWLSAKLGPTTACRYVARNLLRLLASCYLGASRQQFVAGAEEAGPPSTGNLEQGRPVAGDVVSEPVLTCLVHIAHLYGEPVLTYLYLPYISYLVAPGGGTAASRLNSRKEAGLLAAMTLGQKIVVHLSDSTLMDILPRISQEVLLPLLGFLTSPILSFPSGVQGRVVLCLKTIRLMVLVCSRIGPEMAQQHLRDTLRSFFESFSSLPSESGQPPSPDPSALLEFQKVFGPEMAYVAFVRFSCLLGDAFHTIVPNHASVRQLASLHLEQASPLSERQAATGPGRPPLEQEALGAEPTSAPPEDPRSGTFGGVLVGNRIQVSSEAQQELPGGAGGGLCPKLVGQEGEMLKQELRPSTRLLLGNWLAYWQYEIGVGQHEAPFHFHQIKLQSFVGHGGAIKCLAPLSGEDFFLSGSKDKTVRLWPLYNRGDGSHEAKPRLTYDRHKKSVFYVGLLEGPQHVVSCDGTIHIWDAPTGSGLRSFEVLDSKAPITALCPMPAPYGSISIASADSVLRFIDHRKPGWQQEFRLASGPNAGLIRCLAVSPSGRSVAAGFSSGFMVLLDTRTGLIQKAWSAHEGDILQVKATEGNVLVSSSSDHSLTVWKDLEPKPLQVYKSASEPVHTFDLYGHEVVAGTVANRISVYAFQGPSAPGPTKLSSENFRGTLTSLALLPTKCHLLLGSDNGTVRLLA",split="")
+AA
+AA=unlist(strsplit("MDPLLEQVEKDLGIAHSQLLLRGSHVVALVPLKWLVSLKERGVLPVLCPQPEGLSEMEVHACLQHSVQKLPTGWTRVEIHGLQKLWLRYQLTTSANAQKEPTGAPETLHEFMLRVASQNCQNLWNQAHRSYVQRYYPAPAPASVQALEGLRAALQKLYCCPLVPVGRTPSGSSPAKGEDTAGHGTPHFSSILQADALLESSDVLYLVFPYVQYSLRDLITFSPAKLMNSHAKLLFILFQVLLAMQACHEVGLACGIVSLEDVAVDEKLCAWLRVPLQGYEQLGREEAGEGGAVAAASSTPEQGSPEGQGPRGPAAAEGAGALPDLGDLVLDWVHGRLSNLDYLMHLNHLAGRRPRDPNYHPVLPWVMDFTTRGGQFRDLRKSKFRLNKGDKQLDFTYEMTKQAFVVGGSGLSGEQPHVPHHISDVLSDITYYVYTARRTPKAVLCAHVRSQWEPNEYPANLERMQAWTPDECIPEFYLDPTIFKSIHPDMPDLEVPPWYGSCEEFIAAHRALLESPEVSRDLHHWIDLTFGYKLLGKEAVKEKNVCLHLVDNHTHLTSYGVVQLFDQPHPRRLVGATLLPAEAPLSTRPFIPTVQETRVLETPKWSQAAGGPVIDVATCENRFGLSMEEEVEQGAEALESAPVPGRGSEPPPAQAPSFPLDSRPLGWRTKAPAPLLQGEGAEEKLVLPEGHKLLQALEELEKLDVFLLKAVHGVVGWLEQPPMRLPVALSDLFQRDMQVLGVLVGEILFAPKLRTSKPTASLRERFQAVRRLCWLHPKEVPPPLQHLLEVLLQLTDPDPQLLREEEEEGSRGPQLFAYKPVWQGLPPPCPSQLLSPYSGVLPFPAYFPALHRFILTYLSQEAGDEGQGRELVFQLWQQLDGVLSGITPEGLEILLPFILALLSEQRTAVHAAWYLFEPIARALGPKNTNKYLLKLLVGAYESPRGLPGRFYLYTDSFVAQLVARLGLQPFLAHLLPHILQVLGGAEGSFQEESKALLLSTAE
+EDGEESGRSSPASRSFGEEPKGDAGLELVNYMSGISLHDQAYPPESEELPNGLYLAEALSLGQLNDKGGAAEGLLGEDPQDKATGLQCLGGSQDPKHSEEEEEEEEEEEDGEEGRKEAALVAEEPVLSGAAGHSAEPTLAEEDGQTEAEESRQELLDQDVDKEQSILLDTACKMVWWLSAKLGPTTACRYVARNLLRLLASCYLGASRQQFVAGAEEAGPPSTGNLEQGRPVAGDVVSEPVLTCLVHIAHLYGEPVLTYLYLPYISYLVAPGGGTAASRLNSRKEAGLLAAMTLGQKIVVHLSDSTLMDILPRISQEVLLPLLGFLTSPILSFPSGVQGRVVLCLKTIRLMVLVCSRIGPEMAQQHLRDTLRSFFESFSSLPSESGQPPSPDPSALLEFQKVFGPEMAYVAFVRFSCLLGDAFHTIVPNHASVRQLASLHLEQASPLSERQAATGPGRPPLEQEALGAEPTSAPPEDPRSGTFGGVLVGNRIQVSSEAQQELPGGAGGGLCPKLVGQEGEMLKQELRPSTRLLLGNWLAYWQYEIGVGQHEAPFHFHQIKLQSFVGHGGAIKCLAPLSGEDFFLSGSKDKTVRLWPLYNRGDGSHEAKPRLTYDRHKKSVFYVGLLEGPQHVVSCDGTIHIWDAPTGSGLRSFEVLDSKAPITALCPMPAPYGSISIASADSVLRFIDHRKPGWQQEFRLASGPNAGLIRCLAVSPSGRSVAAGFSSGFMVLLDTRTGLIQKAWSAHEGDILQVKATEGNVLVSSSSDHSLTVWKDLEPKPLQVYKSASEPVHTFDLYGHEVVAGTVANRISVYAFQGPSAPGPTKLSSENFRGTLTSLALLPTKCHLLLGSDNGTVRLLA",split=""))
+AA
+paste(sample(AA,size=334,replace=T),collapse="")
+GENE1_AA=paste(sample(AA,size=334,replace=T),collapse="")
+GENE1_AA=paste(c("M",sample(AA,size=334,replace=T),collapse=""))
+GENE1_AA
+GENE1_AA=paste(c("M",sample(AA,size=334,replace=T)),collapse="")
+GENE1_AA
+GENE1_AA_2=unlist(strsplit(GENE1_AA,split=""))
+GENE1_AA_2
+sample(2:length(GENE1_AA_2),10)
+sample(2:nchar(GENE1_AA),10)
+unlist(strsplit(GENE1_AA,split=""))[sample(2:nchar(GENE1_AA),10)]
+GENE1_AA_2=unlist(strsplit(GENE1_AA,split=""))
+GENE1_AA_2[sample(2:nchar(GENE1_AA),10)] <- sample(AA,10,replace=F)
+GENE1_AA_2
+AA_gene1_2=unlist(strsplit(AA_gene1,split="")); AA_gene1_2[sample(2:nchar(AA_gene1),10)] <- sample(AA,10,replace=F); AA_gene1_2<-paste(AA_gene1_2,collapse="")
+a=c('one two')
+a
+a = strsplit(c('A4GNT AAAS AACS AAED1 AAMP AANAT AAR2 AARS2 ABAT ABCA2 ABCA5 ABCB1 ABCB10 ABCB5 ABCB7 ABCC1 ABCC10 ABCC2 ABCD4 ABCE1'),split=' ')
+a
+a = unlist(strsplit(c('A4GNT AAAS AACS AAED1 AAMP AANAT AAR2 AARS2 ABAT ABCA2 ABCA5 ABCB1 ABCB10 ABCB5 ABCB7 ABCC1 ABCC10 ABCC2 ABCD4 ABCE1'),split=' '))
+a
+b = unlist(strsplit(c('CCDC59 NWD2 LOC106537407 LOC106537408 LTA4H LOC106537411 NEDD1 GABRA5 ELK3 ELK3 CDK17 CDK17 LOC106537417 GABRA5 LOC106537417 TMPO TMPO TMPO TMPO TMPO TMPO TMPO TMPO SLC25A3 IKBIP LOC106537421 IKBIP LOC106537426 CLDN12 CLDN12 CLDN12 CLDN12 CLDN12 CLDN12 ZBTB5 CLDN12 CLDN12 GTPBP10 LOC106537431 PIEZO2 ZBTB5 ZBTB5 COMTD1 COMTD1 MRPS36 MRPS36 SERINC5 MRPL38 LOC106537448 LOC106537449 GRHPR TRIM47 TRIM47 TRIM65 UNK UNK UNK GALK1 SAP30BP CCDC59 ZCCHC7 SAP30BP SMIM5 SAMD8 VDAC2 FDPS LOC106537463 LOC106537465 LOC106537466 PAX5 LOC106537469 LOC106537471 PYGO2 LOC106537476 LOC106537477 TRIB1 SYF2 TMEM50A LOC106537482 LOC106537482 TLE4 TLE4 TLE4 TLE4 TLE4 ERCC4 SOCS6 LOC106537487 HSD17B3 FANCC NUBP2 NUBP2 NUBP2 NUBP2 NUBP2 LRRC2 LRRC2 TES LRRC2 LRRC2'),split=' '))
+b
+match(a,b)
+match(b,a)
+intersect(a,b)
+GENESPACE::synteny
+annotate_gff
+GENESPACE::annotate_gff
+library(GENESPACE)
+gff_ogs <- read_gff("/Users/jeff/Downloads/gffWithOgs.txt.gz")
+gff_ogs <- fread("/Users/jeff/Downloads/gffWithOgs.txt.gz")
+dim(gff_ogs)
+gff_ogs[1:5,]
+gff_ogs[39860:39865,]
+length(unique(gff_ogs$arraID))
+length(unique(gff_ogs$arrayID))
+unique(gff_ogs$arrayID)[1]
+unique(gff_ogs$arrayID)[2]
+unique(gff_ogs$arrayID)[3]
+unique(gff_ogs$arrayID)[4]
+test <- (gff_ogs$nbp/gff_ogs$pepLen)
+test[1]
+test[2]
+range(test)
+length(gff_ogs$ord)
+length(unique(gff_ogs$ord))
+length(unique(gff_ogs$globOG))
+length(unique(gff_ogs$og))
+length(gff_ogs$og)
+range(table(gff_ogs$og))
+length(which(table(gff_ogs$og)==90))
+which(table(gff_ogs$og)==90)
+which(gff_ogs$og==20770)
+gff_ogs[which(gff_ogs$og==20770),]
+length(unique(gff_ogs$globOG))
+length(which(gff_ogs$globOG=="OG0000001"))
+length(which(gff_ogs$globOG=="OG0000002"))
+length(which(gff_ogs$globOG=="OG0000003"))
+range(table(gff_ogs$globOG))
+which(table(gff_ogs$globOG)==179)
+gff_ogs[which(gff_ogs$globOG =="OG0000000"),]
+gff_ogs[which(gff_ogs$globOG =="OG0000000"),"genome"]
+gff_ogs[which(gff_ogs$globOG =="OG0000000"),]$genome
+6622-2289
+REEs::blast
+0.0000000001
+rep(0,50)
+paste(rep(0,50),collapse="")
+0.00000000000000000000000000000000000000000000000001
+list(248147:25963048,411250:25486189,25495437:25963048)
+25963048-248147
+25963048-25486189
+411250-248147
+25486189-16797511
+16797511<=25486189 && 16799040>=411250
+65^2
+median(c(1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,4,4,4,4,6,7,7,7,9,10,10,11,11,12,13,14,15,17,23,23,32,33,34,37,42,54,54,60,67,71,72,73,74,75,128,135,159,177,179,201,250,378))
+median(c(1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,4,4,4,4,6,7,7,7,9,10,10,11,11,12,13,14,15,17,23,23,32,33,34,37,42,54,54,60,67,71,72,73,74,75,135,159,177,179,201,250,378))
+sum(c(1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,4,4,4,4,6,7,7,7,9,10,10,11,11,12,13,14,15,17,23,23,32,33,34,37,42,54,54,60,67,71,72,73,74,75,135,159,177,179,201,250,378))
+2225
+2225+128
+2267-2225
+sum(3, 1, 3, 1,44,11,5,3,2,2,4)
+paste(rep(0,40),collapse="")
+253169210-253169532
+253169210-253169426
+253169210-253169798
+253169210-253167860
+253169210-253169532
+798*0.6*0.49
+368760884-368848691
+0.0000000000000000000000000000000000000001
+setwd("/Users/jeff/Documents/REEs")
+library(devtools)
 devtools::document()
 BiocManager::install("JeffWeinell/REEs",update=FALSE, dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="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")
 library(REEs) ; mafft.install()
@@ -327,27 +106,293 @@ INDIR="/Users/jeff/Documents/SequenceCapture/alignments_WENames"#
 OUTDIR="/Users/jeff/Documents/SequenceCapture/partitionedAlignments"#
 TARGPATH="/Users/jeff/Documents/GitHub/SnakeCap/PostSequencing/Partitioned-Alignments/Weinell_TargetLoci_Snakes_Final_targetCDS_v4.fa"#
 allsampleskey <- read.csv("/Users/jeff/Documents/GitHub/SnakeCap/allsamples_key.txt",sep="\t",header=F)
-i=8 ; res <- make.partitioned.alignment(input.path=INDIR,output.dir=OUTDIR,TargetCDS.path=TARGPATH,ith.locus.start=i,ith.locus.end=i,trimto=allsampleskey$V2[allsampleskey$V3=="SeqCap"])
-?filter.alignment
-length(res)
-lengths(res)
-res[[1]][1]
-res[[1]][2]
-names(res[[1]])
-res[[1]][3]
-res[[1]][4]
-res[[1]][5]
-res[[1]][6]
-res[[1]][7]
-res[[1]][8]
-res[[1]][9]
-res[[1]][10]
-filter.alignment(res[[1]][1],mdt=0.9,treat.ambiguous.as.missing=T,min.allele.freqs.dna=c(2,1,0,0))
-res[[1]][[1]]
-filter.alignment(res[[1]][[1]],mdt=0.9,treat.ambiguous.as.missing=T,min.allele.freqs.dna=c(2,1,0,0))
-test <- filter.alignment(res[[1]][[1]],mdt=0.9,treat.ambiguous.as.missing=T,min.allele.freqs.dna=c(2,1,0,0))
+i=8 ; locusi  <- make.partitioned.alignment(input.path=INDIR,output.dir=OUTDIR,TargetCDS.path=TARGPATH,mafft.params=" --auto --adjustdirection --op 3 --ep 0.123 --quiet ", ith.locus.start=i, ith.locus.end=i,trimto=allsampleskey$V2[allsampleskey$V3=="SeqCap"])
+plotAlignment(DNAStringSet("/Users/jeff/Documents/SequenceCapture/partitionedAlignments/All_parts/alignmentFiles/WeinellEntry17.fa"))
+plotAlignment(readDNAStringSet("/Users/jeff/Documents/SequenceCapture/partitionedAlignments/All_parts/alignmentFiles/WeinellEntry17.fa"))
+WE17 <- readDNAStringSet("/Users/jeff/Documents/SequenceCapture/partitionedAlignments/All_parts/alignmentFiles/WeinellEntry17.fa")
+WE17_pinf <- filter.alignment(WE17,min.allele.freqs.dna=c(2,2),treat.ambiguous.as.missing=T)
+WE17_pinf
+plotAlignment(WE17_pinf)
+test <- filter.alignment(WE17,min.allele.freqs.dna=c(0,0),treat.ambiguous.as.missing=T)
+test
+WE17
 plotAlignment(test)
-WE17_inf <- filter.alignment(res[[1]][[1]],mdt=1,treat.ambiguous.as.missing=T,min.allele.freqs.dna=c(2,2,0,0))
-plotAlignment(WE17_inf)
-writeXStringSet(WE17_inf,filepath="/Users/jeff/Documents/SequenceCapture/WE17_pinf.fa")
-q("no")
+writeXStringSet(WE17_pinf,"/Users/jeff/Documents/SequenceCapture/WE17_pinf_v2.fa")
+nchar("ATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCAT")
+length(253160001:253180000)
+IUPAC_CODE_MAP
+?read.table()
+?readLines
+matrix(c(0,0,0,1,2,3,4,4,5,6,7,8,9),ncol=1,dimnames("seq1"))
+c(0,0,0,1,2,3,4,4,5,6,7,8,9)
+A=c(0,0,0,1,2,3,4,4,5,6,7,8,9)
+A
+matrix(data=A,row=length() nrow=1,dimnames("seq1"))
+matrix(data=A, nrow=1,dimnames("seq1"))
+as.matrix(A)
+matrix(data=A,nrow=1,byrow=T,dimnames("seq1"))
+matrix(data=1:10,nrow=1,byrow=T,dimnames("seq1"))
+matrix(data=1:10,nrow=1,byrow=T)
+matrix(data=A, nrow=1,dimnames=list("seq1"))
+mat3a <- matrix(data=A, nrow=1,dimnames=list("seq1"))
+mat3a
+lapply(1:nrow(mat3a),function(x){ resx=rep(0,ncol(mat3a)) ; px=grep('0',unique(mat3a[x,]),value=T); mx=match(px,mat3a[x,]); resx[mx] <- mat3a[x,mx] ; resx})
+x=1
+resx=rep(0,ncol(mat3a))
+resx
+px=grep('0',unique(mat3a[x,]),value=T)
+px
+px=grep(0,unique(mat3a[x,]),value=T)
+px
+unique(mat3a[x,])
+px=grep(0,unique(mat3a[x,]),value=T,invert=T)
+px
+mx=match(px,mat3a[x,])
+mx
+resx[mx] <- mat3a[x,mx]
+resx
+lapply(1:nrow(mat3a),function(x){ resx=rep(0,ncol(mat3a)) ; px=grep('0',unique(mat3a[x,]),value=T,invert=T); mx=match(px,mat3a[x,]); resx[mx] <- mat3a[x,mx] ; resx})
+do.call(rbind,lapply(1:nrow(mat3a),function(x){ resx=rep(0,ncol(mat3a)) ; px=grep('0',unique(mat3a[x,]),value=T,invert=T); mx=match(px,mat3a[x,]); resx[mx] <- mat3a[x,mx] ; resx}))
+Rscript <(echo -e "#
+      mat2b <- as.matrix(read.table(text='$(echo "$TEST2")'))#
+      rownames(mat2b) <- unlist(strsplit('$(echo "$ROWNAMES")',split='\n'))#
+      mat3a0 <- mat2b[grep('reversed',rownames(mat2b),invert=T),,drop=F]#
+      mat3a <- do.call(rbind,lapply(1:nrow(mat3a0),function(x){cumsum(mat3a0[x,])}))#
+      rownames(mat3a) <- rownames(mat3a0)#
+      mat3b <- do.call(rbind,lapply(1:nrow(mat3a),function(x){ resx=rep(0,ncol(mat3a)) ; px=grep('0',unique(mat3a[x,]),value=T,invert=T); mx=match(px,mat3a[x,]); resx[mx] <- mat3a[x,mx] ; resx}))#
+      mat3b#
+      #cumsum(mat3a[1,])#
+      #mat3b <- do.call(rbind,)#
+      #mat3b#
+    ")
+c("seq1","seq2 reversed")
+test <- c("seq1","seq2 reversed")
+strsplit(test,split="")
+strsplit(test,split=" ")
+test <- cbind(sample(0:3,size=30),sample(100:200,size=30))
+test <- cbind(sample(0:3,size=30,replace=T),sample(100:200,size=30,replace=T))
+test
+mat7=test
+which(mat7[,1] == 0 && mat7[,2] > 0),1
+which(mat7[,1] == 0 && mat7[,2] > 0)
+which(mat7[,1] == 0 & mat7[,2] > 0)
+devtools::document()
+AMINO_ACID_CODE
+as.matrix(AMINO_ACID_CODE)
+? AMINO_ACID_CODE
+AMINO_ACID_CODE
+length(AMINO_ACID_CODE)
+length(IUPAC_CODE_MAP)
+CHARS_COLS=c(A="red",C="blue",G="yellow",T="green",M="darkgray", R="darkgray", W="darkgray", S="darkgray", Y="darkgray", K="darkgray", V="darkgray", H="darkgray", D="darkgray", B="darkgray", N="darkgray", '-'="white", '?'="white")
+length(CHARS_COLS)
+plotAlignment <- function(alignment,title="",colors="standard"){#
+	nsamples  <- length(alignment)#
+	width.al  <- width(alignment[1])#
+	#xvalsA    <- seq(from=1,to=(width.al+100),by=100)#
+	xvalsA    <- seq(from=1,to=(width.al),by=1)#
+	xvalsB    <- rep(xvalsA,nsamples)#
+	yvals     <- rep(c(1:nsamples),length(xvalsA))#
+	if(class(alignment)=="DNAStringSet"){#
+		CHARS=paste0(c(names(IUPAC_CODE_MAP),"-","\\?"),"+")#
+		CHARS_COLS=c(A="red",C="blue",G="yellow",T="green",M="darkgray", R="darkgray", W="darkgray", S="darkgray", Y="darkgray", K="darkgray", V="darkgray", H="darkgray", D="darkgray", B="darkgray", N="darkgray", '-'="white", '?'="white")#
+	}#
+	if(class(alignment)=="AAStringSet"){#
+		CHARS=paste0(c(names(AMINO_ACID_CODE),"-","\\?"),"+")#
+		CHARS_COLS <- c(D="brightred",E="brightred",C="yellow",M="yellow",U="yellow",K="blue",O="blue",R="blue",S="orange",T="orange",F="darkblue",Y="darkblue",N="cyan",Q="cyan",G="lightgray",L="green",V="green",I="green",A="lightgray",W="pink",H="paleblue",P="flesh",B="gray",J="gray",Z="gray",X="darkgray", '-'="white", '?'="white")#
+	}#
+	if(all(colors!="standard")){#
+		if(length(colors)==1 && is.null(names(colors))){#
+			CHARS_COLS[1:(length(CHARS_COLS)-2)] <- colors#
+		} else {#
+			CHARS_COLS[(names(CHARS_COLS) %in% names(colors))]  <- colors#
+			CHARS_COLS[!(names(CHARS_COLS) %in% names(colors))] <- "white"#
+		}#
+	}#
+	segments.list <- list(); length(segments.list) <- length(CHARS_COLS)#
+	for(i in 1:length(CHARS_COLS)){#
+		segments.x   <- stringr::str_locate_all(alignment,pattern=CHARS[i])#
+		nsegments    <- (lengths(segments.x)/2)#
+		sumnsegments <- sum(nsegments)#
+		segments.y   <- lapply(1:length(segments.x),function(x) {matrix(data=x,ncol=2,nrow=nsegments[x])})#
+		segments.xy  <- as.data.frame(cbind(do.call(rbind,segments.x), do.call(rbind,segments.y)))#
+		colnames(segments.xy) <- c("x0","x1","y0","y1")#
+		segments.xy[,"char"] <- rep(names(CHARS_COLS[i]),sumnsegments)#
+		segments.xy[,"char_color"] <- rep(unname(CHARS_COLS[i]),sumnsegments)#
+		segments.list[[i]] <- segments.xy#
+	}#
+	segments.df   <- do.call(rbind,segments.list)#
+	segments.mat  <- as.matrix(segments.df[,1:4])#
+	segments.cols <- as.matrix(segments.df[,6],drop=T)#
+	mat.plot      <- segments.mat[(segments.df[,"char"] %in% names(CHARS_COLS)),]#
+	mat.plot[,1]  <- (mat.plot[,1])-0.5#
+	mat.plot[,2]  <- (mat.plot[,2])+0.5#
+	mat.plot.cols <- segments.cols[(segments.df[,"char"] %in% names(CHARS_COLS))]#
+	plot(range(xvalsB),range(yvals),col="white",main=title,xlab="position",ylab="sample",ylim = rev(range(yvals)))#
+	rug(x = 1:nsamples, ticksize = -0.01, side = 2,quiet=T)#
+	segments(x0=mat.plot[,"x0"],x1=mat.plot[,"x1"],y0=mat.plot[,"y0"],y1=mat.plot[,"y1"],col=mat.plot.cols,lwd=2,lend="butt")#
+}
+WE17_AA <- readAAStringSet("/Users/jeff/Documents/SequenceCapture/partitionedAlignments/AminoAcids/alignmentFiles/WeinellEntry17.fa")
+plotAlignment(WE17_AA)
+plotAlignment <- function(alignment,title="",colors="standard"){#
+	nsamples  <- length(alignment)#
+	width.al  <- width(alignment[1])#
+	#xvalsA    <- seq(from=1,to=(width.al+100),by=100)#
+	xvalsA    <- seq(from=1,to=(width.al),by=1)#
+	xvalsB    <- rep(xvalsA,nsamples)#
+	yvals     <- rep(c(1:nsamples),length(xvalsA))#
+	if(class(alignment)=="DNAStringSet"){#
+		CHARS=paste0(c(names(IUPAC_CODE_MAP),"-","\\?"),"+")#
+		CHARS_COLS=c(A="red",C="blue",G="yellow",T="green",M="darkgray", R="darkgray", W="darkgray", S="darkgray", Y="darkgray", K="darkgray", V="darkgray", H="darkgray", D="darkgray", B="darkgray", N="darkgray", '-'="white", '?'="white")#
+	}#
+	if(class(alignment)=="AAStringSet"){#
+		CHARS=paste0(c(names(AMINO_ACID_CODE),"-","\\?"),"+")#
+		CHARS_COLS <- c(D="red",E="red",C="yellow",M="yellow",U="yellow",K="blue",O="blue",R="blue",S="orange",T="orange",F="darkblue",Y="darkblue",N="cyan",Q="cyan",G="lightgray",L="green",V="green",I="green",A="lightgray",W="pink",H="paleblue",P="flesh",B="gray",J="gray",Z="gray",X="darkgray", '-'="white", '?'="white")#
+	}#
+	if(all(colors!="standard")){#
+		if(length(colors)==1 && is.null(names(colors))){#
+			CHARS_COLS[1:(length(CHARS_COLS)-2)] <- colors#
+		} else {#
+			CHARS_COLS[(names(CHARS_COLS) %in% names(colors))]  <- colors#
+			CHARS_COLS[!(names(CHARS_COLS) %in% names(colors))] <- "white"#
+		}#
+	}#
+	segments.list <- list(); length(segments.list) <- length(CHARS_COLS)#
+	for(i in 1:length(CHARS_COLS)){#
+		segments.x   <- stringr::str_locate_all(alignment,pattern=CHARS[i])#
+		nsegments    <- (lengths(segments.x)/2)#
+		sumnsegments <- sum(nsegments)#
+		segments.y   <- lapply(1:length(segments.x),function(x) {matrix(data=x,ncol=2,nrow=nsegments[x])})#
+		segments.xy  <- as.data.frame(cbind(do.call(rbind,segments.x), do.call(rbind,segments.y)))#
+		colnames(segments.xy) <- c("x0","x1","y0","y1")#
+		segments.xy[,"char"] <- rep(names(CHARS_COLS[i]),sumnsegments)#
+		segments.xy[,"char_color"] <- rep(unname(CHARS_COLS[i]),sumnsegments)#
+		segments.list[[i]] <- segments.xy#
+	}#
+	segments.df   <- do.call(rbind,segments.list)#
+	segments.mat  <- as.matrix(segments.df[,1:4])#
+	segments.cols <- as.matrix(segments.df[,6],drop=T)#
+	mat.plot      <- segments.mat[(segments.df[,"char"] %in% names(CHARS_COLS)),]#
+	mat.plot[,1]  <- (mat.plot[,1])-0.5#
+	mat.plot[,2]  <- (mat.plot[,2])+0.5#
+	mat.plot.cols <- segments.cols[(segments.df[,"char"] %in% names(CHARS_COLS))]#
+	plot(range(xvalsB),range(yvals),col="white",main=title,xlab="position",ylab="sample",ylim = rev(range(yvals)))#
+	rug(x = 1:nsamples, ticksize = -0.01, side = 2,quiet=T)#
+	segments(x0=mat.plot[,"x0"],x1=mat.plot[,"x1"],y0=mat.plot[,"y0"],y1=mat.plot[,"y1"],col=mat.plot.cols,lwd=2,lend="butt")#
+}
+plotAlignment(WE17_AA)
+devtools::document()
+rm(list = c("plotAlignment"))
+devtools::document()
+BiocManager::install("JeffWeinell/REEs",update=FALSE, dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,Ncpus=4,auth_token="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")
+library(REEs) ; mafft.install()
+length(28920:39953)
+library(rtracklayer)
+?readGFF
+blast.install()
+install.loc="auto",source=F
+install.loc="auto";source=F
+if(install.loc=="auto"){#
+			install.loc       <- paste0(find.package("REEs"),"/blast-mafft/blast")#
+			#dir.check.create(install.loc)#
+			dir.create(install.loc,recursive=T)#
+	} else {#
+		is.writeable <- file.access(install.loc,mode=2)#
+		if(is.writeable!=0){#
+			stop("Directory defined by install.loc is not writeable.")#
+		}#
+	}
+dir.check.create(install.loc,recursive=T)
+dir.check.create(install.loc)
+install.loc
+REEs.loc <- find.package("REEs")
+REEs.loc
+download.dir      <- install.loc#
+	blast.index.url   <- "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+"#
+	file.prefix       <- "ncbi-blast-"#
+	latest.version    <- "2.11.0"#
+	file.extensions   <- c("+-1.src.rpm","+-1.src.rpm.md5","+-1.x86_64.rpm","+-1.x86_64.rpm.md5","+-src.tar.gz","+-src.tar.gz.md5","+-src.zip","+-src.zip.md5","+-win64.exe","+-win64.exe.md5","+-x64-linux.tar.gz","+-x64-linux.tar.gz.md5","+-x64-macosx.tar.gz","+-x64-macosx.tar.gz.md5","+-x64-win64.tar.gz","+-x64-win64.tar.gz.md5","+.dmg","+.dmg.md5")#
+	blast.urls        <- paste0(blast.index.url,"/",latest.version,"/",file.prefix,latest.version,file.extensions)#
+	linux.url         <- blast.urls[grep(pattern="+-x64-linux.tar.gz$",file.extensions)]#
+	windows.url       <- blast.urls[grep(pattern="+-x64-win64.tar.gz$",file.extensions)]#
+	macOS.url         <- blast.urls[grep(pattern="+-x64-macosx.tar.gz$",file.extensions)]#
+	source.url        <- blast.urls[grep(pattern="+-src.tar.gz$",file.extensions)]
+if(!(Sys.info()["sysname"] %in% c("Linux","Darwin","Windows"))){#
+			stop("unrecognized operating system detected using Sys.info()")#
+		}#
+		if(Sys.info()["sysname"]=="Linux"){#
+			# download tarball#
+			download.file(url=linux.url,destfile=paste0(download.dir,"/",basename(linux.url)),method="wget")#
+			# unpack tarball#
+			system(paste("cd",paste0("'",download.dir,"'"),"&& tar -xzvf",paste0("'",basename(linux.url),"'")))#
+			# delete tarball#
+			system(paste("rm -R",paste0(download.dir,"/",basename(linux.url))))#
+		}#
+		if(Sys.info()["sysname"]=="Darwin"){#
+			# download tarball#
+			download.file(url=macOS.url,destfile=paste0(download.dir,"/",basename(macOS.url)),method="wget")#
+			# move to directory where tarball was downloaded and then unpack it#
+			system(paste("cd",paste0("'",download.dir,"'"),"&& tar -xzvf",paste0("'",basename(macOS.url),"'")))#
+			# delete tarball#
+			system(paste("rm -R",paste0(download.dir,"/",basename(macOS.url))))#
+		}#
+		if(Sys.info()["sysname"]=="Windows"){#
+			# download tarball#
+			download.file(url=windows.url,destfile=paste0(download.dir,"/",basename(windows.url)),method="wget")#
+			# move to directory where tarball was downloaded and then unpack it#
+			system(paste("cd",paste0("'",download.dir,"'"),"&& tar -xzvf",paste0("'",basename(windows.url),"'")))#
+			# delete tarball#
+			system(paste("rm -R",paste0(download.dir,"/",basename(windows.url))))#
+		}
+Sys.info()["sysname"]=="Darwin"
+basename(macOS.url)
+download.file(url=macOS.url,destfile=file.path(download.dir,basename(macOS.url)),method="wget")
+file.path(download.dir,basename(macOS.url))
+macOS.url
+paste("cd",paste0("'",download.dir,"'"),"&& tar -xzvf",paste0("'",basename(macOS.url),"'"))
+sprintf("cd '%s' && tar -xzvf '%s' ",download.dir,basename(macOS.url))
+system(sprintf("cd '%s' && tar -xzvf '%s' ",download.dir,basename(macOS.url)))
+ls download.dir
+list.files(download.dir)
+download.dir
+sprintf("cd '%s' && wget '%s' ",download.dir,macOS.url
+sprintf("cd '%s' && wget '%s' ",download.dir,macOS.url)
+system(sprintf("cd '%s' && tar -xzvf '%s' ",download.dir,basename(macOS.url)))
+system(paste("rm -R",paste0(download.dir,"/",basename(macOS.url))))
+Boa_BED <- import("/Users/jeff/Downloads/boaCon1_genes_raw.bigBed")
+?import()
+Boa_BED <- rtracklayer::import("/Users/jeff/Downloads/boaCon1_genes_raw.bigBed")
+Boa_BED <- rtracklayer::import.bb("/Users/jeff/Downloads/boaCon1_genes_raw.bigBed")
+?trim
+class(Boa_BED)
+str(Boa_BED)
+export(Boa_BED,con="/Users/jeff/Documents/SequenceCapture/boaCon1_genes_raw.gff",format="GFF")
+head("/Users/jeff/Documents/SequenceCapture/boaCon1_genes_raw.gff")
+system("head /Users/jeff/Documents/SequenceCapture/boaCon1_genes_raw.gff")
+Boa_AA <- readAAStringSet("/Users/jeff/Downloads/FileS21_Bcon_rnd3.all.maker.proteins.fasta")
+length(Boa_AA)
+?plot_riparian
+??plot_riparian
+??plot_riparian
+library(REEs)
+aln <- readDNAStringSet("/Users/jeff/Downloads/group3.fa")
+plotAlignment(aln)
+plotAlignment(subseq(aln,30000,45000))
+plotAlignment(subseq(aln,35000,43000))
+plotAlignment(subseq(aln,36000,40000))
+aln <- readDNAStringSet("/Users/jeff/Downloads/group1.fa")
+plotAlignment(aln)
+28491740+99
+devtools::document()
+2900/20
+DNAStringSet(c("ACGT","AGTCT"))
+gsub("C","A",DNAStringSet(c("ACGT","AGTCT")))
+DNAStringSet(gsub("C","A",DNAStringSet(c("ACGT","AGTCT"))))
+test <- DNAStringSet(c("ACGT","AGTCT"))
+names(test) <- c("seq1","seq2")
+test
+DNAStringSet(gsub("C","A",test))
+FILEPATHi="/Users/jeff/Downloads/group3.fa"
+novel             <- REEs::trimXN(Biostrings::DNAStringSet(x=gsub("-|\\?","",Biostrings::readDNAStringSet(FILEPATHi))))
+class(novel)
+novel
+devtools::document()
