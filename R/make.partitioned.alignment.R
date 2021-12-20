@@ -686,10 +686,10 @@ submat <- function(type="DNA") {
 		return(submat)
 	}
 	if(type=="AA"){
-		CODE_MAP <- c(names(AMINO_ACID_CODE),"-")
-		submat <- matrix(data=(-1),nrow=27,ncol=27,dimnames=list(CODE_MAP,CODE_MAP))
+		CODE_MAP <- c("*",names(AMINO_ACID_CODE),"-")
+		submat <- matrix(data=(-1),nrow=28,ncol=28,dimnames=list(CODE_MAP,CODE_MAP))
 		submat[!(lower.tri(submat) | upper.tri(submat))] <- 0
-		submat[26:27,] <- submat[,26:27] <- 0
+		submat[27:28,] <- submat[,27:28] <- 0
 		return(submat)
 	}
 	if(type=="DNA_comparable"){
@@ -700,10 +700,10 @@ submat <- function(type="DNA") {
 		return(submat)
 	}
 	if(type=="AA_comparable"){
-		CODE_MAP <- c(names(AMINO_ACID_CODE),"-")
-		submat <- matrix(data=(-1),nrow=27,ncol=27,dimnames=list(CODE_MAP,CODE_MAP))
+		CODE_MAP <- c("*",names(AMINO_ACID_CODE),"-")
+		submat <- matrix(data=(-1),nrow=28,ncol=28,dimnames=list(CODE_MAP,CODE_MAP))
 		#submat[!(lower.tri(submat) | upper.tri(submat))] <- 0
-		submat[26:27,] <- submat[,26:27] <- 0
+		submat[27:28,] <- submat[,27:28] <- 0
 		return(submat)
 	}
 }
