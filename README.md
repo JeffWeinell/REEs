@@ -307,7 +307,7 @@ Nine of the expanded targets were only partially expanded, meaning that their se
 
 Additionally, NW_013658076.1:768325-769765 (WeinellEntry1658) was targetted instead of NW_013658076.1:768324-769764; these are nearly identical (shifted by only one base on the contig) and I am not sure why this change was made.
 
-Five duplicate pairs of REEs (each pair with identical sequences) were present in the output of step 8 (Table 5). Only one of these pairs was recognized/identified (and filtered manually) prior to submitting target sequences to Arbor Biosciences.
+Six duplicate pairs of REEs (each pair with identical sequences) were present in the output of step 8 (Table 5). Only one of these pairs was recognized/identified (and filtered manually) prior to submitting target sequences to Arbor Biosciences.
 
 The remaining 2,068 REEs (expanded targets) were submitted to Arbor Biosciences for ulstrastringent filtering and probe design, and can be downloaded here: [REEs.expanded.final.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.final.fas). These were actually submitted to Arbor in two batches: [Version1_Target-loci_Jeff-Weinell_10Sep2018.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version1_Target-Loci_Jeff-Weinell_10Sep2018.fasta) and [Version2_additional-targets_20Sep2018.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version2_additional-targets_Entry1899to3152_20Sep2018.fasta). See [ultra-stringent filtering](#ultrastringentFiltering) section.
 
@@ -328,7 +328,7 @@ WeinellEntry2151|NW_013658527.1|12230-12575     |12230-12590    |12576-12590 all
 WeinellEntry2150|NW_013658733.1|434060-434488   |434008-434488  |434008-434059 all Ns
 WeinellEntry2152|NW_013658527.1|14050-14395     |14035-14395    |14035-14049 all Ns
 
-**Table 5**. Pairs of REEs having identical sequences that were included in the ouput of the pick.loci function (step 8). These were subsequently filtered, either immediately before or after application of Arbor's ultrastringent filtering algorithm. The latest version of the pick.loci function has an option to filter REEs if the bitscores of the top matches are too similar according to a user-defined threshold.
+**Table 5**. Pairs of REEs having identical sequences that were included in the ouput of the pick.loci function (step 8). Five of these pairs were subsequently filtered, either immediately before or after application of Arbor's ultrastringent filtering algorithm. One pair (pair 6) was not identified until after synthesis and sequencing. The latest version of the pick.loci function has an option to filter REEs if the bitscores of the top matches are too similar according to a user-defined threshold.
 Contig Accession ID|Start Position|End Position|Sequence/Pair ID|Other ID|Step when filtered
 ---|---|---|---|---|---
 NW_013657725.1|467272|467752|1||manually, after using pick.loci function and before ultrastringent filtering
@@ -341,6 +341,8 @@ NW_013658610.1|34634|34874|4|WeinellEntry589|during ultrastringent filtering
 NW_013658610.1|59790|60030|4|WeinellEntry590|during ultrastringent filtering
 NW_013658165.1|745869|746109|5|WeinellEntry1670|during ultrastringent filtering
 NW_013658165.1|748461|748701|5|WeinellEntry1671|during ultrastringent filtering
+NW_013661433.1|31138|31498|6|WeinellEntry1857| not filtered
+NW_013661433.1|31138|31498|6|WeinellEntry1944| filtered from target reference fasta prior to target matching of assembled loci
 
 <!--
 REEs that failed ultrastringent filtration: 70
@@ -907,7 +909,7 @@ The remaining 84 MHC target loci were submitted to Arbor Biosciences for ultrast
  - 16 other MHC loci were filtered because their baits were all non-specific within the genomes of *T. sirtalis* (**blast results files: XXXXXX)**
  - 12 other MHC loci were already picked as targets (as REEs), and therefore I removed these duplicated targets (**Version1_removed-loci_duplicate-targets.tsv**). 
  
-The remaining 27 MHC loci (non-REEs) and six others that were targetted as REEs (entries 248, 559, 728, 787, 891, and 1944) were included in the final set of target loci for which baits were synthesized.
+The remaining 27 MHC loci (non-REEs) and six others that were targetted as REEs (entries 248, 559, 728, 787, 891, and 1944) were included in the final set of target loci for which baits were synthesized. WeinellEntry1944 was later recognized as a duplicate of the immune target WeinellEntry1857.
 
 <!--
 Version1_Target-loci_Jeff-Weinell_10Sep2018.fasta: 1802 REEs (non-MHC), 12 REE/MHCs, 84 MHCs
