@@ -29,7 +29,7 @@
 <a name="Description"></a>
 # Description of SnakeCap Probe (Bait) Set
 
-The probe set includes 20,020 probes for 3,129 single-copy loci (1,517,011 nt; update this) shared across snakes. The target loci are categorized into four types: (1) rapidly evolving exons (REEs; n = 1,653), (2) ultra-conserved elements (UCEs; n = 907), (3) ddRAD-like loci (n = 328), (4) and functionally interesting genes, which includes 27 major histocompatibility complex (MHC) genes, 119 vision genes, and 95 scalation genes.
+The probe set includes 20,020 probes for 3,129 (actually 3,128) single-copy loci (1,517,011 nt; update this to account for removal of synonymy of WeinellEntry1944 with WeinellEntry1857) shared across snakes. The target loci are categorized into four types: (1) rapidly evolving exons (REEs; n = 1,652), (2) ultra-conserved elements (UCEs; n = 907), (3) ddRAD-like loci (n = 328), (4) and functionally interesting genes, which includes 27 major histocompatibility complex (MHC) genes, 119 vision genes, and 95 scalation genes.
 
 REEs include one or more entire exons and one or both exon-flanking regions, and range in length from 121 to 7,501 nt. I used a modified version of the FrogCap pipeline (Hutter et al., 2019) to select the optimal set of REEs from an alignment of snake exomes.
 
@@ -43,13 +43,13 @@ Functional loci included entire or partial gene regions that have previously bee
 
 Locus type | Region targeted | nloci | nnt | nt/locus (min–max)
 ---- | ---- | ---- | ---- | ----
-Rapidly evolving exons (REEs) | Usually the entire exon + 0–60nt each of 5' & 3' flanking regions. | 1,653 | 996,369 | 121–7,501
+Rapidly evolving exons (REEs) | Usually the entire exon + 0–60nt each of 5' & 3' flanking regions. | 1,652 | 996,369 | 121–7,501
 Ultra-conserved elements (UCEs) | Entire UCE region previously identified | 907 | 143,075 | 120–161
 ddRAD-like | in silico ddRAD selected loci | 328 | 271,505 | 120–996
 MHC | Exons + 0–60nt each of 5' & 3' flanking regions of major histocompatibility complex (MHC) genes. | 27 | 5,354 | 121–364
 Vision | 160nt, including ≤ 70nt upstream of start codon if targeted exon is first exon. Usually, first 160nt of exon targeted. | 119 | 18,857 | 120–170
 Scalation | 1100nt, including 1000nt of promoter region + first 100nt of first exon. | 95 | 81,851 | 125–1,101
-All loci |  | 3,129 | 1,517,011 | 120–7,501 (mean = 531.62)  
+All loci |  | 3,128 | 1,517,011 | 120–7,501 (mean = 531.62)  
 
 <a name="Methods"></a>
 # Methods
