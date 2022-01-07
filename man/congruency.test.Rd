@@ -4,14 +4,14 @@
 \alias{congruency.test}
 \title{Congruency Test}
 \usage{
-congruency.test(tree1, tree2, min.support = 80)
+congruency.test(tree1, tree2, min.support = 0)
 }
 \arguments{
 \item{tree1}{First input tree. Should be class Phylo or multiPhylo.}
 
 \item{tree2}{Second input tree. Should be class Phylo or multiPhylo.}
 
-\item{min.support}{Threshold for a node to be considered strongly supported. Nodes with support less than this value are collapsed into a polytomy. Default is 80, but care should be taken for this value.}
+\item{min.support}{Threshold for a node to be considered strongly supported. Nodes with support less than this value are collapsed into a polytomy. Default is 0. Ignored for trees without support values.}
 }
 \value{
 Logical, TRUE if the two trees are congruent, and otherwise FALSE

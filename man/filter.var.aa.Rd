@@ -4,7 +4,7 @@
 \alias{filter.var.aa}
 \title{Filter by AA Variation}
 \usage{
-filter.var.aa(alignment.site, min.freqs = rep(0, 21))
+\method{filter}{var.aa}(alignment.site, min.freqs = rep(0, 21))
 }
 \arguments{
 \item{alignment.site}{Input character vector representing AA data at one site of an alignment.}

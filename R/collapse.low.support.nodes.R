@@ -12,6 +12,7 @@ collapse.low.support.nodes <- function(rooted.tree,support.threshold=80){
 	tolerance                 <- min(tree1.rooted$edge.length)/2
 	ntips                     <- length(tree1.rooted$tip.label)
 	### Also may want to drop nodes without a support value other than the root?
+	tree1.rooted$node.label   <- as.numeric(gsub(".*/","",tree1.rooted$node.label))
 	tree1.nodes.to.drop       <- (ntips + which(as.numeric(tree1.rooted$node.label) <= support.threshold))
 	### The edges having the descendent node being a weakly supported node that we want to drop
 	tree1.crown.edges.to.drop <- which(tree1.rooted$edge[,2] %in% tree1.nodes.to.drop)

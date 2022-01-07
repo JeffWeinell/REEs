@@ -4,7 +4,7 @@
 \alias{collapse.low.support.nodes}
 \title{Collapse Low Supported Nodes}
 \usage{
-collapse.low.support.nodes(rooted.tree, support.threshold = 80)
+\method{collapse}{low.support.nodes}(rooted.tree, support.threshold = 80)
 }
 \arguments{
 \item{rooted.tree}{Rooted input phylogeny.}

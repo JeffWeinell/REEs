@@ -4,7 +4,7 @@
 \alias{filter.alignment}
 \title{Filter Alignment}
 \usage{
-filter.alignment(
+\method{filter}{alignment}(
   alignment,
   mdt = 1,
   treat.ambiguous.as.missing = F,

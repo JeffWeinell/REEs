@@ -6,7 +6,7 @@
 
 Collapse a list of DNAStringSet objects into a single DNAStringSet object.}
 \usage{
-collapse.DNAStringSet(input.seqs, use.seqnames = T, use.set.names = T)
+\method{collapse}{DNAStringSet}(input.seqs, use.seqnames = T, use.set.names = T)
 }
 \arguments{
 \item{input.seqs}{A list of DNAStringSet objects.}

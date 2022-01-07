@@ -2,7 +2,7 @@
 #' 
 #' Pairwise comparison of input trees and if topologies of each pair is congruent at highly supported nodes.
 #' 
-#' @param ... Two or more input trees (object names separated by commas) of class 
+#' @param ... Two or more input trees (object names separated by commas) of class multiPhylo
 #' @param min.support Nodes with support less than this value are collapse into a polytomy. Default is 80, but care should be taken for this value. 
 #' @return Returns a three-column character matrix. Each row is a comparison of two input trees; first two columns indicate trees compared; third column indicates if the two trees are congruent.
 #' @export 
@@ -26,9 +26,10 @@ multiple.congruency.test <- function(...,min.support=80){
 	}
 	pairwise.treesNames.mat <- xprod.combn.mat(list.of.treeNames,list.of.treeNames)
 	pairwise.treesNames.mat <- pairwise.treesNames.mat[!duplicated(t(apply(pairwise.treesNames.mat,1,sort))),]
-	congruence.result       <- apply(X=pairwise.treesNames.mat,MARGIN=1,FUN=function(input,support.thresh=min.support){tree1=get(input[1]);tree2=get(input[2]);congruency.test(tree1,tree2,min.support=support.thresh)})
-	result                  <- cbind(pairwise.treesNames.mat,congruence.result)
+	congruence.result       <- apply(X=pairwise.treesNames.mat,MARGIN=1,FUN=function(input,support.thresh=min.support){tree1=get(input[1]);tree2=get(input[2]);REEs::congruency.test(tree1,tree2,min.support=support.thresh)})
+	#result                  <- cbind(pairwise.treesNames.mat,congruence.result)
 	#result                  <- result[!duplicated(t(apply(result,1,sort))),]
-	colnames(result) <- c("tree1","tree2","congruent")
+	#colnames(result) <- c("tree1","tree2","congruent")
+	result <- data.frame(tree1=pairwise.treesNames.mat[,1],tree2=pairwise.treesNames.mat[,2],congruent=congruence.result)
 	result
 }

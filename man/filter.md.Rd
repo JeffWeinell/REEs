@@ -6,7 +6,7 @@
 
 Test if a character vector contains. This function is used internally in the the filter.alignment function.}
 \usage{
-filter.md(alignment.site, missing.data.threshold, type, ambiguous = F)
+\method{filter}{md}(alignment.site, missing.data.threshold, type, ambiguous = F)
 }
 \arguments{
 \item{alignment.site}{Character vector corresponding to a site in a DNA or AA alignment}

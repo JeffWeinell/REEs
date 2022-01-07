@@ -4,7 +4,7 @@
 \alias{slice.trim}
 \title{Remove Poorly Aligned Regions}
 \usage{
-slice.trim(input.align, slice.size.bp = 100, threshold = 0.45, min.length = 20)
+\method{slice}{trim}(input.align, slice.size.bp = 100, threshold = 0.45, min.length = 20)
 }
 \arguments{
 \item{input.align}{Input DNA alignment of class DNAStringSet or DNAMultipleAlignment}

@@ -7,7 +7,7 @@
 multiple.congruency.test(..., min.support = 80)
 }
 \arguments{
-\item{...}{Two or more input trees (object names separated by commas) of class}
+\item{...}{Two or more input trees (object names separated by commas) of class multiPhylo}
 
 \item{min.support}{Nodes with support less than this value are collapse into a polytomy. Default is 80, but care should be taken for this value.}
 }

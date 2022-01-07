@@ -4,7 +4,7 @@
 \alias{filter.var.dna}
 \title{Filter by DNA Variation}
 \usage{
-filter.var.dna(alignment.site, min.freqs = c(0, 0, 0, 0))
+\method{filter}{var.dna}(alignment.site, min.freqs = c(0, 0, 0, 0))
 }
 \arguments{
 \item{alignment.site}{Input character vector representing DNA data at one site of an alignment.}

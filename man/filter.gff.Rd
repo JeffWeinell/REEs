@@ -4,7 +4,7 @@
 \alias{filter.gff}
 \title{Filter Feature Annotation Table}
 \usage{
-filter.gff(input.gff, output.gff = NULL, feature.type, min.length = 0)
+\method{filter}{gff}(input.gff, output.gff = NULL, feature.type, min.length = 0)
 }
 \arguments{
 \item{input.gff}{Either a path to input feature annotation table (gff format) or an object of class data.table. See "ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3" as an example input.}
