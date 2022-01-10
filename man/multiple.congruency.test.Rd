@@ -4,12 +4,14 @@
 \alias{multiple.congruency.test}
 \title{Multiple Congruency Test}
 \usage{
-multiple.congruency.test(..., min.support = 80)
+multiple.congruency.test(..., min.support = 80, intermediate.save = NULL)
 }
 \arguments{
 \item{...}{Two or more input trees (object names separated by commas) of class multiPhylo}
 
 \item{min.support}{Nodes with support less than this value are collapse into a polytomy. Default is 80, but care should be taken for this value.}
+
+\item{save.as}{Path to output file. Defult NULL. When NULL, runtimes should be faster, but crashes during long runs will have to be restarted. If an output path is provided then analysis can be resumed.}
 }
 \value{
 Returns a three-column character matrix. Each row is a comparison of two input trees; first two columns indicate trees compared; third column indicates if the two trees are congruent.

@@ -18,5 +18,5 @@ If unique.mode="index". Output sets are retained even if they contain the same e
 Character matrix with as many columns as input vectors. Each row is a unique combination (as defined by unique.mode parameter) of elements from the input vectors.
 }
 \description{
-Find all n-wise combinations of elements from n input sets.
+Find all n-wise combinations of elements from n input sets. Use expand.grid instead of this function.
 }

@@ -1,6 +1,8 @@
 #' All Combinations as Matrix
 #' 
-#' Find all n-wise combinations of elements from n input sets.
+#' Find all n-wise combinations of elements from n input sets. Use expand.grid instead of this function.
+#' 
+#' 
 #' 
 #' @param ... Two or more character vectors (or any vector type coercible to character class). Vectors can be any non-zero length. If input vectors are very long this function may crash. Similarly (and moreso), a large number of input vectors will likely crash this function.
 #' @param unique.mode One of types "unordered", "ordered", or "index" (default is "index").
