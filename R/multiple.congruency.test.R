@@ -7,7 +7,7 @@
 #' @param save.as Path to output file. Defult NULL. When NULL, runtimes should be faster, but crashes during long runs will have to be restarted. If an output path is provided then analysis can be resumed.
 #' @return Returns a three-column character matrix. Each row is a comparison of two input trees; first two columns indicate trees compared; third column indicates if the two trees are congruent.
 #' @export multiple.congruency.test
-multiple.congruency.test <- function(...,min.support=80,intermediate.save=NULL){
+multiple.congruency.test <- function(...,min.support=80,save.as=NULL){
 	list.of.trees <- list(...)
 	if(length(list.of.trees)==1){
 		list.of.trees <- list.of.trees[[1]]
@@ -34,11 +34,11 @@ multiple.congruency.test <- function(...,min.support=80,intermediate.save=NULL){
 		congruence.result       <- apply(X=pairwise.treesNames.mat,MARGIN=1,FUN=function(input,support.thresh=min.support){tree1=get(input[1]);tree2=get(input[2]);REEs::congruency.test(tree1,tree2,min.support=support.thresh)})
 	} else {
 		if(!dir.exists(dirname(save.as))){
-			return(paste0("output directory does not exist:",basename(save.as)))
+			return(paste0("output directory does not exist:",dirname(save.as)))
 		} else {
 			if(file.exists(save.as)){
 				result.last <- read.table(save.as,header=T,sep='\t')
-				tree1.last <- result.last[nrow(result.last),1]
+				tree1.last  <- result.last[nrow(result.last),1]
 				STARTi=match(tree1.last,list.of.treeNames) + 1
 			} else {
 				STARTi=1
@@ -59,6 +59,7 @@ multiple.congruency.test <- function(...,min.support=80,intermediate.save=NULL){
 				}
 			}
 		}
+		congruence.result <- read.table(save.as,header=T,sep='\t')[,'congruent']
 	}
 	result <- data.frame(tree1=pairwise.treesNames.mat[,1],tree2=pairwise.treesNames.mat[,2],congruent=congruence.result)
 	result

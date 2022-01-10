@@ -4,7 +4,7 @@
 \alias{multiple.congruency.test}
 \title{Multiple Congruency Test}
 \usage{
-multiple.congruency.test(..., min.support = 80, intermediate.save = NULL)
+multiple.congruency.test(..., min.support = 80, save.as = NULL)
 }
 \arguments{
 \item{...}{Two or more input trees (object names separated by commas) of class multiPhylo}
