@@ -22,14 +22,9 @@ multiple.congruency.test <- function(...,min.support=80,save.as=NULL){
 	list.of.treeNames       <- names(list.of.trees)
 	for(i in 1:length(list.of.treeNames)){
 		assign(list.of.treeNames[i],list.of.trees[i])
-		#class(get(list.of.treeNames[i]))
 	}
-	#pairwise.treesNames.mat <- xprod.combn.mat(list.of.treeNames,list.of.treeNames)
 	pairwise.treesNames.mat <- as.matrix(expand.grid(list.of.treeNames,list.of.treeNames))
 	pairwise.treesNames.mat <- pairwise.treesNames.mat[!duplicated(t(apply(pairwise.treesNames.mat,1,sort))),]
-	#tmpmatpath <- tempfile()
-	#write.table(pairwise.treesNames.mat,tmpmatpath,col.names=F,row.names=F,sep='\t',quote=FALSE)
-	#system(sprintf("cat '%s' | sort -V > '%s' ",tmpmatpath,tmpmatpath))
 	if(is.null(save.as)){
 		congruence.result       <- apply(X=pairwise.treesNames.mat,MARGIN=1,FUN=function(input,support.thresh=min.support){tree1=get(input[1]);tree2=get(input[2]);REEs::congruency.test(tree1,tree2,min.support=support.thresh)})
 		result <- data.frame(tree1=pairwise.treesNames.mat[,1],tree2=pairwise.treesNames.mat[,2],congruent=congruence.result)
@@ -39,13 +34,7 @@ multiple.congruency.test <- function(...,min.support=80,save.as=NULL){
 		} else {
 			if(file.exists(save.as)){
 				result.last <- read.table(save.as,header=T,sep='\t')
-				#tree1.last  <- result.last[nrow(result.last),1]
-				#STARTi=match(tree1.last,list.of.treeNames) + 1
 				pairwise.treesNames.df  <- data.frame(tree1=pairwise.treesNames.mat[,1],tree2=pairwise.treesNames.mat[,2])
-				#print(dim(pairwise.treesNames.df))
-				#print(colnames(pairwise.treesNames.df))
-				#print(colnames(result.last))
-				#stop()
 				pairwise.treesNames.df2 <- data.table::setDT(pairwise.treesNames.df)[!result.last[,c('tree1','tree2')], on = names(pairwise.treesNames.df)]
 				if(nrow(pairwise.treesNames.df2)==0){
 					return(print("No new comparisons."))
@@ -55,14 +44,13 @@ multiple.congruency.test <- function(...,min.support=80,save.as=NULL){
 				for(i in 1:length(list.of.treeNames)){
 					print(sprintf("%s/%s",i,length(list.of.treeNames)))
 					pairwise.treesNames.mat.i <- pairwise.treesNames.mat[pairwise.treesNames.mat[,1] == list.of.treeNames[i],,drop=F]
-					#pairwise.treesNames.mat.i <- pairwise.treesNames.mat[grep(list.of.treeNames[i],pairwise.treesNames.mat[,1],fixed=T),,drop=F]
 					congruence.result.i       <- apply(X=pairwise.treesNames.mat.i,MARGIN=1,FUN=function(input,support.thresh=min.support){tree1=get(input[1]);tree2=get(input[2]);REEs::congruency.test(tree1,tree2,min.support=support.thresh)})
 					result.i <- data.frame(tree1=pairwise.treesNames.mat.i[,1],tree2=pairwise.treesNames.mat.i[,2],congruent=congruence.result.i)
 					write.table(result.i,save.as,append=T,col.names=F,row.names=F,quote=F,sep='\t')
 				}
 			} else {
 				for(i in 1:length(list.of.treeNames)){
-					print(sprintf("%s/%s/%s",STARTi,i,length(list.of.treeNames)))
+					print(sprintf("%s/%s",i,length(list.of.treeNames)))
 					pairwise.treesNames.mat.i <- pairwise.treesNames.mat[grep(list.of.treeNames[i],pairwise.treesNames.mat[,1],fixed=T),,drop=F]
 					congruence.result.i       <- apply(X=pairwise.treesNames.mat.i,MARGIN=1,FUN=function(input,support.thresh=min.support){tree1=get(input[1]);tree2=get(input[2]);REEs::congruency.test(tree1,tree2,min.support=support.thresh)})
 					result.i <- data.frame(tree1=pairwise.treesNames.mat.i[,1],tree2=pairwise.treesNames.mat.i[,2],congruent=congruence.result.i)
