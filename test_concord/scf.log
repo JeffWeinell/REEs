@@ -1,0 +1,94 @@
+IQ-TREE multicore version 2.1.3 COVID-edition for Mac OS X 64-bit built Oct  4 2021
+Developed by Bui Quang Minh, James Barbetti, Nguyen Lam Tung,
+Olga Chernomor, Heiko Schmidt, Dominik Schrempf, Michael Woodhams.
+
+Host:    Jeffreys-MacBook-Air.local (SSE4.2, 8 GB RAM)
+Command: iqtree2 -t /var/folders/h9/6vmlp5152tvg_fp3d2t2zz_00000gn/T//ref.tree -s /var/folders/h9/6vmlp5152tvg_fp3d2t2zz_00000gn/T//aln.fa --scf 100 --prefix /Users/jeff/Documents/GitHub/SnakeCap/test_concord//scf -T 4
+Seed:    116059 (Using SPRNG - Scalable Parallel Random Number Generator)
+Time:    Wed Feb 16 15:54:31 2022
+Kernel:  SSE2 - 4 threads (8 CPU cores detected)
+
+Reading alignment file /var/folders/h9/6vmlp5152tvg_fp3d2t2zz_00000gn/T//aln.fa ... Fasta format detected
+Alignment most likely contains DNA/RNA sequences
+WARNING: 144 sites contain only gaps or ambiguous characters.
+Alignment has 66 sequences with 6803 columns, 1870 distinct patterns
+1079 parsimony-informative, 588 singleton sites, 5136 constant sites
+                                       Gap/Ambiguity  Composition  p-value
+   1  Acrochordus-granulatus_KU302952         81.07%    passed     11.13%
+   2  Scolecophis-atrocinctus_KU289804        75.54%    passed     29.90%
+   3  Sibynophis-bivittatus_KU309608          76.01%    passed     99.90%
+   4  Tantilla-taeniata_KU289863              76.19%    passed     10.88%
+   5  Prosymna-visseri_MCZR190223             72.62%    passed     81.09%
+   6  Pseudoxenodon-sp_KU312221               77.42%    passed     77.06%
+   7  Pseudaspis-cana_MCZA27068               64.82%    failed      0.75%
+   8  Pseudoxyrhopus-tritaeniatus_KU340969    77.13%    passed     83.54%
+   9  Rhamphiophis-oxyrhynchus_KU290451       78.33%    passed     37.30%
+  10  Psammophis-sibilans_RAX2053             77.16%    passed     94.29%
+  11  Aparallactus-capensis_MCZA28808         77.55%    passed     84.25%
+  12  Achalinus-spinalis_KU312258             80.10%    passed     67.25%
+  13  Chamaelycus-fasciatus_KU348632          75.00%    passed      5.88%
+  14  Lamprophis-lineatus_EBG706              77.32%    passed     87.98%
+  15  Micrelaps-sp_TauM16738                  79.07%    passed     80.15%
+  16  Buhoma-depressiceps_CFS1528             78.45%    passed     95.45%
+  17  Cyclocorus-lineatus_KU335808            77.82%    passed     77.74%
+  18  Hologerrhum-philippinum_KU330752        76.69%    passed     60.02%
+  19  Myersophis-alpestris_KU308684           83.08%    passed      9.08%
+  20  Oxyrhabdium-cfmodestum_KU338101         76.08%    passed     86.80%
+  21  Oxyrhabdium-leporinum_KU346583          76.07%    passed     85.82%
+  22  Oxyrhabdium-modestum_KU310866           76.20%    passed     72.72%
+  23  Aplopeltura-boa_KU315147                78.26%    failed      2.24%
+  24  Levitonius-mirus_KU337269               77.38%    passed     95.06%
+  25  Elapsoidea-sundevallii_MCZR190390       75.58%    passed     88.20%
+  26  Hemibungarus-mcclungi_KU303027          80.27%    passed      5.40%
+  27  Micrurus-corallinus_KU289205            82.46%    passed     16.87%
+  28  Psammodynastes-pulverulentus_KU328547   76.69%    passed     87.13%
+  29  Psammodynastes-pulverulentus_KU329686   78.01%    passed     58.53%
+  30  Python-molurus                         100.00%    passed       nan%
+  31  Ophiophagus-hannah                      78.01%    passed     94.42%
+  32  Crotalus-pyrrhus                        73.34%    passed     25.47%
+  33  Vipera-berus                           100.00%    passed       nan%
+  34  Cerberus-schneiderii_KU324534           81.46%    passed     23.75%
+  35  Thamnophis-sirtalis                     31.53%    failed      0.00%
+  36  Pantherophis-guttatus                   73.94%    failed      4.46%
+  37  Protobothrops-mucrosquamatus           100.00%    passed       nan%
+  38  Hydrophis-curtus                        65.91%    failed      1.72%
+  39  Hydrophis-cyanocinctus                  66.01%    failed      3.14%
+  40  Crotalus-viridis                        72.28%    passed     33.14%
+  41  Bothrops-jararaca                      100.00%    passed       nan%
+  42  Chrysopelea-ornata                      80.51%    passed     87.67%
+  43  Crotalus-adamanteus                     72.12%    passed     44.06%
+  44  Crotalus-horridus                       72.22%    passed     58.10%
+  45  Ahaetulla-prasina_KU323364              76.67%    passed     92.76%
+  46  Emydocephalus-ijimae                    65.50%    failed      1.24%
+  47  Crotalus-tigris                         72.28%    passed     35.43%
+  48  Hydrophis-hardwickii                    79.74%    failed      1.98%
+  49  Hydrophis-melanocephalus               100.00%    passed       nan%
+  50  Laticauda-colubrina                     74.97%    passed     95.50%
+  51  Laticauda-laticaudata                   79.32%    passed     86.34%
+  52  Myanophis-thanlyinensis                 72.86%    passed     20.37%
+  53  Naja-naja                               75.36%    passed     47.18%
+  54  Protobothrops-flavoviridis              72.38%    passed     67.08%
+  55  Notechis-scutatus                       74.33%    passed     92.29%
+  56  Boiga-irregularis_KU345021              73.76%    passed     20.02%
+  57  Pantherophis-obsoletus                  74.14%    failed      1.07%
+  58  Pituophis-catenifer                     73.89%    failed      2.91%
+  59  Pseudonaja-textilis                     74.10%    passed     79.85%
+  60  Ptyas-mucosa                            73.84%    passed      7.48%
+  61  Thamnophis-elegans                      74.08%    passed     63.20%
+  62  Thermophis-baileyi                      73.61%    passed     92.77%
+  63  Boa-constrictor                        100.00%    passed       nan%
+  64  Calamaria-gervaisii_KU327406            79.27%    passed     87.28%
+  65  Dipsas-indica_KU215336                  84.70%    failed      4.76%
+  66  Grayia-smythii_KU341872                 74.35%    passed     37.42%
+WARNING: 65 sequences contain more than 50% gaps/ambiguity
+****  TOTAL                                   77.35%  11 sequences failed composition chi2 test (p-value<5%; df=3)
+Reading tree /var/folders/h9/6vmlp5152tvg_fp3d2t2zz_00000gn/T//ref.tree ...
+un-rooted tree with 60 taxa and 117 branches
+ERROR: Alignment sequence Python-molurus does not appear in the tree
+ERROR: Alignment sequence Vipera-berus does not appear in the tree
+ERROR: Alignment sequence Protobothrops-mucrosquamatus does not appear in the tree
+ERROR: Alignment sequence Bothrops-jararaca does not appear in the tree
+ERROR: Alignment sequence Hydrophis-melanocephalus does not appear in the tree
+ERROR: Alignment sequence Boa-constrictor does not appear in the tree
+(Acrochordus-granulatus_KU302952,(((((((((((((Scolecophis-atrocinctus_KU289804,Tantilla-taeniata_KU289863)98.3/100,Ptyas-mucosa)89.3/96,(((Pantherophis-guttatus,Pantherophis-obsoletus)42.8/88,Pituophis-catenifer)100/100,Boiga-irregularis_KU345021)38.8/86)99.1/100,Calamaria-gervaisii_KU327406)52.2/76,(Chrysopelea-ornata,Ahaetulla-prasina_KU323364)100/100)80.3/87,Grayia-smythii_KU341872)83.9/72,(Pseudoxenodon-sp_KU312221,Thermophis-baileyi)86.3/93)83/49,(Thamnophis-sirtalis,Thamnophis-elegans)100/100)27.1/48,Dipsas-indica_KU215336)95.3/94,Sibynophis-bivittatus_KU309608)100/100,(((Prosymna-visseri_MCZR190223,((((Pseudaspis-cana_MCZA27068,Micrelaps-sp_TauM16738)98.6/99,((Cyclocorus-lineatus_KU335808,Hologerrhum-philippinum_KU330752)99.6/100,((Myersophis-alpestris_KU308684,Levitonius-mirus_KU337269)94.8/97,((Oxyrhabdium-cfmodestum_KU338101,Oxyrhabdium-leporinum_KU346583)91.3/100,Oxyrhabdium-modestum_KU310866)100/100)84.3/97)81.1/96)71.7/25,((Pseudoxyrhopus-tritaeniatus_KU340969,Buhoma-depressiceps_CFS1528)70.2/70,(Psammodynastes-pulverulentus_KU328547,Psammodynastes-pulverulentus_KU329686)100/100)77.1/62)74.7/25,(Aparallactus-capensis_MCZA28808,(Elapsoidea-sundevallii_MCZR190390,((((Hemibungarus-mcclungi_KU303027,Naja-naja)94.3/99,Ophiophagus-hannah)81.5/95,(((((Hydrophis-curtus,Hydrophis-hardwickii)85.8/100,Hydrophis-cyanocinctus)99.7/100,Emydocephalus-ijimae)98.7/100,(Notechis-scutatus,Pseudonaja-textilis)14.9/88)99.1/100,(Laticauda-colubrina,Laticauda-laticaudata)99.6/100)100/100)64.1/79,Micrurus-corallinus_KU289205)58.1/91)100/100)79.2/67)83.3/61)74.4/69,(Chamaelycus-fasciatus_KU348632,Lamprophis-lineatus_EBG706)91.4/98)74.7/71,(Rhamphiophis-oxyrhynchus_KU290451,Psammophis-sibilans_RAX2053)100/100)99.9/100)27.2/87,(Cerberus-schneiderii_KU324534,Myanophis-thanlyinensis)100/100)97.9/100,(Aplopeltura-boa_KU315147,((((Crotalus-pyrrhus,Crotalus-tigris)0/71,(Crotalus-viridis,Crotalus-adamanteus)29.6/63)97.3/100,Crotalus-horridus)99.6/100,Protobothrops-flavoviridis)100/100)24.7/78)99.9/100,Achalinus-spinalis_KU312258);
+ERROR: Tree taxa and alignment sequence do not match (see above)

@@ -1,0 +1,207 @@
+
+
+================== ASTRAL ===================== 
+
+This is ASTRAL version 5.15.5
+Warning: 
+ Fail to load native library libAstral.dylib; use Java default computing method without AVX2, which is 4X slower. 
+ Make sure you are using the correct Djava.library.path (to the `lib` directory under ASTRAL where libAstral.dylib can be found). 
+ Trying running make.sh. For mode debugging, run: java -Djava.library.path=lib/ -jar native_library_tester.jar
+Gene trees are treated as unrooted
+Detected GPU devices: 
+Device 1 of 2: Apple M1 cl_device_id[0xffffffff] Vendor: Intel
+Device 2 of 2: Apple M1 cl_device_id[0x1027f00] Vendor: Apple
+Will use Device : Apple M1
+Will use Device : Apple M1
+Starting 8 threads ...
+There are 8 threads used to run.
+8 trees read from /dev/fd/11
+All output trees will be *arbitrarily* rooted at Sibynophis-bivittatus_KU309608
+
+======== Running the main analysis
+Number of taxa: 66 (66 species)
+Taxa: [Sibynophis-bivittatus_KU309608, Rhamphiophis-oxyrhynchus_KU290451, Pseudoxyrhopus-tritaeniatus_KU340969, Aparallactus-capensis_MCZA28808, Chamaelycus-fasciatus_KU348632, Lamprophis-lineatus_EBG706, Thamnophis-elegans, Pseudaspis-cana_MCZA27068, Buhoma-depressiceps_CFS1528, Prosymna-visseri_MCZR190223, Micrelaps-sp_TauM16738, Oxyrhabdium-cfmodestum_KU338101, Oxyrhabdium-leporinum_KU346583, Oxyrhabdium-modestum_KU310866, Myersophis-alpestris_KU308684, Levitonius-mirus_KU337269, Cyclocorus-lineatus_KU335808, Hologerrhum-philippinum_KU330752, Psammodynastes-pulverulentus_KU328547, Elapsoidea-sundevallii_MCZR190390, Micrurus-corallinus_KU289205, Naja-naja, Hemibungarus-mcclungi_KU303027, Hydrophis-curtus, Hydrophis-hardwickii, Hydrophis-cyanocinctus, Hydrophis-melanocephalus, Emydocephalus-ijimae, Notechis-scutatus, Pseudonaja-textilis, Laticauda-colubrina, Laticauda-laticaudata, Ophiophagus-hannah, Crotalus-pyrrhus, Crotalus-adamanteus, Crotalus-tigris, Crotalus-viridis, Crotalus-horridus, Protobothrops-mucrosquamatus, Protobothrops-flavoviridis, Vipera-berus, Boa-constrictor, Aplopeltura-boa_KU315147, Cerberus-schneiderii_KU324534, Myanophis-thanlyinensis, Pseudoxenodon-sp_KU312221, Dipsas-indica_KU215336, Grayia-smythii_KU341872, Thermophis-baileyi, Chrysopelea-ornata, Ahaetulla-prasina_KU323364, Pantherophis-guttatus, Pantherophis-obsoletus, Pituophis-catenifer, Ptyas-mucosa, Boiga-irregularis_KU345021, Acrochordus-granulatus_KU302952, Scolecophis-atrocinctus_KU289804, Tantilla-taeniata_KU289863, Calamaria-gervaisii_KU327406, Psammophis-sibilans_RAX2053, Bothrops-jararaca, Achalinus-spinalis_KU312258, Thamnophis-sirtalis, Python-molurus, Psammodynastes-pulverulentus_KU329686]
+Taxon occupancy: {Protobothrops-flavoviridis=7, Hologerrhum-philippinum_KU330752=7, Thamnophis-sirtalis=3, Hydrophis-hardwickii=7, Psammophis-sibilans_RAX2053=6, Crotalus-pyrrhus=7, Elapsoidea-sundevallii_MCZR190390=6, Bothrops-jararaca=5, Notechis-scutatus=8, Levitonius-mirus_KU337269=8, Buhoma-depressiceps_CFS1528=6, Ophiophagus-hannah=7, Ptyas-mucosa=8, Scolecophis-atrocinctus_KU289804=6, Calamaria-gervaisii_KU327406=6, Boiga-irregularis_KU345021=8, Aparallactus-capensis_MCZA28808=4, Myanophis-thanlyinensis=7, Ahaetulla-prasina_KU323364=7, Python-molurus=2, Pseudaspis-cana_MCZA27068=6, Psammodynastes-pulverulentus_KU328547=7, Rhamphiophis-oxyrhynchus_KU290451=7, Crotalus-tigris=7, Protobothrops-mucrosquamatus=7, Vipera-berus=8, Pantherophis-obsoletus=8, Chrysopelea-ornata=7, Thamnophis-elegans=7, Laticauda-laticaudata=7, Myersophis-alpestris_KU308684=8, Oxyrhabdium-leporinum_KU346583=8, Acrochordus-granulatus_KU302952=3, Cyclocorus-lineatus_KU335808=7, Oxyrhabdium-cfmodestum_KU338101=8, Grayia-smythii_KU341872=6, Tantilla-taeniata_KU289863=6, Crotalus-viridis=7, Crotalus-adamanteus=8, Pseudoxyrhopus-tritaeniatus_KU340969=6, Dipsas-indica_KU215336=7, Oxyrhabdium-modestum_KU310866=6, Emydocephalus-ijimae=7, Pantherophis-guttatus=8, Sibynophis-bivittatus_KU309608=7, Aplopeltura-boa_KU315147=6, Thermophis-baileyi=7, Pituophis-catenifer=4, Lamprophis-lineatus_EBG706=8, Hydrophis-curtus=7, Pseudoxenodon-sp_KU312221=7, Chamaelycus-fasciatus_KU348632=8, Hemibungarus-mcclungi_KU303027=4, Pseudonaja-textilis=7, Laticauda-colubrina=8, Crotalus-horridus=7, Micrurus-corallinus_KU289205=7, Boa-constrictor=3, Psammodynastes-pulverulentus_KU329686=4, Hydrophis-melanocephalus=6, Achalinus-spinalis_KU312258=4, Micrelaps-sp_TauM16738=8, Prosymna-visseri_MCZR190223=7, Naja-naja=8, Hydrophis-cyanocinctus=7, Cerberus-schneiderii_KU324534=6}
+Using polytree-based weight calculation.
+Number of gene trees: 8
+8 trees have missing taxa
+Calculating distance matrix (for completion of X) ....with 4 distance matrices for parallellism
+Species tree distances calculated ...
+
+Will attempt to complete bipartitions from X before adding using a distance matrix.
+Building set of clusters (X) from gene trees 
+------------------------------
+Number of Clusters after addition from gene trees: 531
+Number of Clusters after addition by distance: 531
+Adding to X using resolutions of greedy consensus ...
+
+Computing greedy consensus  
+took 0 seconds
+Limit for sigma of degrees:1700
+
+polytomy size limit : > 8
+ [3, 3, 3, 4, 4, 8]
+discarded polytomies: 
+Threshold 0.0:
+Threshold 0.01:
+Threshold 0.02:
+Threshold 0.05:
+Threshold 0.1:
+Threshold 0.2:
+polytomy of size 4; rounds with additions with at least 5 support: 0; clusters: 557
+Threshold 0.3333333333333333:
+polytomy of size 3; rounds with additions with at least 5 support: 0; clusters: 555
+polytomy of size 3; rounds with additions with at least 5 support: 0; clusters: 557
+polytomy of size 8; rounds with additions with at least 5 support: 0; clusters: 561
+polytomy of size 3; rounds with additions with at least 5 support: 0; clusters: 557
+polytomy of size 4; rounds with additions with at least 5 support: 0; clusters: 557
+Number of Clusters after addition by greedy: 561
+partitions formed in 0.611 secs
+Dynamic Programming starting after 0.611 secs
+Polytree max score: 2819081
+Polytree building time: 0.005 seconds.
+Fail to load native library libAstral.dylib; use Java default computing method.
+Number of quartet trees in the gene trees: 2819081
+Computing hash values took 0 seconds
+device length is: 2
+TREE HEIGHT IS: 12
+Size of largest cluster: 66
+Size of largest cluster: 66
+Finishing up:446 0 445
+Total Number of elements: 445
+Normalized score (portion of input quartet trees satisfied before correcting for multiple individuals): 0.908926348693067
+Final optimization score: 2562337
+Optimal tree inferred in 1.738 secs.
+Weight calculation using polytrees cumulatively took 0.0 secs
+(Sibynophis-bivittatus_KU309608,(Calamaria-gervaisii_KU327406,((((((((Pseudonaja-textilis,(Notechis-scutatus,(Emydocephalus-ijimae,((Hydrophis-curtus,Hydrophis-hardwickii),(Hydrophis-cyanocinctus,Hydrophis-melanocephalus))))),(Laticauda-colubrina,Laticauda-laticaudata)),((Naja-naja,(Hemibungarus-mcclungi_KU303027,Ophiophagus-hannah)),(Elapsoidea-sundevallii_MCZR190390,Micrurus-corallinus_KU289205))),(Micrelaps-sp_TauM16738,(Pseudaspis-cana_MCZA27068,(Prosymna-visseri_MCZR190223,(((Chamaelycus-fasciatus_KU348632,Lamprophis-lineatus_EBG706),(Rhamphiophis-oxyrhynchus_KU290451,Psammophis-sibilans_RAX2053)),(Aparallactus-capensis_MCZA28808,(Pseudoxyrhopus-tritaeniatus_KU340969,Buhoma-depressiceps_CFS1528))))))),(((Myersophis-alpestris_KU308684,(Levitonius-mirus_KU337269,(Oxyrhabdium-leporinum_KU346583,(Oxyrhabdium-cfmodestum_KU338101,Oxyrhabdium-modestum_KU310866)))),(Cyclocorus-lineatus_KU335808,Hologerrhum-philippinum_KU330752)),(Psammodynastes-pulverulentus_KU328547,Psammodynastes-pulverulentus_KU329686))),(((Vipera-berus,((Bothrops-jararaca,(Crotalus-horridus,(Crotalus-viridis,(Crotalus-pyrrhus,(Crotalus-adamanteus,Crotalus-tigris))))),(Protobothrops-mucrosquamatus,Protobothrops-flavoviridis))),(Aplopeltura-boa_KU315147,(Achalinus-spinalis_KU312258,(Acrochordus-granulatus_KU302952,(Boa-constrictor,Python-molurus))))),(Cerberus-schneiderii_KU324534,Myanophis-thanlyinensis))),(Pseudoxenodon-sp_KU312221,((Thamnophis-elegans,Thamnophis-sirtalis),(Dipsas-indica_KU215336,Thermophis-baileyi)))),(Grayia-smythii_KU341872,(((Boiga-irregularis_KU345021,(Pituophis-catenifer,(Pantherophis-guttatus,Pantherophis-obsoletus))),(Ptyas-mucosa,(Scolecophis-atrocinctus_KU289804,Tantilla-taeniata_KU289863))),(Chrysopelea-ornata,Ahaetulla-prasina_KU323364))))));
+Final quartet score is: 2541846
+Final normalized quartet score is: 0.9016576678711963
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 7:
+	{Hydrophis-curtus, Hydrophis-hardwickii, Hydrophis-cyanocinctus, Hydrophis-melanocephalus, Emydocephalus-ijimae, Notechis-scutatus, Pseudonaja-textilis}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 7:
+	{Laticauda-colubrina, Laticauda-laticaudata}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 7:
+	{Hydrophis-curtus, Hydrophis-hardwickii, Hydrophis-cyanocinctus, Hydrophis-melanocephalus, Emydocephalus-ijimae, Notechis-scutatus}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 6:
+	{Hydrophis-cyanocinctus, Hydrophis-melanocephalus}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 7:
+	{Hydrophis-curtus, Hydrophis-hardwickii}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 4:
+	{Hemibungarus-mcclungi_KU303027, Ophiophagus-hannah}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 6:
+	{Hydrophis-curtus, Hydrophis-hardwickii, Hydrophis-cyanocinctus, Hydrophis-melanocephalus}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Hydrophis-curtus, Hydrophis-hardwickii, Hydrophis-cyanocinctus, Hydrophis-melanocephalus, Emydocephalus-ijimae, Notechis-scutatus, Pseudonaja-textilis, Laticauda-colubrina, Laticauda-laticaudata}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 6:
+	{Hydrophis-curtus, Hydrophis-hardwickii, Hydrophis-cyanocinctus, Hydrophis-melanocephalus, Emydocephalus-ijimae}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 7:
+	{Naja-naja, Hemibungarus-mcclungi_KU303027, Ophiophagus-hannah}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 5:
+	{Elapsoidea-sundevallii_MCZR190390, Micrurus-corallinus_KU289205}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Elapsoidea-sundevallii_MCZR190390, Micrurus-corallinus_KU289205, Naja-naja, Hemibungarus-mcclungi_KU303027, Hydrophis-curtus, Hydrophis-hardwickii, Hydrophis-cyanocinctus, Hydrophis-melanocephalus, Emydocephalus-ijimae, Notechis-scutatus, Pseudonaja-textilis, Laticauda-colubrina, Laticauda-laticaudata, Ophiophagus-hannah}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 3:
+	{Pseudoxyrhopus-tritaeniatus_KU340969, Aparallactus-capensis_MCZA28808, Buhoma-depressiceps_CFS1528}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 5:
+	{Rhamphiophis-oxyrhynchus_KU290451, Psammophis-sibilans_RAX2053}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Rhamphiophis-oxyrhynchus_KU290451, Chamaelycus-fasciatus_KU348632, Lamprophis-lineatus_EBG706, Psammophis-sibilans_RAX2053}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 3:
+	{Pseudoxyrhopus-tritaeniatus_KU340969, Buhoma-depressiceps_CFS1528}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 5:
+	{Rhamphiophis-oxyrhynchus_KU290451, Pseudoxyrhopus-tritaeniatus_KU340969, Aparallactus-capensis_MCZA28808, Chamaelycus-fasciatus_KU348632, Lamprophis-lineatus_EBG706, Buhoma-depressiceps_CFS1528, Prosymna-visseri_MCZR190223, Psammophis-sibilans_RAX2053}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Elapsoidea-sundevallii_MCZR190390, Micrurus-corallinus_KU289205, Naja-naja, Hemibungarus-mcclungi_KU303027, Ophiophagus-hannah}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Rhamphiophis-oxyrhynchus_KU290451, Pseudoxyrhopus-tritaeniatus_KU340969, Aparallactus-capensis_MCZA28808, Chamaelycus-fasciatus_KU348632, Lamprophis-lineatus_EBG706, Pseudaspis-cana_MCZA27068, Buhoma-depressiceps_CFS1528, Prosymna-visseri_MCZR190223, Micrelaps-sp_TauM16738, Psammophis-sibilans_RAX2053}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 6:
+	{Oxyrhabdium-cfmodestum_KU338101, Oxyrhabdium-modestum_KU310866}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Rhamphiophis-oxyrhynchus_KU290451, Pseudoxyrhopus-tritaeniatus_KU340969, Aparallactus-capensis_MCZA28808, Chamaelycus-fasciatus_KU348632, Lamprophis-lineatus_EBG706, Pseudaspis-cana_MCZA27068, Buhoma-depressiceps_CFS1528, Prosymna-visseri_MCZR190223, Micrelaps-sp_TauM16738, Elapsoidea-sundevallii_MCZR190390, Micrurus-corallinus_KU289205, Naja-naja, Hemibungarus-mcclungi_KU303027, Hydrophis-curtus, Hydrophis-hardwickii, Hydrophis-cyanocinctus, Hydrophis-melanocephalus, Emydocephalus-ijimae, Notechis-scutatus, Pseudonaja-textilis, Laticauda-colubrina, Laticauda-laticaudata, Ophiophagus-hannah, Psammophis-sibilans_RAX2053}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 7:
+	{Rhamphiophis-oxyrhynchus_KU290451, Pseudoxyrhopus-tritaeniatus_KU340969, Aparallactus-capensis_MCZA28808, Chamaelycus-fasciatus_KU348632, Lamprophis-lineatus_EBG706, Buhoma-depressiceps_CFS1528, Psammophis-sibilans_RAX2053}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Oxyrhabdium-cfmodestum_KU338101, Oxyrhabdium-leporinum_KU346583, Oxyrhabdium-modestum_KU310866}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 6:
+	{Rhamphiophis-oxyrhynchus_KU290451, Pseudoxyrhopus-tritaeniatus_KU340969, Aparallactus-capensis_MCZA28808, Chamaelycus-fasciatus_KU348632, Lamprophis-lineatus_EBG706, Pseudaspis-cana_MCZA27068, Buhoma-depressiceps_CFS1528, Prosymna-visseri_MCZR190223, Psammophis-sibilans_RAX2053}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Chamaelycus-fasciatus_KU348632, Lamprophis-lineatus_EBG706}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 6:
+	{Cyclocorus-lineatus_KU335808, Hologerrhum-philippinum_KU330752}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Oxyrhabdium-cfmodestum_KU338101, Oxyrhabdium-leporinum_KU346583, Oxyrhabdium-modestum_KU310866, Myersophis-alpestris_KU308684, Levitonius-mirus_KU337269, Cyclocorus-lineatus_KU335808, Hologerrhum-philippinum_KU330752}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Rhamphiophis-oxyrhynchus_KU290451, Pseudoxyrhopus-tritaeniatus_KU340969, Aparallactus-capensis_MCZA28808, Chamaelycus-fasciatus_KU348632, Lamprophis-lineatus_EBG706, Pseudaspis-cana_MCZA27068, Buhoma-depressiceps_CFS1528, Prosymna-visseri_MCZR190223, Micrelaps-sp_TauM16738, Oxyrhabdium-cfmodestum_KU338101, Oxyrhabdium-leporinum_KU346583, Oxyrhabdium-modestum_KU310866, Myersophis-alpestris_KU308684, Levitonius-mirus_KU337269, Cyclocorus-lineatus_KU335808, Hologerrhum-philippinum_KU330752, Psammodynastes-pulverulentus_KU328547, Elapsoidea-sundevallii_MCZR190390, Micrurus-corallinus_KU289205, Naja-naja, Hemibungarus-mcclungi_KU303027, Hydrophis-curtus, Hydrophis-hardwickii, Hydrophis-cyanocinctus, Hydrophis-melanocephalus, Emydocephalus-ijimae, Notechis-scutatus, Pseudonaja-textilis, Laticauda-colubrina, Laticauda-laticaudata, Ophiophagus-hannah, Psammophis-sibilans_RAX2053, Psammodynastes-pulverulentus_KU329686}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 6:
+	{Crotalus-pyrrhus, Crotalus-adamanteus, Crotalus-tigris}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 3:
+	{Psammodynastes-pulverulentus_KU328547, Psammodynastes-pulverulentus_KU329686}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 4:
+	{Crotalus-pyrrhus, Crotalus-adamanteus, Crotalus-tigris, Crotalus-viridis, Crotalus-horridus, Bothrops-jararaca}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 4:
+	{Crotalus-pyrrhus, Crotalus-adamanteus, Crotalus-tigris, Crotalus-viridis, Crotalus-horridus}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Oxyrhabdium-cfmodestum_KU338101, Oxyrhabdium-leporinum_KU346583, Oxyrhabdium-modestum_KU310866, Levitonius-mirus_KU337269}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Oxyrhabdium-cfmodestum_KU338101, Oxyrhabdium-leporinum_KU346583, Oxyrhabdium-modestum_KU310866, Myersophis-alpestris_KU308684, Levitonius-mirus_KU337269, Cyclocorus-lineatus_KU335808, Hologerrhum-philippinum_KU330752, Psammodynastes-pulverulentus_KU328547, Psammodynastes-pulverulentus_KU329686}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 6:
+	{Crotalus-adamanteus, Crotalus-tigris}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 1:
+	{Boa-constrictor, Python-molurus}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 7:
+	{Protobothrops-mucrosquamatus, Protobothrops-flavoviridis}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 3:
+	{Boa-constrictor, Acrochordus-granulatus_KU302952, Achalinus-spinalis_KU312258, Python-molurus}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 2:
+	{Boa-constrictor, Acrochordus-granulatus_KU302952, Python-molurus}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 7:
+	{Crotalus-pyrrhus, Crotalus-adamanteus, Crotalus-tigris, Crotalus-viridis, Crotalus-horridus, Protobothrops-mucrosquamatus, Protobothrops-flavoviridis, Vipera-berus, Bothrops-jararaca}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 5:
+	{Boa-constrictor, Aplopeltura-boa_KU315147, Acrochordus-granulatus_KU302952, Achalinus-spinalis_KU312258, Python-molurus}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 6:
+	{Crotalus-pyrrhus, Crotalus-adamanteus, Crotalus-tigris, Crotalus-viridis, Crotalus-horridus, Protobothrops-mucrosquamatus, Protobothrops-flavoviridis, Vipera-berus, Boa-constrictor, Aplopeltura-boa_KU315147, Acrochordus-granulatus_KU302952, Bothrops-jararaca, Achalinus-spinalis_KU312258, Python-molurus}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 2:
+	{Thamnophis-elegans, Thamnophis-sirtalis}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 7:
+	{Crotalus-pyrrhus, Crotalus-adamanteus, Crotalus-tigris, Crotalus-viridis, Crotalus-horridus, Protobothrops-mucrosquamatus, Protobothrops-flavoviridis, Vipera-berus, Boa-constrictor, Aplopeltura-boa_KU315147, Cerberus-schneiderii_KU324534, Myanophis-thanlyinensis, Acrochordus-granulatus_KU302952, Bothrops-jararaca, Achalinus-spinalis_KU312258, Python-molurus}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 7:
+	{Crotalus-pyrrhus, Crotalus-adamanteus, Crotalus-tigris, Crotalus-viridis, Crotalus-horridus, Protobothrops-mucrosquamatus, Protobothrops-flavoviridis, Bothrops-jararaca}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 6:
+	{Dipsas-indica_KU215336, Thermophis-baileyi}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 6:
+	{Cerberus-schneiderii_KU324534, Myanophis-thanlyinensis}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Rhamphiophis-oxyrhynchus_KU290451, Pseudoxyrhopus-tritaeniatus_KU340969, Aparallactus-capensis_MCZA28808, Chamaelycus-fasciatus_KU348632, Lamprophis-lineatus_EBG706, Pseudaspis-cana_MCZA27068, Buhoma-depressiceps_CFS1528, Prosymna-visseri_MCZR190223, Micrelaps-sp_TauM16738, Oxyrhabdium-cfmodestum_KU338101, Oxyrhabdium-leporinum_KU346583, Oxyrhabdium-modestum_KU310866, Myersophis-alpestris_KU308684, Levitonius-mirus_KU337269, Cyclocorus-lineatus_KU335808, Hologerrhum-philippinum_KU330752, Psammodynastes-pulverulentus_KU328547, Elapsoidea-sundevallii_MCZR190390, Micrurus-corallinus_KU289205, Naja-naja, Hemibungarus-mcclungi_KU303027, Hydrophis-curtus, Hydrophis-hardwickii, Hydrophis-cyanocinctus, Hydrophis-melanocephalus, Emydocephalus-ijimae, Notechis-scutatus, Pseudonaja-textilis, Laticauda-colubrina, Laticauda-laticaudata, Ophiophagus-hannah, Crotalus-pyrrhus, Crotalus-adamanteus, Crotalus-tigris, Crotalus-viridis, Crotalus-horridus, Protobothrops-mucrosquamatus, Protobothrops-flavoviridis, Vipera-berus, Boa-constrictor, Aplopeltura-boa_KU315147, Cerberus-schneiderii_KU324534, Myanophis-thanlyinensis, Acrochordus-granulatus_KU302952, Psammophis-sibilans_RAX2053, Bothrops-jararaca, Achalinus-spinalis_KU312258, Python-molurus, Psammodynastes-pulverulentus_KU329686}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 7:
+	{Thamnophis-elegans, Pseudoxenodon-sp_KU312221, Dipsas-indica_KU215336, Thermophis-baileyi, Thamnophis-sirtalis}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Rhamphiophis-oxyrhynchus_KU290451, Pseudoxyrhopus-tritaeniatus_KU340969, Aparallactus-capensis_MCZA28808, Chamaelycus-fasciatus_KU348632, Lamprophis-lineatus_EBG706, Thamnophis-elegans, Pseudaspis-cana_MCZA27068, Buhoma-depressiceps_CFS1528, Prosymna-visseri_MCZR190223, Micrelaps-sp_TauM16738, Oxyrhabdium-cfmodestum_KU338101, Oxyrhabdium-leporinum_KU346583, Oxyrhabdium-modestum_KU310866, Myersophis-alpestris_KU308684, Levitonius-mirus_KU337269, Cyclocorus-lineatus_KU335808, Hologerrhum-philippinum_KU330752, Psammodynastes-pulverulentus_KU328547, Elapsoidea-sundevallii_MCZR190390, Micrurus-corallinus_KU289205, Naja-naja, Hemibungarus-mcclungi_KU303027, Hydrophis-curtus, Hydrophis-hardwickii, Hydrophis-cyanocinctus, Hydrophis-melanocephalus, Emydocephalus-ijimae, Notechis-scutatus, Pseudonaja-textilis, Laticauda-colubrina, Laticauda-laticaudata, Ophiophagus-hannah, Crotalus-pyrrhus, Crotalus-adamanteus, Crotalus-tigris, Crotalus-viridis, Crotalus-horridus, Protobothrops-mucrosquamatus, Protobothrops-flavoviridis, Vipera-berus, Boa-constrictor, Aplopeltura-boa_KU315147, Cerberus-schneiderii_KU324534, Myanophis-thanlyinensis, Pseudoxenodon-sp_KU312221, Dipsas-indica_KU215336, Thermophis-baileyi, Acrochordus-granulatus_KU302952, Psammophis-sibilans_RAX2053, Bothrops-jararaca, Achalinus-spinalis_KU312258, Thamnophis-sirtalis, Python-molurus, Psammodynastes-pulverulentus_KU329686}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 4:
+	{Pantherophis-guttatus, Pantherophis-obsoletus, Pituophis-catenifer}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 5:
+	{Scolecophis-atrocinctus_KU289804, Tantilla-taeniata_KU289863}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Pantherophis-guttatus, Pantherophis-obsoletus, Pituophis-catenifer, Boiga-irregularis_KU345021}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Pantherophis-guttatus, Pantherophis-obsoletus, Pituophis-catenifer, Ptyas-mucosa, Boiga-irregularis_KU345021, Scolecophis-atrocinctus_KU289804, Tantilla-taeniata_KU289863}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 7:
+	{Ptyas-mucosa, Scolecophis-atrocinctus_KU289804, Tantilla-taeniata_KU289863}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 6:
+	{Chrysopelea-ornata, Ahaetulla-prasina_KU323364, Pantherophis-guttatus, Pantherophis-obsoletus, Pituophis-catenifer, Ptyas-mucosa, Boiga-irregularis_KU345021, Scolecophis-atrocinctus_KU289804, Tantilla-taeniata_KU289863}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 6:
+	{Grayia-smythii_KU341872, Chrysopelea-ornata, Ahaetulla-prasina_KU323364, Pantherophis-guttatus, Pantherophis-obsoletus, Pituophis-catenifer, Ptyas-mucosa, Boiga-irregularis_KU345021, Scolecophis-atrocinctus_KU289804, Tantilla-taeniata_KU289863}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 5:
+	{Rhamphiophis-oxyrhynchus_KU290451, Pseudoxyrhopus-tritaeniatus_KU340969, Aparallactus-capensis_MCZA28808, Chamaelycus-fasciatus_KU348632, Lamprophis-lineatus_EBG706, Thamnophis-elegans, Pseudaspis-cana_MCZA27068, Buhoma-depressiceps_CFS1528, Prosymna-visseri_MCZR190223, Micrelaps-sp_TauM16738, Oxyrhabdium-cfmodestum_KU338101, Oxyrhabdium-leporinum_KU346583, Oxyrhabdium-modestum_KU310866, Myersophis-alpestris_KU308684, Levitonius-mirus_KU337269, Cyclocorus-lineatus_KU335808, Hologerrhum-philippinum_KU330752, Psammodynastes-pulverulentus_KU328547, Elapsoidea-sundevallii_MCZR190390, Micrurus-corallinus_KU289205, Naja-naja, Hemibungarus-mcclungi_KU303027, Hydrophis-curtus, Hydrophis-hardwickii, Hydrophis-cyanocinctus, Hydrophis-melanocephalus, Emydocephalus-ijimae, Notechis-scutatus, Pseudonaja-textilis, Laticauda-colubrina, Laticauda-laticaudata, Ophiophagus-hannah, Crotalus-pyrrhus, Crotalus-adamanteus, Crotalus-tigris, Crotalus-viridis, Crotalus-horridus, Protobothrops-mucrosquamatus, Protobothrops-flavoviridis, Vipera-berus, Boa-constrictor, Aplopeltura-boa_KU315147, Cerberus-schneiderii_KU324534, Myanophis-thanlyinensis, Pseudoxenodon-sp_KU312221, Dipsas-indica_KU215336, Grayia-smythii_KU341872, Thermophis-baileyi, Chrysopelea-ornata, Ahaetulla-prasina_KU323364, Pantherophis-guttatus, Pantherophis-obsoletus, Pituophis-catenifer, Ptyas-mucosa, Boiga-irregularis_KU345021, Acrochordus-granulatus_KU302952, Scolecophis-atrocinctus_KU289804, Tantilla-taeniata_KU289863, Psammophis-sibilans_RAX2053, Bothrops-jararaca, Achalinus-spinalis_KU312258, Thamnophis-sirtalis, Python-molurus, Psammodynastes-pulverulentus_KU329686}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 6:
+	{Crotalus-pyrrhus, Crotalus-adamanteus, Crotalus-tigris, Crotalus-viridis}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 8:
+	{Oxyrhabdium-cfmodestum_KU338101, Oxyrhabdium-leporinum_KU346583, Oxyrhabdium-modestum_KU310866, Myersophis-alpestris_KU308684, Levitonius-mirus_KU337269}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 6:
+	{Chrysopelea-ornata, Ahaetulla-prasina_KU323364}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 4:
+	{Pantherophis-guttatus, Pantherophis-obsoletus}
+You may want to ignore posterior probabilities and other statistics related to the following branch branch because the effective number of genes impacting it is only 7:
+	{Thamnophis-elegans, Dipsas-indica_KU215336, Thermophis-baileyi, Thamnophis-sirtalis}
+(Sibynophis-bivittatus_KU309608,(Calamaria-gervaisii_KU327406,((((((((Pseudonaja-textilis,(Notechis-scutatus,(Emydocephalus-ijimae,((Hydrophis-curtus,Hydrophis-hardwickii)1:1.6739764335716716,(Hydrophis-cyanocinctus,Hydrophis-melanocephalus)0.97:0.8472978603872037)1:1.5404450409471486)1:1.5404450409471486)1:1.6739764335716716)1:1.6739764335716716,(Laticauda-colubrina,Laticauda-laticaudata)1:1.6739764335716716)1:1.7917594692280545,((Naja-naja,(Hemibungarus-mcclungi_KU303027,Ophiophagus-hannah)0.53:0.1053605156578264)0.47:0.06453852113757118,(Elapsoidea-sundevallii_MCZR190390,Micrurus-corallinus_KU289205)0.33:0.0)0.91:0.4924764850977944)1:1.7917594692280545,(Micrelaps-sp_TauM16738,(Pseudaspis-cana_MCZA27068,(Prosymna-visseri_MCZR190223,(((Chamaelycus-fasciatus_KU348632,Lamprophis-lineatus_EBG706)0.99:1.0171192544169267,(Rhamphiophis-oxyrhynchus_KU290451,Psammophis-sibilans_RAX2053)0.99:1.3862943611198908)0.69:0.24247054349209055,(Aparallactus-capensis_MCZA28808,(Pseudoxyrhopus-tritaeniatus_KU340969,Buhoma-depressiceps_CFS1528)0.33:0.0)0.43:0.009120412173070639)0.27:0.0)0.41:0.012783364021886864)0.45:0.03631966358105088)0.71:0.29160037862176813)0.39:0.02617457159116445,(((Myersophis-alpestris_KU308684,(Levitonius-mirus_KU337269,(Oxyrhabdium-leporinum_KU346583,(Oxyrhabdium-cfmodestum_KU338101,Oxyrhabdium-modestum_KU310866)0.58:0.15415067982725836)1:1.7917594692280545)0.6:0.1823215567939546)1:1.5686159179138457,(Cyclocorus-lineatus_KU335808,Hologerrhum-philippinum_KU330752)1:1.5404450409471486)1:1.7917594692280545,(Psammodynastes-pulverulentus_KU328547,Psammodynastes-pulverulentus_KU329686)0.95:0.9808292530117262)0.85:0.3923930265408118)1:1.0836742515592432,(((Vipera-berus,((Bothrops-jararaca,(Crotalus-horridus,(Crotalus-viridis,(Crotalus-pyrrhus,(Crotalus-adamanteus,Crotalus-tigris)0.33:0.0)0.46:0.15415067982725836)0.91:0.5596157879354223)0.98:1.2039728043259361)0.98:1.2039728043259361,(Protobothrops-mucrosquamatus,Protobothrops-flavoviridis)1:1.6739764335716716)1:1.6739764335716716)1:1.6739764335716716,(Aplopeltura-boa_KU315147,(Achalinus-spinalis_KU312258,(Acrochordus-granulatus_KU302952,(Boa-constrictor,Python-molurus)0.67:0.2876820724517809)0.42:0.0)0.95:0.9808292530117262)0.99:1.3862943611198908)1:1.5404450409471486,(Cerberus-schneiderii_KU324534,Myanophis-thanlyinensis)1:1.5404450409471486)0.99:0.9808292530117262)1:1.5686159179138457,(Pseudoxenodon-sp_KU312221,((Thamnophis-elegans,Thamnophis-sirtalis)0.87:0.6931471805599453,(Dipsas-indica_KU215336,Thermophis-baileyi)0.96:0.7468162943665728)0.49:0.06646344954715565)0.38:0.0772110723913377)0.95:0.6181538294947748,(Grayia-smythii_KU341872,(((Boiga-irregularis_KU345021,(Pituophis-catenifer,(Pantherophis-guttatus,Pantherophis-obsoletus)0.98:1.2039728043259361)0.98:1.2039728043259361)0.39:0.028170876966696335,(Ptyas-mucosa,(Scolecophis-atrocinctus_KU289804,Tantilla-taeniata_KU289863)0.99:1.3862943611198908)0.9:0.4953214372300254)1:1.7917594692280545,(Chrysopelea-ornata,Ahaetulla-prasina_KU323364)0.97:0.8371454889231857)0.97:0.7982742967535307)0.53:0.11315012982041134)0.37:0.0));
+ASTRAL finished in 1.992 secs
+Shutting down threading

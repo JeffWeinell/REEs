@@ -1,0 +1,89 @@
+
+
+================== ASTRAL ===================== 
+
+This is ASTRAL version 5.15.5
+Warning: 
+ Fail to load native library libAstral.dylib; use Java default computing method without AVX2, which is 4X slower. 
+ Make sure you are using the correct Djava.library.path (to the `lib` directory under ASTRAL where libAstral.dylib can be found). 
+ Trying running make.sh. For mode debugging, run: java -Djava.library.path=lib/ -jar native_library_tester.jar
+Gene trees are treated as unrooted
+Detected GPU devices: 
+Device 1 of 2: Apple M1 cl_device_id[0xffffffff] Vendor: Intel
+Device 2 of 2: Apple M1 cl_device_id[0x1027f00] Vendor: Apple
+Will use Device : Apple M1
+Will use Device : Apple M1
+Starting 8 threads ...
+There are 8 threads used to run.
+258 trees read from /dev/fd/11
+All output trees will be *arbitrarily* rooted at Pseudoxyrhopus-tritaeniatus_KU340969
+
+======== Running the main analysis
+Number of taxa: 66 (66 species)
+Taxa: [Pseudoxyrhopus-tritaeniatus_KU340969, Pseudaspis-cana_MCZA27068, Buhoma-depressiceps_CFS1528, Chamaelycus-fasciatus_KU348632, Lamprophis-lineatus_EBG706, Oxyrhabdium-modestum_KU310866, Oxyrhabdium-leporinum_KU346583, Oxyrhabdium-cfmodestum_KU338101, Cyclocorus-lineatus_KU335808, Hologerrhum-philippinum_KU330752, Levitonius-mirus_KU337269, Myersophis-alpestris_KU308684, Cerberus-schneiderii_KU324534, Myanophis-thanlyinensis, Chrysopelea-ornata, Thamnophis-sirtalis, Thamnophis-elegans, Sibynophis-bivittatus_KU309608, Grayia-smythii_KU341872, Pseudoxenodon-sp_KU312221, Ahaetulla-prasina_KU323364, Calamaria-gervaisii_KU327406, Scolecophis-atrocinctus_KU289804, Tantilla-taeniata_KU289863, Pantherophis-guttatus, Pantherophis-obsoletus, Pituophis-catenifer, Ptyas-mucosa, Boiga-irregularis_KU345021, Dipsas-indica_KU215336, Thermophis-baileyi, Achalinus-spinalis_KU312258, Acrochordus-granulatus_KU302952, Python-molurus, Aplopeltura-boa_KU315147, Crotalus-pyrrhus, Crotalus-adamanteus, Crotalus-tigris, Crotalus-viridis, Crotalus-horridus, Bothrops-jararaca, Protobothrops-mucrosquamatus, Protobothrops-flavoviridis, Vipera-berus, Hemibungarus-mcclungi_KU303027, Ophiophagus-hannah, Micrurus-corallinus_KU289205, Naja-naja, Elapsoidea-sundevallii_MCZR190390, Hydrophis-curtus, Hydrophis-hardwickii, Hydrophis-cyanocinctus, Hydrophis-melanocephalus, Laticauda-colubrina, Laticauda-laticaudata, Notechis-scutatus, Pseudonaja-textilis, Emydocephalus-ijimae, Prosymna-visseri_MCZR190223, Aparallactus-capensis_MCZA28808, Psammodynastes-pulverulentus_KU328547, Psammodynastes-pulverulentus_KU329686, Micrelaps-sp_TauM16738, Psammophis-sibilans_RAX2053, Rhamphiophis-oxyrhynchus_KU290451, Boa-constrictor]
+Taxon occupancy: {Protobothrops-flavoviridis=246, Hologerrhum-philippinum_KU330752=240, Thamnophis-sirtalis=243, Hydrophis-hardwickii=242, Psammophis-sibilans_RAX2053=225, Crotalus-pyrrhus=237, Bothrops-jararaca=239, Elapsoidea-sundevallii_MCZR190390=239, Notechis-scutatus=248, Levitonius-mirus_KU337269=240, Buhoma-depressiceps_CFS1528=231, Ophiophagus-hannah=248, Calamaria-gervaisii_KU327406=234, Scolecophis-atrocinctus_KU289804=238, Ptyas-mucosa=247, Boiga-irregularis_KU345021=239, Aparallactus-capensis_MCZA28808=229, Myanophis-thanlyinensis=224, Ahaetulla-prasina_KU323364=239, Python-molurus=233, Pseudaspis-cana_MCZA27068=227, Psammodynastes-pulverulentus_KU328547=231, Crotalus-tigris=237, Rhamphiophis-oxyrhynchus_KU290451=235, Pantherophis-obsoletus=248, Protobothrops-mucrosquamatus=239, Vipera-berus=242, Chrysopelea-ornata=239, Thamnophis-elegans=245, Laticauda-laticaudata=239, Myersophis-alpestris_KU308684=231, Oxyrhabdium-leporinum_KU346583=241, Acrochordus-granulatus_KU302952=226, Cyclocorus-lineatus_KU335808=238, Oxyrhabdium-cfmodestum_KU338101=241, Grayia-smythii_KU341872=249, Tantilla-taeniata_KU289863=234, Crotalus-viridis=233, Crotalus-adamanteus=236, Pseudoxyrhopus-tritaeniatus_KU340969=242, Dipsas-indica_KU215336=238, Oxyrhabdium-modestum_KU310866=238, Emydocephalus-ijimae=236, Pantherophis-guttatus=246, Sibynophis-bivittatus_KU309608=241, Aplopeltura-boa_KU315147=230, Thermophis-baileyi=243, Pituophis-catenifer=235, Lamprophis-lineatus_EBG706=240, Hydrophis-curtus=241, Pseudoxenodon-sp_KU312221=241, Chamaelycus-fasciatus_KU348632=238, Hemibungarus-mcclungi_KU303027=244, Pseudonaja-textilis=241, Laticauda-colubrina=239, Crotalus-horridus=232, Micrurus-corallinus_KU289205=240, Boa-constrictor=232, Psammodynastes-pulverulentus_KU329686=225, Achalinus-spinalis_KU312258=225, Hydrophis-melanocephalus=234, Micrelaps-sp_TauM16738=236, Prosymna-visseri_MCZR190223=236, Naja-naja=258, Hydrophis-cyanocinctus=240, Cerberus-schneiderii_KU324534=238}
+Using polytree-based weight calculation.
+Number of gene trees: 258
+186 trees have missing taxa
+Calculating distance matrix (for completion of X) ....with 4 distance matrices for parallellism
+Species tree distances calculated ...
+
+Will attempt to complete bipartitions from X before adding using a distance matrix.
+Building set of clusters (X) from gene trees 
+------------------------------
+Number of Clusters after addition from gene trees: 5871
+Number of Clusters after addition by distance: 5871
+Adding to X using resolutions of greedy consensus ...
+
+Computing greedy consensus  
+took 0 seconds
+Limit for sigma of degrees:1700
+
+polytomy size limit : > 11
+ [3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 11, 11]
+discarded polytomies: 
+Threshold 0.0:
+Threshold 0.01:
+Threshold 0.02:
+polytomy of size 3; rounds with additions with at least 5 support: 0; clusters: 5873
+Threshold 0.05:
+polytomy of size 4; rounds with additions with at least 5 support: 0; clusters: 5873
+Threshold 0.1:
+polytomy of size 5; rounds with additions with at least 5 support: 0; clusters: 5873
+Threshold 0.2:
+polytomy of size 3; rounds with additions with at least 5 support: 0; clusters: 5873
+polytomy of size 4; rounds with additions with at least 5 support: 0; clusters: 5873
+polytomy of size 3; rounds with additions with at least 5 support: 0; clusters: 5873
+polytomy of size 11; rounds with additions with at least 5 support: 0; clusters: 5873
+Threshold 0.3333333333333333:
+polytomy of size 3; rounds with additions with at least 5 support: 0; clusters: 5873
+polytomy of size 4; rounds with additions with at least 5 support: 0; clusters: 5873
+polytomy of size 4; rounds with additions with at least 5 support: 0; clusters: 5873
+polytomy of size 4; rounds with additions with at least 5 support: 0; clusters: 5873
+polytomy of size 4; rounds with additions with at least 5 support: 0; clusters: 5873
+polytomy of size 3; rounds with additions with at least 5 support: 0; clusters: 5873
+polytomy of size 11; rounds with additions with at least 5 support: 0; clusters: 5873
+Number of Clusters after addition by greedy: 5873
+partitions formed in 2.329 secs
+Dynamic Programming starting after 2.329 secs
+Polytree max score: 145650629
+Polytree building time: 0.058 seconds.
+Fail to load native library libAstral.dylib; use Java default computing method.
+Number of quartet trees in the gene trees: 145650629
+Computing hash values took 0 seconds
+device length is: 2
+TREE HEIGHT IS: 16
+Size of largest cluster: 66
+Size of largest cluster: 66
+Finishing up:15180 0 15179
+Total Number of elements: 15179
+Normalized score (portion of input quartet trees satisfied before correcting for multiple individuals): 0.8402106660315212
+Final optimization score: 122377212
+Optimal tree inferred in 5.086 secs.
+Weight calculation using polytrees cumulatively took 0.0 secs
+(Pseudoxyrhopus-tritaeniatus_KU340969,((Pseudaspis-cana_MCZA27068,Prosymna-visseri_MCZR190223),(((Buhoma-depressiceps_CFS1528,(Micrelaps-sp_TauM16738,((((((Vipera-berus,((Bothrops-jararaca,(Crotalus-horridus,(Crotalus-pyrrhus,(Crotalus-adamanteus,(Crotalus-tigris,Crotalus-viridis))))),(Protobothrops-mucrosquamatus,Protobothrops-flavoviridis))),(Aplopeltura-boa_KU315147,(Achalinus-spinalis_KU312258,(Acrochordus-granulatus_KU302952,(Python-molurus,Boa-constrictor))))),(Cerberus-schneiderii_KU324534,Myanophis-thanlyinensis)),(((Sibynophis-bivittatus_KU309608,(((Boiga-irregularis_KU345021,((Pituophis-catenifer,(Pantherophis-guttatus,Pantherophis-obsoletus)),(Ptyas-mucosa,(Scolecophis-atrocinctus_KU289804,Tantilla-taeniata_KU289863)))),(Chrysopelea-ornata,Ahaetulla-prasina_KU323364)),(Grayia-smythii_KU341872,Calamaria-gervaisii_KU327406))),(Pseudoxenodon-sp_KU312221,(Dipsas-indica_KU215336,Thermophis-baileyi))),(Thamnophis-sirtalis,Thamnophis-elegans))),((((Levitonius-mirus_KU337269,Myersophis-alpestris_KU308684),(Oxyrhabdium-modestum_KU310866,(Oxyrhabdium-leporinum_KU346583,Oxyrhabdium-cfmodestum_KU338101))),(Cyclocorus-lineatus_KU335808,Hologerrhum-philippinum_KU330752)),(Psammodynastes-pulverulentus_KU328547,Psammodynastes-pulverulentus_KU329686))),(Micrurus-corallinus_KU289205,((Elapsoidea-sundevallii_MCZR190390,((Pseudonaja-textilis,(Notechis-scutatus,(Emydocephalus-ijimae,((Hydrophis-cyanocinctus,Hydrophis-melanocephalus),(Hydrophis-curtus,Hydrophis-hardwickii))))),(Laticauda-colubrina,Laticauda-laticaudata))),(Hemibungarus-mcclungi_KU303027,(Ophiophagus-hannah,Naja-naja))))))),(Aparallactus-capensis_MCZA28808,(Psammophis-sibilans_RAX2053,Rhamphiophis-oxyrhynchus_KU290451))),(Chamaelycus-fasciatus_KU348632,Lamprophis-lineatus_EBG706))));
+Final quartet score is: 166014072
+Final normalized quartet score is: 1.1398101960822977
+(Pseudoxyrhopus-tritaeniatus_KU340969,((Pseudaspis-cana_MCZA27068,Prosymna-visseri_MCZR190223)0.74:0.059163068465512364,(((Buhoma-depressiceps_CFS1528,(Micrelaps-sp_TauM16738,((((((Vipera-berus,((Bothrops-jararaca,(Crotalus-horridus,(Crotalus-pyrrhus,(Crotalus-adamanteus,(Crotalus-tigris,Crotalus-viridis)0.74:0.06383495827272996)0.94:0.10467762556835161)1:0.5489965707472569)1:2.7608482425474548)1:1.290473361927968,(Protobothrops-mucrosquamatus,Protobothrops-flavoviridis)1:1.6716731697322331)1:2.0308531186513212)1:3.0924202658621347,(Aplopeltura-boa_KU315147,(Achalinus-spinalis_KU312258,(Acrochordus-granulatus_KU302952,(Python-molurus,Boa-constrictor)1:2.43611648561857)1:1.4831354510997405)1:2.7219027046206836)1:0.836425513882238)1:2.244277130302317,(Cerberus-schneiderii_KU324534,Myanophis-thanlyinensis)1:2.5252678077838353)0.98:0.12166793200482394,(((Sibynophis-bivittatus_KU309608,(((Boiga-irregularis_KU345021,((Pituophis-catenifer,(Pantherophis-guttatus,Pantherophis-obsoletus)1:0.2447346171732845)1:2.283051796787911,(Ptyas-mucosa,(Scolecophis-atrocinctus_KU289804,Tantilla-taeniata_KU289863)1:1.1416367831054957)1:0.16604566620318212)1:0.22436404341369914)1:1.8691733166214664,(Chrysopelea-ornata,Ahaetulla-prasina_KU323364)1:1.332704036909777)1:0.5433649238281832,(Grayia-smythii_KU341872,Calamaria-gervaisii_KU327406)0.86:0.0773187243795188)0.98:0.1238760189004468)1:0.6103006034980041,(Pseudoxenodon-sp_KU312221,(Dipsas-indica_KU215336,Thermophis-baileyi)1:0.2864985275556448)1:0.15319885749848225)0.49:0.020508490916332865,(Thamnophis-sirtalis,Thamnophis-elegans)1:3.3861651101752135)1:1.117659979825879)1:1.2534811897389977,((((Levitonius-mirus_KU337269,Myersophis-alpestris_KU308684)1:0.21672837291397912,(Oxyrhabdium-modestum_KU310866,(Oxyrhabdium-leporinum_KU346583,Oxyrhabdium-cfmodestum_KU338101)0.39:0.1226824357489458)1:3.221315862278147)1:0.6360846050365832,(Cyclocorus-lineatus_KU335808,Hologerrhum-philippinum_KU330752)1:0.978743263651527)1:1.4326644203054377,(Psammodynastes-pulverulentus_KU328547,Psammodynastes-pulverulentus_KU329686)1:2.297236839740101)0.84:0.08818512191598743)1:0.18918497420327646,(Micrurus-corallinus_KU289205,((Elapsoidea-sundevallii_MCZR190390,((Pseudonaja-textilis,(Notechis-scutatus,(Emydocephalus-ijimae,((Hydrophis-cyanocinctus,Hydrophis-melanocephalus)1:0.8614692801136896,(Hydrophis-curtus,Hydrophis-hardwickii)1:0.9352116091683677)1:3.7932738106871735)1:2.211605721740147)1:0.2951093892323586)1:1.8079542365549237,(Laticauda-colubrina,Laticauda-laticaudata)1:4.306234990777484)1:2.613036048520349)1:0.21148464612445222,(Hemibungarus-mcclungi_KU303027,(Ophiophagus-hannah,Naja-naja)0.9:0.08590096821851911)1:0.4989858175795541)0.87:0.096797516182594)1:2.477224160625221)1:0.20050519557219115)1:0.1632695406845008)0.71:0.05201395522892109,(Aparallactus-capensis_MCZA28808,(Psammophis-sibilans_RAX2053,Rhamphiophis-oxyrhynchus_KU290451)1:2.3718831114502676)0.65:0.04504431723136528)0.51:0.026256620624658722,(Chamaelycus-fasciatus_KU348632,Lamprophis-lineatus_EBG706)1:1.125475463440095)0.68:0.04681286958642003));
+ASTRAL finished in 6.648 secs
+Shutting down threading

@@ -1,0 +1,75 @@
+
+
+================== ASTRAL ===================== 
+
+This is ASTRAL version 5.15.5
+Warning: 
+ Fail to load native library libAstral.dylib; use Java default computing method without AVX2, which is 4X slower. 
+ Make sure you are using the correct Djava.library.path (to the `lib` directory under ASTRAL where libAstral.dylib can be found). 
+ Trying running make.sh. For mode debugging, run: java -Djava.library.path=lib/ -jar native_library_tester.jar
+Gene trees are treated as unrooted
+Detected GPU devices: 
+Device 1 of 2: Apple M1 cl_device_id[0xffffffff] Vendor: Intel
+Device 2 of 2: Apple M1 cl_device_id[0x1027f00] Vendor: Apple
+Will use Device : Apple M1
+Will use Device : Apple M1
+Starting 8 threads ...
+There are 8 threads used to run.
+2 trees read from /dev/fd/11
+All output trees will be *arbitrarily* rooted at Pseudoxyrhopus-tritaeniatus_KU340969
+
+======== Running the main analysis
+Number of taxa: 64 (64 species)
+Taxa: [Pseudoxyrhopus-tritaeniatus_KU340969, Pseudaspis-cana_MCZA27068, Micrelaps-sp_TauM16738, Prosymna-visseri_MCZR190223, Buhoma-depressiceps_CFS1528, Chamaelycus-fasciatus_KU348632, Lamprophis-lineatus_EBG706, Hemibungarus-mcclungi_KU303027, Micrurus-corallinus_KU289205, Elapsoidea-sundevallii_MCZR190390, Hydrophis-curtus, Hydrophis-hardwickii, Hydrophis-cyanocinctus, Hydrophis-melanocephalus, Emydocephalus-ijimae, Pseudonaja-textilis, Laticauda-colubrina, Laticauda-laticaudata, Ophiophagus-hannah, Naja-naja, Psammophis-sibilans_RAX2053, Rhamphiophis-oxyrhynchus_KU290451, Sibynophis-bivittatus_KU309608, Scolecophis-atrocinctus_KU289804, Tantilla-taeniata_KU289863, Ptyas-mucosa, Pantherophis-guttatus, Pituophis-catenifer, Pantherophis-obsoletus, Boiga-irregularis_KU345021, Chrysopelea-ornata, Grayia-smythii_KU341872, Calamaria-gervaisii_KU327406, Pseudoxenodon-sp_KU312221, Thermophis-baileyi, Thamnophis-sirtalis, Thamnophis-elegans, Achalinus-spinalis_KU312258, Acrochordus-granulatus_KU302952, Python-molurus, Aplopeltura-boa_KU315147, Crotalus-pyrrhus, Crotalus-tigris, Crotalus-viridis, Crotalus-adamanteus, Crotalus-horridus, Bothrops-jararaca, Protobothrops-mucrosquamatus, Protobothrops-flavoviridis, Vipera-berus, Cerberus-schneiderii_KU324534, Psammodynastes-pulverulentus_KU328547, Psammodynastes-pulverulentus_KU329686, Oxyrhabdium-modestum_KU310866, Oxyrhabdium-cfmodestum_KU338101, Oxyrhabdium-leporinum_KU346583, Myersophis-alpestris_KU308684, Cyclocorus-lineatus_KU335808, Hologerrhum-philippinum_KU330752, Levitonius-mirus_KU337269, Aparallactus-capensis_MCZA28808, Notechis-scutatus, Dipsas-indica_KU215336, Ahaetulla-prasina_KU323364]
+Taxon occupancy: {Protobothrops-flavoviridis=1, Thamnophis-sirtalis=1, Hologerrhum-philippinum_KU330752=2, Hydrophis-hardwickii=2, Psammophis-sibilans_RAX2053=1, Crotalus-pyrrhus=2, Elapsoidea-sundevallii_MCZR190390=2, Bothrops-jararaca=2, Notechis-scutatus=1, Levitonius-mirus_KU337269=2, Buhoma-depressiceps_CFS1528=2, Ophiophagus-hannah=1, Scolecophis-atrocinctus_KU289804=2, Ptyas-mucosa=2, Calamaria-gervaisii_KU327406=1, Boiga-irregularis_KU345021=2, Aparallactus-capensis_MCZA28808=1, Python-molurus=1, Ahaetulla-prasina_KU323364=1, Pseudaspis-cana_MCZA27068=1, Psammodynastes-pulverulentus_KU328547=2, Rhamphiophis-oxyrhynchus_KU290451=2, Crotalus-tigris=2, Pantherophis-obsoletus=2, Protobothrops-mucrosquamatus=2, Vipera-berus=2, Chrysopelea-ornata=2, Thamnophis-elegans=1, Laticauda-laticaudata=2, Myersophis-alpestris_KU308684=2, Oxyrhabdium-leporinum_KU346583=1, Acrochordus-granulatus_KU302952=1, Cyclocorus-lineatus_KU335808=2, Oxyrhabdium-cfmodestum_KU338101=1, Tantilla-taeniata_KU289863=2, Grayia-smythii_KU341872=2, Crotalus-viridis=2, Crotalus-adamanteus=2, Pseudoxyrhopus-tritaeniatus_KU340969=2, Dipsas-indica_KU215336=1, Oxyrhabdium-modestum_KU310866=2, Emydocephalus-ijimae=2, Pantherophis-guttatus=2, Sibynophis-bivittatus_KU309608=1, Aplopeltura-boa_KU315147=1, Thermophis-baileyi=2, Pituophis-catenifer=2, Lamprophis-lineatus_EBG706=2, Hydrophis-curtus=2, Pseudoxenodon-sp_KU312221=2, Chamaelycus-fasciatus_KU348632=2, Hemibungarus-mcclungi_KU303027=1, Pseudonaja-textilis=2, Laticauda-colubrina=2, Crotalus-horridus=2, Micrurus-corallinus_KU289205=2, Psammodynastes-pulverulentus_KU329686=2, Hydrophis-melanocephalus=2, Achalinus-spinalis_KU312258=1, Micrelaps-sp_TauM16738=2, Prosymna-visseri_MCZR190223=2, Naja-naja=2, Hydrophis-cyanocinctus=2, Cerberus-schneiderii_KU324534=2}
+Using polytree-based weight calculation.
+Number of gene trees: 2
+2 trees have missing taxa
+Calculating distance matrix (for completion of X) ....with 4 distance matrices for parallellism
+Species tree distances calculated ...
+
+Will attempt to complete bipartitions from X before adding using a distance matrix.
+Building set of clusters (X) from gene trees 
+------------------------------
+Number of Clusters after addition from gene trees: 305
+Number of Clusters after addition by distance: 305
+Adding to X using resolutions of greedy consensus ...
+
+Computing greedy consensus  
+took 0 seconds
+Limit for sigma of degrees:1650
+
+polytomy size limit : > 5
+ [5, 5, 5, 5, 5, 5, 5]
+discarded polytomies: 
+Threshold 0.0:
+polytomy of size 5; rounds with additions with at least 5 support: 0; clusters: 355
+Threshold 0.01:
+polytomy of size 5; rounds with additions with at least 5 support: 0; clusters: 355
+Threshold 0.02:
+polytomy of size 5; rounds with additions with at least 5 support: 0; clusters: 355
+Threshold 0.05:
+polytomy of size 5; rounds with additions with at least 5 support: 0; clusters: 355
+Threshold 0.1:
+polytomy of size 5; rounds with additions with at least 5 support: 0; clusters: 355
+Threshold 0.2:
+polytomy of size 5; rounds with additions with at least 5 support: 0; clusters: 355
+Threshold 0.3333333333333333:
+polytomy of size 5; rounds with additions with at least 5 support: 0; clusters: 355
+Number of Clusters after addition by greedy: 355
+partitions formed in 0.459 secs
+Dynamic Programming starting after 0.46 secs
+Polytree max score: 699511
+Polytree building time: 0.006 seconds.
+Fail to load native library libAstral.dylib; use Java default computing method.
+Number of quartet trees in the gene trees: 699511
+Computing hash values took 0 seconds
+Shutting down threading
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: 1
+	at phylonet.coalescent.WQDataCollection.getAllArray(WQDataCollection.java:1633)
+	at phylonet.coalescent.TurnTaskToScores.<init>(TurnTaskToScores.java:87)
+	at phylonet.coalescent.WQInferenceConsumer.setupMisc(WQInferenceConsumer.java:936)
+	at phylonet.coalescent.AbstractInference.setup(AbstractInference.java:235)
+	at phylonet.coalescent.CommandLine.runOnOneInput(CommandLine.java:636)
+	at phylonet.coalescent.CommandLine.runInference(CommandLine.java:627)
+	at phylonet.coalescent.CommandLine.main(CommandLine.java:533)

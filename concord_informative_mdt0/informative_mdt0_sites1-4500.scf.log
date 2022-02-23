@@ -1,0 +1,94 @@
+IQ-TREE multicore version 2.1.3 COVID-edition for Mac OS X 64-bit built Oct  4 2021
+Developed by Bui Quang Minh, James Barbetti, Nguyen Lam Tung,
+Olga Chernomor, Heiko Schmidt, Dominik Schrempf, Michael Woodhams.
+
+Host:    Jeffreys-MacBook-Air.local (SSE4.2, 8 GB RAM)
+Command: iqtree2 -t /Users/jeff/Documents/trees_along_chromosomes_informative_mdt0/informative_mdt0_sites1-4500.treefile -s /var/folders/h9/6vmlp5152tvg_fp3d2t2zz_00000gn/T//aln.fa --scf 100 --prefix /Users/jeff/Documents/GitHub/SnakeCap/concord_informative_mdt0/informative_mdt0_sites1-4500.scf
+Seed:    434732 (Using SPRNG - Scalable Parallel Random Number Generator)
+Time:    Thu Feb 17 02:42:14 2022
+Kernel:  SSE2 - 1 threads (8 CPU cores detected)
+
+HINT: Use -nt option to specify number of threads because your CPU has 8 cores!
+HINT: -nt AUTO will automatically determine the best number of threads to use.
+
+Reading alignment file /var/folders/h9/6vmlp5152tvg_fp3d2t2zz_00000gn/T//aln.fa ... Fasta format detected
+Alignment most likely contains DNA/RNA sequences
+Alignment has 66 sequences with 4500 columns, 3888 distinct patterns
+4500 parsimony-informative, 0 singleton sites, 0 constant sites
+                                       Gap/Ambiguity  Composition  p-value
+   1  Acrochordus-granulatus_KU302952          0.00%    failed      1.50%
+   2  Scolecophis-atrocinctus_KU289804         0.00%    passed     85.31%
+   3  Sibynophis-bivittatus_KU309608           0.00%    passed     78.55%
+   4  Tantilla-taeniata_KU289863               0.00%    passed     99.10%
+   5  Prosymna-visseri_MCZR190223              0.00%    passed     53.85%
+   6  Pseudoxenodon-sp_KU312221                0.00%    passed     75.39%
+   7  Pseudaspis-cana_MCZA27068                0.00%    passed     94.49%
+   8  Pseudoxyrhopus-tritaeniatus_KU340969     0.00%    passed     92.26%
+   9  Rhamphiophis-oxyrhynchus_KU290451        0.00%    passed     77.95%
+  10  Psammophis-sibilans_RAX2053              0.00%    passed     25.61%
+  11  Aparallactus-capensis_MCZA28808          0.00%    passed     70.59%
+  12  Achalinus-spinalis_KU312258              0.00%    failed      0.01%
+  13  Chamaelycus-fasciatus_KU348632           0.00%    passed     12.56%
+  14  Lamprophis-lineatus_EBG706               0.00%    passed     44.92%
+  15  Micrelaps-sp_TauM16738                   0.00%    passed     93.51%
+  16  Buhoma-depressiceps_CFS1528              0.00%    passed     72.95%
+  17  Cyclocorus-lineatus_KU335808             0.00%    passed     32.20%
+  18  Hologerrhum-philippinum_KU330752         0.00%    passed     12.96%
+  19  Myersophis-alpestris_KU308684            0.00%    passed     64.84%
+  20  Oxyrhabdium-cfmodestum_KU338101          0.00%    passed     61.57%
+  21  Oxyrhabdium-leporinum_KU346583           0.00%    passed     80.17%
+  22  Oxyrhabdium-modestum_KU310866            0.00%    passed     44.71%
+  23  Aplopeltura-boa_KU315147                 0.00%    passed     36.71%
+  24  Levitonius-mirus_KU337269                0.00%    passed     71.04%
+  25  Elapsoidea-sundevallii_MCZR190390        0.00%    passed     99.94%
+  26  Hemibungarus-mcclungi_KU303027           0.00%    passed     81.88%
+  27  Micrurus-corallinus_KU289205             0.00%    passed     92.81%
+  28  Psammodynastes-pulverulentus_KU328547    0.00%    passed     29.03%
+  29  Psammodynastes-pulverulentus_KU329686    0.00%    passed     34.63%
+  30  Python-molurus                           0.00%    passed     89.93%
+  31  Ophiophagus-hannah                       0.00%    passed     98.45%
+  32  Crotalus-pyrrhus                         0.00%    passed     83.35%
+  33  Vipera-berus                             0.00%    passed     98.45%
+  34  Cerberus-schneiderii_KU324534            0.00%    passed     80.28%
+  35  Thamnophis-sirtalis                      0.00%    passed     47.17%
+  36  Pantherophis-guttatus                    0.00%    passed     99.37%
+  37  Protobothrops-mucrosquamatus             0.00%    passed     96.36%
+  38  Hydrophis-curtus                         0.00%    passed     32.25%
+  39  Hydrophis-cyanocinctus                   0.00%    passed     18.25%
+  40  Crotalus-viridis                         0.00%    passed     60.80%
+  41  Bothrops-jararaca                        0.00%    passed     91.27%
+  42  Chrysopelea-ornata                       0.00%    passed     56.44%
+  43  Crotalus-adamanteus                      0.00%    passed     72.39%
+  44  Crotalus-horridus                        0.00%    passed     82.29%
+  45  Ahaetulla-prasina_KU323364               0.00%    passed     91.68%
+  46  Emydocephalus-ijimae                     0.00%    passed     45.44%
+  47  Crotalus-tigris                          0.00%    passed     61.62%
+  48  Hydrophis-hardwickii                     0.00%    passed     32.55%
+  49  Hydrophis-melanocephalus                 0.00%    passed     15.96%
+  50  Laticauda-colubrina                      0.00%    passed      7.04%
+  51  Laticauda-laticaudata                    0.00%    passed     19.59%
+  52  Myanophis-thanlyinensis                  0.00%    passed     85.70%
+  53  Naja-naja                                0.00%    passed     93.65%
+  54  Protobothrops-flavoviridis               0.00%    passed     99.10%
+  55  Notechis-scutatus                        0.00%    passed     99.12%
+  56  Boiga-irregularis_KU345021               0.00%    passed     88.46%
+  57  Pantherophis-obsoletus                   0.00%    passed     99.85%
+  58  Pituophis-catenifer                      0.00%    passed     97.67%
+  59  Pseudonaja-textilis                      0.00%    passed     98.02%
+  60  Ptyas-mucosa                             0.00%    passed     98.68%
+  61  Thamnophis-elegans                       0.00%    passed     55.94%
+  62  Thermophis-baileyi                       0.00%    passed     65.53%
+  63  Boa-constrictor                          0.00%    passed     31.75%
+  64  Calamaria-gervaisii_KU327406             0.00%    passed     45.80%
+  65  Dipsas-indica_KU215336                   0.00%    passed     94.35%
+  66  Grayia-smythii_KU341872                  0.00%    passed     98.71%
+****  TOTAL                                    0.00%  2 sequences failed composition chi2 test (p-value<5%; df=3)
+Reading tree /Users/jeff/Documents/trees_along_chromosomes_informative_mdt0/informative_mdt0_sites1-4500.treefile ...
+un-rooted tree with 66 taxa and 129 branches
+Computing site concordance factor...
+0.201 sec
+Tree with concordance factors written to /Users/jeff/Documents/GitHub/SnakeCap/concord_informative_mdt0/informative_mdt0_sites1-4500.scf.cf.tree
+Annotated tree (best viewed in FigTree) written to /Users/jeff/Documents/GitHub/SnakeCap/concord_informative_mdt0/informative_mdt0_sites1-4500.scf.cf.tree.nex
+Tree with branch IDs written to /Users/jeff/Documents/GitHub/SnakeCap/concord_informative_mdt0/informative_mdt0_sites1-4500.scf.cf.branch
+Concordance factors per branch printed to /Users/jeff/Documents/GitHub/SnakeCap/concord_informative_mdt0/informative_mdt0_sites1-4500.scf.cf.stat
+Date and Time: Thu Feb 17 02:42:14 2022
