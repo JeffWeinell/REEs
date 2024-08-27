@@ -770,8 +770,7 @@ length(which(table(mhc.hits.filtered.100[,1])==0))
 
 ```
 
-Summary of the MHC filtered hit table. The table below shows the number MHC loci (columns 2-5) with at least n matches (column 1) in the genome of *T. sirtalis* with at least *x* percent coverage and percent identical sites across the covered region.
-
+**Table 6**. Summary of the MHC filtered hit table. The table below shows the number MHC loci (columns 2-5) with at least n matches (column 1) in the genome of *T. sirtalis* with at least *x* percent coverage and percent identical sites across the covered region.
   n matches | MHC loci: x=0 | x=60 | x=70 | x=80 | x=90 | x=95 | x=100
  ---|---|---|---|---|---|---|---
   1    | 28   | 30   | 31   | 35   | 50   | 58   | 70
