@@ -2,8 +2,8 @@
 
 # Contents
 
-[Description of SnakeCap Probe Set](#Description)
-[Choosing loci to capture](#Methods.SelectingTargetLoci)
+[Description of SnakeCap probe set](#Description)
+[Selecting loci to capture](#Methods.SelectingTargetLoci)
   - [Rapidly-evolving Exons (REEs)](#Methods.SelectingREEs)
   - [Ultraconserved-elements (UCEs)](#Methods.SelectingUCEs)
   - [ddRAD-like loci](#Methods.SelectingddRAD)
@@ -14,7 +14,7 @@
 [References](#References)
 
 <a name="Description"></a>
-# Description of SnakeCap Probe (Bait) Set
+# Description of SnakeCap probe set
 
 The probe set includes 20,020 probes for 3,128 single-copy loci (1,517,011 nt) shared across snakes. Loci are categorized into four types: (1) rapidly evolving exons (REEs; n = 1,652), (2) ultra-conserved elements (UCEs; n = 907), (3) ddRAD-like loci (n = 328), (4) and functionally interesting genes, which includes 27 major histocompatibility complex (MHC) genes, 119 vision genes, and 95 scalation genes.
 
@@ -26,7 +26,7 @@ ddRAD-like loci are shared, single-copy loci identified from in-silico ddRAD usi
 
 Functional loci included entire or partial gene regions that have previously been predicted or known to function in either (1) vertebrate immune systems, (2) vision, (3) or scalation.
 
-#### Table 1. For each type of locus: genomic region targeted, number of loci (nloci), total number of nucleotides targeted (nnt), and nucleotide lengths (nt/locus) of the shortest and longest loci.
+**Table 1**. For each type of locus: genomic region targeted, number of loci (nloci), total number of nucleotides targeted (nnt), and nucleotide lengths (nt/locus) of the shortest and longest loci.
 
 Locus type | Region targeted | nloci | nnt | nt/locus (min–max)
 ---- | ---- | ---- | ---- | ----
@@ -38,8 +38,9 @@ Vision | 160nt, including ≤ 70nt upstream of start codon if targeted exon is f
 Scalation | 1100nt, including 1000nt of promoter region + first 100nt of first exon. | 95 | 81,851 | 125–1,101
 All loci |  | 3,128 | 1,517,011 | 120–7,501 (mean = 531.62)  
 
-<a name="Methods"></a>
-# Methods
+
+<a name="Methods.SelectingTargetLoci"></a>
+# Selecting loci to capture
 
 <a name="Methods.SelectingREEs"></a>
 ## Selecting the set of target REEs
@@ -56,7 +57,7 @@ REEs::load.gff --> REEs::filter.gff --> REEs::get.seqs.from.gff --> Biostrings::
 I downloaded the [*Thamnophis sirtalis* genome](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz) and its associated annotation table: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz) (n = 559,130 features annotated). Then, I renamed the contigs in the genome file to have the following format: **Thamnophis_sirtalis_GCF_001077635.1_read1**, **Thamnophis_sirtalis_GCF_001077635.1_read2**, etc., and saved this renamed genome in sequential fasta format: [ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/exomes/ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip). The two-column, tab-delimited table [Scaffold-Name-Key.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/main/exomes/Scaffold-Name-Key.txt?token=AJJOG2UQ6MDA7UY2U4R6BFS7ZDZYS) includes the new contig name in the first column and the original contig name in the second column:
 -->
 
-1. I used the functions load.gff and filter.gff (REEs R package) to filter the *Thamnophis sirtalis* genome feature table (GFF3 format) to include only CDS feature tracks ≥ 120bp in length. The input (unfiltered) GFF3 file can be found here: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz). <!-- Learn about GFF3 file format [here](https://uswest.ensembl.org/info/website/upload/gff3.html). -->
+**1**. I used the functions load.gff and filter.gff (REEs R package) to filter the *Thamnophis sirtalis* genome feature table (GFF3 format) to include only CDS feature tracks ≥ 120bp in length. The input (unfiltered) GFF3 file can be found here: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz). <!-- Learn about GFF3 file format [here](https://uswest.ensembl.org/info/website/upload/gff3.html). -->
 
 ```
 ### Load REEs package
