@@ -3,33 +3,20 @@
 # Contents
 
 [Description of SnakeCap Probe Set](#Description)
-
-[Methods](#Methods)
-  - [Choosing loci to capture](#Methods.SelectingTargetLoci)
-    - [Rapidly-evolving Exons (REEs)](#Methods.SelectingREEs)
-    - [Ultraconserved-elements (UCEs)](#Methods.SelectingUCEs)
-    - [ddRAD-like loci](#Methods.SelectingddRAD)
-    - [Major Histocompatibility loci (MHCs)](#Methods.SelectingMHC)
-    - [Scalation loci](#Methods.SelectingScalation)
-    - [Vision loci](#Methods.SelectingVision)
-  - [Ultrastringent filtration and Probe Synthesis](#ProbeSynthesis)
-  - [Taxa Sampled](#Sampling)
-  - [Sequence Capture Library Prep](#LibraryPrep)
-  - [DNA Sequencing](#DNASequencing)
-  - [Post-sequencing](#PostSequencing)
-    - [Demultiplexing](#Demultiplexing)
-    - [Processing sequence reads](#ProcessingReads)
-    - [DNA Alignment](#DNA.Alignment)
-    - [Phylogenetic Analyses](#PhylogeneticAnalyses)
-
-[Results](#Results)
-
+[Choosing loci to capture](#Methods.SelectingTargetLoci)
+  - [Rapidly-evolving Exons (REEs)](#Methods.SelectingREEs)
+  - [Ultraconserved-elements (UCEs)](#Methods.SelectingUCEs)
+  - [ddRAD-like loci](#Methods.SelectingddRAD)
+  - [Major Histocompatibility loci (MHCs)](#Methods.SelectingMHC)
+  - [Scalation loci](#Methods.SelectingScalation)
+  - [Vision loci](#Methods.SelectingVision)
+[Ultrastringent filtration and Probe Synthesis](#ProbeSynthesis)
 [References](#References)
 
 <a name="Description"></a>
 # Description of SnakeCap Probe (Bait) Set
 
-The probe set includes 20,020 probes for 3,129 (actually 3,128) single-copy loci (1,517,011 nt; update this to account for removal of synonymy of WeinellEntry1944 with WeinellEntry1857) shared across snakes. The target loci are categorized into four types: (1) rapidly evolving exons (REEs; n = 1,652), (2) ultra-conserved elements (UCEs; n = 907), (3) ddRAD-like loci (n = 328), (4) and functionally interesting genes, which includes 27 major histocompatibility complex (MHC) genes, 119 vision genes, and 95 scalation genes.
+The probe set includes 20,020 probes for 3,128 single-copy loci (1,517,011 nt) shared across snakes. Loci are categorized into four types: (1) rapidly evolving exons (REEs; n = 1,652), (2) ultra-conserved elements (UCEs; n = 907), (3) ddRAD-like loci (n = 328), (4) and functionally interesting genes, which includes 27 major histocompatibility complex (MHC) genes, 119 vision genes, and 95 scalation genes.
 
 REEs include one or more entire exons and one or both exon-flanking regions, and range in length from 121 to 7,501 nt. I used a modified version of the FrogCap pipeline (Hutter et al., 2019) to select the optimal set of REEs from an alignment of snake exomes.
 
@@ -57,23 +44,19 @@ All loci |  | 3,128 | 1,517,011 | 120–7,501 (mean = 531.62)
 <a name="Methods.SelectingREEs"></a>
 ## Selecting the set of target REEs
 
-<!-- <a name="Methods.SelectingREEs.overview"></a> -->
 #### Overview: 
 
 I used the following R functions (shown as packageName::functionName):
 
 REEs::load.gff --> REEs::filter.gff --> REEs::get.seqs.from.gff --> Biostrings::writeXStringSet --> REEs::blast --> REEs::reportBestMatches --> REEs::get.seqs.from.blastTable --> REEs::makeStatsTable --> REEs::pick.loci --> (then functions in step 8  to get REEs + small region of exon-flanking DNA).
 
-Further description and implementation of these functions is shown below in Details section.
-
-<!-- <a name="Methods.SelectingREEs.detailed"></a> -->
 #### Details:
 
 <!--
 I downloaded the [*Thamnophis sirtalis* genome](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz) and its associated annotation table: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz) (n = 559,130 features annotated). Then, I renamed the contigs in the genome file to have the following format: **Thamnophis_sirtalis_GCF_001077635.1_read1**, **Thamnophis_sirtalis_GCF_001077635.1_read2**, etc., and saved this renamed genome in sequential fasta format: [ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/exomes/ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip). The two-column, tab-delimited table [Scaffold-Name-Key.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/main/exomes/Scaffold-Name-Key.txt?token=AJJOG2UQ6MDA7UY2U4R6BFS7ZDZYS) includes the new contig name in the first column and the original contig name in the second column:
 -->
 
-1. I used the functions load.gff and filter.gff (REEs R package) to filter the *Thamnophis sirtalis* genome feature table (GFF3 format) to include only CDS feature tracks ≥ 120bp in length. The input (unfiltered) GFF3 file can be found here: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz). Learn about GFF3 file format [here](https://uswest.ensembl.org/info/website/upload/gff3.html).
+1. I used the functions load.gff and filter.gff (REEs R package) to filter the *Thamnophis sirtalis* genome feature table (GFF3 format) to include only CDS feature tracks ≥ 120bp in length. The input (unfiltered) GFF3 file can be found here: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz). <!-- Learn about GFF3 file format [here](https://uswest.ensembl.org/info/website/upload/gff3.html). -->
 
 ```
 ### Load REEs package
