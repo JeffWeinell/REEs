@@ -19,7 +19,7 @@
 <a name="Description"></a>
 ## What is the SnakeCap probe set?
 
-The SnakeCap probe set was designed to facilitate targeted DNA sequencing for phylogenomic studies across and within diverse lineages of snakes (e.g. [Weinell et al. 2024](https://doi.org/10.1098/rsos.240064)).
+The SnakeCap probe set was designed to facilitate targeted DNA sequencing for phylogenomic studies across and within diverse lineages of snakes (e.g. [Weinell et al. 2024](https://doi.org/10.1098/rsos.240064)). 
 
 The probe set includes 20,020 probe sequences (120bp) for 3,128 single-copy loci (1,517,011 nt) in genomes of a diverse group of snakes.
 
@@ -33,9 +33,12 @@ ddRAD-like loci are shared, single-copy loci identified from in-silico ddRAD usi
 
 MHC, vision, and scalation loci included entire or subregions of genes. Putative gene functions are from results of previous studies.
 
+[Table 1](#Table1) summarizes loci targeted using the SnakeCap probe set.
+
+<a name="Table1"></a>
 **Table 1**. For each type of locus: genomic region targeted, number of loci (nloci), number of nucleotides targeted (nt), and nucleotide lengths (nt/locus) of the shortest and longest loci.
 
-Locus type | Region targeted | nloci | nnt | nt/locus (min–max)
+Locus type | Region targeted | nloci | nt | nt/locus (min–max)
 ---- | ---- | ---- | ---- | ----
 Rapidly evolving exons (REEs) | Usually the entire exon + 0–60nt each of 5' & 3' flanking regions. | 1,652 | 996,369 | 121–7,501
 Ultra-conserved elements (UCEs) | Entire UCE region previously identified | 907 | 143,075 | 120–161
@@ -60,7 +63,7 @@ I used the following R functions (shown as packageName::functionName):
 
 REEs::load.gff --> REEs::filter.gff --> REEs::get.seqs.from.gff --> Biostrings::writeXStringSet --> REEs::blast --> REEs::reportBestMatches --> REEs::get.seqs.from.blastTable --> REEs::makeStatsTable --> REEs::pick.loci --> (then functions in step 8  to get REEs + small region of exon-flanking DNA).
 
-#### Step-by-step procedure to select target REEs:
+#### Step-by-step procedure:
 
 <!--
 I downloaded the [*Thamnophis sirtalis* genome](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz) and its associated annotation table: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz) (n = 559,130 features annotated). Then, I renamed the contigs in the genome file to have the following format: **Thamnophis_sirtalis_GCF_001077635.1_read1**, **Thamnophis_sirtalis_GCF_001077635.1_read2**, etc., and saved this renamed genome in sequential fasta format: [ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/exomes/ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip). The two-column, tab-delimited table [Scaffold-Name-Key.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/main/exomes/Scaffold-Name-Key.txt?token=AJJOG2UQ6MDA7UY2U4R6BFS7ZDZYS) includes the new contig name in the first column and the original contig name in the second column:
@@ -101,23 +104,9 @@ Note 1: This filtered GFF table is also included as a data table object in the R
 Note 2: the filtered GFF table is not true GFF format, because the header/comment lines are not included; nevertheless, the format used for the columns follows GFF3 format.
 -->
 
-**2**. Get sequences in genomic regions included in the subsetted feature table.
+Search for *T. sirtalis* CDS sequences in squamate genomes listed in [Table 2](#Table2) using REEs::blast to run TBLASTX in R; save up to 50 matches per query sequence.
 
-```
-# URL to the Thamnophis sirtalis genome
-Thamnophis.sirtalis_genome.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz"
-
-### Extract the sequences for the loci in the filtered GFF (Thamnophis.sirtalis_GFF_CDS_longer120bp from step 1).
-Thamnophis.sirtalis_exome   <- REEs::get.seqs.from.gff(input.seqs=Thamnophis.sirtalis_genome.url,input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp)
-
-### Save extracted sequences
-writeXStringSet(x=Thamnophis.sirtalis_exome,filepath="./Thamnophis_sirtalis_exome_longer120bp.fas")
-
-```
-Output DNA sequences were saved in fasta format and can be downloaded here: [Thamnophis_sirtalis_exome_longer120bp.fas](https://osf.io/v7ecb/download).
-
-**3**. I used TBLASTX as implemented in the REEs::blast function to search for each *T. sirtalis* CDS sequence (from step 2) in each squamate genome listed in Table 2. I saved up to 50 matches per query sequence.
-
+<a name="Table2"></a>
 **Table 2**. Genomes used to select REEs included all squamate genomes available from NCBI in 2017.
 Species  | Family | NCBI Genome Assembly Accession
 ----|----|---- 
@@ -134,7 +123,7 @@ Species  | Family | NCBI Genome Assembly Accession
 *Vipera berus berus* | Viperidae (Viperinae) | GCA_000800605.1
 
 ```
-### URLs to the genomes used are held in a matrix that can be accessed with the REEs::datasets function.
+# URLs to the genomes used are held in a matrix that can be accessed with the REEs::datasets function.
 Anolis.carolinensis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Anolis carolinensis"),2]
 Gekko.japonicus.genome_url              <- REEs::datasets(1)[which(datasets(1)[,1]=="Gekko japonicus"),2]
 Pogona.vitticeps.genome_url             <- REEs::datasets(1)[which(datasets(1)[,1]=="Pogona vitticeps"),2]
@@ -147,7 +136,7 @@ Python.bivittatus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,
 Vipera.berus.genome_url                 <- REEs::datasets(1)[which(datasets(1)[,1]=="Vipera berus"),2]
 Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Thamnophis sirtalis"),2]
 
-# Runs TBLASTX
+# Run TBLASTX
 Anolis.carolinensis.50hits          <- REEs::blast(method="tblastx",subject=Anolis.carolinensis.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Anolis.carolinensis.tblastx.exons.50hits.txt")
 Gekko.japonicus.50hits              <- REEs::blast(method="tblastx",subject=Gekko.japonicus.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Gekko.japonicus.tblastx.exons.50hits.txt")
 Pogona.vitticeps.50hits             <- REEs::blast(method="tblastx",subject=Pogona.vitticeps.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Pogona.vitticeps.tblastx.exons.50hits.txt")
@@ -160,9 +149,9 @@ Python.bivittatus.50hits            <- REEs::blast(method="tblastx",subject=Pyth
 Vipera.berus.50hits                 <- REEs::blast(method="tblastx",subject=Vipera.berus.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Vipera.berus.tblastx.exons.50hits.txt")
 Thamnophis.sirtalis.50hits          <- REEs::blast(method="tblastx",subject=Thamnophis.sirtalis.genome_url,query=Thamnophis.sirtalis_exome,table.out="./Thamnophis.sirtalis.tblastx.exons.50hits.txt")
 ```
-The TBLASTX output tables can be downloaded here (these are xz compressed): [Anolis.carolinensis.tblastx.exons.50hits.txt.xz](https://osf.io/3a4be/download), [Gekko.japonicus.tblastx.exons.50hits.txt.xz](https://osf.io/u2ec5/download), [Pogona.vitticeps.tblastx.exons.50hits.txt.xz](https://osf.io/9ehyf/download), [Crotalus.horridus.tblastx.exons.50hits.txt.xz](https://osf.io/j4gvk/download), [Crotalus.mitchellii.tblastx.exons.50hits.txt.xz](https://osf.io/5vxt7/download), [Ophiophagus.hannah.tblastx.exons.50hits.txt.xz](https://osf.io/jr5zd/download), [Pantherophis.guttatus.tblastx.exons.50hits.txt.xz](https://osf.io/tu3ve/download), [Protobothrops.mucrosquamatus.tblastx.exons.50hits.txt.xz](https://osf.io/7xmr4/download), [Python.bivittatus.tblastx.exons.50hits.txt.xz](https://osf.io/8s5na/download), [Vipera.berus.tblastx.exons.50hits.txt.xz](https://osf.io/48x7e/download), [Thamnophis.sirtalis.tblastx.exons.50hits.txt.xz](https://osf.io/ctz73/download).
+TBLASTX output tables (xz compressed): [Anolis.carolinensis.tblastx.exons.50hits.txt.xz](https://osf.io/3a4be/download), [Gekko.japonicus.tblastx.exons.50hits.txt.xz](https://osf.io/u2ec5/download), [Pogona.vitticeps.tblastx.exons.50hits.txt.xz](https://osf.io/9ehyf/download), [Crotalus.horridus.tblastx.exons.50hits.txt.xz](https://osf.io/j4gvk/download), [Crotalus.mitchellii.tblastx.exons.50hits.txt.xz](https://osf.io/5vxt7/download), [Ophiophagus.hannah.tblastx.exons.50hits.txt.xz](https://osf.io/jr5zd/download), [Pantherophis.guttatus.tblastx.exons.50hits.txt.xz](https://osf.io/tu3ve/download), [Protobothrops.mucrosquamatus.tblastx.exons.50hits.txt.xz](https://osf.io/7xmr4/download), [Python.bivittatus.tblastx.exons.50hits.txt.xz](https://osf.io/8s5na/download), [Vipera.berus.tblastx.exons.50hits.txt.xz](https://osf.io/48x7e/download), [Thamnophis.sirtalis.tblastx.exons.50hits.txt.xz](https://osf.io/ctz73/download).
 
-**4**. I used the REEs::reportBestMatches function to filter the hit tables generated by TBLASTX to include only the best match (max bitscore) per query. Matches with bitscore < 50 were dropped. If bitscores of the best and second-best matches differed by < **5**, then the query locus was filtered.
+Process TBLASTX results to exclude loci without a strong match or with similarly strong best matches. Then, keep only the best match per locus. We used bitscore as the measure of match strength (higher bitscore = better match; bitscore ≥ 50 = strong match; match strengths similar if difference in bitscores < 5).
 
 ```
 best.hits.Anolis.carolinensis           <- REEs::reportBestMatches(input.table=Anolis.carolinensis.50hits, output.table.path="Anolis.carolinensis.best.hits.txt")
@@ -176,13 +165,12 @@ best.hits.Protobothrops.mucrosquamatus  <- REEs::reportBestMatches(input.table=P
 best.hits.Python.bivittatus             <- REEs::reportBestMatches(input.table=Python.bivittatus.50hits, output.table.path="Python.bivittatus.best.hits.txt")
 best.hits.Vipera.berus                  <- REEs::reportBestMatches(input.table=Vipera.berus.50hits, output.table.path="Vipera.berus.best.hits.txt")
 ```
+Best matches for retained loci: [Anolis.carolinensis.exons.best.hits.txt](https://osf.io/a5b8n/download), [Gekko.japonicus.exons.best.hits.txt](https://osf.io/a9p23/download), [Pogona.vitticeps.exons.best.hits.txt](https://osf.io/xrycw/download), [Crotalus.horridus.exons.best.hits.txt](https://osf.io/zrndt/download), [Crotalus.mitchellii.exons.best.hits.txt](https://osf.io/bhnwy/download), [Ophiophagus.hannah.exons.best.hits.txt](https://osf.io/y49cv/download), [Pantherophis.guttatus.exons.best.hits.txt](https://osf.io/2vw9f/download), [Protobothrops.mucrosquamatus.exons.best.hits.txt](https://osf.io/aqps2/download), [Python.bivittatus.exons.best.hits.txt](https://osf.io/wxthd/download), [Vipera.berus.exons.best.hits.txt](https://osf.io/en4yg/download),[Thamnophis.sirtalis.exons.best.hits.txt](https://osf.io/mekqz/download).
 
-Output tables containing the set of best matches: [Anolis.carolinensis.exons.best.hits.txt](https://osf.io/a5b8n/download), [Gekko.japonicus.exons.best.hits.txt](https://osf.io/a9p23/download), [Pogona.vitticeps.exons.best.hits.txt](https://osf.io/xrycw/download), [Crotalus.horridus.exons.best.hits.txt](https://osf.io/zrndt/download), [Crotalus.mitchellii.exons.best.hits.txt](https://osf.io/bhnwy/download), [Ophiophagus.hannah.exons.best.hits.txt](https://osf.io/y49cv/download), [Pantherophis.guttatus.exons.best.hits.txt](https://osf.io/2vw9f/download), [Protobothrops.mucrosquamatus.exons.best.hits.txt](https://osf.io/aqps2/download), [Python.bivittatus.exons.best.hits.txt](https://osf.io/wxthd/download), [Vipera.berus.exons.best.hits.txt](https://osf.io/en4yg/download),[Thamnophis.sirtalis.exons.best.hits.txt](https://osf.io/mekqz/download).
-
-**5**. Extract sequences for the best matches identified in step 4.
+Get sequences for the best matches.
 
 ```
-#### Extracts the sequence of the best match of each exon query from each genome.
+#### Extracts the sequence of the best match to each query from each subject genome.
 Anolis.carolinensis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Anolis.carolinensis, input.seqs=Anolis.carolinensis.genome_url, output.path="Anolis.carolinensis.tblastx.best.hits_seqs.fas")
 Gekko.japonicus.best.hits.seqs              <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Gekko.japonicus, input.seqs=Gekko.japonicus.genome_url, output.path="Gekko.japonicus.tblastx.best.hits_seqs.fas")
 Pogona.vitticeps.best.hits.seqs             <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Pogona.vitticeps, input.seqs=Pogona.vitticeps.genome_url, output.path="Pogona.vitticeps.tblastx.best.hits_seqs.fas")
@@ -195,30 +183,29 @@ Python.bivittatus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(in
 Vipera.berus.best.hits.seqs                 <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Vipera.berus, input.seqs=Vipera.berus.genome_url, output.path="Vipera.berus.tblastx.best.hits_seqs.fas")
 Thamnophis.sirtalis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=best.hits.Thamnophis.sirtalis, input.seqs=Thamnophis.sirtalis.genome_url, output.path="Thamnophis.sirtalis.tblastx.best.hits_seqs.fas")
 ```
+Sequences for the best matches (fasta format): [Anolis.carolinensis.tblastx.best.hits_seqs.fas](https://osf.io/mabyw/download), [Gekko.japonicus.tblastx.best.hits_seqs.fas](https://osf.io/8etnk/download), [Pogona.vitticeps.tblastx.best.hits_seqs.fas](https://osf.io/cxey4/download), [Crotalus.horridus.tblastx.best.hits_seqs.fas](https://osf.io/apvx2/download), [Crotalus.mitchellii.tblastx.best.hits_seqs.fas](https://osf.io/tm4jq/download), [Ophiophagus.hannah.tblastx.best.hits_seqs.fas](https://osf.io/5d7wa/download), [Pantherophis.guttatus.tblastx.best.hits_seqs.fas](https://osf.io/byj3d/download), [Protobothrops.mucrosquamatus.tblastx.best.hits_seqs.fas](https://osf.io/6yk2b/download), [Python.bivittatus.tblastx.best.hits_seqs.fas](https://osf.io/ywdq9/download), [Vipera.berus.tblastx.best.hits_seqs.fas](https://osf.io/8vpq5/download), [Thamnophis.sirtalis.tblastx.best.hits_seqs.fas](https://osf.io/g8rqd/download).
 
-Output sequences in fasta format: [Anolis.carolinensis.tblastx.best.hits_seqs.fas](https://osf.io/mabyw/download), [Gekko.japonicus.tblastx.best.hits_seqs.fas](https://osf.io/8etnk/download), [Pogona.vitticeps.tblastx.best.hits_seqs.fas](https://osf.io/cxey4/download), [Crotalus.horridus.tblastx.best.hits_seqs.fas](https://osf.io/apvx2/download), [Crotalus.mitchellii.tblastx.best.hits_seqs.fas](https://osf.io/tm4jq/download), [Ophiophagus.hannah.tblastx.best.hits_seqs.fas](https://osf.io/5d7wa/download), [Pantherophis.guttatus.tblastx.best.hits_seqs.fas](https://osf.io/byj3d/download), [Protobothrops.mucrosquamatus.tblastx.best.hits_seqs.fas](https://osf.io/6yk2b/download), [Python.bivittatus.tblastx.best.hits_seqs.fas](https://osf.io/ywdq9/download), [Vipera.berus.tblastx.best.hits_seqs.fas](https://osf.io/8vpq5/download), [Thamnophis.sirtalis.tblastx.best.hits_seqs.fas](https://osf.io/g8rqd/download).
-
-**6**. Perform multiple sequence alignment (MAFFT algorithm) for the best matches to each query exon sequence and create a table of alignment statistics with format described in [Table 3](#Table3).
+For each locus, perform multiple sequence alignment (MAFFT algorithm) with the set of best matches. Calculate a variety of statistics for each alignment and summarize in a table. Columns of the alignment summary stats table are described in [Table 3](#Table3).
 
 ```
-### Create a character vector holding the paths to each of the ".*.tblastx.best.hits_seqs.fas" files generated in step 5. 
+### Create a character vector holding the paths to each of the ".*.tblastx.best.hits_seqs.fas" files 
 input.seqs.paths <- c("Anolis.carolinensis.tblastx.best.hits_seqs.fas", "Gekko.japonicus.tblastx.best.hits_seqs.fas", "Pogona.vitticeps.tblastx.best.hits_seqs.fas", "Crotalus.horridus.tblastx.best.hits_seqs.fas", "Crotalus.mitchellii.tblastx.best.hits_seqs.fas", "Ophiophagus.hannah.tblastx.best.hits_seqs.fas", "Pantherophis.guttatus.tblastx.best.hits_seqs.fas", "Protobothrops.mucrosquamatus.tblastx.best.hits_seqs.fas", "Python.bivittatus.tblastx.best.hits_seqs.fas", "Vipera.berus.tblastx.best.hits_seqs.fas", "Thamnophis.sirtalis.tblastx.best.hits_seqs.fas")
 
 ### Align homologous sequences and make a table to summarize data in each alignment (one row per aligned locus).
 stats.table.all  <- makeStatsTable(input.seqs=input.seqs.paths, input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp, output.path="./statsTable_REEs_SnakeCap.txt", species.names=c("Anolis carolinensis","Gekko japonicus","Pogona vitticeps","Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"), subgroup=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),alignments.out=alignments.dir, reference.species=11)
 ```
-The output table [statsTable_REEs_SnakeCap.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/statsTable_REEs_SnakeCap.txt) includes summary statistics and information for 66,489 alignments (**XXXXX.tar.xz**).
+The resulting summary stats table: [statsTable_REEs_SnakeCap.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/statsTable_REEs_SnakeCap.txt) includes stats for 66,489 alignments (**XXXXX.tar.xz**).
 
-**Table 3.** Description of information and statistics in each column of the output table generated by the function makeStatsTable in step 6. If you are using this table to interpret your own results with a different number of input species, then the column number will differ from what is shown here. Also, column names that include a species name will differ if you used different input species. The species name in columns 1 and 7 will always be the name of the primary species chosen in step 1.
+**Table 3.** Description of values in columns of the table generated by REEs::makeStatsTable. If you are using this table to interpret your own results with a different number of input species, then the column number will differ from what is shown here. Also, column names that include a species name will differ if you used different input species. The species name in columns 1 and 7 is the species whose genome was used in the first step.
 column number|column name|column description
 ---|---|---
 1|Thamnophis_sirtalis.locus|Contig accession and start and end position of the query sequence.
 2|num.Species|Number of species (individuals) in the alignment
 3|CountCover|Number of sites with at least four individuals with non-missing or ambiguous data
 4|absolutePIS|Number of parsimony informative sites
-5|percentPIS|percent of the sites with at least four individuals with non-missing or ambiguous data that are parsimony informative (i.e., percent of sites that could be parsimony informative that actually are)
+5|percentPIS|percent of the sites with at least four individuals with non-missing or ambiguous data that are parsimony informative (i.e., percent of sites that could be parsimony informative and that actually are).
 6|mean.pident|Mean pairwise percent of sites identical to *T. sirtalis*; this is the mean of columns 8–17.
-7|pident.Thamnophis_sirtalis|Percent of sites identical between *T. sirtalis* query and *T. sirtalis* best match; this should always be 100 and any other value indicates the tblastx match that was chosen as the best match (step 4 reportBestMatches function) is not the true best match.
+7|pident.Thamnophis_sirtalis|Percent of sites identical between *T. sirtalis* query and *T. sirtalis* best match; should always be 100 (usually a few exceptions due to tblastx issues).
 8|pident.Anolis_carolinensis|Percent of sites identical between *T. sirtalis* query and *A. carolinensis* best match.
 9|pident.Gekko_japonicus|Percent of sites identical between *T. sirtalis* query and *G. japonicus* best match.
 10|pident.Pogona_vitticeps|Percent of sites identical between *T. sirtalis* query and *P. vitticeps* best match.
@@ -236,7 +223,8 @@ column number|column name|column description
 22|min.pident.subgroup|Minimum of percent of sites identical to *T. sirtalis* among the snake species compared. In other words, the minimum of columns 11–17. The would be calculated across different columns if the subgroup was defined differently.
 23|alignment.width|Width of the alignment. This column was not generated for the SnakeCap dataset because I used an older version of makeStatsTable, which did not include this column in the output table.
 
-**7**. I used the function pick.loci (REEs package) to choose a set of REEs for sequence capture. I applied the following criteria to select REEs: (1) I filtered out loci if minimum percent genetic similarity (mean among snakes) to *T. sirtalis* was < 65% or = 100%; (2) for genes with multiple exons, I kept only the exon with the lowest mean pairwise genetic distance to *T. sirtalis* (16,650 exons pass this step); (3) the maximum number of baits required to target the exons was set to 20,000 (this constraint was imposed by the 20K my-baits kit) with bait size = 120nt and 50% bait tiling; (4) the maximum number of nucleotides to target was set to 1.2Mb (also constrained by the my-baits kit); (5) of the sets of exons that meet criteria 1–4, I chose the set that maximizes the total number of variable sites relative to *T. sirtalis*.
+
+Use the table of alignment summary stats to choose a set of REEs for sequence capture. I applied the following criteria to select REEs: (1) I filtered out loci if minimum percent genetic similarity (mean among snakes) to *T. sirtalis* was < 65% or = 100%; (2) for genes with multiple exons, I kept only the exon with the lowest mean pairwise genetic distance to *T. sirtalis* (16,650 exons pass this step); (3) the maximum number of baits required to target the exons was set to 20,000 (this constraint was imposed by the 20K my-baits kit) with bait size = 120nt and 50% bait tiling; (4) the maximum number of nucleotides to target was set to 1.2Mb (also constrained by the my-baits kit); (5) of the sets of exons that meet criteria 1–4, I chose the set that maximizes the total number of variable sites relative to *T. sirtalis*.
 
 <!--
 **The number of nucleotides targetted should be determined by the number of baits in the kit, length of baits, and tiling amount...For each row in the input stats matrix, calculate how many baits would be needed to target the exon using the bait length and tiling amount, and then use rollSum function on the number of baits (after other filtering steps and sorting steps are completed). Keep rows in which rollSum(number.of.baits) < 20,000. However, check if the 1.2Mb threshold wasn't determined by Arbor...
@@ -262,7 +250,7 @@ The output table includes 2,070 REEs and can be downloaded here [stats_data_Fast
 An updated version of this stats table stats_data_FastestExonPerGene_best.tsv that includes the WeinellEntry locus names is [stats_data_FastestExonPerGene_best_20Nov2020.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best_20Nov2020.tsv).
 -->
 
-**8**. Expand the target region to include noncoding DNA upstream and downstream of the loci identified in step 7. The amount of noncoding DNA included in each expanded target is a function of the bait length (120nt) and exon length, such that the expanded target length is a multiple of the bait length.
+Expand the target region to include upstream and downstream noncoding regions. The width of the added noncoding region included in each expanded target is a function of the bait length (120nt) and exon length, such that the expanded target length is a multiple of the bait length.
 
 ```
 ### Calculate start and end coordinates of expanded targets (REEs + flanking noncoding regions) such that the expanded target length is a multiple of the bait length.
@@ -307,22 +295,22 @@ Thamnophis.sirtalis_genome.url <- REEs::datasets(1)[1,2]
 
 REEs.expanded <- get_ncbi_sequences(outfile="./REEs.expanded.fas",input.seqs=Thamnophis.sirtalis_genome.url, accessionList=targets.contig, startList= targets.start, endList=targets.end, if.outside.range="partial",trim.ambiguous = FALSE)
 ```
-
 The output sequences (expanded REEs targets) can be downloaded here: [REEs.expanded.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.fas).
 
 Results:
-Nine of the expanded targets were only partially expanded, meaning that their sequence lengths (actually sequence lengths minus one, because of a bug in the code that has since been fixed) were not a multiple of the bait length. Three of these targets were located near the end of the reference contig and another six had terminal strings of ambiguous bases (Ns) that were trimmed (Table 4). Note: 57 other targets that were fully expanded had terminal Ns, but these Ns were not trimmed because they were not detected. The latest version of the get_ncbi_sequences function (REEs package) has an option to trim terminal Ns, but this option was not present when SnakeCap targets were chosen.
+Nine of the expanded targets were only partially expanded, meaning that their sequence lengths (actually sequence lengths minus one, because of a bug in the code that has since been fixed) were not a multiple of the bait length. Three of these targets were located near the end of the reference contig and another six had terminal strings of ambiguous bases (Ns) that were trimmed ([Table 4](#Table4)). Note: 57 other targets that were fully expanded had terminal Ns, but these Ns were not trimmed because they were not detected. The latest version of the get_ncbi_sequences function (REEs package) has an option to trim terminal Ns, but this option was not present when SnakeCap targets were chosen.
 
 Additionally, NW_013658076.1:768325-769765 (WeinellEntry1658) was targetted instead of NW_013658076.1:768324-769764; these are nearly identical (shifted by only one base on the contig) and I am not sure why this change was made.
 
-Six duplicate pairs of REEs (each pair with identical sequences) were present in the output of step 8 (Table 5). Only one of these pairs was recognized/identified (and filtered manually) prior to submitting target sequences to Arbor Biosciences.
+Six duplicate pairs of REEs were present ([Table 5](#Table5)). Only one of these pairs was recognized/identified (and filtered manually) prior to submitting target sequences to Arbor Biosciences.
 
 The remaining 2,068 REEs (expanded targets) were submitted to Arbor Biosciences for ulstrastringent filtering and probe design, and can be downloaded here: [REEs.expanded.final.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.final.fas). These were actually submitted to Arbor in two batches: [Version1_Target-loci_Jeff-Weinell_10Sep2018.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version1_Target-Loci_Jeff-Weinell_10Sep2018.fasta) and [Version2_additional-targets_20Sep2018.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version2_additional-targets_Entry1899to3152_20Sep2018.fasta). See [ultra-stringent filtering](#ultrastringentFiltering) section.
 
-Arbor performed ultrastringent filtration on the 2,068 REEs retained from step 8 (after removing two identical sequences; pair 1 Table 5). Ultrastringent filtering resulted in the removal of 203 REEs (1,865 REEs retained). Of the 203 REEs that were filtered, 76 were filtered because no baits could be designed for these loci (70 of these are listed in [Version1-loci-removed_ZeroBaitCoverageLoci.tsv](https://git.io/JLiEu) and six are listed in [Version2-loci-removed_ZeroBaitCoverageLoci.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version2-loci-removed_ZeroBaitCoverageLoci.tsv)); and 127 REEs were filtered because all proposed baits were non-specific within the *T. sirtalis* genome (eight of these are listed in [Version1-loci-removed_baits-nonspecific.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version1-loci-removed_nonspecific-baits.tsv) and 119 are listed in [Version2-loci-removed_baits-nonspecific.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version2-loci-removed_baits-nonspecific.tsv)).
+Arbor performed ultrastringent filtration on the 2,068 REEs retained from step 8 (after removing two identical sequences; pair 1 [Table 5](#Table5)). Ultrastringent filtering resulted in the removal of 203 REEs (1,865 REEs retained). Of the 203 REEs that were filtered, 76 were filtered because no baits could be designed for these loci (70 of these are listed in [Version1-loci-removed_ZeroBaitCoverageLoci.tsv](https://git.io/JLiEu) and six are listed in [Version2-loci-removed_ZeroBaitCoverageLoci.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version2-loci-removed_ZeroBaitCoverageLoci.tsv)); and 127 REEs were filtered because all proposed baits were non-specific within the *T. sirtalis* genome (eight of these are listed in [Version1-loci-removed_baits-nonspecific.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version1-loci-removed_nonspecific-baits.tsv) and 119 are listed in [Version2-loci-removed_baits-nonspecific.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version2-loci-removed_baits-nonspecific.tsv)).
 
 Of the 1,865 REEs that passed ultrastringent filtering, 212 were removed to allow a fraction of the 20K baits to be used to target other types of loci (UCEs, MHC genes, scalation genes, vision genes, and ddRAD-like loci), and these removed REEs are listed in the file [Version3-loci-removed_others.tsv](https://github.com/JeffWeinell/SnakeCap/blob/main/ArborFiles/Version3-loci-removed_others.tsv). Baits for the remaining 1,653 REEs were synthesized by Arbor (mybaits 20K bait kit: product no. 3001160).
 
+<a name="Table4"></a>
 **Table 4**. The nine partially expanded targets from output of step 8 and reason why targets were partially rather than fully expanded.
 WeinellEntry name|Contig accession ID|Nucleotide range of partially expanded target|Nucleotide range that would have been targetted if it had been possible|Reason why target sequence partially rather than fully expanded.
 ---|---|---|---|---
@@ -336,6 +324,7 @@ WeinellEntry2151|NW_013658527.1|12230-12575     |12230-12590    |12576-12590 all
 WeinellEntry2150|NW_013658733.1|434060-434488   |434008-434488  |434008-434059 all Ns
 WeinellEntry2152|NW_013658527.1|14050-14395     |14035-14395    |14035-14049 all Ns
 
+<a name="Table5"></a>
 **Table 5**. Pairs of REEs having identical sequences that were included in the ouput of the pick.loci function (step 8). Five of these pairs were subsequently filtered, either immediately before or after application of Arbor's ultrastringent filtering algorithm. One pair (pair 6) was not identified until after synthesis and sequencing. The latest version of the pick.loci function has an option to filter REEs if the bitscores of the top matches are too similar according to a user-defined threshold.
 Contig Accession ID|Start Position|End Position|Sequence/Pair ID|Other ID|Step when filtered
 ---|---|---|---|---|---
@@ -790,6 +779,7 @@ length(which(table(mhc.hits.filtered.100[,1])==0))
 
 ```
 
+<a name="Table6"></a>
 **Table 6**. Summary of the MHC filtered hit table. The table below shows the number MHC loci (columns 2-5) with at least n matches (column 1) in the genome of *T. sirtalis* with at least *x* percent coverage and percent identical sites across the covered region.
   n matches | MHC loci: x=0 | x=60 | x=70 | x=80 | x=90 | x=95 | x=100
  ---|---|---|---|---|---|---|---
@@ -839,6 +829,7 @@ I used blastn to search for the vision loci probes from Schott et al. (2017) (wh
 
 After choosing the target loci, probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total. See **Target-loci_Coverage_graph_22October2020.pdf** for a visual summary of target loci, probes, probe coverage, and features of loci including genes, mRNA/transcribed regions, and protein-coding (CDS) regions. This graph was generated with **graph_target_and_features.R** and then filesize reduction in Adobe Acrobat.
 
+<a name="Table7"></a>
 **Table 7.** Genomes from which synthesized baits were designed from.
 species | genome assembly accession | contig prefixes | n target loci with baits designed from species | n bait-containing contigs
 ----|----|----|----|----
