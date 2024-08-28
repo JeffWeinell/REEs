@@ -3,6 +3,7 @@
 # Contents
 
 [Description of SnakeCap probe set](#Description)
+
 [Selecting loci to capture](#Methods.SelectingTargetLoci)
   - [Rapidly-evolving Exons (REEs)](#Methods.SelectingREEs)
   - [Ultraconserved-elements (UCEs)](#Methods.SelectingUCEs)
@@ -10,7 +11,9 @@
   - [Major Histocompatibility loci (MHCs)](#Methods.SelectingMHC)
   - [Scalation loci](#Methods.SelectingScalation)
   - [Vision loci](#Methods.SelectingVision)
+
 [Ultrastringent filtration and Probe Synthesis](#ProbeSynthesis)
+
 [References](#References)
 
 <a name="Description"></a>
@@ -819,8 +822,7 @@ I used blastn to search for the vision loci probes from Schott et al. (2017) (wh
 
 After choosing the target loci, probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total. See **Target-loci_Coverage_graph_22October2020.pdf** for a visual summary of target loci, probes, probe coverage, and features of loci including genes, mRNA/transcribed regions, and protein-coding (CDS) regions. This graph was generated with **graph_target_and_features.R** and then filesize reduction in Adobe Acrobat.
 
-**Table X.** Genomes from which synthesized baits were designed from.
-
+**Table 7.** Genomes from which synthesized baits were designed from.
 species | genome assembly accession | contig prefixes | n target loci with baits designed from species | n bait-containing contigs
 ----|----|----|----|----
 *Thamnophis sirtalis* | GCF_001077635.1 | NW_0136; LFLD01 | 2,619  | 1,412 
