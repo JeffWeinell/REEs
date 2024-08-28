@@ -820,7 +820,7 @@ I used blastn to search for the vision loci probes from Schott et al. (2017) (wh
 <a name="ProbeSynthesis"></a>
 ## Ultra-stringent filtration and probe synthesis
 
-After choosing the target loci, probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total. See **Target-loci_Coverage_graph_22October2020.pdf** for a visual summary of aligned target loci, probes, probe coverage, and annotations including genes, mRNA/transcribed regions, and protein-coding (CDS) regions. <!-- This graph was generated with **graph_target_and_features.R** and then filesize reduction in Adobe Acrobat. -->
+After identifying candidate target loci, candidate probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total. See **Target-loci_Coverage_graph_22October2020.pdf** for a visual summary of aligned target loci, probes, probe coverage, and annotations including genes, mRNA/transcribed regions, and protein-coding (CDS) regions. <!-- This graph was generated with **graph_target_and_features.R** and then filesize reduction in Adobe Acrobat. -->
 
 <a name="Table7"></a>
 **Table 7.** Genomes from which synthesized baits were designed from.
