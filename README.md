@@ -812,7 +812,7 @@ I targeted a subset of the genes included in the study by Holthaus et al. (2017)
 
 
 <a name="Methods.SelectingVision"></a>
-## Selecting vision loci:
+### Selecting vision loci:
 
 I used blastn to search for the vision loci probes from Schott et al. (2017) (which were from *Anolis*, *Columba*, *Gallus*, and *Pelodiscus*, *Sceloporus*, or *Python*) within the snake genomes. Most of the SnakeCap probes for these loci are designed from *Ophiophagus* (n = 88), but some probes were designed from *Thamnophis* (n = 21), *Protobothrops* (n = 5), *Pantherophis* (n = 3), or *Python* (n = 2), when blastn of Schott et al 2017 probes did not yield a strong match in *Ophiophagus*.
 
