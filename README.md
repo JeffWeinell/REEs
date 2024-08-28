@@ -1,6 +1,6 @@
 # SnakeCap Probe Set
 
-# Contents
+## Contents
 
 [What is the SnakeCap probe set?](#Description)
 
@@ -17,7 +17,7 @@
 [References](#References)
 
 <a name="Description"></a>
-# Description of SnakeCap probe set
+## What is the SnakeCap probe set?
 
 The SnakeCap probe set was designed to facilitate targeted DNA sequencing for phylogenomic studies across and within diverse lineages of snakes (e.g. [Weinell et al. 2024](https://doi.org/10.1098/rsos.240064)).
 
@@ -47,7 +47,7 @@ All loci |  | 3,128 | 1,517,011 | 120–7,501 (mean = 531.62)
 
 
 <a name="Methods.SelectingTargetLoci"></a>
-# Selecting candidate loci to target for targeted sequencing
+## Selecting candidate loci to target for targeted sequencing
 
 Here I outline the steps that I used to identify candidate loci to target. [Ultrastringent filtration and probe synthesis](#ProbeSynthesis) steps filtered some candidate targets from inclusion in the final set of SnakeCap probe targets.
 
@@ -569,7 +569,7 @@ Result: 1,000 *T. sirtalis* UCEs chosen as targets: [targetUCEs.1000.fas](https:
 
 
 <a name="Methods.SelectingddRAD"></a>
-## Selecting the set of target ddRAD-like loci
+### Selecting the set of target ddRAD-like loci
 
 #### Overview:
 
@@ -718,7 +718,7 @@ Set of ddRAD-like loci to target can be downloaded here: [Thermophis_ProposedLoc
 
 
 <a name="Methods.SelectingMHC"></a>
-## Selecting MHC loci:
+### Selecting MHC loci:
 
 I used grep to search within the annotation table of the *T. sirtalis* genome (**ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3**) for CDS features of major histocompatibility genes, using the following grep search terms: (1) "MHC", (2) "major histocompatibility". Results = 86 CDS regions corresponding to exons of 19 genes (**ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3**).
 
@@ -823,7 +823,7 @@ See the README file in ArborFiles folder for a description about how the bait ki
 -->
 
 <a name="Methods.SelectingScalation"></a>
-## Selecting scalation loci:
+### Selecting scalation loci:
 
 I targeted a subset of the genes included in the study by Holthaus et al. (2017). In that study, the authors identified homologous genes of the Epidermal Differentiation Complex (which are putatively involved in scalation) of *Python bivittatus* and *Ophiophagus hannah*. I downloaded the *Ophiophagus* scalation gene sequences using the table of genomic coordinates provided by Holthaus et al. (2017), and then used tblastn to search for and obtain homologous loci in *T. sirtalis*, *Protobothrops mucrosquamatus*, and *Crotalus horridus*.
 
