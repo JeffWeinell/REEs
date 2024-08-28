@@ -4,7 +4,7 @@
 
 [Description of SnakeCap probe set](#Description)
 
-[Selecting loci to capture](#Methods.SelectingTargetLoci)
+[Selecting loci to target for sequence capture](#Methods.SelectingTargetLoci)
   - [Rapidly-evolving exons (REEs)](#Methods.SelectingREEs)
   - [Ultraconserved elements (UCEs)](#Methods.SelectingUCEs)
   - [ddRAD-like loci](#Methods.SelectingddRAD)
@@ -45,7 +45,7 @@ All loci |  | 3,128 | 1,517,011 | 120–7,501 (mean = 531.62)
 
 
 <a name="Methods.SelectingTargetLoci"></a>
-# Selecting loci to capture
+# Selecting loci to target for sequence capture
 
 <a name="Methods.SelectingREEs"></a>
 ### Rapidly-evolving exons (REEs)
