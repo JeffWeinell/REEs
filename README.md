@@ -19,7 +19,7 @@
 <a name="Description"></a>
 # Description of SnakeCap probe set
 
-The SnakeCap probe set was designed to facilitate targeted DNA sequencing for phylogenomic studies across and within diverse lineages of snakes (e.g. [Weinell et al. (2024)](https://doi.org/10.1098/rsos.240064)).
+The SnakeCap probe set was designed to facilitate targeted DNA sequencing for phylogenomic studies across and within diverse lineages of snakes (e.g. [Weinell et al. 2024](https://doi.org/10.1098/rsos.240064)).
 
 The probe set includes 20,020 probe sequences (120bp) for 3,128 single-copy loci (1,517,011 nt) in genomes of a diverse group of snakes.
 
