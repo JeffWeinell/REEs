@@ -616,7 +616,7 @@ names(Thermophis.ddradlike.seqs) <- proposed.ddRAD.loci.coordinates$coordinates
 ### Save sequences.
 writeXStringSet(Thermophis.ddradlike.seqs,"Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas")
 ```
-*Thermophis baileyi* sequences for proposed ddRAD-like loci can be downloaded here: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas). **Note: QLTV01020412.1:1-995, which was targetted, is not in the table of proposed loci (nor is any locus on that contig); need to figure out why.**
+*Thermophis baileyi* sequences for proposed ddRAD-like loci can be downloaded here: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas).
 
 **3**. Trim loci that have strings of ambiguous bases to keep the longest non-ambiguous region.
 ```
@@ -678,7 +678,7 @@ writeXStringSet(proposed.loci.trimmed,"Thermophis_ProposedLoci_CCTGCAGG-GAATTC_9
 ```
 Proposed ddRAD-like loci after trimming can be downloaded here: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas).
 
-**4**. I randomly selected loci from the set of trimmed, proposed ddRAD-like loci until all remaining baits (n = ) in the 20K bait kit were assigned. **Finish adding the code used to calculate baits per locus**
+**4**. I randomly selected loci from the set of trimmed, proposed ddRAD-like loci until all remaining baits (n = ) in the 20K bait kit were assigned. **To do: add code used to calculate baits per locus**
 ```
 ### Read in the trimmed loci if not already loaded
 proposed.loci.trimmed             <- Biostrings::readDNAStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas")
@@ -699,16 +699,15 @@ ddrad.targets.seqs <- proposed.loci.trimmed.randomOrder[which(baits.per.locus.ro
 ### Save the set of proposed ddRAD-like loci to target
 writeXStringSet(ddrad.targets.seqs,"/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/ddRAD-like/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed_targetted.fas")
 ```
-Set of ddRAD-like loci to target can be downloaded here: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed_targetted.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed_targetted.fas).
-**Note: QLTV01020412.1:1-995, which was also targetted, is not in this file**
+Sequences for ddRAD-like loci to target: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed_targetted.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed_targetted.fas)
 
 
 <a name="Methods.SelectingMHC"></a>
 ### Selecting MHC loci:
 
-I used grep to search within the annotation table of the *T. sirtalis* genome (**ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3**) for CDS features of major histocompatibility genes, using the following grep search terms: (1) "MHC", (2) "major histocompatibility". Results = 86 CDS regions corresponding to exons of 19 genes (**ref_Thamnophis_sirtalis-6.0_top_level_JLW_immune-loci-CDS.gff3**).
+I used grep to search within the annotation table of the *T. sirtalis* genome [ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/exomes/ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip) for CDS features of major histocompatibility genes, using the following grep search terms: (1) "MHC", (2) "major histocompatibility". Results = 86 CDS regions corresponding to exons of 19 genes: [ref_Thamnophis_sirtalis-6.0_top_level_MHC.gff3](https://github.com/JeffWeinell/SnakeCap/raw/main/immune/ref_Thamnophis_sirtalis-6.0_top_level_MHC.gff3).
 
-Target loci included the entire CDS region plus approximately equal amounts of upstream and downstream non-coding DNA (0-60nt). The amount of flanking non-coding DNA targetted was determined by the size of baits (120nt baits). Specifically, the following R script was used to (1) define coordinates of target loci, and (2) to extract MHC targets from the *T. sirtalis* genome and save them to the file **MHC-target-loci_preliminary.fasta**:
+Target loci included the entire CDS region plus approximately equal amounts of upstream and downstream non-coding DNA (0-60nt). The amount of flanking non-coding DNA targetted was determined by the size of baits (120nt baits). Specifically, the following R script was used to (1) define coordinates of target loci, and (2) to extract MHC targets from the *T. sirtalis* genome and save them to [MHC-target-loci_preliminary.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/immune/MHC-target-loci_preliminary.fasta).
 
 ```
 library(RCurl)
