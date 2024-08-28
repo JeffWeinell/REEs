@@ -19,17 +19,19 @@
 <a name="Description"></a>
 # Description of SnakeCap probe set
 
-The probe set includes 20,020 probes for 3,128 single-copy loci (1,517,011 nt) shared across snakes. Loci are categorized into four types: (1) rapidly evolving exons (REEs; n = 1,652), (2) ultra-conserved elements (UCEs; n = 907), (3) ddRAD-like loci (n = 328), (4) and functionally interesting genes, which includes 27 major histocompatibility complex (MHC) genes, 119 vision genes, and 95 scalation genes.
+The probe set includes 20,020 probes for 3,128 single-copy loci (1,517,011 nt) in genomes of a diverse group of snakes.
 
-REEs include one or more entire exons and one or both exon-flanking regions, and range in length from 121 to 7,501 nt. I used a modified version of the FrogCap pipeline (Hutter et al., 2019) to select the optimal set of REEs from an alignment of snake exomes.
+Target loci include rapidly evolving exons (REEs), ultra-conserved elements (UCEs), ddRAD-like loci, major histocompatibility complex (MHC) genes, vision-associated genes, and scalation-associated genes.
+
+REEs include one or more entire exons, one or both exon-flanking regions, and range in length from 121 to 7,501 nt. I used a modified version of the FrogCap pipeline (Hutter et al., 2019) to select the optimal set of REEs from an alignment of snake exomes.
 
 SnakeCap UCEs are a subset of the *Micrurus fulvius* UCEs from Streicher and Wiens (2017).
 
 ddRAD-like loci are shared, single-copy loci identified from in-silico ddRAD using recognition sites for SbfI and EcoRI restriction enzymes.
 
-Functional loci included entire or partial gene regions that have previously been predicted or known to function in either (1) vertebrate immune systems, (2) vision, (3) or scalation.
+MHC, vision, and scalation loci included entire or subregions of genes. Putative gene functions are from results of previous studies.
 
-**Table 1**. For each type of locus: genomic region targeted, number of loci (nloci), total number of nucleotides targeted (nnt), and nucleotide lengths (nt/locus) of the shortest and longest loci.
+**Table 1**. For each type of locus: genomic region targeted, number of loci (nloci), number of nucleotides targeted (nt), and nucleotide lengths (nt/locus) of the shortest and longest loci.
 
 Locus type | Region targeted | nloci | nnt | nt/locus (min–max)
 ---- | ---- | ---- | ---- | ----
@@ -62,7 +64,7 @@ I downloaded the [*Thamnophis sirtalis* genome](https://ftp.ncbi.nlm.nih.gov/gen
 
 Step-by-step description of pipeline used to select target REEs:
 
-**1**. I used the functions load.gff and filter.gff (REEs R package) to filter the *Thamnophis sirtalis* genome feature table (GFF3 format) to include only CDS feature tracks ≥ 120bp in length. The input (unfiltered) GFF3 file can be found here: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz). <!-- Learn about GFF3 file format [here](https://uswest.ensembl.org/info/website/upload/gff3.html). -->
+**1**. I used the R functions REEs::load.gff and REEs::filter.gff to filter the *Thamnophis sirtalis* genome feature table [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz) to include only CDS features ≥ 120bp.
 
 ```
 ### Load REEs package
@@ -82,14 +84,14 @@ write.table(x=output.gff,file="./Thamnophis.sirtalis_GFF_CDS_longer120bp.txt",qu
 ```
 The output feature table can be downloaded here: [Thamnophis.sirtalis_GFF_CDS_longer120bp.txt](https://osf.io/tm7qw/download).  Note 1: This filtered GFF table is also included as a data table object in the REEs R package (object name: Thamnophis.sirtalis_GFF_CDS_longer120bp). Note 2: the filtered GFF table is not true GFF format, because the header/comment lines are not included; nevertheless, the format used for the columns follows GFF3 format.
 
-**2**. I used the function get.seqs.from.gff to extract the sequences corresponding the CDS features in the table generated in step 1. 
+**2**. I used the function REEs::get.seqs.from.gff to extract the sequences corresponding the CDS features in the table generated in step 1. 
 
 ```
 ### URL to the Thamnophis sirtalis genome (fasta formatted sequences).
 Thamnophis.sirtalis_genome.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz"
 
 ### Extract the sequences for the loci in the filtered GFF (Thamnophis.sirtalis_GFF_CDS_longer120bp from step 1).
-Thamnophis.sirtalis_exome   <- get.seqs.from.gff(input.seqs=Thamnophis.sirtalis_genome.path,input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp) 
+Thamnophis.sirtalis_exome   <- REEs::get.seqs.from.gff(input.seqs=Thamnophis.sirtalis_genome.path,input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp) 
 
 ### Save extracted sequences
 writeXStringSet(x=Thamnophis.sirtalis_exome,filepath="./Thamnophis_sirtalis_exome_longer120bp.fas")
