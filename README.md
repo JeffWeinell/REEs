@@ -46,7 +46,7 @@ ddRAD-like | in silico ddRAD selected loci | 328 | 271,505 | 120–996
 MHC | Exons + 0–60nt each of 5' & 3' flanking regions of major histocompatibility complex (MHC) genes. | 27 | 5,354 | 121–364
 Vision | 160nt, including ≤ 70nt upstream of start codon if targeted exon is first exon. Usually, first 160nt of exon targeted. | 119 | 18,857 | 120–170
 Scalation | 1100nt, including 1000nt of promoter region + first 100nt of first exon. | 95 | 81,851 | 125–1,101
-All loci |  | 3,128 | 1,517,011 | 120–7,501 (mean = 531.62)  
+All loci |  | 3,128 | 1,517,011 | 120–7,501 (mean = 531.62)
 
 
 <a name="Methods.SelectingTargetLoci"></a>
@@ -255,7 +255,7 @@ Expand the target region to include upstream and downstream noncoding regions. T
 ```
 ### Calculate start and end coordinates of expanded targets (REEs + flanking noncoding regions) such that the expanded target length is a multiple of the bait length.
 
-### Read the output table of the function pick.loci in step 7.
+### Read pick.loci output table
 stats.table.best       <- as.data.frame(data.table::fread("stats_data_FastestExonPerGene_best_28Dec2020.tsv",header=T,sep="\t"))
 
 ### Define a vector holding the locus lengths
@@ -434,15 +434,15 @@ Output tables were saved to the files: [Crotalus.horridus.blastn.UCEs.best.hits.
 
 **4**. I used the function REEs::get.seqs.from.blastTable to extract and save the set of best-match UCEs from each genome.
 ```
-#### Read in the tables of best matches generated from step 3 (if these are not already loaded).
-UCEs.best.hits.Crotalus.horridus             <- as.data.frame(data.table::fread("./Crotalus.horridus.blastn.UCEs.best.hits.txt"),header=T)
-UCEs.best.hits.Crotalus.mitchellii           <- as.data.frame(data.table::fread("./Crotalus.mitchellii.blastn.UCEs.best.hits.txt"),header=T)
-UCEs.best.hits.Ophiophagus.hannah            <- as.data.frame(data.table::fread("./Ophiophagus.hannah.blastn.UCEs.best.hits.txt"),header=T)
-UCEs.best.hits.Pantherophis.guttatus         <- as.data.frame(data.table::fread("./Pantherophis.guttatus.blastn.UCEs.best.hits.txt"),header=T)
-UCEs.best.hits.Protobothrops.mucrosquamatus  <- as.data.frame(data.table::fread("./Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt"),header=T)
-UCEs.best.hits.Python.bivittatus             <- as.data.frame(data.table::fread("./Python.bivittatus.blastn.UCEs.best.hits.txt"),header=T)
-UCEs.best.hits.Thamnophis.sirtalis           <- as.data.frame(data.table::fread("./Thamnophis.sirtalis.blastn.UCEs.best.hits.txt"),header=T)
-UCEs.best.hits.Vipera.berus                  <- as.data.frame(data.table::fread("./Vipera.berus.blastn.UCEs.best.hits.txt"),header=T)
+#### Load tables with best matches
+UCEs.best.hits.Crotalus.horridus             <- as.data.frame(data.table::fread("Crotalus.horridus.blastn.UCEs.best.hits.txt"),header=T)
+UCEs.best.hits.Crotalus.mitchellii           <- as.data.frame(data.table::fread("Crotalus.mitchellii.blastn.UCEs.best.hits.txt"),header=T)
+UCEs.best.hits.Ophiophagus.hannah            <- as.data.frame(data.table::fread("Ophiophagus.hannah.blastn.UCEs.best.hits.txt"),header=T)
+UCEs.best.hits.Pantherophis.guttatus         <- as.data.frame(data.table::fread("Pantherophis.guttatus.blastn.UCEs.best.hits.txt"),header=T)
+UCEs.best.hits.Protobothrops.mucrosquamatus  <- as.data.frame(data.table::fread("Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt"),header=T)
+UCEs.best.hits.Python.bivittatus             <- as.data.frame(data.table::fread("Python.bivittatus.blastn.UCEs.best.hits.txt"),header=T)
+UCEs.best.hits.Thamnophis.sirtalis           <- as.data.frame(data.table::fread("Thamnophis.sirtalis.blastn.UCEs.best.hits.txt"),header=T)
+UCEs.best.hits.Vipera.berus                  <- as.data.frame(data.table::fread("Vipera.berus.blastn.UCEs.best.hits.txt"),header=T)
 
 #### Define the genome URL paths. The URLs for genomes used in the SnakeCap study can be called using the datasets function of REEs package.
 Crotalus.horridus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,1]=="Crotalus horridus"),2]
@@ -455,14 +455,14 @@ Vipera.berus.genome_url                 <- REEs::datasets(1)[which(datasets(1)[,
 Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Thamnophis sirtalis"),2]
 
 #### Extracts the sequence of the best match of each UCE from each snake genome.
-Crotalus.horridus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Crotalus.horridus, input.seqs=Crotalus.horridus.genome_url, output.path="./Crotalus.horridus.UCEs.fas")
-Crotalus.mitchellii.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Crotalus.mitchellii, input.seqs=Crotalus.mitchellii.genome_url, output.path="./Crotalus.mitchellii.UCEs.fas")
-Ophiophagus.hannah.best.hits.seqs           <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Ophiophagus.hannah, input.seqs=Ophiophagus.hannah.genome_url, output.path="./Ophiophagus.hannah.UCEs.fas")
-Pantherophis.guttatus.best.hits.seqs        <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Pantherophis.guttatus, input.seqs=Pantherophis.guttatus.genome_url, output.path="./Pantherophis.guttatus.UCEs.fas")
-Protobothrops.mucrosquamatus.best.hits.seqs <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Protobothrops.mucrosquamatus, input.seqs=Protobothrops.mucrosquamatus.genome_url, output.path="./Protobothrops.mucrosquamatus.UCEs.fas")
-Python.bivittatus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Python.bivittatus, input.seqs=Python.bivittatus.genome_url, output.path="./Python.bivittatus.UCEs.fas")
-Vipera.berus.best.hits.seqs                 <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Vipera.berus, input.seqs=Vipera.berus.genome_url, output.path="./Vipera.berus.UCEs.fas")
-Thamnophis.sirtalis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Thamnophis.sirtalis, input.seqs=Thamnophis.sirtalis.genome_url, output.path="./Thamnophis.sirtalis.UCEs.fas")
+Crotalus.horridus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Crotalus.horridus, input.seqs=Crotalus.horridus.genome_url, output.path="Crotalus.horridus.UCEs.fas")
+Crotalus.mitchellii.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Crotalus.mitchellii, input.seqs=Crotalus.mitchellii.genome_url, output.path="Crotalus.mitchellii.UCEs.fas")
+Ophiophagus.hannah.best.hits.seqs           <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Ophiophagus.hannah, input.seqs=Ophiophagus.hannah.genome_url, output.path="Ophiophagus.hannah.UCEs.fas")
+Pantherophis.guttatus.best.hits.seqs        <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Pantherophis.guttatus, input.seqs=Pantherophis.guttatus.genome_url, output.path="Pantherophis.guttatus.UCEs.fas")
+Protobothrops.mucrosquamatus.best.hits.seqs <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Protobothrops.mucrosquamatus, input.seqs=Protobothrops.mucrosquamatus.genome_url, output.path="Protobothrops.mucrosquamatus.UCEs.fas")
+Python.bivittatus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Python.bivittatus, input.seqs=Python.bivittatus.genome_url, output.path="Python.bivittatus.UCEs.fas")
+Vipera.berus.best.hits.seqs                 <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Vipera.berus, input.seqs=Vipera.berus.genome_url, output.path="Vipera.berus.UCEs.fas")
+Thamnophis.sirtalis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Thamnophis.sirtalis, input.seqs=Thamnophis.sirtalis.genome_url, output.path="Thamnophis.sirtalis.UCEs.fas")
 ```
 
 Output sequences in fasta format can be downloaded here: [Crotalus.horridus.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.UCEs.fas), [Crotalus.mitchellii.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.UCEs.fas), [Ophiophagus.hannah.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.UCEs.fas), [Pantherophis.guttatus.UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.UCEs.fas), [Protobothrops.mucrosquamatus.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.UCEs.fas), [Python.bivittatus.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.UCEs.fas), [Thamnophis.sirtalis.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.UCEs.fas), [Vipera.berus.UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.UCEs.fas). Important note: Sequence headers in the output fastas have the format "querySequenceName_Subject=subjectContigName_ContigStart_ContigEnd". For example, the *Crotalus horridus* sequence that is the best match to UCE 1003 of *Micrurus fulvius* has the header "micrurus_fulvius_uce-1003_Subject=LVCR01005387.1_10818_10626". This is not intuitive because the only species in the header is *Micrurus fulvius*, even though the sequence is actually from *Crotalus horridus*.
@@ -497,10 +497,10 @@ The renamed sequences can be downloaded here: [Crotalus.horridus.UCEs_renamed.fa
 **5**. I used the function REEs::align.shared.loci to align the set of UCEs found in all snake genomes; this function invokes MAFFT for multisequence alignment.
 
 ```
-### Define an character vector of paths to the input (unaligned) UCE sequence files. These are the sequences obtained from step 4. Note: Using the original or "renamed" (with headers renamed) sequences produces the same output.
+### Character vector with paths to the unaligned UCE sequence files.
 UCEs.paths <- c("Crotalus.horridus.UCEs_renamed.fas","Crotalus.mitchellii.UCEs_renamed.fas","Ophiophagus.hannah.UCEs_renamed.fas","Pantherophis.guttatus.UCEs_renamed.fas","Protobothrops.mucrosquamatus.UCEs_renamed.fas","Python.bivittatus.UCEs_renamed.fas","Thamnophis.sirtalis.UCEs_renamed.fas","Vipera.berus.UCEs_renamed.fas")
 
-### Align the UCEs that are found in each of the files specified by UCEs.paths
+### Align sequences for each UCE locus
 aligned.UCEs <- align.shared.loci(input.seqs=UCEs.paths, indv=c("Pantherophis.guttatus", "Thamnophis.sirtalis", "Vipera.berus", "Python.bivittatus", "Protobothrops.mucrosquamatus", "Ophiophagus.hannah", "Crotalus.mitchellii", "Crotalus.horridus"), reference.indv=7, seqname.str.delim="_", seqname.str.loc=3, output.dir="./MAFFT-aligned-UCEs")
 
 ```
@@ -594,7 +594,7 @@ proposed.ddRAD.loci.coordinates       <- REEs::proposeLoci.ddRADlike(input.seqs=
 ```
 Result: Table containing coordinates for 2,337 proposed ddRAD-like loci: [ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt).
 
-**2**. I used the function get_ncbi_sequences (REEs package) to obtain the sequences of the loci proposed in step 1. For loci on the antisense strands of contigs I first downloaded the corresponding reverse complement sequence (from the sense strand), and then I used the function reverseComplement (Biostrings package) to obtain the correct antisense strand target.
+**2**. Extract sequences for proposed loci. <!-- For loci on the antisense strands of contigs I first downloaded the corresponding reverse complement sequence (from the sense strand), and then I used the function reverseComplement (Biostrings package) to obtain the correct antisense strand target. -->
 ```
 ### Defining vectors containing the Genbank accession and range of positions to download. This information is from the second, third, and fourth columns of the table that was generated by the function proposeLoci.ddRADlike. Note that the start and end positions are relative to the sense strand of the contig. The coordinates of proposed loci on the antisense strand have the format "ContigAccession:cEndPosition-StartPosition", which is equal to the reverse complement of a sequence with coordinates "ContigAccession:StartPosition-EndPosition".
 ContigAccession <- proposed.ddRAD.loci.coordinates$ContigAccession
