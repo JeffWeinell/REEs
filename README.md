@@ -1,8 +1,8 @@
-# SnakeCap Sequence Capture Probe Set
+# SnakeCap Probe Set
 
 # Contents
 
-[Description of SnakeCap probe set](#Description)
+[What is the SnakeCap probe set?](#Description)
 
 [Selecting loci to target for sequence capture](#Methods.SelectingTargetLoci)
   - [Rapidly-evolving exons (REEs)](#Methods.SelectingREEs)
@@ -19,7 +19,9 @@
 <a name="Description"></a>
 # Description of SnakeCap probe set
 
-The probe set includes 20,020 probes for 3,128 single-copy loci (1,517,011 nt) in genomes of a diverse group of snakes.
+The SnakeCap probe set was designed to facilitate targeted DNA sequencing for phylogenomic studies across and within diverse lineages of snakes (e.g. [Weinell et al. (2024)](https://doi.org/10.1098/rsos.240064)).
+
+The probe set includes 20,020 probe sequences (120bp) for 3,128 single-copy loci (1,517,011 nt) in genomes of a diverse group of snakes.
 
 Target loci include rapidly evolving exons (REEs), ultra-conserved elements (UCEs), ddRAD-like loci, major histocompatibility complex (MHC) genes, vision-associated genes, and scalation-associated genes.
 
@@ -45,7 +47,9 @@ All loci |  | 3,128 | 1,517,011 | 120–7,501 (mean = 531.62)
 
 
 <a name="Methods.SelectingTargetLoci"></a>
-# Selecting loci to target for sequence capture
+# Selecting loci to target for targeted sequencing
+
+Here I outline the steps that I used to identify loci 
 
 <a name="Methods.SelectingREEs"></a>
 ### Rapidly-evolving exons (REEs)
@@ -56,13 +60,11 @@ I used the following R functions (shown as packageName::functionName):
 
 REEs::load.gff --> REEs::filter.gff --> REEs::get.seqs.from.gff --> Biostrings::writeXStringSet --> REEs::blast --> REEs::reportBestMatches --> REEs::get.seqs.from.blastTable --> REEs::makeStatsTable --> REEs::pick.loci --> (then functions in step 8  to get REEs + small region of exon-flanking DNA).
 
-#### Step-by-step procedure:
+#### Step-by-step procedure to select target REEs:
 
 <!--
 I downloaded the [*Thamnophis sirtalis* genome](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz) and its associated annotation table: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz) (n = 559,130 features annotated). Then, I renamed the contigs in the genome file to have the following format: **Thamnophis_sirtalis_GCF_001077635.1_read1**, **Thamnophis_sirtalis_GCF_001077635.1_read2**, etc., and saved this renamed genome in sequential fasta format: [ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/exomes/ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip). The two-column, tab-delimited table [Scaffold-Name-Key.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/main/exomes/Scaffold-Name-Key.txt?token=AJJOG2UQ6MDA7UY2U4R6BFS7ZDZYS) includes the new contig name in the first column and the original contig name in the second column:
 -->
-
-Steps used to select target REEs:
 
 Get DNA sequences in CDS regions >120bp in the *Thamnophis sirtalis* reference genome
 
@@ -91,8 +93,8 @@ writeXStringSet(x=Thamnophis.sirtalis_exome,filepath="Thamnophis_sirtalis_exome_
 ```
 
 Output files from previous code block:
- - [Thamnophis.sirtalis_GFF_CDS_longer120bp.txt](https://osf.io/tm7qw/download)
- - [Thamnophis_sirtalis_exome_longer120bp.fas](https://osf.io/v7ecb/download)
+ - [Thamnophis.sirtalis_GFF_CDS_longer120bp.txt](https://osf.io/tm7qw/download) <!-- filesize 39.7 Mb -->
+ - [Thamnophis_sirtalis_exome_longer120bp.fas](https://osf.io/v7ecb/download) <!-- filesize 33.9 Mb -->
 
 <!--
 Note 1: This filtered GFF table is also included as a data table object in the REEs R package (object name: Thamnophis.sirtalis_GFF_CDS_longer120bp).
