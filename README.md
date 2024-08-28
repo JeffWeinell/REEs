@@ -21,7 +21,7 @@
 
 The SnakeCap probe set was designed to facilitate targeted DNA sequencing for phylogenomic studies across and within diverse lineages of snakes (e.g. [Weinell et al. 2024](https://doi.org/10.1098/rsos.240064)). 
 
-The probe set includes 20,020 probe sequences (120bp) for 3,128 single-copy loci (1,517,011 nt) in genomes of a diverse group of snakes.
+The [probe set](https://github.com/JeffWeinell/SnakeCap/raw/main/Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta) includes 20,020 sequences (120bp baits) targeting [3,128 loci](https://github.com/JeffWeinell/SnakeCap/raw/main/Weinell_TargetLoci_Snakes_Final_18April2019.fa) (1,517,011 nt) in snakes.
 
 Target loci include rapidly evolving exons (REEs), ultra-conserved elements (UCEs), ddRAD-like loci, major histocompatibility complex (MHC) genes, vision-associated genes, and scalation-associated genes.
 
