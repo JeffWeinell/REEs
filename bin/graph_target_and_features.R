@@ -6,38 +6,38 @@ invisible(lapply(packages.to.load, FUN=library, character.only = TRUE))
 ####
 ## loads fasta-formatted DNA sequences of target.loci and probes used to capture target loci
 ####
-target.loci             <- readDNAStringSet(file="~/Weinell_TargetLoci_Snakes_Final_18April2019.fa")
-probes                  <- readDNAStringSet(file="~/Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta")
+target.loci             <- readDNAStringSet(file="Weinell_TargetLoci_Snakes_Final_18April2019.fa")
+probes                  <- readDNAStringSet(file="Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta")
 
 ####
 ## loads start/stop/sense coordinates (location qualifiers) of features (gene, mRNA, and CDS regions) for each target locus. A different table is used for each type of target locus.
 ####
 
-Exon.Immune.annotations <- read.table("~/Exon.and.Immune-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v3.txt",colClasses="character",header=T,sep="\t")                           ### table made from NCBI annotations using code in /Users/Jeff/Documents/SnakeCap_Data/Notes_12April2020.txt
-UCE.annotations         <- read.table("~/UCE-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v2.txt",colClasses="character",header=T,sep="\t")                                       ### table made from NCBI annotations using code in /Users/Jeff/Documents/SnakeCap_Data/Notes_12April2020.txt
-ddRAD.annotations       <- read.table("~/ddRAD-loci_Thamnophis_putative-homologs-of-Thermophis_NCBI-coordinates_table_MoreInfo_v3_30March2020.txt",colClasses="character",header=T,sep="\t")     ### table made from NCBI annotations using code in /Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/get_Thamnophis_homologs_all.R
-vision.annotations      <- read.table("~/Vision-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v2.txt",colClasses="character",header=T,sep="\t")                                    ### table made from NCBI annotations using code in /Users/Jeff/Documents/SnakeCap_Data/Notes_12April2020.txt
-scalation.annotations   <- read.table("~/Scalation-Loci_NCBI-coordinates_table_MoreInfo_12April2020.txt",colClasses="character",header=T,sep="\t")                              ### table made from annotations in paper rather than from NCBI feature tables
+Exon.Immune.annotations <- read.table("https://github.com/JeffWeinell/SnakeCap/raw/main/NCBI-coordinates_tables/Exon.and.Immune-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v3.txt",colClasses="character",header=T,sep="\t")                           ### table made from NCBI annotations using code in /Users/Jeff/Documents/SnakeCap_Data/Notes_12April2020.txt
+UCE.annotations         <- read.table("https://github.com/JeffWeinell/SnakeCap/raw/main/NCBI-coordinates_tables/UCE-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v2.txt",colClasses="character",header=T,sep="\t")                                       ### table made from NCBI annotations using code in /Users/Jeff/Documents/SnakeCap_Data/Notes_12April2020.txt
+ddRAD.annotations       <- read.table("https://github.com/JeffWeinell/SnakeCap/raw/main/NCBI-coordinates_tables/ddRAD-loci_Thamnophis_putative-homologs-of-Thermophis_NCBI-coordinates_table_MoreInfo_v3_30March2020.txt",colClasses="character",header=T,sep="\t")     ### table made from NCBI annotations using code in /Users/Jeff/Google Drive/KU/ExonCapture_LociSelection/get_Thamnophis_homologs_all.R
+vision.annotations      <- read.table("https://github.com/JeffWeinell/SnakeCap/raw/main/NCBI-coordinates_tables/Vision-Loci_Thamnophis_NCBI-coordinates_table_MoreInfo_12April2020_v2.txt",colClasses="character",header=T,sep="\t")                                    ### table made from NCBI annotations using code in /Users/Jeff/Documents/SnakeCap_Data/Notes_12April2020.txt
+scalation.annotations   <- read.table("https://github.com/JeffWeinell/SnakeCap/raw/main/NCBI-coordinates_tables/Scalation-Loci_NCBI-coordinates_table_MoreInfo_12April2020.txt",colClasses="character",header=T,sep="\t")                              ### table made from annotations in paper rather than from NCBI feature tables
 
 ####
 ## merge the annotation tables into a single annotation table
 ####
-features.table          <- rbind(Exon.Immune.annotations,UCE.annotations,scalation.annotations,vision.annotations,ddRAD.annotations)  ### will eventually use rbind to include the annotations of other types of loci
+features.table          <- rbind(Exon.Immune.annotations,UCE.annotations,scalation.annotations,vision.annotations,ddRAD.annotations)
 
-# The next two lines (commented out) write or read the combined feature table generated in the previous line. Reading in the separate annotation tables each time and re-generating the combined feature table is good for keeping track of how the tables were generated.
-# write.table(x=features.table,file="~/All-Loci_NCBI-coordinates_table_MoreInfo_13April2020.txt",quote=F,sep="\t",row.names=F)
-# features.table        <- read.table("~/All-Loci_NCBI-coordinates_table_MoreInfo_13April2020.txt",colClasses="character",header=T,sep="\t")
+# Write/read the combined feature table.
+# write.table(x=features.table,file="All-Loci_NCBI-coordinates_table_MoreInfo_13April2020.txt",quote=F,sep="\t",row.names=F)
+# features.table        <- read.table("https://github.com/JeffWeinell/SnakeCap/raw/main/NCBI-coordinates_tables/All-Loci_NCBI-coordinates_table_MoreInfo_13April2020.txt",colClasses="character",header=T,sep="\t")
 
 ### This next table is used to transform gene/mRNA/CDS feature ranges that are annotated for Thamnophis sirtalis onto the homologous region for loci not designed from T. sirtalis.
 ### So far, this table only includes range transormation info for Thamnophis vs. Thermophis (ddRAD-like loci). The table was created with the script get_Thamnophis_homologs_all.R
-transform.ranges.table <- read.table("~/Thermophis.vs.Thamnophis.transform.range.matrix.txt",colClasses="character",header=F,sep="\t")
+transform.ranges.table <- read.table("https://github.com/JeffWeinell/SnakeCap/raw/main/NCBI-coordinates_tables/Thermophis.vs.Thamnophis.transform.range.matrix.txt",colClasses="character",header=F,sep="\t")
 
-loci.names  <- names(target.loci)                  ### Names of target loci. These have the form "WeinellEntryXXX", where XXX is a unique number identifier (one to 4 digits)
-probe.names <- names(probes)                       ### Names of probes. These have the form "WeinellEntryXXX_StartPosition_EndPosition" (first base of target locus = position "0")
+loci.names  <- names(target.loci) ### Names of target loci. These have the form "WeinellEntryXXX", where XXX is a unique number identifier (one to 4 digits)
+probe.names <- names(probes)      ### Names of probes. These have the form "WeinellEntryXXX_StartPosition_EndPosition" (first base of target locus = position "0")
 
-loci.per.plot         <- 20                        ### Number loci to include on each page of the pdf that will be generated. 20 seems to look nice.
-rev.loci.names        <- rev(loci.names)           ### Reverse orders the list of loci.names. This is done because loci will be plotted from bottom to top, so we want to plot in reverse order so that numerical order is plotted from top to bottom of each pdf page
-rev.order.target.loci <- rev(target.loci)          ### Reverse orders the DNAStringSet of target loci (doesnt reverse each sequence, just the order of the set of sequences)
+loci.per.plot         <- 20               ### Number loci to include on each page of the pdf that will be generated. 20 seems to look nice.
+rev.loci.names        <- rev(loci.names)  ### Reverse orders the list of loci.names. This is done because loci will be plotted from bottom to top, so we want to plot in reverse order so that numerical order is plotted from top to bottom of each pdf page
+rev.order.target.loci <- rev(target.loci) ### Reverse orders the DNAStringSet of target loci (doesnt reverse each sequence, just the order of the set of sequences)
 
 locus.of.probe   <- gsub("_.+","",probe.names)
 origin.of.probe  <- as.numeric(gsub(".+_","",probe.names))                                 ### extracts the first position -1 of each probe relative to its target locus
@@ -341,7 +341,7 @@ for(k in 130:135){ ### plots scalation loci
 ### On OsX: the quartz function is used to save the plot
 ### On Windows: the cairo_pdf functon is used to save the plot
 
-pdf.pathname <- "~/Target-loci_Coverage_graph_14April2020_scalation.pdf"
+pdf.pathname <- "Target-loci_Coverage_graph_14April2020_scalation.pdf"
 if(Sys.info()["sysname"]=="Darwin"){
 	quartz(type = "pdf", file = pdf.pathname)
 } else {
