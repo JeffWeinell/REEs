@@ -62,36 +62,49 @@ REEs::load.gff --> REEs::filter.gff --> REEs::get.seqs.from.gff --> Biostrings::
 I downloaded the [*Thamnophis sirtalis* genome](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz) and its associated annotation table: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz) (n = 559,130 features annotated). Then, I renamed the contigs in the genome file to have the following format: **Thamnophis_sirtalis_GCF_001077635.1_read1**, **Thamnophis_sirtalis_GCF_001077635.1_read2**, etc., and saved this renamed genome in sequential fasta format: [ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/exomes/ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip). The two-column, tab-delimited table [Scaffold-Name-Key.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/main/exomes/Scaffold-Name-Key.txt?token=AJJOG2UQ6MDA7UY2U4R6BFS7ZDZYS) includes the new contig name in the first column and the original contig name in the second column:
 -->
 
-Step-by-step description of pipeline used to select target REEs:
+Steps used to select target REEs:
 
-**1**. I used the R functions REEs::load.gff and REEs::filter.gff to filter the *Thamnophis sirtalis* genome feature table [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz) to include only CDS features ≥ 120bp.
+Get DNA sequences in CDS regions >120bp in the *Thamnophis sirtalis* reference genome
 
 ```
-### Load REEs package
+# Load REEs package
 library(REEs)
 
-### Define URL to the Thamnophis sirtalis genome feature table.
-Thamnophis.sirtalis_GFF.url       <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz"
+# URL to Thamnophis sirtalis genome (fasta)
+Thamnophis.sirtalis_genome.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz"
 
-### Load the input feature table into R
-Thamnophis.sirtalis_GFF     <- load.gff(input=Thamnophis.sirtalis_GFF.url,local=F)
+# URL to T. sirtalis genome annotations (GFF)
+Thamnophis.sirtalis_GFF.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz"
 
-### Filter Thamnophis.sirtalis_GFF to only include CDS features with length at least 120bp (the size of the baits).
-Thamnophis.sirtalis_GFF_CDS_longer120bp <- filter.gff(input.gff=Thamnophis.sirtalis_GFF,feature.type="CDS",min.length=120)
+# Load GFF into R
+Thamnophis.sirtalis_GFF <- load.gff(input=Thamnophis.sirtalis_GFF.url,local=F)
 
-### Save the filtered feature table
-write.table(x=output.gff,file="./Thamnophis.sirtalis_GFF_CDS_longer120bp.txt",quote=F,sep="\t",row.names=F,col.names=T)
+# Get subset of annotation features where type=CDS and length (= end-start) > 120 (bait size)
+Thamnophis.sirtalis_GFF_CDS_longer120bp <- filter.gff(input.gff=Thamnophis.sirtalis_GFF, feature.type="CDS", min.length=120)
+
+# Get sequences for feature subset regions
+Thamnophis.sirtalis_exome <- REEs::get.seqs.from.gff(input.seqs=Thamnophis.sirtalis_genome.url,input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp)
+
+# Save feature subset as a table and sequences in fasta format
+write.table(x=output.gff,file="Thamnophis.sirtalis_GFF_CDS_longer120bp.txt",quote=F,sep="\t",row.names=F,col.names=T)
+writeXStringSet(x=Thamnophis.sirtalis_exome,filepath="Thamnophis_sirtalis_exome_longer120bp.fas")
 ```
-The output feature table can be downloaded here: [Thamnophis.sirtalis_GFF_CDS_longer120bp.txt](https://osf.io/tm7qw/download).  Note 1: This filtered GFF table is also included as a data table object in the REEs R package (object name: Thamnophis.sirtalis_GFF_CDS_longer120bp). Note 2: the filtered GFF table is not true GFF format, because the header/comment lines are not included; nevertheless, the format used for the columns follows GFF3 format.
 
-**2**. I used the function REEs::get.seqs.from.gff to extract the sequences corresponding the CDS features in the table generated in step 1. 
+Output files from previous code block: [Thamnophis.sirtalis_GFF_CDS_longer120bp.txt](https://osf.io/tm7qw/download) [Thamnophis_sirtalis_exome_longer120bp.fas](https://osf.io/v7ecb/download). 
+
+<!--
+Note 1: This filtered GFF table is also included as a data table object in the REEs R package (object name: Thamnophis.sirtalis_GFF_CDS_longer120bp).
+Note 2: the filtered GFF table is not true GFF format, because the header/comment lines are not included; nevertheless, the format used for the columns follows GFF3 format.
+-->
+
+**2**. Get sequences in genomic regions included in the subsetted feature table.
 
 ```
-### URL to the Thamnophis sirtalis genome (fasta formatted sequences).
+# URL to the Thamnophis sirtalis genome
 Thamnophis.sirtalis_genome.url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz"
 
 ### Extract the sequences for the loci in the filtered GFF (Thamnophis.sirtalis_GFF_CDS_longer120bp from step 1).
-Thamnophis.sirtalis_exome   <- REEs::get.seqs.from.gff(input.seqs=Thamnophis.sirtalis_genome.path,input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp) 
+Thamnophis.sirtalis_exome   <- REEs::get.seqs.from.gff(input.seqs=Thamnophis.sirtalis_genome.url,input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp)
 
 ### Save extracted sequences
 writeXStringSet(x=Thamnophis.sirtalis_exome,filepath="./Thamnophis_sirtalis_exome_longer120bp.fas")
