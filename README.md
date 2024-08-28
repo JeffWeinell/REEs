@@ -5,10 +5,10 @@
 [Description of SnakeCap probe set](#Description)
 
 [Selecting loci to capture](#Methods.SelectingTargetLoci)
-  - [Rapidly-evolving Exons (REEs)](#Methods.SelectingREEs)
-  - [Ultraconserved-elements (UCEs)](#Methods.SelectingUCEs)
+  - [Rapidly-evolving exons (REEs)](#Methods.SelectingREEs)
+  - [Ultraconserved elements (UCEs)](#Methods.SelectingUCEs)
   - [ddRAD-like loci](#Methods.SelectingddRAD)
-  - [Major Histocompatibility loci (MHCs)](#Methods.SelectingMHC)
+  - [Major histocompatibility complex loci (MHCs)](#Methods.SelectingMHC)
   - [Scalation loci](#Methods.SelectingScalation)
   - [Vision loci](#Methods.SelectingVision)
 
@@ -48,7 +48,7 @@ All loci |  | 3,128 | 1,517,011 | 120–7,501 (mean = 531.62)
 # Selecting loci to capture
 
 <a name="Methods.SelectingREEs"></a>
-## Selecting the set of target REEs
+### Rapidly-evolving exons (REEs)
 
 #### Overview: 
 
@@ -56,7 +56,7 @@ I used the following R functions (shown as packageName::functionName):
 
 REEs::load.gff --> REEs::filter.gff --> REEs::get.seqs.from.gff --> Biostrings::writeXStringSet --> REEs::blast --> REEs::reportBestMatches --> REEs::get.seqs.from.blastTable --> REEs::makeStatsTable --> REEs::pick.loci --> (then functions in step 8  to get REEs + small region of exon-flanking DNA).
 
-#### Details:
+#### Step-by-step procedure:
 
 <!--
 I downloaded the [*Thamnophis sirtalis* genome](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz) and its associated annotation table: [GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/077/635/GCF_001077635.1_Thamnophis_sirtalis-6.0/GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.gff.gz) (n = 559,130 features annotated). Then, I renamed the contigs in the genome file to have the following format: **Thamnophis_sirtalis_GCF_001077635.1_read1**, **Thamnophis_sirtalis_GCF_001077635.1_read2**, etc., and saved this renamed genome in sequential fasta format: [ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/blob/main/exomes/ref_Thamnophis_sirtalis-6.0_top_level_JLW.gff3.zip). The two-column, tab-delimited table [Scaffold-Name-Key.txt](https://raw.githubusercontent.com/JeffWeinell/SnakeCap/main/exomes/Scaffold-Name-Key.txt?token=AJJOG2UQ6MDA7UY2U4R6BFS7ZDZYS) includes the new contig name in the first column and the original contig name in the second column:
@@ -360,16 +360,14 @@ Total REEs removed: 70+123+212 = 405
 -->
 
 <a name="Methods.SelectingUCEs"></a>
-## Selecting the set of target UCEs
+### Ultraconserved elements (UCEs)
 
 #### Overview:
 
 Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus fulvius* (Streicher and Wiens, 2017; **Table X**). First, I filtered the full set of *Micrurus* UCEs to only include those present in all NCBI snake genomes (n = 2,968 UCEs). Then, I filtered the set of shared UCEs to include only loci in which the *T. sirtalis* sequence included at least 200nt of non-gap sites in the UCE alignment. I sorted the set of passing *T. sirtalis* UCEs by UCE name and then retained only the first 1,000 loci. From each of these 1,000 loci, I extracted the middle 161nt bases to be used at a template for probe design. Arbor Biosciences was able to synthesize probes for 907 of the 1,000 proposed target UCEs.
 
 
-#### Details:
-
-Step-by-step description of pipeline used to select target UCEs:
+#### Step-by-step procedure:
 
 **1**. I downloaded the set of *Micurus fulvius* UCEs (n = 3,260) identified by Streicher and Wiens (2017). These were available as a fasta file called [micrurus_UCEs.fa](https://git.io/JLiu2).
 
