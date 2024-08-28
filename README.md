@@ -577,9 +577,7 @@ Identify and obtain all regions of the *Thermophis baileyi* genome that begin wi
 Most of the important files and scripts for selecting ddRAD-like loci are in the zip file **RandomLoci.zip**
 --->
 
-#### Details:
-
-Step-by-step description of pipeline used to select ddRAD-like loci to target:
+#### Step-by-step procedure:
 
 **1**. I used the function REEs::proposeLoci.ddRADlike to propose a set of target loci ("ddRAD-like" loci) that are expected to be distributed relatively randomly throughout the genome, and which have lengths between 900-1000nt. These loci ddRAD-like because the method involves searching for the recognition sequences of two restriction enzymes. The function returns a table containing the genomic coordinates of all regions that begin with the recognition sequence of a restriction enzyme A (= SbfI: "CCTGCAGG") and end with the recognition sequence of a restriction enzyme B (= EcoR1: "GAATTC"), and which have a sequence length that is within a specified range (900-1000nt). Important Note: the function proposeLoci.ddRADlike should not be thought of as a way to conduct in silico ddRAD, and it is possible that the proposed loci contains internal RE recognition sites, which wouldn't happen in real ddRAD.
 
