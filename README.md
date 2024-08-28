@@ -192,7 +192,7 @@ For each locus, perform multiple sequence alignment (MAFFT algorithm) with the s
 input.seqs.paths <- c("Anolis.carolinensis.tblastx.best.hits_seqs.fas", "Gekko.japonicus.tblastx.best.hits_seqs.fas", "Pogona.vitticeps.tblastx.best.hits_seqs.fas", "Crotalus.horridus.tblastx.best.hits_seqs.fas", "Crotalus.mitchellii.tblastx.best.hits_seqs.fas", "Ophiophagus.hannah.tblastx.best.hits_seqs.fas", "Pantherophis.guttatus.tblastx.best.hits_seqs.fas", "Protobothrops.mucrosquamatus.tblastx.best.hits_seqs.fas", "Python.bivittatus.tblastx.best.hits_seqs.fas", "Vipera.berus.tblastx.best.hits_seqs.fas", "Thamnophis.sirtalis.tblastx.best.hits_seqs.fas")
 
 ### Align homologous sequences and make a table to summarize data in each alignment (one row per aligned locus).
-stats.table.all  <- makeStatsTable(input.seqs=input.seqs.paths, input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp, output.path="./statsTable_REEs_SnakeCap.txt", species.names=c("Anolis carolinensis","Gekko japonicus","Pogona vitticeps","Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"), subgroup=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),alignments.out=alignments.dir, reference.species=11)
+stats.table.all  <- makeStatsTable(input.seqs=input.seqs.paths, input.gff=Thamnophis.sirtalis_GFF_CDS_longer120bp, output.path="statsTable_REEs_SnakeCap.txt", species.names=c("Anolis carolinensis","Gekko japonicus","Pogona vitticeps","Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"), subgroup=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),alignments.out=alignments.dir, reference.species=11)
 ```
 The resulting summary stats table: [statsTable_REEs_SnakeCap.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/statsTable_REEs_SnakeCap.txt) includes stats for 66,489 alignments. <!-- (**XXXXX.tar.xz**). -->
 
@@ -572,6 +572,7 @@ Identify and obtain all regions of the *Thermophis baileyi* genome that begin wi
 6. Filtered *T. baileyi* contigs (antisense strand) to only include those with both restriction enzyme recognition sites.
 7. For the set of contigs containing both recognition sites, extract the region between each pairwise combination of RE sites.
 8. Filter extracted regions to keep only those with length between 900–1000bp.
+
 9. BLAST (tblastx, tblastn, blastx, blastn?) each sequence in the set of 900-1000bp extracted regions to search within each snake genome
 10. Keep the set of single-copy sequences present in all snakes genomes, and design probes for these target loci.
 Most of the important files and scripts for selecting ddRAD-like loci are in the zip file **RandomLoci.zip**
@@ -579,41 +580,44 @@ Most of the important files and scripts for selecting ddRAD-like loci are in the
 
 #### Step-by-step procedure:
 
-**1**. I used the function REEs::proposeLoci.ddRADlike to propose a set of target loci ("ddRAD-like" loci) that are expected to be distributed relatively randomly throughout the genome, and which have lengths between 900-1000nt. These loci ddRAD-like because the method involves searching for the recognition sequences of two restriction enzymes. The function returns a table containing the genomic coordinates of all regions that begin with the recognition sequence of a restriction enzyme A (= SbfI: "CCTGCAGG") and end with the recognition sequence of a restriction enzyme B (= EcoR1: "GAATTC"), and which have a sequence length that is within a specified range (900-1000nt). Important Note: the function proposeLoci.ddRADlike should not be thought of as a way to conduct in silico ddRAD, and it is possible that the proposed loci contains internal RE recognition sites, which wouldn't happen in real ddRAD.
+**1**. Propose a set of target loci ("ddRAD-like" loci) that are expected to be distributed relatively randomly throughout the genome, and which have lengths between 900-1000nt. These loci ddRAD-like because the method involves searching for the recognition sequences of two restriction enzymes. The function returns a table containing the genomic coordinates of all regions that begin with the recognition sequence of a restriction enzyme A (= SbfI: "CCTGCAGG") and end with the recognition sequence of a restriction enzyme B (= EcoR1: "GAATTC"), and which have a sequence length that is within a specified range (900-1000nt).
 
 ```
-### Define the recognition sequence for SbfI restriction enzyme
-SbfI.Seq                              <- "CCTGCAGG"
-### Define the recognition sequence for EcoR1 restriction enzyme
-EcoR1.Seq                             <- "GAATTC"
-### Define URL path to Thermophis baileyi genome
-Thermophis.baileyi_genome.url         <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/457/575/GCA_003457575.1_DSBC_Tbai_1.0/GCA_003457575.1_DSBC_Tbai_1.0_genomic.fna.gz"
+# Define the recognition sequence for SbfI and EcoR1 restriction enzymes
+SbfI.Seq <- "CCTGCAGG"
+EcoR1.Seq  <- "GAATTC"
 
-### Use the function proposeLoci.ddRADlike (REEs package) to find 900-1000nt regions of contigs that begin with one of the two recognition sequences (SbfI.Seq or EcoR1.Seq) and end with the other recognition sequence.
-proposed.ddRAD.loci.coordinates       <- REEs::proposeLoci.ddRADlike(input.seqs=Thermophis.baileyi_genome.url,output.dir="/ddRAD-like/",recognitionSeqs=c(SbfI.Seq,EcoR1.Seq),lim.lengths=c(900,1000),save.tables=T)
+# URL to Thermophis baileyi genome
+Thermophis.baileyi_genome.url  <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/457/575/GCA_003457575.1_DSBC_Tbai_1.0/GCA_003457575.1_DSBC_Tbai_1.0_genomic.fna.gz"
+
+# Find 900-1000nt regions of contigs that begin with one of the two recognition sequences (SbfI.Seq or EcoR1.Seq) and end with the other recognition sequence.
+proposed.ddRAD.loci.coordinates <- REEs::proposeLoci.ddRADlike(input.seqs=Thermophis.baileyi_genome.url,output.dir="/ddRAD-like/",recognitionSeqs=c(SbfI.Seq,EcoR1.Seq),lim.lengths=c(900,1000),save.tables=T)
+
+# Important Note: Unlike in real ddRAD, proposed ddRAD-like loci may contain internal RE recognition sites.
+
 ```
-Result: Table containing coordinates for 2,337 proposed ddRAD-like loci: [ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt).
+Table with genomic coordinates for 2,337 proposed ddRAD-like loci: [ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/ProposedLoci_CCTGCAGG-GAATTC_output_900to1000.txt).
 
 **2**. Extract sequences for proposed loci. <!-- For loci on the antisense strands of contigs I first downloaded the corresponding reverse complement sequence (from the sense strand), and then I used the function reverseComplement (Biostrings package) to obtain the correct antisense strand target. -->
 ```
-### Defining vectors containing the Genbank accession and range of positions to download. This information is from the second, third, and fourth columns of the table that was generated by the function proposeLoci.ddRADlike. Note that the start and end positions are relative to the sense strand of the contig. The coordinates of proposed loci on the antisense strand have the format "ContigAccession:cEndPosition-StartPosition", which is equal to the reverse complement of a sequence with coordinates "ContigAccession:StartPosition-EndPosition".
+# Defining vectors containing the Genbank accession and range of positions to download. This information is from the second, third, and fourth columns of the table that was generated by the function proposeLoci.ddRADlike. Note that the start and end positions are relative to the sense strand of the contig. The coordinates of proposed loci on the antisense strand have the format "ContigAccession:cEndPosition-StartPosition", which is equal to the reverse complement of a sequence with coordinates "ContigAccession:StartPosition-EndPosition".
 ContigAccession <- proposed.ddRAD.loci.coordinates$ContigAccession
 LocusStart      <- proposed.ddRAD.loci.coordinates$StartPosition
 LocusEnd        <- proposed.ddRAD.loci.coordinates$EndPosition
 
-### Download genome to temporary file, and then extract and import from positions LocusStart to LocusEnd of the sense strand of the respective contig in ContigAccession. The "outfile" parameter is set to NULL because we need to take the reverse complement of some of the sequences before saving. 
+# Download genome to temporary file, and then extract and import from positions LocusStart to LocusEnd of the sense strand of the respective contig in ContigAccession. The "outfile" parameter is set to NULL because we need to take the reverse complement of some of the sequences before saving. 
 Thermophis.ddradlike.proposed.seqs <- REEs::get_ncbi_sequences(outfile=NULL,input.seqs=Thermophis.baileyi_genome.url,accessionList=ContigAccession,startList=LocusStart,endList=LocusEnd,strandList="1",db="nuccore",rettype="fasta",retmode="text",if.outside.range="partial",trim.ambiguous = FALSE)
 
-### Numerical vector indicating which of the proposed loci are on the antisense strand. These are the loci that need to be reverse complemented.
+# Numerical vector indicating which of the proposed loci are on the antisense strand. These are the loci that need to be reverse complemented.
 which.reverse.complement <- grep(":c",proposed.ddRAD.loci.coordinates$coordinates)
 
-### Reverse complement the "ith" sequence in Thermophis.ddradlike.seqs for each i in the vector which.reverse.complement
+# Reverse complement the "ith" sequence in Thermophis.ddradlike.seqs for each i in the vector which.reverse.complement
 Thermophis.ddradlike.seqs[which.reverse.complement] <- Biostrings::reverseComplement(Thermophis.ddradlike.seqs[which.reverse.complement])
 
-### Update sequence names to account for reverse complementing. The new sequence names are the character strings in the coordinates column (first column) of the table proposed.ddRAD.loci.coordinates.
+# Update sequence names to account for reverse complementing. The new sequence names are the character strings in the coordinates column (first column) of the table proposed.ddRAD.loci.coordinates.
 names(Thermophis.ddradlike.seqs) <- proposed.ddRAD.loci.coordinates$coordinates
 
-### Save sequences.
+# Save sequences.
 writeXStringSet(Thermophis.ddradlike.seqs,"Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas")
 ```
 *Thermophis baileyi* sequences for proposed ddRAD-like loci can be downloaded here: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas).
@@ -660,8 +664,8 @@ new.coordinates.left[grep(":c",names(loci.trimmed.left)),2] <- old.coordinates.l
 new.coordinates.right                                         <- cbind((old.coordinates.right[,1]+right.pos[which.right,1]-1),old.coordinates.right[,2])
 new.coordinates.right[grep(":c",names(loci.trimmed.right)),1] <- old.coordinates.right[grep(":c",(names(loci.trimmed.right))),1]-(right.pos[which.right[grep(":c",(names(loci.trimmed.right)))],1]-1)
 
-new.names.left        <- paste0(mgsub(c(":c[1-9].+",":[1-9].+"),c(":c",":"),names(loci.trimmed.left)),new.coordinates.left[,1],"-",new.coordinates.left[,2])
-new.names.right       <- paste0(mgsub(c(":c[1-9].+",":[1-9].+"),c(":c",":"),names(loci.trimmed.right)),new.coordinates.right[,1],"-",new.coordinates.right[,2])
+new.names.left  <- paste0(mgsub(c(":c[1-9].+",":[1-9].+"),c(":c",":"),names(loci.trimmed.left)),new.coordinates.left[,1],"-",new.coordinates.left[,2])
+new.names.right <- paste0(mgsub(c(":c[1-9].+",":[1-9].+"),c(":c",":"),names(loci.trimmed.right)),new.coordinates.right[,1],"-",new.coordinates.right[,2])
 
 ### Rename the trimmed loci to the new genomic coordinates
 names(loci.trimmed.left)  <- new.names.left
@@ -670,7 +674,7 @@ loci.trimmed <- c(loci.trimmed.left,loci.trimmed.right)
 loci.trimmed <- loci.trimmed[match(unique(names(loci.trimmed)),names(loci.trimmed))]
 
 ### DNAStringSet object of the proposed loci, including the trimmed loci
-proposed.loci.trimmed                        <- c(proposed.loci[-which.Ns],loci.trimmed)
+proposed.loci.trimmed <- c(proposed.loci[-which.Ns],loci.trimmed)
 
 ### Save proposed.loci.trimmed
 writeXStringSet(proposed.loci.trimmed,"Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas")
@@ -738,7 +742,7 @@ Next, I used blastn to search for the MHC target loci in the *T. sirtalis* genom
 Processing the hits table in R:
 
 ```
-# read in the blastn hit table
+# read in the blastn hits table
 mhc.hits.Thamnophis            <- read.csv(file="~/MHC_86-targets-vs-Thamnophis_HitTable.csv",header=F)
 colnames(mhc.hits.Thamnophis)  <- c("query.acc.ver", "subject.acc.ver", "percent.identity", "alignment.length", "mismatches", "gap.opens", "query.start", "query.end", "subject.start", "subject.end", "evalue", "bit score")
 
@@ -820,7 +824,7 @@ I used blastn to search for the vision loci probes from Schott et al. (2017) (wh
 <a name="ProbeSynthesis"></a>
 ## Ultra-stringent filtration and probe synthesis
 
-After identifying candidate target loci, candidate probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total. See **Target-loci_Coverage_graph_22October2020.pdf** for a visual summary of aligned target loci, probes, probe coverage, and annotations including genes, mRNA/transcribed regions, and protein-coding (CDS) regions. <!-- This graph was generated with **graph_target_and_features.R** and then filesize reduction in Adobe Acrobat. -->
+After identifying candidate target loci, candidate probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total. See **Target-loci_Coverage_graph_22October2020.pdf** for a visual summary of aligned target loci, probes, probe coverage, and annotations including genes, mRNA/transcribed regions, and protein-coding (CDS) regions. <!-- This graph was generated with bin/graph_target_and_features.R and then filesize reduction in Adobe Acrobat. -->
 
 <a name="Table7"></a>
 **Table 7.** Genomes from which synthesized baits were designed from.
