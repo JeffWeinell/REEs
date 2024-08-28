@@ -90,7 +90,9 @@ write.table(x=output.gff,file="Thamnophis.sirtalis_GFF_CDS_longer120bp.txt",quot
 writeXStringSet(x=Thamnophis.sirtalis_exome,filepath="Thamnophis_sirtalis_exome_longer120bp.fas")
 ```
 
-Output files from previous code block: [Thamnophis.sirtalis_GFF_CDS_longer120bp.txt](https://osf.io/tm7qw/download) [Thamnophis_sirtalis_exome_longer120bp.fas](https://osf.io/v7ecb/download). 
+Output files from previous code block:
+ - [Thamnophis.sirtalis_GFF_CDS_longer120bp.txt](https://osf.io/tm7qw/download)
+ - [Thamnophis_sirtalis_exome_longer120bp.fas](https://osf.io/v7ecb/download)
 
 <!--
 Note 1: This filtered GFF table is also included as a data table object in the REEs R package (object name: Thamnophis.sirtalis_GFF_CDS_longer120bp).
