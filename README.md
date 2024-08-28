@@ -678,7 +678,7 @@ writeXStringSet(proposed.loci.trimmed,"Thermophis_ProposedLoci_CCTGCAGG-GAATTC_9
 ```
 Proposed ddRAD-like loci after trimming can be downloaded here: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas).
 
-**4**. I randomly selected loci from the set of trimmed, proposed ddRAD-like loci until all remaining baits (n = ) in the 20K bait kit were assigned. **To do: add code used to calculate baits per locus**
+**4**. I randomly selected loci from the set of trimmed, proposed ddRAD-like loci until all remaining baits (n = **XXX**) in the 20K bait kit were assigned. **To do: add code used to calculate baits per locus**
 ```
 ### Read in the trimmed loci if not already loaded
 proposed.loci.trimmed             <- Biostrings::readDNAStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas")
@@ -733,9 +733,9 @@ MHC.targets <- get_ncbi_sequences(outfile="~/MHC-target-loci_preliminary.fasta",
 )
 ```
 
-Next, I used blastn to search for the MHC target loci in the *T. sirtalis* genome (results in hit table **MHC_86-targets-vs-Thamnophis_HitTable.csv**).
+Next, I used blastn to search for the MHC target loci in the *T. sirtalis* genome. Hits table resulting from blastn: [MHC_86-targets-vs-Thamnophis_HitTable.csv](https://github.com/JeffWeinell/SnakeCap/raw/f929e1cadd10ae7fca0fc1779d48ca5ec22a37b6/immune/MHC_86-targets-vs-Thamnophis_HitTable.csv)
 
-Examining the hit tables in R:
+Processing the hits table in R:
 
 ```
 # read in the blastn hit table
@@ -771,8 +771,6 @@ for(i in 1:length(x.vals)){
 }
 
 length(which(table(mhc.hits.filtered.100[,1])==0))
-
-
 ```
 
 <a name="Table6"></a>
@@ -788,12 +786,12 @@ length(which(table(mhc.hits.filtered.100[,1])==0))
 
 The MHC loci with genomic coordinates NW_013661433.1:30811-30931 and NW_013659533.1:83942-84062 were dropped from the set of potential target loci because contained very short coding regions (4bp and 19bp, respectively).
 
-The remaining 84 MHC target loci were submitted to Arbor Biosciences for ultrastringent filtration and bait design (WeinellEntry1815-1898):
- - 29 MHC loci failed ultrastringent filtration, and therefore no baits designed for these loci (**Version1_ZeroBaitCoverageLoci.tsv**)
- - 16 other MHC loci were filtered because their baits were all non-specific within the genomes of *T. sirtalis* (**blast results files: XXXXXX)**
- - 12 other MHC loci were already picked as targets (as REEs), and therefore I removed these duplicated targets (**Version1_removed-loci_duplicate-targets.tsv**). 
- 
-The remaining 27 MHC loci (non-REEs) and six others that were targetted as REEs (entries 248, 559, 728, 787, 891, and 1944) were included in the final set of target loci for which baits were synthesized. WeinellEntry1944 was later recognized as a duplicate of the immune target WeinellEntry1857.
+The remaining 84 MHC target loci (WeinellEntry1815-1898) were submitted to Arbor Biosciences for ultrastringent filtering and bait design:
+ - 29 MHC loci failed ultrastringent filtering and therefore no baits were designed for these loci; see [Version1-loci-removed_ZeroBaitCoverageLoci.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version1-loci-removed_ZeroBaitCoverageLoci.tsv).
+ - 16 other MHC loci were filtered because their baits were all non-specific within the genomes of *T. sirtalis*; see [Version1-loci-removed_nonspecific-baits.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version1-loci-removed_nonspecific-baits.tsv) and [Version2-loci-removed_baits-nonspecific.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version2-loci-removed_baits-nonspecific.tsv).
+ - 12 other MHC loci were already picked as targets (as REEs) and therefore I removed these duplicated targets; see [Version1-loci-removed_duplicate-targets.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version1-loci-removed_duplicate-targets.tsv).
+
+The remaining 27 MHC loci (non-REEs) and six others that were targetted as REEs (entries 248, 559, 728, 787, 891, and 1944) were targeted in the final (synthesized) probe set. WeinellEntry1944 was later recognized as a duplicate of the immune target WeinellEntry1857.
 
 <!--
 Version1_Target-loci_Jeff-Weinell_10Sep2018.fasta: 1802 REEs (non-MHC), 12 REE/MHCs, 84 MHCs
@@ -813,7 +811,6 @@ See the README file in ArborFiles folder for a description about how the bait ki
 
 I targeted a subset of the genes included in the study by Holthaus et al. (2017). In that study, the authors identified homologous genes of the Epidermal Differentiation Complex (which are putatively involved in scalation) of *Python bivittatus* and *Ophiophagus hannah*. I downloaded the *Ophiophagus* scalation gene sequences using the table of genomic coordinates provided by Holthaus et al. (2017), and then used tblastn to search for and obtain homologous loci in *T. sirtalis*, *Protobothrops mucrosquamatus*, and *Crotalus horridus*.
 
-
 <a name="Methods.SelectingVision"></a>
 ### Selecting vision loci:
 
@@ -823,7 +820,7 @@ I used blastn to search for the vision loci probes from Schott et al. (2017) (wh
 <a name="ProbeSynthesis"></a>
 ## Ultra-stringent filtration and probe synthesis
 
-After choosing the target loci, probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total. See **Target-loci_Coverage_graph_22October2020.pdf** for a visual summary of target loci, probes, probe coverage, and features of loci including genes, mRNA/transcribed regions, and protein-coding (CDS) regions. This graph was generated with **graph_target_and_features.R** and then filesize reduction in Adobe Acrobat.
+After choosing the target loci, probes were designed by Arbor Biosciences with the following specifications: 50% tiling, 120nt/probe; 20,020 probes in total. See **Target-loci_Coverage_graph_22October2020.pdf** for a visual summary of aligned target loci, probes, probe coverage, and annotations including genes, mRNA/transcribed regions, and protein-coding (CDS) regions. <!-- This graph was generated with **graph_target_and_features.R** and then filesize reduction in Adobe Acrobat. -->
 
 <a name="Table7"></a>
 **Table 7.** Genomes from which synthesized baits were designed from.
