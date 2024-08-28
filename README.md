@@ -47,9 +47,9 @@ All loci |  | 3,128 | 1,517,011 | 120–7,501 (mean = 531.62)
 
 
 <a name="Methods.SelectingTargetLoci"></a>
-# Selecting loci to target for targeted sequencing
+# Selecting candidate loci to target for targeted sequencing
 
-Here I outline the steps that I used to identify loci 
+Here I outline the steps that I used to identify candidate loci to target. [Ultrastringent filtration and probe synthesis](#ProbeSynthesis) steps filtered some candidate targets from inclusion in the final set of SnakeCap probe targets.
 
 <a name="Methods.SelectingREEs"></a>
 ### Rapidly-evolving exons (REEs)
