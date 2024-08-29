@@ -874,14 +874,10 @@ species | genome assembly accession | contig prefixes | n target loci with baits
 *Pantherophis guttatus* | GCA_001185365.1 | JTLQ01 | 2  | 2
 *Thermophis baileyi* | GCA_003457575.1 | QLTV01 | 328  | 229
 
-
-Probe set and loci targeted (oldnames)
- - [probe set](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta)
- - [3,128 loci](https://github.com/JeffWeinell/SnakeCap/raw/main/Weinell_TargetLoci_Snakes_Final_18April2019.fa)
-
-
-
-
+Probe set and target loci
+ - [20,020 probes seqs (oldnames)](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta)
+ - [3,128 target loci seqs](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/Weinell_TargetLoci_Snakes_Final_newnames.fa)
+ - [target loci info](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/SnakeCap_loci_info.txt)
 
 
 <a name="References"></a>
