@@ -580,7 +580,8 @@ target.UCEs   <- Biostrings::getSeq(Thamnophis.sirtalis.UCEs.200.1000, gsubrange
 ### Save UCE targets
 Biostrings::writeXStringSet(x=target.UCEs,filepath="./targetUCEs.1000.fas",format="fasta")
 ```
-- *T. sirtalis* sequences for 1,000 UCEs chosen as candidate targets: [targetUCEs.1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/targetUCEs.1000.fas). These correspond to WeinellEntry targets 2153–3152 in [Version2_additional-targets_Entry1899to3152_20Sep2018.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version2_additional-targets_Entry1899to3152_20Sep2018.fasta). After ultrastringent filtering, probes were designed for 907 of the 1,000 UCEs submitted to Arbor Biosciences. See [ultra-stringent filtering](#ultrastringentFiltering) section.
+- *T. sirtalis* sequences for 1,000 UCEs chosen as candidate targets: [targetUCEs.1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/targetUCEs.1000.fas). 
+<!-- These correspond to WeinellEntry targets 2153–3152 (locus1676-locus2580) in [Version2_additional-targets_Entry1899to3152_20Sep2018.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version2_additional-targets_Entry1899to3152_20Sep2018.fasta). After ultrastringent filtering, probes were designed for 907 of the 1,000 UCEs submitted to Arbor Biosciences. See [ultra-stringent filtering](#ultrastringentFiltering) section. -->
 
 
 <a name="Methods.SelectingddRAD"></a>
