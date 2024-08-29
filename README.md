@@ -19,19 +19,16 @@
 <a name="Description"></a>
 ## What is the SnakeCap probe set?
 
-The SnakeCap probe set was designed to facilitate targeted DNA sequencing for phylogenomic studies across and within diverse lineages of snakes (e.g. [Weinell et al. 2024](https://doi.org/10.1098/rsos.240064)). 
+The [SnakeCap probe set](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta) is a collection of 20,020 x 120bp RNA sequences useful for targeted DNA sequencing of diverse lineages of snakes. The probes target [3,128 phylogenomic loci](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/Weinell_TargetLoci_Snakes_Final_newnames.fa) useful for studies of closely or distantly related lineages (e.g. [Weinell et al. 2024](https://doi.org/10.1098/rsos.240064)).
 
-The [probe set](https://github.com/JeffWeinell/SnakeCap/raw/main/Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta) includes 20,020 sequences (120bp baits) targeting [3,128 loci](https://github.com/JeffWeinell/SnakeCap/raw/main/Weinell_TargetLoci_Snakes_Final_18April2019.fa) (1,517,011 nt) in snakes.
+ - [target loci info](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/SnakeCap_loci_info.txt)
 
 Target loci include rapidly evolving exons (REEs), ultra-conserved elements (UCEs), ddRAD-like loci, major histocompatibility complex (MHC) genes, vision-associated genes, and scalation-associated genes.
 
-REEs include one or more entire exons, one or both exon-flanking regions, and range in length from 121 to 7,501 nt. I used a modified version of the FrogCap pipeline (Hutter et al., 2019) to select the optimal set of REEs from an alignment of snake exomes.
-
-SnakeCap UCEs are a subset of the *Micrurus fulvius* UCEs from Streicher and Wiens (2017).
-
-ddRAD-like loci are shared, single-copy loci identified from in-silico ddRAD using recognition sites for SbfI and EcoRI restriction enzymes.
-
-MHC, vision, and scalation loci included entire or subregions of genes. Putative gene functions are from results of previous studies.
+- REEs include one or more entire exons, one or both exon-flanking regions, and range in length from 121 to 7,501 nt. I used a modified version of the FrogCap pipeline (Hutter et al., 2019) to select the optimal set of REEs from an alignment of snake exomes.
+- SnakeCap UCEs are a subset of the *Micrurus fulvius* UCEs from Streicher and Wiens (2017).
+- ddRAD-like loci are shared, single-copy loci identified from in-silico ddRAD using recognition sites for SbfI and EcoRI restriction enzymes.
+- MHC, vision, and scalation loci included entire or subregions of genes. Putative gene functions are from results of previous studies.
 
 [Table 1](#Table1) summarizes loci targeted using the SnakeCap probe set.
 
