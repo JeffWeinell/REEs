@@ -233,23 +233,24 @@ Use the table of alignment summary stats to choose a set of REEs for sequence ca
 stats.table.all <- data.table::fread("./statsTable_REEs_SnakeCap.txt",header=T)
 
 ### Filter the stats table to the optimal set of REEs
-stats.table.best <- REEs::pick.loci(statsTable.path=stats.table.all,
-                                    primary.species="Thamnophis sirtalis",
-                                    species.subgroup=c("Crotalus horridus",
-                                                       "Crotalus mitchellii",
-                                                       "Ophiophagus hannah",
-                                                       "Pantherophis guttatus",
-                                                       "Protobothrops mucrosquamatus",
-                                                       "Python bivittatus",
-                                                       "Vipera berus",
-                                                       "Thamnophis sirtalis"),
-                                    pident.keep=c(65,100),
-                                    max.loci.per.gene=1,
-                                    min.num.species="all",
-                                    max.capture.coverage=1200500,
-                                    fast.stat="pident",
-                                    use.min.pident.subgroup=T,
-                                    output.path="stats_data_FastestExonPerGene_best_28Dec2020.tsv")
+stats.table.best <- REEs::pick.loci(
+                        statsTable.path=stats.table.all,
+                        primary.species="Thamnophis sirtalis",
+                        species.subgroup=c("Crotalus horridus",
+                                           "Crotalus mitchellii",
+                                           "Ophiophagus hannah",
+                                           "Pantherophis guttatus",
+                                           "Protobothrops mucrosquamatus",
+                                           "Python bivittatus",
+                                           "Vipera berus",
+                                           "Thamnophis sirtalis"),
+                        pident.keep=c(65,100),
+                        max.loci.per.gene=1,
+                        min.num.species="all",
+                        max.capture.coverage=1200500,
+                        fast.stat="pident",
+                        use.min.pident.subgroup=T,
+                        output.path="stats_data_FastestExonPerGene_best_28Dec2020.tsv")
 ```
 - [stats_data_FastestExonPerGene_best_28Dec2020.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best_28Dec2020.tsv) includes 2,070 REEs and format described in [Table 3](#Table3).
 <!---
