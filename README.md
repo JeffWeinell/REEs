@@ -294,7 +294,7 @@ Thamnophis.sirtalis_genome.url <- REEs::datasets(1)[1,2]
 
 REEs.expanded <- get_ncbi_sequences(outfile="./REEs.expanded.fas",input.seqs=Thamnophis.sirtalis_genome.url, accessionList=targets.contig, startList= targets.start, endList=targets.end, if.outside.range="partial",trim.ambiguous = FALSE)
 ```
-The output sequences (expanded REEs targets) can be downloaded here: [REEs.expanded.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.fas).
+- [REEs.expanded.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.fas)
 
 Results:
 Nine of the expanded targets were only partially expanded, meaning that their sequence lengths (actually sequence lengths minus one, because of a bug in the code that has since been fixed) were not a multiple of the bait length. Three of these targets were located near the end of the reference contig and another six had terminal strings of ambiguous bases (Ns) that were trimmed ([Table 4](#Table4)). Note: 57 other targets that were fully expanded had terminal Ns, but these Ns were not trimmed because they were not detected. The latest version of the get_ncbi_sequences function (REEs package) has an option to trim terminal Ns, but this option was not present when SnakeCap targets were chosen.
