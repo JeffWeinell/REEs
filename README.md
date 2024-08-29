@@ -94,10 +94,8 @@ Thamnophis.sirtalis_exome <- REEs::get.seqs.from.gff(input.seqs=Thamnophis.sirta
 write.table(x=output.gff,file="Thamnophis.sirtalis_GFF_CDS_longer120bp.txt",quote=F,sep="\t",row.names=F,col.names=T)
 writeXStringSet(x=Thamnophis.sirtalis_exome,filepath="Thamnophis_sirtalis_exome_longer120bp.fas")
 ```
-
-Output files from previous code block:
- - [Thamnophis.sirtalis_GFF_CDS_longer120bp.txt](https://osf.io/tm7qw/download) <!-- filesize 39.7 Mb -->
- - [Thamnophis_sirtalis_exome_longer120bp.fas](https://osf.io/v7ecb/download) <!-- filesize 33.9 Mb -->
+- [Thamnophis.sirtalis_GFF_CDS_longer120bp.txt](https://osf.io/tm7qw/download) <!-- filesize 39.7 Mb -->
+- [Thamnophis_sirtalis_exome_longer120bp.fas](https://osf.io/v7ecb/download) <!-- filesize 33.9 Mb -->
 
 <!--
 Note 1: This filtered GFF table is also included as a data table object in the REEs R package (object name: Thamnophis.sirtalis_GFF_CDS_longer120bp).
@@ -235,15 +233,30 @@ Use the table of alignment summary stats to choose a set of REEs for sequence ca
 stats.table.all <- data.table::fread("./statsTable_REEs_SnakeCap.txt",header=T)
 
 ### Filter the stats table to the optimal set of REEs
-stats.table.best <- REEs::pick.loci(statsTable.path=stats.table.all,primary.species="Thamnophis sirtalis", output.path="./stats_data_FastestExonPerGene_best_28Dec2020.tsv", species.subgroup=c("Crotalus horridus","Crotalus mitchellii","Ophiophagus hannah","Pantherophis guttatus", "Protobothrops mucrosquamatus", "Python bivittatus","Vipera berus","Thamnophis sirtalis"),pident.keep=c(65,100),max.loci.per.gene=1, min.num.species="all",max.capture.coverage=1200500,fast.stat="pident",use.min.pident.subgroup=T)
+stats.table.best <- REEs::pick.loci(statsTable.path=stats.table.all,
+                                    primary.species="Thamnophis sirtalis",
+                                    species.subgroup=c("Crotalus horridus",
+                                                       "Crotalus mitchellii",
+                                                       "Ophiophagus hannah",
+                                                       "Pantherophis guttatus",
+                                                       "Protobothrops mucrosquamatus",
+                                                       "Python bivittatus",
+                                                       "Vipera berus",
+                                                       "Thamnophis sirtalis"),
+                                    pident.keep=c(65,100),
+                                    max.loci.per.gene=1,
+                                    min.num.species="all",
+                                    max.capture.coverage=1200500,
+                                    fast.stat="pident",
+                                    use.min.pident.subgroup=T,
+                                    output.path="stats_data_FastestExonPerGene_best_28Dec2020.tsv")
 ```
-
+- [stats_data_FastestExonPerGene_best_28Dec2020.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best_28Dec2020.tsv) includes 2,070 REEs and format described in [Table 3](#Table3).
 <!---
 ### Note 1: Using the code above retains 2,068 REEs in stats.table.best, of which 2,067 are the same as those previously picked and included in the file "stats_data_FastestExonPerGene_best.tsv". The output table stats.table.best includes "NW_013658076.1:768357-769730", which was not previously selected for inclusion in "stats_data_FastestExonPerGene_best.tsv"; conversely, "stats_data_FastestExonPerGene_best.tsv" includes "NW_013658076.1:768360-769730", "NW_013657914.1:650880-651587", "NW_013662230.1:5224-5446", and "NW_013659343.1:156011-156388", which are not included in the output table stats.table.best
 ### Note 2: "NW_013658076.1:768357-769730" of stats.table.best is essentially the same locus as "NW_013658076.1:768360-769730" in stats_data_FastestExonPerGene_best.tsv; The difference is because the latest version of the REEs::reportBestMatches function filters matches that are subsequences of other matches.
 ### Note 3: running pick.loci with max.capture.coverage=1200500 (rather than 1200000) includes the loci "NW_013657914.1:650880-651587" and "NW_013662230.1:5224-5446", which were included in "stats_data_FastestExonPerGene_best.tsv", but "NW_013659343.1:156011-156388" is still missing.
 --->
-Output table [stats_data_FastestExonPerGene_best_28Dec2020.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best_28Dec2020.tsv) includes 2,070 REEs. The format of the output table is the same as the format of the input table; see [Table 3](#Table3) for column descriptions.
 
 <!--
 An updated version of this stats table stats_data_FastestExonPerGene_best.tsv that includes the WeinellEntry locus names is [stats_data_FastestExonPerGene_best_20Nov2020.tsv](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/stats_data_FastestExonPerGene_best_20Nov2020.tsv).
@@ -294,6 +307,7 @@ Thamnophis.sirtalis_genome.url <- REEs::datasets(1)[1,2]
 
 REEs.expanded <- get_ncbi_sequences(outfile="./REEs.expanded.fas",input.seqs=Thamnophis.sirtalis_genome.url, accessionList=targets.contig, startList= targets.start, endList=targets.end, if.outside.range="partial",trim.ambiguous = FALSE)
 ```
+- **stats_REEs.expanded.tsv**
 - [REEs.expanded.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/REEs/REEs.expanded.fas)
 
 Results:
