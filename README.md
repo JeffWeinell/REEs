@@ -589,7 +589,14 @@ Biostrings::writeXStringSet(x=target.UCEs,filepath="./targetUCEs.1000.fas",forma
 
 #### Overview:
 
-Identify and obtain all regions of the *Thermophis baileyi* genome that begin with the recognition sequence of the restriction enzyme (RE) *Sbfi* and end with the recognition sequence of the RE *EcoR1*, and which have a length of 900-1000nt. Then I used BLASTn to search for homologs of the *Thermophis baileyi* ddRAD-like loci in the *T. sirtalis* genome. I filtered the set of ddRAD-like loci to include only those with a single, high quality match found in *T. sirtalis* genome. I trimmed the ends of sequences if there was a string of ambiguous bases nearby. A subset of the retained loci were submitted to Arbor for ultrastringent filtering and then probe design.
+These loci are located between recognition sequences of two different restriction enzymes, like real ddRAD loci, so I called these loci "ddRAD-like". This method is expected to yield a set of candidate loci with desired lengths and that are distributed throughout genomes.
+
+First, I identified all 900-1000nt regions of the *Thermophis baileyi* genome that begin or end with recognition sequences of restriction enzymes *Sbfi* or *EcoR1*.
+Then, I filtered this initial set of candidate target loci to include only those with a single strong match (BLASTn) in *T. sirtalis* genome.
+Next, I end-trimmed regions with a high number of ambiguous bases (if present).
+I retained a random subset of candidates for ultrastringent filtering and then probe design.
+
+#### Step-by-step procedure:
 
 <!---
 1. grep Sbfi recognition site in *T. baileyi* genome (sense strand contigs); output = three column hit table containing the "contig accession", "start position", "end position"
@@ -606,7 +613,6 @@ Identify and obtain all regions of the *Thermophis baileyi* genome that begin wi
 Most of the important files and scripts for selecting ddRAD-like loci are in the zip file **RandomLoci.zip**
 --->
 
-#### Step-by-step procedure:
 
 **1**. Propose a set of target loci ("ddRAD-like" loci) that are expected to be distributed relatively randomly throughout the genome, and which have lengths between 900-1000nt. These loci ddRAD-like because the method involves searching for the recognition sequences of two restriction enzymes. The function returns a table containing the genomic coordinates of all regions that begin with the recognition sequence of a restriction enzyme A (= SbfI: "CCTGCAGG") and end with the recognition sequence of a restriction enzyme B (= EcoR1: "GAATTC"), and which have a sequence length that is within a specified range (900-1000nt).
 
