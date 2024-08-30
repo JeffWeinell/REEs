@@ -377,43 +377,14 @@ Total REEs removed: 70+123+212 = 405
 
 #### Overview:
 
-Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus fulvius* (Streicher and Wiens, 2017; **Table X**). First, I filtered the full set of *Micrurus* UCEs to only include those present in all NCBI snake genomes (n = 2,968 UCEs). Then, I filtered the set of shared UCEs to include only loci in which the *T. sirtalis* sequence included at least 200nt of non-gap sites in the UCE alignment. I sorted the set of passing *T. sirtalis* UCEs by UCE name and then retained only the first 1,000 loci. From each of these 1,000 loci, I extracted the middle 161nt bases to be used at a template for probe design. Arbor Biosciences was able to synthesize probes for 907 of the 1,000 proposed target UCEs.
+Target UCEs include 907 of the 3,260 UCEs previously identified in *Micrurus fulvius* (Streicher and Wiens, 2017). First, I filtered the full set of *Micrurus* UCEs to only include those present in all NCBI snake genomes (n = 2,968 UCEs). Then, I filtered the set of shared UCEs to include only loci in which the *T. sirtalis* sequence included at least 200nt of non-gap sites in the UCE alignment. I sorted the set of passing *T. sirtalis* UCEs by UCE name and then retained only the first 1,000 loci. From each of these 1,000 loci, I extracted the middle 161nt bases to be used at a template for probe design. Arbor Biosciences was able to synthesize probes for 907 of the 1,000 proposed target UCEs.
 
 #### Step-by-step procedure:
 
-**1**. I downloaded the set of *Micurus fulvius* UCEs (n = 3,260) identified by Streicher and Wiens (2017). These were available as a fasta file called [micrurus_UCEs.fa](https://git.io/JLiu2).
-
-**2**. To find *Micrurus* UCEs in each of the other snake genomes, I queried each *Micrurus* UCE against each snake genome using blastn algorithm (saving ≤ 50 matches per query), which was implemented using the R wrapper function REEs::blast. 
-
-<!-- Note: The newest version of the *Pantherophis guttatus* genome (JTLQ00000000.2 as of January 13, 2021) was not available when I did these analyses.
-"*Pantherophis guttatus* genome" = version JTLQ00000000.1. 
-The contigs of version JTLQ00000000.1 are split into three fasta files available from NCBI.
-I downloaded these files and merged them into one file.
-Each of the other genomes were downloaded as a single file from NCBI.
--->
+I used blastn to search for [3,260 *Micurus fulvius* UCEs](https://git.io/JLiu2) (Streicher and Wiens, 2017) in each genome listed in [Table 2](#Table2). I saved the best match for each UCE in each genome (out of an ititial ≤50 matches saved for each UCE/genome).
 
 ```
-# Download the three fasta files containing contigs of the Pantherophis guttatus genome (JTLQ00000000.1). These will be saved to your current directory unless you specify otherwise.
-utils::download.file(url="https://sra-download.ncbi.nlm.nih.gov/traces/wgs03/wgs_aux/JT/LQ/JTLQ01/JTLQ01.1.fsa_nt.gz", destfile="JTLQ01.1.fsa_nt.gz")
-utils::download.file(url="https://sra-download.ncbi.nlm.nih.gov/traces/wgs03/wgs_aux/JT/LQ/JTLQ01/JTLQ01.2.fsa_nt.gz", destfile="JTLQ01.2.fsa_nt.gz")
-utils::download.file(url="https://sra-download.ncbi.nlm.nih.gov/traces/wgs03/wgs_aux/JT/LQ/JTLQ01/JTLQ01.3.fsa_nt.gz", destfile="JTLQ01.3.fsa_nt.gz")
-
-# Load the downloaded fasta files into R as DNAStringSet objects.
-Pantherophis.guttatus.genome_JTLQ01.1 <- Biostrings::readDNAStringSet("JTLQ01.1.fsa_nt.gz")
-Pantherophis.guttatus.genome_JTLQ01.2 <- Biostrings::readDNAStringSet("JTLQ01.2.fsa_nt.gz")
-Pantherophis.guttatus.genome_JTLQ01.3 <- Biostrings::readDNAStringSet("JTLQ01.3.fsa_nt.gz")
-
-# Merge the three DNAStringSet objects into one object containing all contigs of the genome.
-Pantherophis.guttatus.genome_JTLQ01 <- c(Pantherophis.guttatus.genome_JTLQ01.1,Pantherophis.guttatus.genome_JTLQ01.2,Pantherophis.guttatus.genome_JTLQ01.3)
-
-# Save the genome.
-Biostrings::writeXStringSet(x=Pantherophis.guttatus.genome_JTLQ01,filepath="Pantherophis.guttatus_JTLQ01.fsa_nt.gz",compress=TRUE)
-```
-- *Pantherophis guttatus* JTLQ00000000.1 contigs: [Pantherophis.guttatus_JTLQ01.fsa_nt.gz](https://osf.io/r2xa3/download)
-
-
-```
-# URLs to genome fastas
+# URLs to genomes to search in
 Pantherophis.guttatus.genome_url        <- "https://osf.io/r2xa3/download"
 Anolis.carolinensis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Anolis carolinensis"),2]
 Gekko.japonicus.genome_url              <- REEs::datasets(1)[which(datasets(1)[,1]=="Gekko japonicus"),2]
@@ -426,7 +397,7 @@ Python.bivittatus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,
 Vipera.berus.genome_url                 <- REEs::datasets(1)[which(datasets(1)[,1]=="Vipera berus"),2]
 Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Thamnophis sirtalis"),2]
 
-### Runs BLASTN
+# Runs BLASTN
 Crotalus.horridus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Crotalus.horridus.genome_url, query="./micrurus_UCEs.fa", table.out="./Crotalus.horridus.blastn.UCEs.50hits.txt")
 Crotalus.mitchellii.UCEs.50hits          <- REEs::blast(method="blastn",subject=Crotalus.mitchellii.genome_url, query="./micrurus_UCEs.fa", table.out="./Crotalus.mitchellii.blastn.UCEs.50hits.txt")
 Ophiophagus.hannah.UCEs.50hits           <- REEs::blast(method="blastn",subject=Ophiophagus.hannah.genome_url, query="./micrurus_UCEs.fa", table.out="./Ophiophagus.hannah.blastn.UCEs.50hits.txt")
@@ -435,12 +406,8 @@ Protobothrops.mucrosquamatus.UCEs.50hits <- REEs::blast(method="blastn",subject=
 Python.bivittatus.UCEs.50hits            <- REEs::blast(method="blastn",subject=Python.bivittatus.genome_url, query="./micrurus_UCEs.fa", table.out="./Python.bivittatus.blastn.UCEs.50hits.txt")
 Vipera.berus.UCEs.50hits                 <- REEs::blast(method="blastn",subject=Vipera.berus.genome_url, query="./micrurus_UCEs.fa", table.out="./Vipera.berus.blastn.UCEs.50hits.txt")
 Thamnophis.sirtalis.UCEs.50hits          <- REEs::blast(method="blastn",subject=Thamnophis.sirtalis.genome_url, query="./micrurus_UCEs.fa", table.out="./Thamnophis.sirtalis.blastn.UCEs.50hits.txt")
-```
-Output tables from BLASTN: [Crotalus.horridus.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.blastn.UCEs.50hits.txt), [Crotalus.mitchellii.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.blastn.UCEs.50hits.txt), [Ophiophagus.hannah.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.blastn.UCEs.50hits.txt), [Pantherophis.guttatus.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.blastn.UCEs.50hits.txt), [Protobothrops.mucrosquamatus.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.blastn.UCEs.50hits.txt), [Python.bivittatus.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.blastn.UCEs.50hits.txt), [Thamnophis.sirtalis.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.blastn.UCEs.50hits.txt), and [Vipera.berus.blastn.UCEs.50hits.txt](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.blastn.UCEs.50hits.txt).
 
-**3**. I used the function reportBestMatches to filter the hit tables to include only the best match for each query UCE.
-
-```
+# Best match for each UCE in each genome
 UCEs.best.hits.Crotalus.horridus             <- REEs::reportBestMatches(input.table=Crotalus.horridus.UCEs.50hits, output.table.path="Crotalus.horridus.blastn.UCEs.best.hits.txt")
 UCEs.best.hits.Crotalus.mitchellii           <- REEs::reportBestMatches(input.table=Crotalus.mitchellii.UCEs.50hits, output.table.path="Crotalus.mitchellii.blastn.UCEs.best.hits.txt")
 UCEs.best.hits.Ophiophagus.hannah            <- REEs::reportBestMatches(input.table=Ophiophagus.hannah.UCEs.50hits, output.table.path="Ophiophagus.hannah.blastn.UCEs.best.hits.txt")
@@ -450,38 +417,7 @@ UCEs.best.hits.Python.bivittatus             <- REEs::reportBestMatches(input.ta
 UCEs.best.hits.Thamnophis.sirtalis           <- REEs::reportBestMatches(input.table=Thamnophis.sirtalis.UCEs.50hits, output.table.path="Thamnophis.sirtalis.blastn.UCEs.best.hits.txt")
 UCEs.best.hits.Vipera.berus                  <- REEs::reportBestMatches(input.table=Vipera.berus.UCEs.50hits, output.table.path="Vipera.berus.blastn.UCEs.best.hits.txt")
 
-### Getting a list of the shared loci.
-shared.UCEs <- intersect.all(list(UCEs.best.hits.Crotalus.horridus$qseqid, UCEs.best.hits.Crotalus.mitchellii$qseqid,UCEs.best.hits.Ophiophagus.hannah$qseqid, UCEs.best.hits.Pantherophis.guttatus$qseqid,UCEs.best.hits.Protobothrops.mucrosquamatus$qseqid, UCEs.best.hits.Python.bivittatus$qseqid, UCEs.best.hits.Vipera.berus$qseqid, UCEs.best.hits.Thamnophis.sirtalis$qseqid))
-
-### Result: 2,168 UCE loci were found in all of the species. The loci missing from one or more species are not filtered here, but are filtered later when the function align.shared.loci is used.
-
-```
-Output tables with best matches: [Crotalus.horridus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.blastn.UCEs.best.hits.txt), [Crotalus.mitchellii.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.blastn.UCEs.best.hits.txt), [Ophiophagus.hannah.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.blastn.UCEs.best.hits.txt) , [Pantherophis.guttatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.blastn.UCEs.best.hits.txt), [Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt), [Python.bivittatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.blastn.UCEs.best.hits.txt), [Thamnophis.sirtalis.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.blastn.UCEs.best.hits.txt), [Vipera.berus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.blastn.UCEs.best.hits.txt).
-
-**4**. Extract and save sequences for best matches UCEs
-
-```
-#### Load tables with best matches
-UCEs.best.hits.Crotalus.horridus             <- as.data.frame(data.table::fread("Crotalus.horridus.blastn.UCEs.best.hits.txt"),header=T)
-UCEs.best.hits.Crotalus.mitchellii           <- as.data.frame(data.table::fread("Crotalus.mitchellii.blastn.UCEs.best.hits.txt"),header=T)
-UCEs.best.hits.Ophiophagus.hannah            <- as.data.frame(data.table::fread("Ophiophagus.hannah.blastn.UCEs.best.hits.txt"),header=T)
-UCEs.best.hits.Pantherophis.guttatus         <- as.data.frame(data.table::fread("Pantherophis.guttatus.blastn.UCEs.best.hits.txt"),header=T)
-UCEs.best.hits.Protobothrops.mucrosquamatus  <- as.data.frame(data.table::fread("Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt"),header=T)
-UCEs.best.hits.Python.bivittatus             <- as.data.frame(data.table::fread("Python.bivittatus.blastn.UCEs.best.hits.txt"),header=T)
-UCEs.best.hits.Thamnophis.sirtalis           <- as.data.frame(data.table::fread("Thamnophis.sirtalis.blastn.UCEs.best.hits.txt"),header=T)
-UCEs.best.hits.Vipera.berus                  <- as.data.frame(data.table::fread("Vipera.berus.blastn.UCEs.best.hits.txt"),header=T)
-
-#### Define the genome URL paths. The URLs for genomes used in the SnakeCap study can be called using the datasets function of REEs package.
-Crotalus.horridus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,1]=="Crotalus horridus"),2]
-Crotalus.mitchellii.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Crotalus mitchellii"),2]
-Ophiophagus.hannah.genome_url           <- REEs::datasets(1)[which(datasets(1)[,1]=="Ophiophagus hannah"),2]
-Pantherophis.guttatus.genome_url        <- REEs::datasets(1)[which(datasets(1)[,1]=="Pantherophis guttatus"),2]
-Protobothrops.mucrosquamatus.genome_url <- REEs::datasets(1)[which(datasets(1)[,1]=="Protobothrops mucrosquamatus"),2]
-Python.bivittatus.genome_url            <- REEs::datasets(1)[which(datasets(1)[,1]=="Python bivittatus"),2]
-Vipera.berus.genome_url                 <- REEs::datasets(1)[which(datasets(1)[,1]=="Vipera berus"),2]
-Thamnophis.sirtalis.genome_url          <- REEs::datasets(1)[which(datasets(1)[,1]=="Thamnophis sirtalis"),2]
-
-#### Extracts the sequence of the best match of each UCE from each snake genome.
+# Sequences for best match for each UCE in each genome
 Crotalus.horridus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Crotalus.horridus, input.seqs=Crotalus.horridus.genome_url, output.path="Crotalus.horridus.UCEs.fas")
 Crotalus.mitchellii.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Crotalus.mitchellii, input.seqs=Crotalus.mitchellii.genome_url, output.path="Crotalus.mitchellii.UCEs.fas")
 Ophiophagus.hannah.best.hits.seqs           <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Ophiophagus.hannah, input.seqs=Ophiophagus.hannah.genome_url, output.path="Ophiophagus.hannah.UCEs.fas")
@@ -490,12 +426,7 @@ Protobothrops.mucrosquamatus.best.hits.seqs <- REEs::get.seqs.from.blastTable(in
 Python.bivittatus.best.hits.seqs            <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Python.bivittatus, input.seqs=Python.bivittatus.genome_url, output.path="Python.bivittatus.UCEs.fas")
 Vipera.berus.best.hits.seqs                 <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Vipera.berus, input.seqs=Vipera.berus.genome_url, output.path="Vipera.berus.UCEs.fas")
 Thamnophis.sirtalis.best.hits.seqs          <- REEs::get.seqs.from.blastTable(input.blastTable=UCEs.best.hits.Thamnophis.sirtalis, input.seqs=Thamnophis.sirtalis.genome_url, output.path="Thamnophis.sirtalis.UCEs.fas")
-```
-Sequences for best matches: [Crotalus.horridus.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.UCEs.fas), [Crotalus.mitchellii.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.UCEs.fas), [Ophiophagus.hannah.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.UCEs.fas), [Pantherophis.guttatus.UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.UCEs.fas), [Protobothrops.mucrosquamatus.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.UCEs.fas), [Python.bivittatus.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.UCEs.fas), [Thamnophis.sirtalis.UCEs.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.UCEs.fas), [Vipera.berus.UCEs.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.UCEs.fas). Important note: Sequence headers in the output fastas have the format "querySequenceName_Subject=subjectContigName_ContigStart_ContigEnd". For example, the *Crotalus horridus* sequence that is the best match to UCE 1003 of *Micrurus fulvius* has the header "micrurus_fulvius_uce-1003_Subject=LVCR01005387.1_10818_10626". This is not intuitive because the only species in the header is *Micrurus fulvius*, even though the sequence is actually from *Crotalus horridus*.
 
-Rename sequences to format "Genus_species_uce-XXXX" to match naming format used by Streicher and Weins (2017), where XXXX is an ID number for a particular UCE.
-
-```
 # Renaming each species' UCE sequences to match the format of sequence names used by Streicher and Wiens (2017): "Genus_species_uce-XXXX", where XXXX is a number.
 names(Crotalus.horridus.best.hits.seqs)            <- mgsub(c("micrurus_fulvius_","_Subject.+"), c("Crotalus_horridus_",""), names(Crotalus.horridus.best.hits.seqs))
 names(Crotalus.mitchellii.best.hits.seqs)          <- mgsub(c("micrurus_fulvius_","_Subject.+"), c("Crotalus_mitchellii_",""), names(Crotalus.mitchellii.best.hits.seqs))
@@ -516,23 +447,26 @@ writeXStringSet(Python.bivittatus.best.hits.seqs,"Python.bivittatus.UCEs_renamed
 writeXStringSet(Thamnophis.sirtalis.best.hits.seqs,"Thamnophis.sirtalis.UCEs_renamed.fas")
 writeXStringSet(Vipera.berus.best.hits.seqs,"Vipera.berus.UCEs_renamed.fas")
 ```
-Renamed sequences for best matches: [Crotalus.horridus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.UCEs_renamed.fas), [Crotalus.mitchellii.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.UCEs_renamed.fas), [Ophiophagus.hannah.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.UCEs_renamed.fas), [Pantherophis.guttatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.UCEs_renamed.fas), [Protobothrops.mucrosquamatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.UCEs_renamed.fas), [Python.bivittatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.UCEs_renamed.fas), [Thamnophis.sirtalis.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.UCEs_renamed.fas), [Vipera.berus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.UCEs_renamed.fas)
+- Best matches (blastn hit tables): [Crotalus.horridus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.blastn.UCEs.best.hits.txt), [Crotalus.mitchellii.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.blastn.UCEs.best.hits.txt), [Ophiophagus.hannah.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.blastn.UCEs.best.hits.txt) , [Pantherophis.guttatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.blastn.UCEs.best.hits.txt), [Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.blastn.UCEs.best.hits.txt), [Python.bivittatus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.blastn.UCEs.best.hits.txt), [Thamnophis.sirtalis.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.blastn.UCEs.best.hits.txt), [Vipera.berus.blastn.UCEs.best.hits.txt](https://github.com/JeffWeinell/SnakeCap/blob/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.blastn.UCEs.best.hits.txt).
+- Best matches (sequenes) [Crotalus.horridus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.horridus.UCEs_renamed.fas), [Crotalus.mitchellii.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Crotalus.mitchellii.UCEs_renamed.fas), [Ophiophagus.hannah.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Ophiophagus.hannah.UCEs_renamed.fas), [Pantherophis.guttatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Pantherophis.guttatus.UCEs_renamed.fas), [Protobothrops.mucrosquamatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Protobothrops.mucrosquamatus.UCEs_renamed.fas), [Python.bivittatus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Python.bivittatus.UCEs_renamed.fas), [Thamnophis.sirtalis.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Thamnophis.sirtalis.UCEs_renamed.fas), [Vipera.berus.UCEs_renamed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/UCEs.In.Snake.Genomes/Vipera.berus.UCEs_renamed.fas)
 
-
-**5**. Align seqs for each UCE locus found in all snake genomes.
+Align seqs for each UCE locus found in all snake genomes.
 
 ```
+# List of UCEs found in all genomes (n = 2,168)
+shared.UCEs <- intersect.all(list(UCEs.best.hits.Crotalus.horridus$qseqid, UCEs.best.hits.Crotalus.mitchellii$qseqid,UCEs.best.hits.Ophiophagus.hannah$qseqid, UCEs.best.hits.Pantherophis.guttatus$qseqid,UCEs.best.hits.Protobothrops.mucrosquamatus$qseqid, UCEs.best.hits.Python.bivittatus$qseqid, UCEs.best.hits.Vipera.berus$qseqid, UCEs.best.hits.Thamnophis.sirtalis$qseqid))
+
 # Character vector with paths to the unaligned UCE sequence files.
 UCEs.paths <- c("Crotalus.horridus.UCEs_renamed.fas","Crotalus.mitchellii.UCEs_renamed.fas","Ophiophagus.hannah.UCEs_renamed.fas","Pantherophis.guttatus.UCEs_renamed.fas","Protobothrops.mucrosquamatus.UCEs_renamed.fas","Python.bivittatus.UCEs_renamed.fas","Thamnophis.sirtalis.UCEs_renamed.fas","Vipera.berus.UCEs_renamed.fas")
 
-# Align sequences for each UCE locus
+# Align sequences for each UCE locus (mafft wrapper)
 aligned.UCEs <- align.shared.loci(input.seqs=UCEs.paths, indv=c("Pantherophis.guttatus", "Thamnophis.sirtalis", "Vipera.berus", "Python.bivittatus", "Protobothrops.mucrosquamatus", "Ophiophagus.hannah", "Crotalus.mitchellii", "Crotalus.horridus"), reference.indv=7, seqname.str.delim="_", seqname.str.loc=3, output.dir="./MAFFT-aligned-UCEs")
 
 ```
-- Alignments for the 2,968 UCEs found in all snake genomes: [MAFFT-aligned-UCEs.zip](https://osf.io/wpcr7/download).
+- [2,968 UCE alignments](https://osf.io/wpcr7/download).
 
 
-**6**. Extract *Thamnophis sirtalis* sequences and filter by minimum size. Sort the remaining sequences by UCE name and then extract the middle 161nt of the first 1,000 loci.
+Extract *Thamnophis sirtalis* UCE sequence from each alignment, filter seqs <200bp, sort remaining sequences by UCE name and keep first 1,000 loci as candidate targets. Extract middle 161nt of each candidate target UCE as template for probe design.
 
 ```
 ### Character vector of paths to the UCE alignments
@@ -577,8 +511,7 @@ target.UCEs   <- Biostrings::getSeq(Thamnophis.sirtalis.UCEs.200.1000, gsubrange
 ### Save UCE targets
 Biostrings::writeXStringSet(x=target.UCEs,filepath="./targetUCEs.1000.fas",format="fasta")
 ```
-- *T. sirtalis* sequences for 1,000 UCEs chosen as candidate targets: [targetUCEs.1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/targetUCEs.1000.fas). 
-<!-- These correspond to WeinellEntry targets 2153–3152 (locus1676-locus2580) in [Version2_additional-targets_Entry1899to3152_20Sep2018.fasta](https://github.com/JeffWeinell/SnakeCap/raw/main/ArborFiles/Version2_additional-targets_Entry1899to3152_20Sep2018.fasta). After ultrastringent filtering, probes were designed for 907 of the 1,000 UCEs submitted to Arbor Biosciences. See [ultra-stringent filtering](#ultrastringentFiltering) section. -->
+- [1,000 candidate UCE targets](https://github.com/JeffWeinell/SnakeCap/raw/main/UCEs/targetUCEs.1000.fas)
 
 
 <a name="Methods.SelectingddRAD"></a>
@@ -609,7 +542,6 @@ I retained a random subset of candidates for ultrastringent filtering and then p
 10. Keep the set of single-copy sequences present in all snakes genomes, and design probes for these target loci.
 Most of the important files and scripts for selecting ddRAD-like loci are in the zip file **RandomLoci.zip**
 --->
-
 
 Propose a set of target loci ("ddRAD-like" loci) that are expected to be distributed relatively randomly throughout the genome, and which have lengths between 900-1000nt. These loci ddRAD-like because the method involves searching for the recognition sequences of two restriction enzymes. The function returns a table containing the genomic coordinates of all regions that begin with the recognition sequence of a restriction enzyme A (= SbfI: "CCTGCAGG") and end with the recognition sequence of a restriction enzyme B (= EcoR1: "GAATTC"), and which have a sequence length that is within a specified range (900-1000nt).
 
@@ -649,48 +581,40 @@ Thermophis.ddradlike.seqs[which.reverse.complement] <- Biostrings::reverseComple
 # Update sequence names to account for reverse complementing. The new sequence names are the character strings in the coordinates column (first column) of the table proposed.ddRAD.loci.coordinates.
 names(Thermophis.ddradlike.seqs) <- proposed.ddRAD.loci.coordinates$coordinates
 
-# Save sequences.
-writeXStringSet(Thermophis.ddradlike.seqs,"Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas")
-```
-- *Thermophis baileyi* sequences for proposed ddRAD-like loci: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas).
+proposed.loci <- Thermophis.ddradlike.seqs
 
-Trim loci that have strings of ambiguous bases to keep the longest non-ambiguous region.
-
-```
-### If not already loaded, read in the set of proposed loci sequences from step two.
-proposed.loci <- Biostrings::readDNAStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000.fas")
-
-### Vector indicating which loci contain a string of ambiguous bases (Ns).
+### Trim loci that have strings of ambiguous bases to keep the longest non-ambiguous region.
+# Vector indicating which loci contain a string of ambiguous bases (Ns).
 which.Ns <- grep("N+N",proposed.loci)
 
-### DNAStringSet object containing the loci to trim
+# DNAStringSet object containing the loci to trim
 loci.to.trim <- proposed.loci[which.Ns]
 
-### Start and end positions of the strings of Ns
+# Start and end positions of the strings of Ns
 N.locs <- stringr::str_locate(string=loci.to.trim,pattern="N+N")
 
-### Start and end positions of the 5' and 3' non-ambiguous strings.
+# Start and end positions of the 5' and 3' non-ambiguous strings.
 left.pos     <- cbind(1,(N.locs[,1]-1))
 right.pos    <- cbind((N.locs[,2]+1),width(loci.to.trim))
 
-### Length of 3' and 5' non-ambiguous regions
+# Length of 3' and 5' non-ambiguous regions
 length.left  <- (N.locs[,1]-1)
 length.right <- width(loci.to.trim)-N.locs[,2]
 which.longer <- apply(X=cbind(length.left,length.right),MARGIN=1,FUN=function(x){which(x==max(x))})
 which.left   <- which(which.longer==1)
 which.right  <- which(which.longer==2)
 
-### DNAStringSets containing the trimmed loci.
+# DNAStringSets containing the trimmed loci.
 loci.trimmed.left  <- subseq(loci.to.trim[which.left],start=rep(1,length(which.left)),end=left.pos[,2][which.left])
 loci.trimmed.right <- subseq(loci.to.trim[which.right],start=right.pos[,1][which.right],end=right.pos[,2][which.right])
 
-### Old contig coordinates of loci to be trimmed
+# Old contig coordinates of loci to be trimmed
 old.coordinates.left        <- mat.strsplit(mgsub(c(".+:c",".+:"),c("",""),names(loci.trimmed.left)),split="-")
 old.coordinates.right       <- mat.strsplit(mgsub(c(".+:c",".+:"),c("",""),names(loci.trimmed.right)),split="-")
 mode(old.coordinates.left)  <- "numeric"
 mode(old.coordinates.right) <- "numeric"
 
-### New contig coordinates of loci to be trimmed
+# New contig coordinates of loci to be trimmed
 new.coordinates.left        <- cbind(old.coordinates.left[,1],old.coordinates.left[,1]+(left.pos[which.left,2]-1))
 new.coordinates.left[grep(":c",names(loci.trimmed.left)),2] <- old.coordinates.left[grep(":c",(names(loci.trimmed.left))),1]-(left.pos[which.left[grep(":c",(names(loci.trimmed.left)))],2]-1)
 
@@ -700,44 +624,39 @@ new.coordinates.right[grep(":c",names(loci.trimmed.right)),1] <- old.coordinates
 new.names.left  <- paste0(mgsub(c(":c[1-9].+",":[1-9].+"),c(":c",":"),names(loci.trimmed.left)),new.coordinates.left[,1],"-",new.coordinates.left[,2])
 new.names.right <- paste0(mgsub(c(":c[1-9].+",":[1-9].+"),c(":c",":"),names(loci.trimmed.right)),new.coordinates.right[,1],"-",new.coordinates.right[,2])
 
-### Rename the trimmed loci to the new genomic coordinates
+# Rename the trimmed loci to the new genomic coordinates
 names(loci.trimmed.left)  <- new.names.left
 names(loci.trimmed.right) <- new.names.right
 loci.trimmed <- c(loci.trimmed.left,loci.trimmed.right)
 loci.trimmed <- loci.trimmed[match(unique(names(loci.trimmed)),names(loci.trimmed))]
 
-### DNAStringSet object of the proposed loci, including the trimmed loci
+# DNAStringSet object of the proposed loci, including the trimmed loci
 proposed.loci.trimmed <- c(proposed.loci[-which.Ns],loci.trimmed)
 
-### Save proposed.loci.trimmed
+# Save proposed.loci.trimmed
 writeXStringSet(proposed.loci.trimmed,"Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas")
+```
+- [Candidate ddRAD-like target loci](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas)
+
+Randomly retain candidates until cumulative number of target sites across target loci excedes max number of possible target sites given limitations of the probe set and tiling (20,000 probes; probe size 120bp; 2x tiling).
 
 ```
-- Candidate ddRAD-like target loci after end-trimming: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas).
+# Read in the trimmed loci if not already loaded
+proposed.loci.trimmed <- Biostrings::readDNAStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas")
 
-Randomly retain candidates until cumulative number of target sites excedes max number of target size for probe set. **To do: add code used to calculate baits per locus**
-
-```
-### Read in the trimmed loci if not already loaded
-proposed.loci.trimmed             <- Biostrings::readDNAStringSet("Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed.fas")
-
-### Randomly shuffle the order of the loci
+# Randomly shuffle the order of the loci
 proposed.loci.trimmed.randomOrder <- proposed.loci.trimmed[sample(1:length(proposed.loci.trimmed),n=lenth(proposed.loci.trimmed),replace=F)]
 
-### Calculate the number of baits needed to target each locus in proposed.loci.trimmed.randomOrder
+# Calculate the number of baits (=probes) needed to target each locus
 baits.per.locus <- 
 
-### Create a vector of the rolling sum of baits per locus
+# Create a vector of the rolling sum of baits per locus
 baits.per.locus.rollingSum <- REEs::rollSum(baits.per.locus)
 
-### Keep the first N loci in proposed.loci.trimmed.randomOrder in which rolling sum of baits per locus is closest to but not exceeding the number of unassigned baits remaining in the bait kit.
+# Keep the first N loci in proposed.loci.trimmed.randomOrder in which rolling sum of baits per locus is closest to but not exceeding the number of unassigned baits remaining in the bait kit.
 ddrad.targets.seqs <- proposed.loci.trimmed.randomOrder[which(baits.per.locus.rollingSum < 3,695)]
-
-### Save the set of candidate ddRAD-like loci to target
-writeXStringSet(ddrad.targets.seqs,"/Users/alyssaleinweber/Documents/SequenceCapture-GitHub/ddRAD-like/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed_targetted.fas")
 ```
-- Candidate ddRAD-like loci to target: [Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed_targetted.fas](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed_targetted.fas)
-
+- [Candidate ddRAD-like target loci](https://github.com/JeffWeinell/SnakeCap/raw/main/ddRAD/Thermophis_ProposedLoci_CCTGCAGG-GAATTC_900to1000_trimmed_targetted.fas)
 
 <a name="Methods.SelectingMHC"></a>
 ### MHC loci:
@@ -872,7 +791,7 @@ species | genome assembly accession | contig prefixes | n target loci with baits
 *Thermophis baileyi* | GCA_003457575.1 | QLTV01 | 328  | 229
 
 Probe set and target loci
- - [20,020 probes seqs (oldnames)](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta)
+ - [20,020 probes seqs](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta)
  - [3,128 target loci seqs](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/Weinell_TargetLoci_Snakes_Final_newnames.fa)
  - [target loci info](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/SnakeCap_loci_info.txt)
 
