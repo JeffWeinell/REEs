@@ -1,4 +1,4 @@
-locus.name	locus.altname4	locus.altname1	locus.altname2	locus.altname3	Species	Target_NCBI	type	includes.genes	GeneNames	Weinell2024.alignments
+locus.name	locus.altname1	locus.altname2	locus.altname3	locus.altname4	source.species	source.genomic.coordinates	locus.type	genes.ids	genes.names	Weinell2024.Elapoidea.phylogeny
 locus1	NA	WeinellEntry1	REE_1	sample66_0000000001	Thamnophis sirtalis	NW_013657827.1:910380-911340	REE	ZP1	zona pellucida glycoprotein 1 (sperm receptor)	TRUE
 locus2	NA	WeinellEntry4	REE_2	sample66_0000000009	Thamnophis sirtalis	NW_013657696.1:2144317-2144557	REE	LOC106540148	boophilin-G2-like	TRUE
 locus3	NA	WeinellEntry6	REE_3	sample66_0000000010	Thamnophis sirtalis	NW_013658071.1:824738-824978	REE	LOC106541798	serpin B6-like	TRUE
@@ -1192,7 +1192,6 @@ locus1190	NA	WeinellEntry1428	REE_1179	sample66_0000002270	Thamnophis sirtalis	N
 locus1191	NA	WeinellEntry1429	REE_1180	sample66_0000002271	Thamnophis sirtalis	NW_013660692.1:51751-51991	REE	ALOX12B	arachidonate 12-lipoxygenase, 12R type	TRUE
 locus1192	NA	WeinellEntry1430	REE_1181	sample66_0000002272	Thamnophis sirtalis	NW_013658334.1:71535-71775	REE	LOC106544595	antigen peptide transporter 1-like	TRUE
 locus1193	NA	WeinellEntry1431	REE_1182	sample66_0000002273	Thamnophis sirtalis	NW_013658266.1:393025-394705	REE	YTHDF3	YTH N(6)-methyladenosine RNA binding protein 3	TRUE
-NA	locus1193_partial	WeinellEntry3091	NA	sample66_0000002534	Thamnophis sirtalis	NW_013658266.1:394472-394632	UCE	YTHDF3	YTH N(6)-methyladenosine RNA binding protein 3	FALSE
 locus1194	NA	WeinellEntry1432	REE_1183	sample66_0000002274	Thamnophis sirtalis	NW_013661735.1:21491-22451	REE	LOC106556380	olfactory receptor 1020-like	TRUE
 locus1195	NA	WeinellEntry1433	REE_1184	sample66_0000002275	Thamnophis sirtalis	NW_013659223.1:218707-218947	REE	LOXL2	lysyl oxidase-like 2	TRUE
 locus1196	NA	WeinellEntry1434	REE_1185	sample66_0000002276	Thamnophis sirtalis	NW_013657689.1:628169-628409	REE	LOC106537846	chromosome unknown open reading frame, human C9orf91	TRUE
@@ -2692,7 +2691,7 @@ locus2689	NA	WeinellEntry5292	vision_16	sample66_0000001133	Ophiophagus hannah	A
 locus2690	NA	WeinellEntry5293	vision_17	sample66_0000003079	Ophiophagus hannah	AZIM01000286.1:70027-70188	vision	CRYAA_Exon1	CRYAA	TRUE
 locus2691	NA	WeinellEntry5294	vision_18	sample66_0000000004	Ophiophagus hannah	AZIM01000184.1:450396-450557	vision	CRYBA2_Exon1	CRYBA2	TRUE
 locus2692	NA	WeinellEntry5295	vision_19	sample66_0000002644	Ophiophagus hannah	AZIM01001670.1:141554-141715	vision	CRYBB2_Exon6	CRYBB2	TRUE
-locus2693	NA	WeinellEntry5296;WeinellEntry5297	vision_20	sample66_0000000591;sample66_0000002702	Ophiophagus hannah	AZIM01000160.1:125280-125441	vision	CRYD1_Exon17;CRYD2_Exon16	CRYD1_Exon17;CRYD2_Exon16	TRUE
+locus2693	NA	WeinellEntry5296	vision_20	sample66_0000000591	Ophiophagus hannah	AZIM01000160.1:125280-125441	vision	CRYD1_Exon17	CRYD1_Exon17	TRUE
 locus2694	NA	WeinellEntry5298	vision_21	sample66_0000002627	Ophiophagus hannah	AZIM01001627.1:61933-62093	vision	CRYGS_Exon1	CRYGS	TRUE
 locus2695	NA	WeinellEntry5299	vision_22	sample66_0000001563	Ophiophagus hannah	AZIM01000062.1:1005183-1005344	vision	CRYL1_Exon3	CRYL1	TRUE
 locus2696	NA	WeinellEntry5300	vision_23	sample66_0000001606	Ophiophagus hannah	AZIM01003886.1:127529-127689	vision	ENO1_Exon5	ENO1	TRUE
@@ -2928,7 +2927,6 @@ locus2925	NA	WeinellEntry5542	ddRADlike_166	sample66_0000000327	Thermophis baile
 locus2926	NA	WeinellEntry5543	ddRADlike_167	sample66_0000000334	Thermophis baileyi	QLTV01004100.1:2660610-2661588	ddRADlike	NA	NA	TRUE
 locus2927	NA	WeinellEntry5544	ddRADlike_168	sample66_0000000338	Thermophis baileyi	QLTV01004146.1:2881941-2882930	ddRADlike	NA	NA	TRUE
 locus2928	NA	WeinellEntry5545	ddRADlike_169	sample66_0000000380	Thermophis baileyi	QLTV01004222.1:2396980-2397957	ddRADlike	NA	NA	TRUE
-NA	locus2928_partial	WeinellEntry5546	ddRADlike_170	sample66_0000002939	Thermophis baileyi	QLTV01004222.1:2397032-2397957	ddRADlike	NA	NA	FALSE
 locus2929	NA	WeinellEntry5547	ddRADlike_172	sample66_0000000403	Thermophis baileyi	QLTV01004232.1:188994-189933	ddRADlike	NA	NA	TRUE
 locus2930	NA	WeinellEntry5548	ddRADlike_174	sample66_0000000413	Thermophis baileyi	QLTV01004237.1:1333547-1334476	ddRADlike	NA	NA	TRUE
 locus2931	NA	WeinellEntry5549	ddRADlike_175	sample66_0000000426	Thermophis baileyi	QLTV01004242.1:1340941-1341925	ddRADlike	NA	NA	TRUE
@@ -2937,7 +2935,6 @@ locus2933	NA	WeinellEntry5551	ddRADlike_177	sample66_0000000431	Thermophis baile
 locus2934	NA	WeinellEntry5552	ddRADlike_178	sample66_0000000448	Thermophis baileyi	QLTV01004256.1:3682832-3683792	ddRADlike	NA	NA	TRUE
 locus2935	NA	WeinellEntry5553	ddRADlike_179	sample66_0000000471	Thermophis baileyi	QLTV01004257.1:2606037-2606981	ddRADlike	MET	MET	TRUE
 locus2936	NA	WeinellEntry5554	ddRADlike_180	sample66_0000000501	Thermophis baileyi	QLTV01004279.1:2038339-2039287	ddRADlike	MAP3K6	MAP3K6 [mitogen-activated protein kinase kinase kinase 6]	TRUE
-NA	locus2936_partial	WeinellEntry5555	ddRADlike_181	sample66_0000002948	Thermophis baileyi	QLTV01004279.1:2038350-2039287	ddRADlike	MAP3K6	MAP3K6 [mitogen-activated protein kinase kinase kinase 6]	FALSE
 locus2937	NA	WeinellEntry5556	ddRADlike_182	sample66_0000000532	Thermophis baileyi	QLTV01004293.1:158596-159532	ddRADlike	NA	NA	TRUE
 locus2938	NA	WeinellEntry5557	ddRADlike_185	sample66_0000000599	Thermophis baileyi	QLTV01004393.1:746305-747237	ddRADlike	NA	NA	TRUE
 locus2939	NA	WeinellEntry5558	ddRADlike_186	sample66_0000000632	Thermophis baileyi	QLTV01004403.1:4098702-4099688	ddRADlike	NA	NA	TRUE
@@ -2959,7 +2956,6 @@ locus2954	NA	WeinellEntry5573	ddRADlike_205	sample66_0000001190	Thermophis baile
 locus2955	NA	WeinellEntry5574	ddRADlike_206	sample66_0000001219	Thermophis baileyi	QLTV01000419.1:c1499961-1498976	ddRADlike	NA	NA	TRUE
 locus2956	NA	WeinellEntry5575	ddRADlike_207	sample66_0000001301	Thermophis baileyi	QLTV01000419.1:c3761031-3760125	ddRADlike	ETNK2	ETNK2 [ethanolamine kinase 2]	TRUE
 locus2957	NA	WeinellEntry5576	ddRADlike_208	sample66_0000001313	Thermophis baileyi	QLTV01000437.1:c1250374-1249408	ddRADlike	NA	NA	TRUE
-NA	locus2957_partial	WeinellEntry5577	ddRADlike_209	sample66_0000002970	Thermophis baileyi	QLTV01000437.1:c1250374-1249426	ddRADlike	NA	NA	FALSE
 locus2958	NA	WeinellEntry5578	ddRADlike_210	sample66_0000001329	Thermophis baileyi	QLTV01000437.1:c827576-826596	ddRADlike	NA	NA	TRUE
 locus2959	NA	WeinellEntry5579	ddRADlike_211	sample66_0000001411	Thermophis baileyi	QLTV01000548.1:c3481854-3480911	ddRADlike	HLX	HLX [H2.0-like homeobox]	TRUE
 locus2960	NA	WeinellEntry5580	ddRADlike_212	sample66_0000001458	Thermophis baileyi	QLTV01000556.1:c667725-666768	ddRADlike	NA	NA	TRUE
@@ -3006,12 +3002,10 @@ locus3000	NA	WeinellEntry5620	ddRADlike_262	sample66_0000000028	Thermophis baile
 locus3001	NA	WeinellEntry5621	ddRADlike_263	sample66_0000001427	Thermophis baileyi	QLTV01001765.1:c998022-997037	ddRADlike	NA	NA	TRUE
 locus3002	NA	WeinellEntry5622	ddRADlike_264	sample66_0000000814	Thermophis baileyi	QLTV01001769.1:c1005763-1004768	ddRADlike	NA	NA	TRUE
 locus3003	NA	WeinellEntry5623	ddRADlike_265	sample66_0000000534	Thermophis baileyi	QLTV01001798.1:c684016-683026	ddRADlike	TNC	TNC [tenascin C]	TRUE
-NA	locus3003_partial	WeinellEntry5624	ddRADlike_266	sample66_0000003017	Thermophis baileyi	QLTV01001798.1:c684016-683075	ddRADlike	TNC	TNC [tenascin C]	FALSE
 locus3004	NA	WeinellEntry5625	ddRADlike_267	sample66_0000000128	Thermophis baileyi	QLTV01001812.1:c687982-687029	ddRADlike	NA	NA	TRUE
 locus3005	NA	WeinellEntry5626	ddRADlike_268	sample66_0000001158	Thermophis baileyi	QLTV01001816.1:c1344433-1343463	ddRADlike	NA	NA	TRUE
 locus3006	NA	WeinellEntry5627	ddRADlike_269	sample66_0000000517	Thermophis baileyi	QLTV01001816.1:c1535611-1534684	ddRADlike	NA	NA	TRUE
 locus3007	NA	WeinellEntry5628	ddRADlike_270	sample66_0000000928	Thermophis baileyi	QLTV01001816.1:c322588-321600	ddRADlike	VGLL2	VGLL2 [Vestigial Like Family Member 2]	TRUE
-NA	locus3007_partial	WeinellEntry5629	ddRADlike_271	sample66_0000003022	Thermophis baileyi	QLTV01001816.1:c322588-321657	ddRADlike	VGLL2	VGLL2 [Vestigial Like Family Member 2]	FALSE
 locus3008	NA	WeinellEntry5630	ddRADlike_272	sample66_0000000670	Thermophis baileyi	QLTV01001849.1:c2531452-2530515	ddRADlike	NA	NA	TRUE
 locus3009	NA	WeinellEntry5631	ddRADlike_273	sample66_0000001434	Thermophis baileyi	QLTV01001849.1:c2784552-2783580	ddRADlike	ACVR1B	ACVR1B [activin A receptor, type IB]	TRUE
 locus3010	NA	WeinellEntry5632	ddRADlike_275	sample66_0000000100	Thermophis baileyi	QLTV01002011.1:c1451841-1450897	ddRADlike	NA	NA	TRUE
@@ -3020,7 +3014,6 @@ locus3012	NA	WeinellEntry5634	ddRADlike_277	sample66_0000000655	Thermophis baile
 locus3013	NA	WeinellEntry5635	ddRADlike_278	sample66_0000000523	Thermophis baileyi	QLTV01002103.1:c61938-60965	ddRADlike	NR5A1	NR5A1 [Nuclear Receptor Subfamily 5 Group A Member 1]	TRUE
 locus3014	NA	WeinellEntry5636	ddRADlike_279	sample66_0000000381	Thermophis baileyi	QLTV01002113.1:c684761-683787	ddRADlike	CELSR3	CELSR3 [Cadherin EGF LAG Seven-Pass G-Type Receptor 3]	TRUE
 locus3015	NA	WeinellEntry5637	ddRADlike_281	sample66_0000001178	Thermophis baileyi	QLTV01002264.1:c1002897-1001927	ddRADlike	NA	NA	TRUE
-NA	locus3015_partial	WeinellEntry5638	ddRADlike_282	sample66_0000003031	Thermophis baileyi	QLTV01002264.1:c1002897-1001991	ddRADlike	NA	NA	FALSE
 locus3016	NA	WeinellEntry5639	ddRADlike_283	sample66_0000000692	Thermophis baileyi	QLTV01002264.1:c2841833-2840874	ddRADlike	STXBP3	STXBP3 [Syntaxin Binding Protein 3]	TRUE
 locus3017	NA	WeinellEntry5640	ddRADlike_284	sample66_0000001463	Thermophis baileyi	QLTV01002265.1:c6667756-6666845	ddRADlike	NA	NA	TRUE
 locus3018	NA	WeinellEntry5641	ddRADlike_285	sample66_0000002049	Thermophis baileyi	QLTV01002419.1:c9128976-9128020	ddRADlike	NA	NA	TRUE
@@ -3034,7 +3027,6 @@ locus3025	NA	WeinellEntry5648	ddRADlike_292	sample66_0000000090	Thermophis baile
 locus3026	NA	WeinellEntry5649	ddRADlike_295	sample66_0000000189	Thermophis baileyi	QLTV01002485.1:c45336-44421	ddRADlike	CHRNE	CHRNE [Cholinergic Receptor Nicotinic Epsilon Subunit]	TRUE
 locus3027	NA	WeinellEntry5650	ddRADlike_296	sample66_0000000194	Thermophis baileyi	QLTV01002537.1:c416596-415654	ddRADlike	LOC106546708	LOC106546708 [serine/threonine-protein kinase pim-1-like]	TRUE
 locus3028	NA	WeinellEntry5651	ddRADlike_297	sample66_0000000213	Thermophis baileyi	QLTV01002544.1:c844398-843413	ddRADlike	NA	NA	TRUE
-NA	locus3028_partial	WeinellEntry5652	ddRADlike_298	sample66_0000003045	Thermophis baileyi	QLTV01002544.1:c844398-843443	ddRADlike	NA	NA	FALSE
 locus3029	NA	WeinellEntry5653	ddRADlike_299	sample66_0000000214	Thermophis baileyi	QLTV01002544.1:c897086-896156	ddRADlike	TSC2	TSC2 [tuberous sclerosis 2]	TRUE
 locus3030	NA	WeinellEntry5654	ddRADlike_300	sample66_0000000232	Thermophis baileyi	QLTV01002548.1:c817876-816887	ddRADlike	NA	NA	TRUE
 locus3031	NA	WeinellEntry5655	ddRADlike_301	sample66_0000000233	Thermophis baileyi	QLTV01002549.1:c20884-19885	ddRADlike	LOC106557420	LOC106557420	TRUE
@@ -3074,7 +3066,6 @@ locus3064	NA	WeinellEntry5688	ddRADlike_342	sample66_0000000870	Thermophis baile
 locus3065	NA	WeinellEntry5689	ddRADlike_343	sample66_0000000020	Thermophis baileyi	QLTV01003309.1:c106865-105944	ddRADlike	NA	NA	TRUE
 locus3066	NA	WeinellEntry5690	ddRADlike_344	sample66_0000000092	Thermophis baileyi	QLTV01003323.1:c2952031-2951036	ddRADlike	NA	NA	TRUE
 locus3067	NA	WeinellEntry5691	ddRADlike_345	sample66_0000000104	Thermophis baileyi	QLTV01003359.1:c59478-58525	ddRADlike	NA	NA	TRUE
-NA	locus3067_partial	WeinellEntry5692	ddRADlike_346	sample66_0000003085	Thermophis baileyi	QLTV01003359.1:c59478-58562	ddRADlike	NA	NA	FALSE
 locus3068	NA	WeinellEntry5693	ddRADlike_347	sample66_0000000171	Thermophis baileyi	QLTV01003387.1:c72786-71838	ddRADlike	NA	NA	TRUE
 locus3069	NA	WeinellEntry5694	ddRADlike_349	sample66_0000000179	Thermophis baileyi	QLTV01003391.1:c3367778-3366803	ddRADlike	PLCH1	PLCH1 [Phospholipase C Eta 1]	FALSE
 locus3070	NA	WeinellEntry5695	ddRADlike_350	sample66_0000000419	Thermophis baileyi	QLTV01003395.1:c431960-431054	ddRADlike	NA	NA	TRUE
@@ -3118,11 +3109,21 @@ locus3107	NA	WeinellEntry5732	ddRADlike_400	sample66_0000002676	Thermophis baile
 locus3108	NA	WeinellEntry5733	ddRADlike_401	sample66_0000000016	Thermophis baileyi	QLTV01012195.1:c2221972-2221022	ddRADlike	NA	NA	TRUE
 locus3109	NA	WeinellEntry5734	ddRADlike_402	sample66_0000000891	Thermophis baileyi	QLTV01012198.1:c8318604-8317640	ddRADlike	NA	NA	TRUE
 locus3110	NA	WeinellEntry5735	ddRADlike_404	sample66_0000000834	Thermophis baileyi	QLTV01020729.1:c2758101-2757193	ddRADlike	MTCH2	MTCH2 [mitochondrial carrier 2]	TRUE
-NA	NA	WeinellEntry119	NA	sample66_0000000073	Thamnophis sirtalis	NW_013659042.1:44872-45472	REE	LOC106549660	uncharacterized LOC106549660	FALSE
-NA	NA	WeinellEntry216	NA	sample66_0000000145	Thamnophis sirtalis	NW_013658138.1:668871-669231	REE	LOC106542647	ficolin-1-like	FALSE
-NA	NA	WeinellEntry1343	NA	sample66_0000001119	Thamnophis sirtalis	NW_013660427.1:50814-51054	REE	LOC106554603	olfactory receptor 8S1-like	FALSE
-NA	NA	WeinellEntry1702	NA	sample66_0000001435	Thamnophis sirtalis	NW_013657965.1:647302-647542	REE	LOC106540428	puratrophin-1-like	FALSE
-NA	NA	WeinellEntry2747	NA	sample66_0000002218	Thamnophis sirtalis	NW_013658782.1:272346-272506	UCE	NA	NA	FALSE
-NA	NA	WeinellEntry5205	NA	sample66_0000002613	Ophiophagus hannah	AZIM01008286.1:908-2008	scalation	Beta28_Promoter_Exon1	Beta28	FALSE
-NA	NA	WeinellEntry5268	NA	sample66_0000002674	Python bivittatus	NW_006533133.1:166991-167115	scalation	S100A11_Promoter_Exon1	S100A11 [S100 Calcium Binding Protein A11]	FALSE
-NA	NA	WeinellEntry5403	NA	sample66_0000002797	Protobothrops mucrosquamatus	NW_015387673.1:171016-171175	vision	NRL_Exon1	NRL	FALSE
+locus3111	locus2693_duplicate	WeinellEntry5297	NA	sample66_0000002702	Ophiophagus hannah	AZIM01000160.1:125280-125441	vision	CRYD2_Exon16	CRYD2_Exon16	TRUE
+locus3112	locus1193_partial	WeinellEntry3091	NA	sample66_0000002534	Thamnophis sirtalis	NW_013658266.1:394472-394632	UCE	YTHDF3	YTH N(6)-methyladenosine RNA binding protein 3	FALSE
+locus3113	locus2928_partial	WeinellEntry5546	ddRADlike_170	sample66_0000002939	Thermophis baileyi	QLTV01004222.1:2397032-2397957	ddRADlike	NA	NA	FALSE
+locus3114	locus2936_partial	WeinellEntry5555	ddRADlike_181	sample66_0000002948	Thermophis baileyi	QLTV01004279.1:2038350-2039287	ddRADlike	MAP3K6	MAP3K6 [mitogen-activated protein kinase kinase kinase 6]	FALSE
+locus3115	locus2957_partial	WeinellEntry5577	ddRADlike_209	sample66_0000002970	Thermophis baileyi	QLTV01000437.1:c1250374-1249426	ddRADlike	NA	NA	FALSE
+locus3116	locus3003_partial	WeinellEntry5624	ddRADlike_266	sample66_0000003017	Thermophis baileyi	QLTV01001798.1:c684016-683075	ddRADlike	TNC	TNC [tenascin C]	FALSE
+locus3117	locus3007_partial	WeinellEntry5629	ddRADlike_271	sample66_0000003022	Thermophis baileyi	QLTV01001816.1:c322588-321657	ddRADlike	VGLL2	VGLL2 [Vestigial Like Family Member 2]	FALSE
+locus3118	locus3015_partial	WeinellEntry5638	ddRADlike_282	sample66_0000003031	Thermophis baileyi	QLTV01002264.1:c1002897-1001991	ddRADlike	NA	NA	FALSE
+locus3119	locus3028_partial	WeinellEntry5652	ddRADlike_298	sample66_0000003045	Thermophis baileyi	QLTV01002544.1:c844398-843443	ddRADlike	NA	NA	FALSE
+locus3120	locus3067_partial	WeinellEntry5692	ddRADlike_346	sample66_0000003085	Thermophis baileyi	QLTV01003359.1:c59478-58562	ddRADlike	NA	NA	FALSE
+locus3121	NA	WeinellEntry119	NA	sample66_0000000073	Thamnophis sirtalis	NW_013659042.1:44872-45472	REE	LOC106549660	uncharacterized LOC106549660	FALSE
+locus3122	NA	WeinellEntry216	NA	sample66_0000000145	Thamnophis sirtalis	NW_013658138.1:668871-669231	REE	LOC106542647	ficolin-1-like	FALSE
+locus3123	NA	WeinellEntry1343	NA	sample66_0000001119	Thamnophis sirtalis	NW_013660427.1:50814-51054	REE	LOC106554603	olfactory receptor 8S1-like	FALSE
+locus3124	NA	WeinellEntry1702	NA	sample66_0000001435	Thamnophis sirtalis	NW_013657965.1:647302-647542	REE	LOC106540428	puratrophin-1-like	FALSE
+locus3125	NA	WeinellEntry2747	NA	sample66_0000002218	Thamnophis sirtalis	NW_013658782.1:272346-272506	UCE	NA	NA	FALSE
+locus3126	NA	WeinellEntry5205	NA	sample66_0000002613	Ophiophagus hannah	AZIM01008286.1:908-2008	scalation	Beta28_Promoter_Exon1	Beta28	FALSE
+locus3127	NA	WeinellEntry5268	NA	sample66_0000002674	Python bivittatus	NW_006533133.1:166991-167115	scalation	S100A11_Promoter_Exon1	S100A11 [S100 Calcium Binding Protein A11]	FALSE
+locus3128	NA	WeinellEntry5403	NA	sample66_0000002797	Protobothrops mucrosquamatus	NW_015387673.1:171016-171175	vision	NRL_Exon1	NRL	FALSE
