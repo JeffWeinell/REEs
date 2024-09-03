@@ -5,7 +5,7 @@
  - [Installation](#InstallingREEs)
 
 <a name="Introduction"></a>
-## Introduction.
+## Introduction
 This R package includes functions for identifying rapidly-evolving exons (REEs) using a set of whole genomes and at least one genome with exons annotated. I used some functions in this package to identify candidate phylogenomic target loci for targeted sequence capture in snakes ([SnakeCap](https://github.com/JeffWeinell/SnakeCap/blob/main/README.md)). These methods were inspired by [FrogCap](https://frogcap.com/) ([Hutter et al. 2021](https://onlinelibrary.wiley.com/doi/10.1111/1755-0998.13517)) and RELEC ([Karin et al. 2019](https://doi.org/10.1093/molbev/msz263)).
 
 <!--
