@@ -19,7 +19,7 @@
 <a name="Description"></a>
 ## What is the SnakeCap probe set?
 
-The [SnakeCap probe set](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta) is a collection of 20,020 x 120bp RNA sequences useful for targeted DNA sequencing of diverse lineages of snakes. The probes target [3,128 phylogenomic loci](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/Weinell_TargetLoci_Snakes_Final_newnames.fa) useful for studies of closely or distantly related lineages (e.g. [Weinell et al. 2024](https://doi.org/10.1098/rsos.240064)).
+The [SnakeCap probe set](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/Weinell_FinalProbeSet_20020Probes_7-Oct-2018.fasta) is a collection of 20,020 x 120bp RNA sequences useful for targeted DNA sequencing of [3,128 phylogenomic loci](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/Weinell_TargetLoci_Snakes_Final_newnames.fa) present in the genomes of numerous distantly related lineages of snakes ([Weinell et al. 2024](https://doi.org/10.1098/rsos.240064)).
 
  - [target loci info](https://github.com/JeffWeinell/SnakeCap/raw/main/docs/SnakeCap_loci_info.txt)
 
