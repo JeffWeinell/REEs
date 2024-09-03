@@ -10,7 +10,7 @@
 
 <a name="Introduction"></a>
 ## Introduction.
-This R package includes functions for identifying **rapidly-evolving exons (REEs)** using a set of whole genomes and at least one genome with exons annotated. I used some functions in this package to identify candidate phylogenomic target loci for targeted sequence capture in snakes [(SnakeCap)](https://github.com/JeffWeinell/SnakeCap/blob/main/README.md). These methods were inspired by [FrogCap](https://frogcap.com/) [(Hutter et al. 2021)](https://onlinelibrary.wiley.com/doi/10.1111/1755-0998.13517) and RELEC [Karin et al. 2019](https://doi.org/10.1093/molbev/msz263).
+This R package includes functions for identifying **rapidly-evolving exons (REEs)** using a set of whole genomes and at least one genome with exons annotated. I used some functions in this package to identify candidate phylogenomic target loci for targeted sequence capture in snakes ([SnakeCap])(https://github.com/JeffWeinell/SnakeCap/blob/main/README.md). These methods were inspired by [FrogCap](https://frogcap.com/) ([Hutter et al. 2021])(https://onlinelibrary.wiley.com/doi/10.1111/1755-0998.13517) and RELEC ([Karin et al. 2019])(https://doi.org/10.1093/molbev/msz263).
 
 <!--
 The reasons for publishing these methods as an R package include (1) having a reproducible and citable pipeline for projects that use the SnakeCap probe set, and (2) to provide a method for researchers to select a set of loci for their phylogenomic studies.
