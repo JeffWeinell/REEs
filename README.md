@@ -33,7 +33,7 @@ BiocManager::install(c("BSgenome","DECIPHER","phangorn","dplyr","data.table", "f
 BiocManager::install("gschofl/biofiles",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F)
 
 # Install REEs
-BiocManager::install("JeffWeinell/REEs",update=FALSE,dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,auth_token="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")
+BiocManager::install("JeffWeinell/REEs",update=FALSE,dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F)
 ```
 
 To install BLAST, follow the instructions [here](https://www.ncbi.nlm.nih.gov/books/NBK279671/) or use the ```REEs::blast.install``` function.
