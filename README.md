@@ -2,11 +2,7 @@
 
  - [Introduction](#Introduction)
  - [Software Dependencies](#Dependencies)
- - [Installing REEs](#InstallingREEs)
- - [Installing BLAST](#InstallingBLAST)
- - [Installing MAFFT](#InstallingMAFFT)
- - [How to use this package](#HowTo)
- - [Example](#Example)
+ - [Installation](#InstallingREEs)
 
 <a name="Introduction"></a>
 ## Introduction.
@@ -40,8 +36,6 @@ BiocManager::install("gschofl/biofiles",dependencies=c("Depends", "Imports", "Li
 BiocManager::install("JeffWeinell/REEs",update=FALSE,dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,auth_token="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")
 ```
 
-<a name="InstallingBLAST"></a>
-
 To install BLAST, follow the instructions [here](https://www.ncbi.nlm.nih.gov/books/NBK279671/) or use the ```REEs::blast.install``` function.
 
 ```
@@ -51,8 +45,6 @@ library(REEs)
 # Install BLAST
 blast.install()
 ```
-
-<a name="InstallingMAFFT"></a>
 
 To install MAFFT, follow the instructions [here](https://mafft.cbrc.jp/alignment/software/) and/or [here](https://mafft.cbrc.jp/alignment/software/installation_without_root.html) or use the ```REEs::install.mafft``` function.
 
