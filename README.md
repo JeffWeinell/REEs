@@ -1,7 +1,7 @@
 # REEs Package
 
  - [Introduction](#Introduction)
- - [Software Dependencies](#Dependencies)
+ - [Dependencies](#Dependencies)
  - [Installation](#InstallingREEs)
 
 <a name="Introduction"></a>
@@ -13,7 +13,7 @@ The reasons for publishing these methods as an R package include (1) having a re
 -->
 
 <a name="Dependencies"></a>
-### Software Dependencies:
+### Dependencies:
   - [R](https://www.r-project.org/) v3.6+
   - [BLAST](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)
   - [MAFFT](https://mafft.cbrc.jp/alignment/software/)
