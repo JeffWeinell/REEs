@@ -132,60 +132,83 @@ Vipera.berus.genome_url                 <- "https://ftp.ncbi.nlm.nih.gov/genomes
 setwd("~/path/to/output/directory/")
 
 # Run TBLASTX
-Anolis.carolinensis.50hits          <- REEs::blast(method="tblastx",
-                                                   subject=Anolis.carolinensis.genome_url,
-                                                   query=Thamnophis.sirtalis_exome,
-                                                   table.out="Anolis.carolinensis.tblastx.exons.50hits.txt")
 
-Gekko.japonicus.50hits              <- REEs::blast(method="tblastx",
-                                                   subject=Gekko.japonicus.genome_url,
-                                                   query=Thamnophis.sirtalis_exome,
-                                                   table.out="Gekko.japonicus.tblastx.exons.50hits.txt")
 
-Pogona.vitticeps.50hits             <- REEs::blast(method="tblastx",
-                                                   subject=Pogona.vitticeps.genome_url,
-                                                   query=Thamnophis.sirtalis_exome,
-                                                   table.out="Pogona.vitticeps.tblastx.exons.50hits.txt")
+### like this but replace object names with local file names
+QUERY_GENOME_PATH=Thamnophis.sirtalis_exome Anolis.carolinensis.genome_url
+SUBJECT_GENOME_PATH=Anolis.carolinensis.genome_url
+OUTPUT_PATH=Anolis.carolinensis.tblastx.exons.50hits.txt
 
-Crotalus.horridus.50hits            <- REEs::blast(method="tblastx",
-                                                   subject=Crotalus.horridus.genome_url,
-                                                   query=Thamnophis.sirtalis_exome,
-                                                   table.out="Crotalus.horridus.tblastx.exons.50hits.txt")
 
-Crotalus.mitchellii.50hits          <- REEs::blast(method="tblastx",
-                                                   subject=Crotalus.mitchellii.genome_url,
-                                                   query=Thamnophis.sirtalis_exome,
-                                                   table.out="Crotalus.mitchellii.tblastx.exons.50hits.txt")
+# make blast database for each genome
+makeblastdb -n Anolis.carolinensis.genome -parse_seqids -dbtype nucl -max_file_sz 4GB
 
-Ophiophagus.hannah.50hits           <- REEs::blast(method="tblastx",
-                                                   subject=Ophiophagus.hannah.genome_url,
-                                                   query=Thamnophis.sirtalis_exome,
-                                                   table.out="Ophiophagus.hannah.tblastx.exons.50hits.txt")
+# 
+tblastx -db Anolis.carolinensis.db \ 
+        -query Thamnophis.sirtalis_exome \ 
+        -out Anolis.carolinensis.tblastx.exons.50hits.txt \ 
+        -evalue 0.00001 \ 
+        -outfmt 6 \ 
+        -max_target_seqs 10 \ 
+        -max_hsps 10 -num_threads 4
 
-Pantherophis.guttatus.50hits        <- REEs::blast(method="tblastx",
-                                                   subject=Pantherophis.guttatus.genome_url,
-                                                   query=Thamnophis.sirtalis_exome,
-                                                   table.out="Pantherophis.guttatus.tblastx.exons.50hits.txt")
 
-Protobothrops.mucrosquamatus.50hits <- REEs::blast(method="tblastx",
-                                                   subject=Protobothrops.mucrosquamatus.genome_url,
-                                                   query=Thamnophis.sirtalis_exome,
-                                                   table.out="Protobothrops.mucrosquamatus.tblastx.exons.50hits.txt")
+# Anolis.carolinensis.50hits          <- REEs::blast(method="tblastx",
+#                                                    subject=Anolis.carolinensis.genome_url,
+#                                                    query=Thamnophis.sirtalis_exome,
+#                                                    table.out="Anolis.carolinensis.tblastx.exons.50hits.txt")
+# 
+# Gekko.japonicus.50hits              <- REEs::blast(method="tblastx",
+#                                                    subject=Gekko.japonicus.genome_url,
+#                                                    query=Thamnophis.sirtalis_exome,
+#                                                    table.out="Gekko.japonicus.tblastx.exons.50hits.txt")
+# 
+# Pogona.vitticeps.50hits             <- REEs::blast(method="tblastx",
+#                                                    subject=Pogona.vitticeps.genome_url,
+#                                                    query=Thamnophis.sirtalis_exome,
+#                                                    table.out="Pogona.vitticeps.tblastx.exons.50hits.txt")
+# 
+# Crotalus.horridus.50hits            <- REEs::blast(method="tblastx",
+#                                                    subject=Crotalus.horridus.genome_url,
+#                                                    query=Thamnophis.sirtalis_exome,
+#                                                    table.out="Crotalus.horridus.tblastx.exons.50hits.txt")
+# 
+# Crotalus.mitchellii.50hits          <- REEs::blast(method="tblastx",
+#                                                    subject=Crotalus.mitchellii.genome_url,
+#                                                    query=Thamnophis.sirtalis_exome,
+#                                                    table.out="Crotalus.mitchellii.tblastx.exons.50hits.txt")
+# 
+# Ophiophagus.hannah.50hits           <- REEs::blast(method="tblastx",
+#                                                    subject=Ophiophagus.hannah.genome_url,
+#                                                    query=Thamnophis.sirtalis_exome,
+#                                                    table.out="Ophiophagus.hannah.tblastx.exons.50hits.txt")
+# 
+# Pantherophis.guttatus.50hits        <- REEs::blast(method="tblastx",
+#                                                    subject=Pantherophis.guttatus.genome_url,
+#                                                    query=Thamnophis.sirtalis_exome,
+#                                                    table.out="Pantherophis.guttatus.tblastx.exons.50hits.txt")
+# 
+# Protobothrops.mucrosquamatus.50hits <- REEs::blast(method="tblastx",
+#                                                    subject=Protobothrops.mucrosquamatus.genome_url,
+#                                                    query=Thamnophis.sirtalis_exome,
+#                                                    table.out="Protobothrops.mucrosquamatus.tblastx.exons.50hits.txt")
+# 
+# Python.bivittatus.50hits            <- REEs::blast(method="tblastx",
+#                                                    subject=Python.bivittatus.genome_url,
+#                                                    query=Thamnophis.sirtalis_exome,
+#                                                    table.out="Python.bivittatus.tblastx.exons.50hits.txt")
+# 
+# Vipera.berus.50hits                 <- REEs::blast(method="tblastx",
+#                                                    subject=Vipera.berus.genome_url,
+#                                                    query=Thamnophis.sirtalis_exome,
+#                                                    table.out="Vipera.berus.tblastx.exons.50hits.txt")
+# 
+# Thamnophis.sirtalis.50hits          <- REEs::blast(method="tblastx",
+#                                                    subject=Thamnophis.sirtalis.genome_url,
+#                                                    query=Thamnophis.sirtalis_exome,
+#                                                    table.out="Thamnophis.sirtalis.tblastx.exons.50hits.txt")
 
-Python.bivittatus.50hits            <- REEs::blast(method="tblastx",
-                                                   subject=Python.bivittatus.genome_url,
-                                                   query=Thamnophis.sirtalis_exome,
-                                                   table.out="Python.bivittatus.tblastx.exons.50hits.txt")
 
-Vipera.berus.50hits                 <- REEs::blast(method="tblastx",
-                                                   subject=Vipera.berus.genome_url,
-                                                   query=Thamnophis.sirtalis_exome,
-                                                   table.out="Vipera.berus.tblastx.exons.50hits.txt")
-
-Thamnophis.sirtalis.50hits          <- REEs::blast(method="tblastx",
-                                                   subject=Thamnophis.sirtalis.genome_url,
-                                                   query=Thamnophis.sirtalis_exome,
-                                                   table.out="Thamnophis.sirtalis.tblastx.exons.50hits.txt")
 ```
 TBLASTX output tables (xz compressed): [Anolis.carolinensis.tblastx.exons.50hits.txt.xz](https://osf.io/3a4be/download), [Gekko.japonicus.tblastx.exons.50hits.txt.xz](https://osf.io/u2ec5/download), [Pogona.vitticeps.tblastx.exons.50hits.txt.xz](https://osf.io/9ehyf/download), [Crotalus.horridus.tblastx.exons.50hits.txt.xz](https://osf.io/j4gvk/download), [Crotalus.mitchellii.tblastx.exons.50hits.txt.xz](https://osf.io/5vxt7/download), [Ophiophagus.hannah.tblastx.exons.50hits.txt.xz](https://osf.io/jr5zd/download), [Pantherophis.guttatus.tblastx.exons.50hits.txt.xz](https://osf.io/tu3ve/download), [Protobothrops.mucrosquamatus.tblastx.exons.50hits.txt.xz](https://osf.io/7xmr4/download), [Python.bivittatus.tblastx.exons.50hits.txt.xz](https://osf.io/8s5na/download), [Vipera.berus.tblastx.exons.50hits.txt.xz](https://osf.io/48x7e/download), [Thamnophis.sirtalis.tblastx.exons.50hits.txt.xz](https://osf.io/ctz73/download).
 
