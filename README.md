@@ -23,26 +23,26 @@ The reasons for publishing these methods as an R package include (1) having a re
   - [MAFFT](https://mafft.cbrc.jp/alignment/software/)
 
 <a name="InstallingREEs"></a>
-### Installing REEs
+### Installation
 
-Load R and then run the block of code below. Uncomment and modify the .libPaths() line to install REEs to a non-default location.
+To install REEs, use R package BiocManager and run the block of code below.
+
 ```
-# Install and load BiocManager package
+# Install and load BiocManager
 install.packages(pkgs="BiocManager",repos = "http://cran.us.r-project.org")
 library(BiocManager)
 
-# Install REEs dependencies
+# Install REEs dependency packages
 BiocManager::install(c("BSgenome","DECIPHER","phangorn","dplyr","data.table", "foreach","reutils","curl","knitr","devtools"),dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F)
 BiocManager::install("gschofl/biofiles",dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F)
 
-# Install REEs.
+# Install REEs
 BiocManager::install("JeffWeinell/REEs",update=FALSE,dependencies=c("Depends", "Imports", "LinkingTo"),build_vignettes=F,auth_token="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")
 ```
 
 <a name="InstallingBLAST"></a>
-### Install BLAST
 
-You can follow the instructions [here](https://www.ncbi.nlm.nih.gov/books/NBK279671/) or use the REEs ```blast.install``` function to install BLAST.
+To install BLAST, follow the instructions [here](https://www.ncbi.nlm.nih.gov/books/NBK279671/) or use the ```REEs::blast.install``` function.
 
 ```
 # Load REEs
@@ -53,12 +53,9 @@ blast.install()
 ```
 
 <a name="InstallingMAFFT"></a>
-### Install MAFFT
 
-Instructions for installing MAFFT can be found [here](https://mafft.cbrc.jp/alignment/software/).
-Also useful: [How to install MAFFT to a non-default location](https://mafft.cbrc.jp/alignment/software/installation_without_root.html).
+To install MAFFT, follow the instructions [here](https://mafft.cbrc.jp/alignment/software/) and/or [here](https://mafft.cbrc.jp/alignment/software/installation_without_root.html) or use the ```REEs::install.mafft``` function.
 
-Alternatively, use the ```install.mafft``` function.
 ```
 # Load REEs
 library(REEs)
