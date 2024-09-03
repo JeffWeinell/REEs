@@ -48,7 +48,7 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 	}
 	# Test that table.out does not already exist as a file or directory.
 	if(dirname(table.out) == "."){
-		table.out <- paste0(getwd(),"/",table.out)
+		table.out <- file.path(getwd(),table.out)
 	}
 	if(file.exists(table.out) | dir.exists(table.out) | !dir.exists(dirname(table.out))){
 		stop("invalid table.out")
@@ -56,11 +56,11 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 	# Where subject and query files data should be held.
 	output.path       <- table.out
 	# Create a directory to hold output files other than output.table; this directory will be deleted upon close if cleanup = TRUE
-	temp.path         <- paste0(dirname(output.path),"/",basename(tempfile(pattern="tempoutdir")))
+	temp.path         <- file.path(dirname(output.path),basename(tempfile(pattern="tempoutdir")))
 	# dircon            <- dir.check.create(temp.path)
 	dircon            <- dir.create(temp.path,recursive=T)
-	subject.path.temp <- paste0(temp.path,"/",basename(tempfile()))
-	query.path.temp   <- paste0(temp.path,"/",basename(tempfile()))
+	subject.path.temp <- file.path(temp.path,basename(tempfile()))
+	query.path.temp   <- file.path(temp.path,basename(tempfile()))
 	if(!is.null(parallel.groups)){
 		out.files.temp   <- paste0(temp.path,"/",basename(paste0(tools::file_path_sans_ext(table.out),"_",c(1:parallel.groups),".tsv")))
 		query.paths.all  <- paste0(query.path.temp,"_",c(1:parallel.groups))
@@ -215,7 +215,8 @@ blast <- function(blast.path="auto",method,subject,query,table.out,eval=1e-5,out
 	### Run blast!!
 	print("about to run blast")
 	if(is.null(parallel.groups)){
-		command <- paste(blast.exe.path,"-db",subject.path.temp,"-query",query.path.temp,"-out",output.path,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
+		# command <- paste(blast.exe.path,"-db",subject.path.temp,"-query",query.path.temp,"-out",output.path,"-evalue",eval,"-outfmt",output.format,"-max_target_seqs",max.targets.per.query,"-max_hsps",max.matches.per.target,"-num_threads",num.threads,other.args)
+		command <- sprintf("%s -db %s -query %s -out %s -evalue %s -outfmt %s -max_target_seqs %s -max_hsps %s -num_threads", blast.exe.path,subject.path.temp,query.path.temp,output.path,eval,output.format,max.targets.per.query,max.matches.per.target,num.threads,other.args)
 		res <- system(command, wait=T)
 		if(res == 0) {
 			result <- data.table::fread(output.path)

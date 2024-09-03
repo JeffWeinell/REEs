@@ -7,8 +7,5 @@
 #' @return Creates a blast database file.
 #' @export makeBlastDB
 makeBlastDB  <- function(makeblastdb.path,subject.path){
-	### pastes the parts into a character string that can be executed in terminal
-	command  <- paste(makeblastdb.path,"-in",subject.path,"-parse_seqids -dbtype nucl -max_file_sz 4GB")
-	### calls terminal to execute the character string "command"
-	system(command)
+	system(sprintf("%s -n %s -parse_seqids -dbtype nucl -max_file_sz 4GB",makeblastdb.path,subject.path))
 }
