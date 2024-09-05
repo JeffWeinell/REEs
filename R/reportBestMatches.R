@@ -44,7 +44,7 @@ reportBestMatches <- function(input.table, output.table.path=NULL, remove.subseq
 	                dplyr::mutate(include1 = ifelse(bitrank > 1,F,T)) %>% 
 	                dplyr::mutate(include2 = ifelse(bitscore < min.bitscore,F,T)) %>% 
 	                dplyr::mutate(include3 = ifelse(any(bitrank == 2 & bitdiff < min.bitscore.difference),F,T)) %>% 
-	                dplyr::subset(include1 & include2 & include3)
+	                subset(include1 & include2 & include3)
 	
 	# only keep format 6 columns
 	best.matches.out  <- best.matches %>% dplyr::select(qseqid,sseqid,pident,length,mismatch,gapopen,qstart,qend,sstart,send,evalue,bitscore)
